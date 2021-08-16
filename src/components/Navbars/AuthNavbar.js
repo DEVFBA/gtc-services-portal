@@ -50,10 +50,10 @@ function AuthNavbar(props) {
       <Container>
         <div className="navbar-wrapper">
           <NavbarBrand href="#pablo" onClick={(e) => e.preventDefault()}>
-            Paper Dashboard PRO React
+            GTC Services Portal
           </NavbarBrand>
         </div>
-        <button
+{/*         <button
           aria-controls="navigation-index"
           aria-expanded={false}
           aria-label="Toggle navigation"
@@ -99,7 +99,7 @@ function AuthNavbar(props) {
               </NavLink>
             </NavItem>
           </Nav>
-        </Collapse>
+        </Collapse> */}
       </Container>
     </Navbar>
   );

@@ -1,7 +1,7 @@
 {
   "name": "gtc-services-portal",
   "version": "1.3.0",
-  "description": "Premium Bootstrap 4 Paper UI Design",
+  "description": "GTC Services Portal Administration",
   "main": "index.js",
   "private": true,
   "scripts": {
@@ -26,7 +26,7 @@
     "bootstrap4",
     "reactstrap"
   ],
-  "author": "Creative Tim <hello@creative-tim.com> (https://www.creative-tim.com)",
+  "author": "Garantía Total en Consultoría Tecnológica Avanzada SA de CV",
   "bugs": {
     "url": "https://github.com/creativetimofficial/ct-paper-dashboard-pro-react/issues"
   },

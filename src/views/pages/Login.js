@@ -61,7 +61,7 @@ function Login() {
                         <i className="nc-icon nc-single-02" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="First Name..." type="text" />
+                    <Input placeholder="Email..." type="text" />
                   </InputGroup>
                   <InputGroup>
                     <InputGroupAddon addonType="prepend">
@@ -76,7 +76,7 @@ function Login() {
                     />
                   </InputGroup>
                   <br />
-                  <FormGroup>
+{/*                   <FormGroup>
                     <FormGroup check>
                       <Label check>
                         <Input defaultChecked defaultValue="" type="checkbox" />
@@ -84,7 +84,7 @@ function Login() {
                         Subscribe to newsletter
                       </Label>
                     </FormGroup>
-                  </FormGroup>
+                  </FormGroup> */}
                 </CardBody>
                 <CardFooter>
                   <Button
@@ -94,7 +94,7 @@ function Login() {
                     href="#pablo"
                     onClick={(e) => e.preventDefault()}
                   >
-                    Get Started
+                    Login
                   </Button>
                 </CardFooter>
               </Card>
@@ -106,7 +106,7 @@ function Login() {
         className="full-page-background"
         style={{
           backgroundImage: `url(${
-            require("assets/img/bg/fabio-mangione.jpg").default
+            require("assets/img/logo-gtc.jpg").default
           })`,
         }}
       />
