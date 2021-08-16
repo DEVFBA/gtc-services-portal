@@ -36,13 +36,51 @@ import {
   Col,
 } from "reactstrap";
 
+import { Link, useHistory } from "react-router-dom";
+import { useState, useEffect} from "react";
+
 function Register() {
+  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const history = useHistory();
+  const logged = localStorage.getItem("logged");
+
+  React.useEffect(() => {
+    console.log("Si entré")
+    //Si el usuario ya ha iniciado sesión que se le redirija al dashboard
+    //Por el momento se usará la bandera logged
+    if(logged==="true")
+    {
+      history.push("/admin/dashboard");
+      return;
+    }
+  }, []);
+
   React.useEffect(() => {
     document.body.classList.toggle("register-page");
     return function cleanup() {
       document.body.classList.toggle("register-page");
     };
   });
+
+  function onChangeName(event) {
+    setName(event.target.value);
+  }
+
+  function onChangeLastName(event) {
+    setLastName(event.target.value);
+  }
+
+  function onChangePassword(event) {
+    console.log(password);
+  }
+
+  function onChangeEmail(event) {
+    setEmail(event.target.value);
+  }
+
   return (
     <div className="register-page">
       <Container>
@@ -88,7 +126,7 @@ function Register() {
           <Col className="mr-auto" lg="4" md="6">
             <Card className="card-signup text-center">
               <CardHeader>
-                <CardTitle tag="h4">Register</CardTitle>
+                <CardTitle tag="h4">Registro</CardTitle>
                 <div className="social">
                   <Button className="btn-icon btn-round" color="twitter">
                     <i className="fa fa-twitter" />
@@ -110,7 +148,10 @@ function Register() {
                         <i className="nc-icon nc-single-02" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="First Name..." type="text" />
+                    <Input 
+                      placeholder="Nombre" 
+                      type="text"
+                      onChange={onChangeName} />
                   </InputGroup>
                   <InputGroup>
                     <InputGroupAddon addonType="prepend">
@@ -118,7 +159,10 @@ function Register() {
                         <i className="nc-icon nc-circle-10" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Last Name..." type="text" />
+                    <Input 
+                      placeholder="Apellido" 
+                      type="text"
+                      onChange={onChangeLastName} />
                   </InputGroup>
                   <InputGroup>
                     <InputGroupAddon addonType="prepend">
@@ -126,7 +170,23 @@ function Register() {
                         <i className="nc-icon nc-email-85" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Email..." type="email" />
+                    <Input 
+                      placeholder="Email" 
+                      type="email"
+                      onChange={onChangeEmail} />
+                  </InputGroup>
+                  <InputGroup>
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="nc-icon nc-key-25" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      placeholder="Contraseña"
+                      type="password"
+                      autoComplete="off"
+                      onChange={onChangePassword}
+                    />
                   </InputGroup>
                   <FormGroup check className="text-left">
                     <Label check>
@@ -150,6 +210,9 @@ function Register() {
                   Get Started
                 </Button>
               </CardFooter>
+              <Link className="need-account" to="/auth/login">
+                  ¿Ya tienes una cuenta?
+              </Link>
             </Card>
           </Col>
         </Row>

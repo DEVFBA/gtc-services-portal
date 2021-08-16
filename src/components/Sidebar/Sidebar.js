@@ -192,19 +192,19 @@ function Sidebar(props) {
                 <li>
                   <NavLink to="/admin/user-profile" activeClassName="">
                     <span className="sidebar-mini-icon">MP</span>
-                    <span className="sidebar-normal">My Profile</span>
+                    <span className="sidebar-normal">Mi Perfil</span>
                   </NavLink>
                 </li>
                 <li>
                   <NavLink to="/admin/user-profile" activeClassName="">
                     <span className="sidebar-mini-icon">EP</span>
-                    <span className="sidebar-normal">Edit Profile</span>
+                    <span className="sidebar-normal">Editar Perfil</span>
                   </NavLink>
                 </li>
                 <li>
                   <NavLink to="/admin/user-profile" activeClassName="">
-                    <span className="sidebar-mini-icon">S</span>
-                    <span className="sidebar-normal">Settings</span>
+                    <span className="sidebar-mini-icon">C</span>
+                    <span className="sidebar-normal">Configuración</span>
                   </NavLink>
                 </li>
               </ul>

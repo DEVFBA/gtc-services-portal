@@ -15,6 +15,8 @@
 
 */
 import React from "react";
+import { Link, useHistory } from "react-router-dom";
+import { useState, useEffect} from "react";
 
 // reactstrap components
 import {
@@ -36,22 +38,58 @@ import {
 } from "reactstrap";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const history = useHistory();
+  const logged = localStorage.getItem("logged");
+  
+
+  useEffect(() => {
+    //Si el usuario ya ha iniciado sesión que se le redirija al dashboard
+    //Por el momento se usará la bandera logged
+    if(logged==="true")
+    {
+      history.push("/admin/dashboard");
+      return;
+    }
+  }, []);
+
   React.useEffect(() => {
     document.body.classList.toggle("login-page");
     return function cleanup() {
       document.body.classList.toggle("login-page");
     };
   });
+
+  function onChangePassword(event) {
+    setPassword(event.target.value);
+  }
+
+  function onChangeEmail(event) {
+    setEmail(event.target.value);
+  }
+
+  function onSubmitForm(event) {
+    event.preventDefault();
+
+    const credentials = { email, password };
+
+    //Aquí se hará el fetch a la API 
+    //Por el momento se va a guardar en el local storage una bandera para simular el token
+    localStorage.setItem("logged", true);
+    history.push("/admin/dashboard");
+  }
+
   return (
     <div className="login-page">
       <Container>
         <Row>
           <Col className="ml-auto mr-auto" lg="4" md="6">
-            <Form action="" className="form" method="">
+            <Form className="form" onSubmit={onSubmitForm} >
               <Card className="card-login">
                 <CardHeader>
                   <CardHeader>
-                    <h3 className="header text-center">Login</h3>
+                    <h3 className="header text-center">Iniciar Sesión</h3>
                   </CardHeader>
                 </CardHeader>
                 <CardBody>
@@ -61,7 +99,11 @@ function Login() {
                         <i className="nc-icon nc-single-02" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Email..." type="text" />
+                    <Input
+                      type = "email"
+                      name = "email"
+                      placeholder="Email"
+                      onChange={onChangeEmail} />
                   </InputGroup>
                   <InputGroup>
                     <InputGroupAddon addonType="prepend">
@@ -70,9 +112,10 @@ function Login() {
                       </InputGroupText>
                     </InputGroupAddon>
                     <Input
-                      placeholder="Password"
+                      placeholder="Contraseña"
                       type="password"
                       autoComplete="off"
+                      onChange={onChangePassword}
                     />
                   </InputGroup>
                   <br />
@@ -87,16 +130,15 @@ function Login() {
                   </FormGroup> */}
                 </CardBody>
                 <CardFooter>
-                  <Button
-                    block
-                    className="btn-round mb-3"
-                    color="warning"
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    Login
-                  </Button>
+                  <div className="btn-login">
+                    <Button type="submit" className="btn-round mb-3" color="warning">
+                      Iniciar Sesión
+                    </Button>
+                  </div>
                 </CardFooter>
+                <Link className="need-account" to="/auth/register">
+                    ¿Necesitas una cuenta?
+                </Link>
               </Card>
             </Form>
           </Col>
