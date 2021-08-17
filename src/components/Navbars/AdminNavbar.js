@@ -17,6 +17,7 @@
 import React from "react";
 import classnames from "classnames";
 import { useLocation } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   Button,
   Collapse,
@@ -42,6 +43,7 @@ function AdminNavbar(props) {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const [color, setColor] = React.useState("navbar-transparent");
   const location = useLocation();
+  const history = useHistory();
   React.useEffect(() => {
     window.addEventListener("resize", updateColor);
   });
@@ -77,6 +79,14 @@ function AdminNavbar(props) {
     }
     setCollapseOpen(!collapseOpen);
   };
+
+  function logout() {
+    //setUser(null);
+    //Borramos del localstorage la bandera de logged
+    localStorage.removeItem("logged");
+    history.push("/auth/login");
+  }
+  
   return (
     <>
       <Navbar
@@ -113,7 +123,7 @@ function AdminNavbar(props) {
             </div>
             <NavbarBrand href="#pablo" onClick={(e) => e.preventDefault()}>
               <span className="d-none d-md-block">
-                Paper Dashboard PRO React
+                GTC Dashboard
               </span>
               <span className="d-block d-md-none">PD PRO React</span>
             </NavbarBrand>
@@ -137,79 +147,12 @@ function AdminNavbar(props) {
             navbar
             isOpen={collapseOpen}
           >
-            <Form>
-              <InputGroup className="no-border">
-                <Input defaultValue="" placeholder="Search..." type="text" />
-                <InputGroupAddon addonType="append">
-                  <InputGroupText>
-                    <i className="nc-icon nc-zoom-split" />
-                  </InputGroupText>
-                </InputGroupAddon>
-              </InputGroup>
-            </Form>
+            
             <Nav navbar>
               <NavItem>
-                <NavLink
-                  className="btn-magnify"
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  <i className="nc-icon nc-layout-11" />
-                  <p>
-                    <span className="d-lg-none d-md-block">Stats</span>
-                  </p>
-                </NavLink>
-              </NavItem>
-              <UncontrolledDropdown className="btn-rotate" nav>
-                <DropdownToggle
-                  aria-haspopup={true}
-                  caret
-                  color="default"
-                  data-toggle="dropdown"
-                  id="navbarDropdownMenuLink"
-                  nav
-                >
-                  <i className="nc-icon nc-bell-55" />
-                  <p>
-                    <span className="d-lg-none d-md-block">Some Actions</span>
-                  </p>
-                </DropdownToggle>
-                <DropdownMenu
-                  persist
-                  aria-labelledby="navbarDropdownMenuLink"
-                  right
-                >
-                  <DropdownItem
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    Action
-                  </DropdownItem>
-                  <DropdownItem
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    Another action
-                  </DropdownItem>
-                  <DropdownItem
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    Something else here
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-              <NavItem>
-                <NavLink
-                  className="btn-rotate"
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  <i className="nc-icon nc-settings-gear-65" />
-                  <p>
-                    <span className="d-lg-none d-md-block">Account</span>
-                  </p>
-                </NavLink>
+                <Button Button type="submit" className="btn-round mb-3" color="warning" onClick={logout}>
+                  Cerrar Sesión
+                </Button>
               </NavItem>
             </Nav>
           </Collapse>
