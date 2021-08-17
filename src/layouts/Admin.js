@@ -103,15 +103,15 @@ function Admin(props) {
           )
         }
       </div>
-      <FixedPlugin
+      {/*<FixedPlugin
         bgColor={backgroundColor}
         activeColor={activeColor}
         sidebarMini={sidebarMini}
         handleActiveClick={handleActiveClick}
         handleBgClick={handleBgClick}
         handleMiniClick={handleMiniClick}
-      />
-    </div>
+      />*/}
+      </div>
   );
 }
 

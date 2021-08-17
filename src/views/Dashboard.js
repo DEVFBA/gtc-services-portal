@@ -71,7 +71,6 @@ function Dashboard() {
   const history = useHistory();
 
   React.useEffect(() => {
-    console.log("Si entré")
     //Si el usuario no ha iniciado sesión que se le redirija al login
     //Por el momento se usará la bandera logged
     if(logged!="true")
