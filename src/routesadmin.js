@@ -1,4 +1,4 @@
-import Dashboard from "views/Dashboard.js";
+import DashboardAdmin from "views/Dashboard.js";
 import Usuarios from "views/pages/Usuarios.js";
 import ModuleSettings from "views/pages/ModuleSettings";
 import Clientes from "views/pages/Clientes.js";
@@ -11,7 +11,7 @@ const routes = [
     path: "/dashboard",
     name: "Home",
     icon: "nc-icon nc-bank",
-    component: Dashboard,
+    component: DashboardAdmin,
     layout: "/admin",
   },
   {
@@ -24,6 +24,26 @@ const routes = [
         path: "/users",
         name: "Usuarios",
         component: Usuarios,
+        layout: "/admin",
+      },
+    ],
+  },
+  {
+    collapse: true,
+    name: "Catálogos",
+    icon: "nc-icon nc-single-copy-04",
+    state: "CatalogsCollapse",
+    views: [
+      {
+        path: "/portal-catalogs",
+        name: "Portal",
+        component: CatalogosPortal,
+        layout: "/admin",
+      },
+      {
+        path: "/sat-catalogs",
+        name: "SAT",
+        component: CatalogosSAT,
         layout: "/admin",
       },
     ],
@@ -52,26 +72,6 @@ const routes = [
         path: "/module-settings",
         name: "Configuraciones",
         component: ModuleSettings,
-        layout: "/admin",
-      },
-    ],
-  },
-  {
-    collapse: true,
-    name: "Catálogos",
-    icon: "nc-icon nc-single-copy-04",
-    state: "CatalogsCollapse",
-    views: [
-      {
-        path: "/portal-catalogs",
-        name: "Portal",
-        component: CatalogosPortal,
-        layout: "/admin",
-      },
-      {
-        path: "/sat-catalogs",
-        name: "SAT",
-        component: CatalogosSAT,
         layout: "/admin",
       },
     ],
