@@ -45,6 +45,7 @@ function Sidebar(props) {
     });
     return initialState;
   };
+
   // this verifies if any of the collapses should be default opened on a rerender of this component
   // for example, on the refresh of the page,
   // while on the src/views/forms/RegularForms.js - route /admin/regular-forms
@@ -58,6 +59,7 @@ function Sidebar(props) {
     }
     return false;
   };
+
   // this function creates the links and collapses that appear in the sidebar (left menu)
   const createLinks = (routes) => {
     return routes.map((prop, key) => {
@@ -124,10 +126,12 @@ function Sidebar(props) {
       );
     });
   };
+
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
     return props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
   };
+
   React.useEffect(() => {
     // if you are using a Windows Machine, the scrollbars will have a Mac look
     if (navigator.platform.indexOf("Win") > -1) {
@@ -144,9 +148,11 @@ function Sidebar(props) {
       }
     };
   });
+
   React.useEffect(() => {
     setCollapseStates(getCollapseStates(props.routes));
   }, []);
+
   return (
     <div
       className="sidebar"
@@ -183,6 +189,7 @@ function Sidebar(props) {
               onClick={() => setOpenAvatar(!openAvatar)}
             >
               <span>
+                {/*AQUI VA EL NOMBRE DEL USUARIO*/}
                 Chet Faker
                 <b className="caret" />
               </span>
@@ -206,13 +213,16 @@ function Sidebar(props) {
                     <span className="sidebar-mini-icon">C</span>
                     <span className="sidebar-normal">Configuración</span>
                   </NavLink>
+                  <NavLink to="/admin/user-profile" activeClassName="">
+                    <span className="sidebar-mini-icon">CS</span>
+                    <span className="sidebar-normal">Cerrar Sesión</span>
+                  </NavLink>
                 </li>
               </ul>
             </Collapse>
           </div>
         </div>
-        {/* <Nav>{createLinks(props.routes)}</Nav> */}
-        {/* <Nav>{createLinks(props.routes)}</Nav> */}
+        <Nav>{createLinks(props.routes)}</Nav>
       </div>
     </div>
   );
