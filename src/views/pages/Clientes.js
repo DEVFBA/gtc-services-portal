@@ -32,7 +32,6 @@ import {
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
-import ModalAddRegister from "components/Modals/ModalAddRegister.js";
 
 const dataTable = [
   ["Tiger Nixon", "System Architect", "Edinburgh", "61"],
