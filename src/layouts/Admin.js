@@ -190,7 +190,7 @@ function Admin(props) {
         handleActiveClick={handleActiveClick}
         handleBgClick={handleBgClick}
         handleMiniClick={handleMiniClick}
-      />
+      /> 
       </div>
   );
 }
