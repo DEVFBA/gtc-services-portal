@@ -66,7 +66,7 @@ var mapData = {
   US: 2920,
 };
 
-function Dashboard() {
+function DashboardSupport() {
   const sql = require("mssql"); //necesitamos el paquete sql
   const [countries, setCountries] = useState([]);
   const logged = localStorage.getItem("logged");
@@ -159,12 +159,12 @@ function Dashboard() {
   return (
     <>
         <div className="content">
-          <button onClick={crearCommercialRelease}>
-                  Crear Commercial Release
-          </button>
+            <div className="header text-center">
+            <h3 className="title">Dashboard Support</h3>
+            </div>
         </div>
     </>
   );
 }
 
-export default Dashboard;
+export default DashboardSupport;

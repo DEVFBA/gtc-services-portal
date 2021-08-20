@@ -79,7 +79,7 @@ const dataTable = [
   ["Olivia Liang", "Support Engineer", "Singapore", "64"],
 ];
 
-function ReactTables(props) {
+function CatalogosSAT(props) {
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
       return {
@@ -214,7 +214,7 @@ function ReactTables(props) {
           <Col md="12">
             <Card>
               <CardHeader>
-                {/*<CardTitle tag="h4">{props.example}</CardTitle>*/}
+                <CardTitle tag="h4">SAT Catalog</CardTitle>
                 <Button color="primary" onClick={toggleModalAddRecord}>
                   <span className="btn-label">
                     <i className="nc-icon nc-simple-add" />
@@ -326,4 +326,4 @@ function ReactTables(props) {
   );
 }
 
-export default ReactTables;
+export default CatalogosSAT;

@@ -77,6 +77,11 @@ function Login() {
     //Aquí se hará el fetch a la API 
     //Por el momento se va a guardar en el local storage una bandera para simular el token
     localStorage.setItem("logged", true);
+
+    //Vamos a tener 3 tipos de usuario, dependiendo cual sea se les van a mostrar cosas diferentes en la aplicación
+    //Por el momento guardaremos el tipo de usuario en el localstorage, pero eso se tiene que saber en la aplicación de usuario que va "abrazar" todo el sitio una vez que se haya loggeado
+    localStorage.setItem("tipo", "administrador")
+    
     history.push("/admin/dashboard");
   }
 
@@ -136,8 +141,8 @@ function Login() {
                     </Button>
                   </div>
                 </CardFooter>
-                <Link className="need-account" to="/auth/register">
-                    ¿Necesitas una cuenta?
+                <Link className="need-account" to="/">
+                    ¿Olvidaste tu contraseña?
                 </Link>
               </Card>
             </Form>

@@ -150,7 +150,7 @@ function AdminNavbar(props) {
             
             <Nav navbar>
               <NavItem>
-                <Button Button type="submit" className="btn-round mb-3" color="warning" onClick={logout}>
+                <Button color="primary" onClick={logout}>
                   Cerrar Sesión
                 </Button>
               </NavItem>
