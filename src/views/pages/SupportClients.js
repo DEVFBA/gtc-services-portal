@@ -27,7 +27,10 @@ import {
   Col,
   Modal, 
   ModalBody, 
-  ModalFooter
+  ModalFooter,
+  FormGroup,
+  Label,
+  Input,
 } from "reactstrap";
 
 // core components
@@ -155,7 +158,7 @@ function SupportClients(props) {
   const [records, setRecords] = useState([]);
 
   useEffect(() => {
-    //Aqui vamos a descargar la lista de registros de la base de datos por primera vez
+    //Aqui vamos a descargar la lista de clientes de la base de datos por primera vez
   }, []);
 
   function addRecord(event) {
@@ -213,14 +216,19 @@ function SupportClients(props) {
           <Col md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">Users Apps Catalog</CardTitle>
-                <Button color="primary" onClick={toggleModalAddRecord}>
-                  <span className="btn-label">
-                    <i className="nc-icon nc-simple-add" />
-                  </span>
-                  Add new record
-                </Button>
-              </CardHeader>
+                <FormGroup>
+                    {/*Al seleccionar un cliente se hará fetch para actualizar la tabla de catálogos*/}
+                    <Label for="exampleSelect">Selecciona un cliente para administrar sus servicios y aplicaciones</Label>
+                    <Input type="select" name="select" id="exampleSelect">
+                      {/*Las opciones se van a descargar del primer useeffect*/}
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                    </Input>
+                  </FormGroup>
+                </CardHeader>
               <CardBody>
                 <ReactTable
                   data={dataState}
