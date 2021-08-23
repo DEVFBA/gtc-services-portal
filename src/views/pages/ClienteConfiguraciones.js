@@ -31,7 +31,7 @@ import {
 } from "reactstrap";
 
 // core components
-import ReactTable from "components/ReactTable/ReactTable.js"; 
+import ReactTable from "components/ReactTable/ReactTable.js";
 
 const dataTable = [
   ["Tiger Nixon", "System Architect", "Edinburgh", "61"],
@@ -78,7 +78,7 @@ const dataTable = [
   ["Olivia Liang", "Support Engineer", "Singapore", "64"],
 ];
 
-function CatalogosPortal(props) {
+function ClienteConfiguraciones() {
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
       return {
@@ -142,7 +142,6 @@ function CatalogosPortal(props) {
     })
   );
 
-  const [modalAddRecord, setModalAddRecord] = useState(false);
   const [modalReadRecord, setModalReadRecord] = useState(false);
   const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
 
@@ -158,14 +157,6 @@ function CatalogosPortal(props) {
     //Aqui vamos a descargar la lista de registros de la base de datos por primera vez
   }, []);
 
-  function addRecord(event) {
-    //Código para añadir un registro a la tabla
-    //EndPoint CREATE
-
-    //una vez que añadimos el nuevo usuario, vamos a actualizar la tabla
-    //updateRecords();
-  }
-
   function updateRecord(){
     //A la hora de crear un nuevo registro necesitamos actualizar la tabla para que
     //se pinten todos los registros incluido el nuevo
@@ -176,15 +167,6 @@ function CatalogosPortal(props) {
   function readRecord(){
     //Leemos la informacion completa del registo para pintarla en el modal
     //tal vez no sea necesaria porque ya se leyó anteriormente...
-  }
-
-  function toggleModalAddRecord(){
-    if(modalAddRecord == false){
-      setModalAddRecord(true);
-    }
-    else{
-      setModalAddRecord(false);
-    }
   }
 
   function toggleModalReadRecord(){
@@ -213,13 +195,7 @@ function CatalogosPortal(props) {
           <Col md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">Portal Catalog</CardTitle>
-                <Button color="primary" onClick={toggleModalAddRecord}>
-                  <span className="btn-label">
-                    <i className="nc-icon nc-simple-add" />
-                  </span>
-                  Add new record
-                </Button>
+                <CardTitle tag="h4">Client Settings</CardTitle>
               </CardHeader>
               <CardBody>
                 <ReactTable
@@ -258,27 +234,6 @@ function CatalogosPortal(props) {
           </Col>
         </Row>
       </div>
-
-      {/*MODAL PARA AÑADIR REGISTROS*/}
-      <Modal isOpen={modalAddRecord} toggle={toggleModalAddRecord}>
-        <div className="modal-header justify-content-center">
-        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={toggleModalAddRecord}>
-            <span aria-hidden="true">×</span>
-        </button>
-        <h5 className="modal-title">Add new record</h5>
-        </div>
-        <ModalBody>
-            <p>Woohoo, you're reading this text in a modal!</p>
-        </ModalBody>
-        <ModalFooter>
-            <Button color="secondary" onClick={toggleModalAddRecord}>
-                Close
-            </Button>
-            <Button color="primary">
-                Save changes
-            </Button>
-        </ModalFooter>
-      </Modal>
 
       {/*MODAL PARA LEER REGISTRO*/}
       <Modal isOpen={modalReadRecord} toggle={toggleModalReadRecord}>
@@ -325,4 +280,4 @@ function CatalogosPortal(props) {
   );
 }
 
-export default CatalogosPortal;
+export default ClienteConfiguraciones;

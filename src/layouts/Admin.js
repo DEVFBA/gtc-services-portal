@@ -43,17 +43,20 @@ function Admin(props) {
   const [adminNav, setAdminNav] = useState();
 
   //GUARDAR EL ESTADO PARA LAS RUTAS
-  const [dbRoutes, setDbRoutes] = useState();
+  const [dbRoutes, setDbRoutes] = useState([]);
 
   //Para revisar qué tipo de RUTAS (En este caso MENU) mostrar
   const tipo = localStorage.getItem("tipo");
 
   useEffect(() => {
     //Para saber qué tipo de rutas se van a tomar
+    //Se van a jalar de la base de datos dependiendo el tipo de usuario
     //Por el momento se usará el tipo del localstorage
+    setDbRoutes(routesadmin);
+    console.log(dbRoutes)
     if(tipo === "administrador"){
-      //setDbRoutes(routessupport)
-      setSide(
+      setDbRoutes(routesadmin)
+      /*setSide(
         <Sidebar
         {...props}
         routes={routesadmin}
@@ -61,14 +64,13 @@ function Admin(props) {
         activeColor={activeColor}
       />
       );
-        console.log(side)
       setAdminNav(
         <Switch>{getRoutes(routesadmin)}</Switch>
-      )
+      )*/
     }
     else if(tipo == "support"){
-      //setDbRoutes(routessupport)
-      setSide(
+      setDbRoutes(routessupport)
+      /*setSide(
         <Sidebar
         {...props}
         routes={routessupport}
@@ -79,11 +81,11 @@ function Admin(props) {
         console.log(side)
       setAdminNav(
         <Switch>{getRoutes(routessupport)}</Switch>
-      )
+      )*/
     }
     else{
-      //setDbRoutes(routesclient) 
-      setSide(
+      setDbRoutes(routesclient) 
+      /*setSide(
         <Sidebar
         {...props}
         routes={routesclient}
@@ -94,17 +96,9 @@ function Admin(props) {
         console.log(side)
       setAdminNav(
         <Switch>{getRoutes(routesclient)}</Switch>
-      )
+      )*/
     }
-    console.log(dbRoutes)
   }, []);
-
-  useEffect(() => {
-    //Las rutas se van a jalar de la base de datos, van a depender 
-    //del tipo de usuario...
-
-  }, []);
-
 
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
@@ -165,17 +159,17 @@ function Admin(props) {
 
   return (
     <div className="wrapper">
-      {/*<Sidebar
+      <Sidebar
         {...props}
         routes={dbRoutes}
         bgColor={backgroundColor}
         activeColor={activeColor}
-      />*/}
-      {side}
+      />
+      {/*side*/}
       <div className="main-panel" ref={mainPanel}>
         <AdminNavbar {...props} handleMiniClick={handleMiniClick} />
-        {/*<Switch>{getRoutes(dbRoutes)}</Switch>*/}
-        {adminNav}
+        <Switch>{getRoutes(dbRoutes)}</Switch>
+        {/*adminNav*/}
         {
           // we don't want the Footer to be rendered on full screen maps page
           props.location.pathname.indexOf("full-screen-map") !== -1 ? null : (
@@ -183,14 +177,14 @@ function Admin(props) {
           )
         }
       </div>
-      <FixedPlugin
+      {/*<FixedPlugin
         bgColor={backgroundColor}
         activeColor={activeColor}
         sidebarMini={sidebarMini}
         handleActiveClick={handleActiveClick}
         handleBgClick={handleBgClick}
         handleMiniClick={handleMiniClick}
-      />
+      /> */}
       </div>
   );
 }

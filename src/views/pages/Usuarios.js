@@ -22,17 +22,21 @@ import {
   Card,
   CardHeader,
   CardBody,
+  CardFooter,
   CardTitle,
   Row,
   Col,
   Modal, 
   ModalBody, 
-  ModalFooter
+  ModalFooter,
+  FormGroup,
+  Form,
+  Input,
+  Label,
 } from "reactstrap";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
-import ModalAddRegister from "components/Modals/ModalAddRegister.js";
 
 const dataTable = [
   ["Tiger Nixon", "System Architect", "Edinburgh", "61"],
@@ -79,15 +83,15 @@ const dataTable = [
   ["Olivia Liang", "Support Engineer", "Singapore", "64"],
 ];
 
-function Usuarios(props) {
+function Usuarios() {
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
       return {
         id: key,
         name: prop[0],
-        position: prop[1],
-        office: prop[2],
-        age: prop[3],
+        email: prop[1],
+        position: prop[2],
+        status: prop[3],
         actions: (
           // ACCIONES A REALIZAR EN CADA REGISTRO
           <div className="actions-right">
@@ -147,10 +151,21 @@ function Usuarios(props) {
   const [modalReadRecord, setModalReadRecord] = useState(false);
   const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
 
-  //Validaciones en formularios de Modals
-  const [requiredState, setrequiredState] = React.useState("");
-  const [emailState, setemailState] = React.useState("");
-  const [numberState, setnumberState] = React.useState("");
+  // register form
+  const [registerEmail, setregisterEmail] = React.useState("");
+  const [registerFullName, setregisterFullName] = React.useState("");
+  const [registerPassword, setregisterPassword] = React.useState("");
+  const [registerRol, setregisterRol] = React.useState("");
+  const [registerConfirmPassword, setregisterConfirmPassword] = React.useState(
+    ""
+  );
+  const [registerEmailState, setregisterEmailState] = React.useState("");
+  const [registerFullNameState, setregisterFullNameState] = React.useState("");
+  const [registerPasswordState, setregisterPasswordState] = React.useState("");
+  const [
+    registerConfirmPasswordState,
+    setregisterConfirmPasswordState,
+  ] = React.useState("");
 
   //Descargar la lista de registros
   const [records, setRecords] = useState([]);
@@ -206,6 +221,107 @@ function Usuarios(props) {
     }
   }
 
+  // function that returns true if value is email, false otherwise
+  const verifyEmail = (value) => {
+    var emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (emailRex.test(value)) {
+      return true;
+    }
+    return false;
+  };
+  // function that verifies if a string has a given length or not
+  const verifyLength = (value, length) => {
+    if (value.length >= length) {
+      return true;
+    }
+    return false;
+  };
+  // function that verifies if two strings are equal
+  const compare = (string1, string2) => {
+    if (string1 === string2) {
+      return true;
+    }
+    return false;
+  };
+  // function that verifies if value contains only numbers
+  const verifyNumber = (value) => {
+    var numberRex = new RegExp("^[0-9]+$");
+    if (numberRex.test(value)) {
+      return true;
+    }
+    return false;
+  };
+  // verifies if value is a valid URL
+  const verifyUrl = (value) => {
+    try {
+      new URL(value);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  };
+
+  const registerClick = () => {
+    if (registerEmailState === "") {
+      setregisterEmailState("has-danger");
+    }
+    if (registerFullNameState === "") {
+      setregisterFullNameState("has-danger");
+    }
+    if (registerPasswordState === "" || registerConfirmPasswordState === "") {
+      setregisterPasswordState("has-danger");
+      setregisterConfirmPasswordState("has-danger");
+    }
+  };
+  const loginClick = () => {
+    if (loginFullNameState === "") {
+      setloginFullNameState("has-danger");
+    }
+    if (loginEmailState === "") {
+      setloginEmailState("has-danger");
+    }
+    if (loginPasswordState === "") {
+      setloginPasswordState("has-danger");
+    }
+  };
+
+  const typeClick = () => {
+    if (requiredState === "") {
+      setrequiredState("has-danger");
+    }
+    if (emailState === "") {
+      setemailState("has-danger");
+    }
+    if (numberState === "") {
+      setnumberState("has-danger");
+    }
+    if (urlState === "") {
+      seturlState("has-danger");
+    }
+    if (sourceState === "" || destinationState === "") {
+      setsourceState("has-danger");
+      setdestinationState("has-danger");
+    }
+  };
+
+  const rangeClick = () => {
+    if (minLengthState === "") {
+      setminLengthState("has-danger");
+    }
+    if (maxLengthState === "") {
+      setmaxLengthState("has-danger");
+    }
+    if (rangeState === "") {
+      setrangeState("has-danger");
+    }
+    if (minState === "") {
+      setminState("has-danger");
+    }
+    if (maxState === "") {
+      setmaxState("has-danger");
+    }
+  };
+
   return (
     <>
       {/*console.log(props.example)*/}
@@ -227,20 +343,20 @@ function Usuarios(props) {
                   data={dataState}
                   columns={[
                     {
-                      Header: "Id",
+                      Header: "Nombre",
                       accessor: "name",
                     },
                     {
-                      Header: "Desc. Corta",
+                      Header: "Email",
+                      accessor: "email",
+                    },
+                    {
+                      Header: "Descripción",
                       accessor: "position",
                     },
                     {
-                      Header: "Desc. Larga",
-                      accessor: "office",
-                    },
-                    {
                       Header: "Estatus",
-                      accessor: "age",
+                      accessor: "status",
                     },
                     {
                       Header: "Actions",
@@ -261,7 +377,7 @@ function Usuarios(props) {
       </div>
 
       {/*MODAL PARA AÑADIR REGISTROS*/}
-      <Modal isOpen={modalAddRecord} toggle={toggleModalAddRecord}>
+      <Modal isOpen={modalAddRecord} toggle={toggleModalAddRecord} size="lg">
         <div className="modal-header justify-content-center">
         <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={toggleModalAddRecord}>
             <span aria-hidden="true">×</span>
@@ -269,7 +385,111 @@ function Usuarios(props) {
         <h5 className="modal-title">Add new record</h5>
         </div>
         <ModalBody>
-            <p>Woohoo, you're reading this text in a modal!</p>
+          <Form id="RegisterValidation">
+            <FormGroup className={`has-label ${registerEmailState}`}>
+              <label>Email Address *</label>
+              <Input
+                name="email"
+                type="email"
+                onChange={(e) => {
+                  if (!verifyEmail(e.target.value)) {
+                    setregisterEmailState("has-danger");
+                  } else {
+                    setregisterEmailState("has-success");
+                  }
+                  setregisterEmail(e.target.value);
+                }}
+              />
+              {registerEmailState === "has-danger" ? (
+                <label className="error">
+                  Please enter a valid email address.
+                </label>
+              ) : null}
+            </FormGroup>
+            <FormGroup className={`has-label ${registerFullNameState}`}>
+                <label>Full Name *</label>
+                <Input
+                  name="fullname"
+                  type="text"
+                  onChange={(e) => {
+                    if (!verifyLength(e.target.value, 1)) {
+                      setregisterFullNameState("has-danger");
+                    } else {
+                      setregisterFullNameState("has-success");
+                    }
+                    setregisterFullName(e.target.value);
+                  }}
+                />
+                {registerFullNameState === "has-danger" ? (
+                  <label className="error">This field is required.</label>
+                ) : null}
+            </FormGroup>
+            <FormGroup className={`has-label ${registerPasswordState}`}>
+              <label>Password *</label>
+              <Input
+                id="registerPassword"
+                name="password"
+                type="password"
+                autoComplete="off"
+                onChange={(e) => {
+                  if (!verifyLength(e.target.value, 1)) {
+                    setregisterPasswordState("has-danger");
+                  } else {
+                    setregisterPasswordState("has-success");
+                  }
+                  setregisterPassword(e.target.value);
+                }}
+              />
+              {registerPasswordState === "has-danger" ? (
+                <label className="error">This field is required.</label>
+              ) : null}
+            </FormGroup>
+            <FormGroup
+              className={`has-label ${registerConfirmPasswordState}`}
+            >
+              <label>Confirm Password *</label>
+              <Input
+                equalto="#registerPassword"
+                id="registerPasswordConfirmation"
+                name="password_confirmation"
+                type="password"
+                autoComplete="off"
+                onChange={(e) => {
+                  if (!compare(e.target.value, registerPassword)) {
+                    setregisterConfirmPasswordState("has-danger");
+                    setregisterPasswordState("has-danger");
+                  } else {
+                    setregisterConfirmPasswordState("has-success");
+                    setregisterPasswordState("has-success");
+                  }
+                  setregisterConfirmPassword(e.target.value);
+                }}
+              />
+              {registerConfirmPasswordState === "has-danger" ? (
+                <label className="error">This field is required.</label>
+              ) : null}
+            </FormGroup>
+            <FormGroup>
+              {/*Falta guardar en variable*/}
+              <Label for="exampleSelect">Rol * </Label>
+              <Input type="select" name="select" id="exampleSelect">
+                <option>Administrador</option>
+                <option>Soporte</option>
+                <option>Cliente</option>
+                <option>Servicio</option>
+              </Input>
+            </FormGroup>
+            <FormGroup check>
+              <Input type="checkbox" name="check" id="exampleCheck" checked/>
+              <Label for="exampleCheck" check>Habilitado *</Label>
+            </FormGroup>
+            <div className="category form-category">
+              * Required fields
+            </div>
+            <Button color="primary" onClick={registerClick}>
+              Register
+            </Button>
+          </Form>
         </ModalBody>
         <ModalFooter>
             <Button color="secondary" onClick={toggleModalAddRecord}>
