@@ -32,6 +32,8 @@ import {
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
+import ModalUpdateClientSettings from "../components/modals/ModalUpdateClientSettings.js";
+import ModalReadClientSettings from "../components/modals/ModalReadClientSettings.js";
 
 const dataTable = [
   ["Tiger Nixon", "System Architect", "Edinburgh", "61"],
@@ -236,46 +238,10 @@ function ClienteConfiguraciones() {
       </div>
 
       {/*MODAL PARA LEER REGISTRO*/}
-      <Modal isOpen={modalReadRecord} toggle={toggleModalReadRecord}>
-        <div className="modal-header justify-content-center">
-        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={toggleModalReadRecord}>
-            <span aria-hidden="true">×</span>
-        </button>
-        <h5 className="modal-title">Record Detail</h5>
-        </div>
-        <ModalBody>
-            <p>Woohoo, you're reading this text in a modal!</p>
-        </ModalBody>
-        <ModalFooter>
-            <Button color="secondary" onClick={toggleModalReadRecord}>
-                Close
-            </Button>
-            <Button color="primary">
-                Save changes
-            </Button>
-        </ModalFooter>
-      </Modal>
+      <ModalReadClientSettings abierto = {modalReadRecord} toggleModalReadRecord = {toggleModalReadRecord}/>
 
       {/*MODAL PARA MODIFICAR REGISTRO*/}
-      <Modal isOpen={modalUpdateRecord} toggle={toggleModalUpdateRecord}>
-        <div className="modal-header justify-content-center">
-        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={toggleModalUpdateRecord}>
-            <span aria-hidden="true">×</span>
-        </button>
-        <h5 className="modal-title">Edit Record</h5>
-        </div>
-        <ModalBody>
-            <p>Woohoo, you're reading this text in a modal!</p>
-        </ModalBody>
-        <ModalFooter>
-            <Button color="secondary" onClick={toggleModalUpdateRecord}>
-                Close
-            </Button>
-            <Button color="primary">
-                Save changes
-            </Button>
-        </ModalFooter>
-      </Modal>
+      <ModalUpdateClientSettings abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord}/>
     </>
   );
 }
