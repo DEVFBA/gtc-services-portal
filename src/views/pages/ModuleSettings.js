@@ -27,11 +27,16 @@ import {
   Col,
   Modal, 
   ModalBody, 
-  ModalFooter
+  ModalFooter,
+  FormGroup,
+  Input,
+  Label
 } from "reactstrap";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
+import ModalUpdateSettings from "../components/modals/ModalUpdateSettings.js";
+import ModalReadSettings from "../components/modals/ModalReadSettings.js";
 
 const dataTable = [
   ["Tiger Nixon", "System Architect", "Edinburgh", "61"],
@@ -158,14 +163,6 @@ function ModuleSettings(props) {
     //Aqui vamos a descargar la lista de registros de la base de datos por primera vez
   }, []);
 
-  function addRecord(event) {
-    //Código para añadir un registro a la tabla
-    //EndPoint CREATE
-
-    //una vez que añadimos el nuevo usuario, vamos a actualizar la tabla
-    //updateRecords();
-  }
-
   function updateRecord(){
     //A la hora de crear un nuevo registro necesitamos actualizar la tabla para que
     //se pinten todos los registros incluido el nuevo
@@ -176,15 +173,6 @@ function ModuleSettings(props) {
   function readRecord(){
     //Leemos la informacion completa del registo para pintarla en el modal
     //tal vez no sea necesaria porque ya se leyó anteriormente...
-  }
-
-  function toggleModalAddRecord(){
-    if(modalAddRecord == false){
-      setModalAddRecord(true);
-    }
-    else{
-      setModalAddRecord(false);
-    }
   }
 
   function toggleModalReadRecord(){
@@ -214,12 +202,18 @@ function ModuleSettings(props) {
             <Card>
               <CardHeader>
                 <CardTitle tag="h4">Modules Catalog</CardTitle>
-                <Button color="primary" onClick={toggleModalAddRecord}>
-                  <span className="btn-label">
-                    <i className="nc-icon nc-simple-add" />
-                  </span>
-                  Add new record
-                </Button>
+                <FormGroup>
+                    {/*Al seleccionar un cliente se hará fetch para actualizar la tabla de catálogos*/}
+                    <Label for="exampleSelect">Selecciona una aplicación para administrar sus platillas</Label>
+                    <Input type="select" name="select" id="exampleSelect">
+                      {/*Las opciones se van a descargar del primer useeffect*/}
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                    </Input>
+                  </FormGroup>
               </CardHeader>
               <CardBody>
                 <ReactTable
@@ -259,68 +253,11 @@ function ModuleSettings(props) {
         </Row>
       </div>
 
-      {/*MODAL PARA AÑADIR REGISTROS*/}
-      <Modal isOpen={modalAddRecord} toggle={toggleModalAddRecord}>
-        <div className="modal-header justify-content-center">
-        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={toggleModalAddRecord}>
-            <span aria-hidden="true">×</span>
-        </button>
-        <h5 className="modal-title">Add new record</h5>
-        </div>
-        <ModalBody>
-            <p>Woohoo, you're reading this text in a modal!</p>
-        </ModalBody>
-        <ModalFooter>
-            <Button color="secondary" onClick={toggleModalAddRecord}>
-                Close
-            </Button>
-            <Button color="primary">
-                Save changes
-            </Button>
-        </ModalFooter>
-      </Modal>
-
       {/*MODAL PARA LEER REGISTRO*/}
-      <Modal isOpen={modalReadRecord} toggle={toggleModalReadRecord}>
-        <div className="modal-header justify-content-center">
-        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={toggleModalReadRecord}>
-            <span aria-hidden="true">×</span>
-        </button>
-        <h5 className="modal-title">Record Detail</h5>
-        </div>
-        <ModalBody>
-            <p>Woohoo, you're reading this text in a modal!</p>
-        </ModalBody>
-        <ModalFooter>
-            <Button color="secondary" onClick={toggleModalReadRecord}>
-                Close
-            </Button>
-            <Button color="primary">
-                Save changes
-            </Button>
-        </ModalFooter>
-      </Modal>
+      <ModalReadSettings abierto = {modalReadRecord} toggleModalReadRecord = {toggleModalReadRecord}/>
 
       {/*MODAL PARA MODIFICAR REGISTRO*/}
-      <Modal isOpen={modalUpdateRecord} toggle={toggleModalUpdateRecord}>
-        <div className="modal-header justify-content-center">
-        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={toggleModalUpdateRecord}>
-            <span aria-hidden="true">×</span>
-        </button>
-        <h5 className="modal-title">Edit Record</h5>
-        </div>
-        <ModalBody>
-            <p>Woohoo, you're reading this text in a modal!</p>
-        </ModalBody>
-        <ModalFooter>
-            <Button color="secondary" onClick={toggleModalUpdateRecord}>
-                Close
-            </Button>
-            <Button color="primary">
-                Save changes
-            </Button>
-        </ModalFooter>
-      </Modal>
+      <ModalUpdateSettings abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord}/>
     </>
   );
 }

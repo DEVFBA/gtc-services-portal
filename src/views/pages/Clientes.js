@@ -25,6 +25,9 @@ import {
   CardTitle,
   Row,
   Col,
+  FormGroup,
+  Label,
+  Input,
   Modal, 
   ModalBody, 
   ModalFooter
@@ -214,6 +217,18 @@ function Clientes(props) {
             <Card>
               <CardHeader>
                 <CardTitle tag="h4">Clients Catalog</CardTitle>
+                <FormGroup>
+                    {/*Al seleccionar un cliente se hará fetch para actualizar la tabla de catálogos*/}
+                    <Label for="exampleSelect">Selecciona un cliente para administrar sus usuarios</Label>
+                    <Input type="select" name="select" id="exampleSelect">
+                      {/*Las opciones se van a descargar del primer useeffect*/}
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                    </Input>
+                </FormGroup>
                 <Button color="primary" onClick={toggleModalAddRecord}>
                   <span className="btn-label">
                     <i className="nc-icon nc-simple-add" />
