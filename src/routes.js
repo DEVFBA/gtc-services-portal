@@ -12,7 +12,7 @@
 =========================================================
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
+* Probando nuevo equipo
 */
 import Buttons from "views/components/Buttons.js";
 import Calendar from "views/Calendar.js";

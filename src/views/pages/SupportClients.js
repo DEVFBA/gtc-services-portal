@@ -33,8 +33,12 @@ import {
   Input,
 } from "reactstrap";
 
+import Select from "react-select";
+
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
+import ModalUpdateSupport from "../components/modals/ModalUpdateSupport.js";
+import ModalReadSupport from "../components/modals/ModalReadSupport.js";
 
 const dataTable = [
   ["Tiger Nixon", "System Architect", "Edinburgh", "61"],
@@ -154,20 +158,28 @@ function SupportClients(props) {
   const [emailState, setemailState] = React.useState("");
   const [numberState, setnumberState] = React.useState("");
 
+  //Guardar todos los catálogos para el select
+  //const [catalogs, setCatalogs] = React.useState([]);
+  const catalogs =[
+    { value: "Afghanistan", label: " Afghanistan " },
+    { value: "Albania", label: " Albania " },
+    { value: "Algeria", label: " Algeria " },
+    { value: "American Samoa", label: " American Samoa " },
+    { value: "Andorra", label: " Andorra " },
+    { value: "Angola", label: " Angola " },
+    { value: "Anguilla", label: " Anguilla " },
+    { value: "Antarctica", label: " Antarctica " },
+  ]
+
+  //Guardar catalogo seleccionado para descargar su lista de opciones
+  const [catalog, setCatalog] = React.useState();
+  
   //Descargar la lista de registros
   const [records, setRecords] = useState([]);
 
   useEffect(() => {
     //Aqui vamos a descargar la lista de clientes de la base de datos por primera vez
   }, []);
-
-  function addRecord(event) {
-    //Código para añadir un registro a la tabla
-    //EndPoint CREATE
-
-    //una vez que añadimos el nuevo usuario, vamos a actualizar la tabla
-    //updateRecords();
-  }
 
   function updateRecord(){
     //A la hora de crear un nuevo registro necesitamos actualizar la tabla para que
@@ -179,15 +191,6 @@ function SupportClients(props) {
   function readRecord(){
     //Leemos la informacion completa del registo para pintarla en el modal
     //tal vez no sea necesaria porque ya se leyó anteriormente...
-  }
-
-  function toggleModalAddRecord(){
-    if(modalAddRecord == false){
-      setModalAddRecord(true);
-    }
-    else{
-      setModalAddRecord(false);
-    }
   }
 
   function toggleModalReadRecord(){
@@ -208,6 +211,14 @@ function SupportClients(props) {
     }
   }
 
+//Guardar evento al seleccionar en el catálogo
+const handleTypeChange = (e) => {
+  //checar problema a la hora de hacer el setCatalog
+  setCatalog(e.value);
+  console.log(e.value)
+  //console.log(catalog)
+}
+
   return (
     <>
       {/*console.log(props.example)*/}
@@ -217,16 +228,12 @@ function SupportClients(props) {
             <Card>
               <CardHeader>
                 <FormGroup>
-                    {/*Al seleccionar un cliente se hará fetch para actualizar la tabla de catálogos*/}
-                    <Label for="exampleSelect">Selecciona un cliente para administrar sus servicios y aplicaciones</Label>
-                    <Input type="select" name="select" id="exampleSelect">
-                      {/*Las opciones se van a descargar del primer useeffect*/}
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
-                    </Input>
+                    {/*Al seleccionar un catálogo se hará fetch para actualizar sus configuraciones*/}
+                    <Label for="exampleSelect">Selecciona un catálogo para administrar sus configuraciones</Label>
+                    <Select 
+                      onChange={e => handleTypeChange(e)} 
+                      options = {catalogs}
+                    />
                   </FormGroup>
                 </CardHeader>
               <CardBody>
@@ -267,68 +274,11 @@ function SupportClients(props) {
         </Row>
       </div>
 
-      {/*MODAL PARA AÑADIR REGISTROS*/}
-      <Modal isOpen={modalAddRecord} toggle={toggleModalAddRecord}>
-        <div className="modal-header justify-content-center">
-        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={toggleModalAddRecord}>
-            <span aria-hidden="true">×</span>
-        </button>
-        <h5 className="modal-title">Add new record</h5>
-        </div>
-        <ModalBody>
-            <p>Woohoo, you're reading this text in a modal!</p>
-        </ModalBody>
-        <ModalFooter>
-            <Button color="secondary" onClick={toggleModalAddRecord}>
-                Close
-            </Button>
-            <Button color="primary">
-                Save changes
-            </Button>
-        </ModalFooter>
-      </Modal>
-
       {/*MODAL PARA LEER REGISTRO*/}
-      <Modal isOpen={modalReadRecord} toggle={toggleModalReadRecord}>
-        <div className="modal-header justify-content-center">
-        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={toggleModalReadRecord}>
-            <span aria-hidden="true">×</span>
-        </button>
-        <h5 className="modal-title">Record Detail</h5>
-        </div>
-        <ModalBody>
-            <p>Woohoo, you're reading this text in a modal!</p>
-        </ModalBody>
-        <ModalFooter>
-            <Button color="secondary" onClick={toggleModalReadRecord}>
-                Close
-            </Button>
-            <Button color="primary">
-                Save changes
-            </Button>
-        </ModalFooter>
-      </Modal>
+      <ModalReadSupport abierto = {modalReadRecord} toggleModalReadRecord = {toggleModalReadRecord}/>
 
       {/*MODAL PARA MODIFICAR REGISTRO*/}
-      <Modal isOpen={modalUpdateRecord} toggle={toggleModalUpdateRecord}>
-        <div className="modal-header justify-content-center">
-        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={toggleModalUpdateRecord}>
-            <span aria-hidden="true">×</span>
-        </button>
-        <h5 className="modal-title">Edit Record</h5>
-        </div>
-        <ModalBody>
-            <p>Woohoo, you're reading this text in a modal!</p>
-        </ModalBody>
-        <ModalFooter>
-            <Button color="secondary" onClick={toggleModalUpdateRecord}>
-                Close
-            </Button>
-            <Button color="primary">
-                Save changes
-            </Button>
-        </ModalFooter>
-      </Modal>
+      <ModalUpdateSupport abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord}/>
     </>
   );
 }

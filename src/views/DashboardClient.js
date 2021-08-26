@@ -67,7 +67,7 @@ var mapData = {
 };
 
 function DashboardClient() {
-  const sql = require("mssql"); //necesitamos el paquete sql
+  //const sql = require("mssql"); //necesitamos el paquete sql
   const [countries, setCountries] = useState([]);
   const logged = localStorage.getItem("logged");
   const history = useHistory();

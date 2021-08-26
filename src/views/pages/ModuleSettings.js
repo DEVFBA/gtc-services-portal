@@ -15,6 +15,8 @@
 
 */
 import React, { useState, useEffect } from "react";
+import { Link, BrowserRouter, useLocation } from "react-router-dom";
+
 
 // reactstrap components
 import {
@@ -27,144 +29,107 @@ import {
   Col,
   Modal, 
   ModalBody, 
-  ModalFooter
+  ModalFooter,
+  FormGroup,
+  Input,
+  Label
 } from "reactstrap";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
-
-const dataTable = [
-  ["Tiger Nixon", "System Architect", "Edinburgh", "61"],
-  ["Garrett Winters", "Accountant", "Tokyo", "63"],
-  ["Ashton Cox", "Junior Technical Author", "San Francisco", "66"],
-  ["Cedric Kelly", "Senior Javascript Developer", "Edinburgh", "22"],
-  ["Airi Satou", "Accountant", "Tokyo", "33"],
-  ["Brielle Williamson", "Integration Specialist", "New York", "61"],
-  ["Herrod Chandler", "Sales Assistant", "San Francisco", "59"],
-  ["Rhona Davidson", "Integration Specialist", "Tokyo", "55"],
-  ["Colleen Hurst", "Javascript Developer", "San Francisco", "39"],
-  ["Sonya Frost", "Software Engineer", "Edinburgh", "23"],
-  ["Jena Gaines", "Office Manager", "London", "30"],
-  ["Quinn Flynn", "Support Lead", "Edinburgh", "22"],
-  ["Charde Marshall", "Regional Director", "San Francisco", "36"],
-  ["Haley Kennedy", "Senior Marketing Designer", "London", "43"],
-  ["Tatyana Fitzpatrick", "Regional Director", "London", "19"],
-  ["Michael Silva", "Marketing Designer", "London", "66"],
-  ["Paul Byrd", "Chief Financial Officer (CFO)", "New York", "64"],
-  ["Gloria Little", "Systems Administrator", "New York", "59"],
-  ["Bradley Greer", "Software Engineer", "London", "41"],
-  ["Dai Rios", "Personnel Lead", "Edinburgh", "35"],
-  ["Jenette Caldwell", "Development Lead", "New York", "30"],
-  ["Yuri Berry", "Chief Marketing Officer (CMO)", "New York", "40"],
-  ["Caesar Vance", "Pre-Sales Support", "New York", "21"],
-  ["Doris Wilder", "Sales Assistant", "Sidney", "23"],
-  ["Angelica Ramos", "Chief Executive Officer (CEO)", "London", "47"],
-  ["Gavin Joyce", "Developer", "Edinburgh", "42"],
-  ["Jennifer Chang", "Regional Director", "Singapore", "28"],
-  ["Brenden Wagner", "Software Engineer", "San Francisco", "28"],
-  ["Fiona Green", "Chief Operating Officer (COO)", "San Francisco", "48"],
-  ["Shou Itou", "Regional Marketing", "Tokyo", "20"],
-  ["Michelle House", "Integration Specialist", "Sidney", "37"],
-  ["Suki Burks", "Developer", "London", "53"],
-  ["Prescott Bartlett", "Technical Author", "London", "27"],
-  ["Gavin Cortez", "Team Leader", "San Francisco", "22"],
-  ["Martena Mccray", "Post-Sales support", "Edinburgh", "46"],
-  ["Unity Butler", "Marketing Designer", "San Francisco", "47"],
-  ["Howard Hatfield", "Office Manager", "San Francisco", "51"],
-  ["Hope Fuentes", "Secretary", "San Francisco", "41"],
-  ["Vivian Harrell", "Financial Controller", "San Francisco", "62"],
-  ["Timothy Mooney", "Office Manager", "London", "37"],
-  ["Jackson Bradshaw", "Director", "New York", "65"],
-  ["Olivia Liang", "Support Engineer", "Singapore", "64"],
-];
+import ModalUpdateSettings from "../components/modals/ModalUpdateSettings.js";
+import ModalReadSettings from "../components/modals/ModalReadSettings.js";
 
 function ModuleSettings(props) {
-  const [dataState, setDataState] = React.useState(
-    dataTable.map((prop, key) => {
-      return {
-        id: key,
-        name: prop[0],
-        position: prop[1],
-        office: prop[2],
-        age: prop[3],
-        actions: (
-          // ACCIONES A REALIZAR EN CADA REGISTRO
-          <div className="actions-right">
-            {/*IMPLEMENTAR VER REGISTRO A DETALLE*/}
-            <Button
-              onClick={() => {
-                let obj = dataState.find((o) => o.id === key);
-                alert(
-                  "You've clicked LIKE button on \n{ \nName: " +
-                    obj.name +
-                    ", \nposition: " +
-                    obj.position +
-                    ", \noffice: " +
-                    obj.office +
-                    ", \nage: " +
-                    obj.age +
-                    "\n}."
-                );
-              }}
-              color="info"
-              size="sm"
-              className="btn-icon btn-link like"
-              onClick={toggleModalReadRecord}
-            >
-              <i className="fa fa-list" />
-            </Button>{" "}
-            {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-            <Button
-              onClick={() => {
-                let obj = dataState.find((o) => o.id === key);
-                alert(
-                  "You've clicked EDIT button on \n{ \nName: " +
-                    obj.name +
-                    ", \nposition: " +
-                    obj.position +
-                    ", \noffice: " +
-                    obj.office +
-                    ", \nage: " +
-                    obj.age +
-                    "\n}."
-                );
-              }}
-              color="warning"
-              size="sm"
-              className="btn-icon btn-link edit"
-              onClick={toggleModalUpdateRecord}
-            >
-              <i className="fa fa-edit" />
-            </Button>
-          </div>
-        ),
-      };
-    })
-  );
 
-  const [modalAddRecord, setModalAddRecord] = useState(false);
+  //Guardar datos para la tabla
+  const [dataTable, setDataTable] = useState([]);
+
+  //Guardar el estado de la tabla
+  const [dataState, setDataState] = React.useState([]);
+
+  //Banderas para abrir modals
   const [modalReadRecord, setModalReadRecord] = useState(false);
   const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
 
-  //Validaciones en formularios de Modals
-  const [requiredState, setrequiredState] = React.useState("");
-  const [emailState, setemailState] = React.useState("");
-  const [numberState, setnumberState] = React.useState("");
-
-  //Descargar la lista de registros
-  const [records, setRecords] = useState([]);
-
   useEffect(() => {
     //Aqui vamos a descargar la lista de registros de la base de datos por primera vez
+    const datos = [
+      ["APP1", "System Architect", "Edinburgh", "61"],
+      ["APP2", "Accountant", "Tokyo", "63"],
+      ["APP3", "Junior Technical Author", "San Francisco", "66"],
+      ["APP4", "Senior Javascript Developer", "Edinburgh", "22"],
+      ["APP5", "Accountant", "Tokyo", "33"],
+      ["APP6", "Integration Specialist", "New York", "61"],
+    ];
+    setDataTable(datos);
   }, []);
 
-  function addRecord(event) {
-    //Código para añadir un registro a la tabla
-    //EndPoint CREATE
+  useEffect(() => {
+    setDataState(
+      dataTable.map((prop, key) => {
+        return {
+          id: key,
+          name: prop[0],
+          position: prop[1],
+          office: prop[2],
+          age: prop[3],
+          actions: (
+            // ACCIONES A REALIZAR EN CADA REGISTRO
+            <div className="actions-right">
+              {/*IMPLEMENTAR VER REGISTRO A DETALLE*/}
+              <Button
+                onClick={() => {
+                  let obj = dataState.find((o) => o.id === key);
+                  alert(
+                    "You've clicked LIKE button on \n{ \nName: " +
+                      obj.name +
+                      ", \nposition: " +
+                      obj.position +
+                      ", \noffice: " +
+                      obj.office +
+                      ", \nage: " +
+                      obj.age +
+                      "\n}."
+                  );
+                }}
+                color="info"
+                size="sm"
+                className="btn-icon btn-link like"
+                onClick={toggleModalReadRecord}
+              >
+                <i className="fa fa-list" />
+              </Button>{" "}
+              {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
+              <Button
+                onClick={() => {
+                  let obj = dataState.find((o) => o.id === key);
+                  alert(
+                    "You've clicked EDIT button on \n{ \nName: " +
+                      obj.name +
+                      ", \nposition: " +
+                      obj.position +
+                      ", \noffice: " +
+                      obj.office +
+                      ", \nage: " +
+                      obj.age +
+                      "\n}."
+                  );
+                }}
+                color="warning"
+                size="sm"
+                className="btn-icon btn-link edit"
+                onClick={toggleModalUpdateRecord}
+              >
+                <i className="fa fa-edit" />
+              </Button>
+            </div>
+          ),
+        };
+      })
+    );
+  }, [dataTable.length]);
 
-    //una vez que añadimos el nuevo usuario, vamos a actualizar la tabla
-    //updateRecords();
-  }
 
   function updateRecord(){
     //A la hora de crear un nuevo registro necesitamos actualizar la tabla para que
@@ -176,15 +141,6 @@ function ModuleSettings(props) {
   function readRecord(){
     //Leemos la informacion completa del registo para pintarla en el modal
     //tal vez no sea necesaria porque ya se leyó anteriormente...
-  }
-
-  function toggleModalAddRecord(){
-    if(modalAddRecord == false){
-      setModalAddRecord(true);
-    }
-    else{
-      setModalAddRecord(false);
-    }
   }
 
   function toggleModalReadRecord(){
@@ -214,27 +170,29 @@ function ModuleSettings(props) {
             <Card>
               <CardHeader>
                 <CardTitle tag="h4">Modules Catalog</CardTitle>
-                <Button color="primary" onClick={toggleModalAddRecord}>
-                  <span className="btn-label">
-                    <i className="nc-icon nc-simple-add" />
-                  </span>
-                  Add new record
-                </Button>
+                <Link to="/admin/add-application">
+                  <Button color="primary">
+                    <span className="btn-label">
+                      <i className="nc-icon nc-simple-add" />
+                    </span>
+                    Add new record
+                  </Button>
+                </Link>
               </CardHeader>
               <CardBody>
                 <ReactTable
                   data={dataState}
                   columns={[
                     {
-                      Header: "Id",
+                      Header: "Aplicación",
                       accessor: "name",
                     },
                     {
-                      Header: "Desc. Corta",
+                      Header: "Versión",
                       accessor: "position",
                     },
                     {
-                      Header: "Desc. Larga",
+                      Header: "Suite",
                       accessor: "office",
                     },
                     {
@@ -259,68 +217,11 @@ function ModuleSettings(props) {
         </Row>
       </div>
 
-      {/*MODAL PARA AÑADIR REGISTROS*/}
-      <Modal isOpen={modalAddRecord} toggle={toggleModalAddRecord}>
-        <div className="modal-header justify-content-center">
-        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={toggleModalAddRecord}>
-            <span aria-hidden="true">×</span>
-        </button>
-        <h5 className="modal-title">Add new record</h5>
-        </div>
-        <ModalBody>
-            <p>Woohoo, you're reading this text in a modal!</p>
-        </ModalBody>
-        <ModalFooter>
-            <Button color="secondary" onClick={toggleModalAddRecord}>
-                Close
-            </Button>
-            <Button color="primary">
-                Save changes
-            </Button>
-        </ModalFooter>
-      </Modal>
-
       {/*MODAL PARA LEER REGISTRO*/}
-      <Modal isOpen={modalReadRecord} toggle={toggleModalReadRecord}>
-        <div className="modal-header justify-content-center">
-        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={toggleModalReadRecord}>
-            <span aria-hidden="true">×</span>
-        </button>
-        <h5 className="modal-title">Record Detail</h5>
-        </div>
-        <ModalBody>
-            <p>Woohoo, you're reading this text in a modal!</p>
-        </ModalBody>
-        <ModalFooter>
-            <Button color="secondary" onClick={toggleModalReadRecord}>
-                Close
-            </Button>
-            <Button color="primary">
-                Save changes
-            </Button>
-        </ModalFooter>
-      </Modal>
+      <ModalReadSettings abierto = {modalReadRecord} toggleModalReadRecord = {toggleModalReadRecord}/>
 
       {/*MODAL PARA MODIFICAR REGISTRO*/}
-      <Modal isOpen={modalUpdateRecord} toggle={toggleModalUpdateRecord}>
-        <div className="modal-header justify-content-center">
-        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={toggleModalUpdateRecord}>
-            <span aria-hidden="true">×</span>
-        </button>
-        <h5 className="modal-title">Edit Record</h5>
-        </div>
-        <ModalBody>
-            <p>Woohoo, you're reading this text in a modal!</p>
-        </ModalBody>
-        <ModalFooter>
-            <Button color="secondary" onClick={toggleModalUpdateRecord}>
-                Close
-            </Button>
-            <Button color="primary">
-                Save changes
-            </Button>
-        </ModalFooter>
-      </Modal>
+      <ModalUpdateSettings abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord}/>
     </>
   );
 }

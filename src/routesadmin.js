@@ -4,6 +4,7 @@ import ModuleSettings from "views/pages/ModuleSettings";
 import Clientes from "views/pages/Clientes.js";
 import CatalogosPortal from "views/pages/CatalogosPortal";
 import CatalogosSAT from "views/pages/CatalogosSAT";
+import AddApplication from "views/pages/AddApplication";
 
 const routes = [
   {
@@ -75,6 +76,14 @@ const routes = [
         layout: "/admin",
       },
     ],
+  },
+  {
+    invisible: true,
+    path: "/add-application",
+    name: "Add Application",
+    icon: "nc-icon nc-bank",
+    component: AddApplication,
+    layout: "/admin",
   },
 ];
 
