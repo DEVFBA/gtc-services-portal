@@ -33,6 +33,8 @@ import {
   Input,
 } from "reactstrap";
 
+import Select from "react-select";
+
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalUpdateSupport from "../components/modals/ModalUpdateSupport.js";
@@ -156,6 +158,22 @@ function SupportClients(props) {
   const [emailState, setemailState] = React.useState("");
   const [numberState, setnumberState] = React.useState("");
 
+  //Guardar todos los catálogos para el select
+  //const [catalogs, setCatalogs] = React.useState([]);
+  const catalogs =[
+    { value: "Afghanistan", label: " Afghanistan " },
+    { value: "Albania", label: " Albania " },
+    { value: "Algeria", label: " Algeria " },
+    { value: "American Samoa", label: " American Samoa " },
+    { value: "Andorra", label: " Andorra " },
+    { value: "Angola", label: " Angola " },
+    { value: "Anguilla", label: " Anguilla " },
+    { value: "Antarctica", label: " Antarctica " },
+  ]
+
+  //Guardar catalogo seleccionado para descargar su lista de opciones
+  const [catalog, setCatalog] = React.useState();
+  
   //Descargar la lista de registros
   const [records, setRecords] = useState([]);
 
@@ -193,6 +211,14 @@ function SupportClients(props) {
     }
   }
 
+//Guardar evento al seleccionar en el catálogo
+const handleTypeChange = (e) => {
+  //checar problema a la hora de hacer el setCatalog
+  setCatalog(e.value);
+  console.log(e.value)
+  //console.log(catalog)
+}
+
   return (
     <>
       {/*console.log(props.example)*/}
@@ -202,16 +228,12 @@ function SupportClients(props) {
             <Card>
               <CardHeader>
                 <FormGroup>
-                    {/*Al seleccionar un cliente se hará fetch para actualizar la tabla de catálogos*/}
-                    <Label for="exampleSelect">Selecciona un cliente para administrar sus servicios y aplicaciones</Label>
-                    <Input type="select" name="select" id="exampleSelect">
-                      {/*Las opciones se van a descargar del primer useeffect*/}
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
-                    </Input>
+                    {/*Al seleccionar un catálogo se hará fetch para actualizar sus configuraciones*/}
+                    <Label for="exampleSelect">Selecciona un catálogo para administrar sus configuraciones</Label>
+                    <Select 
+                      onChange={e => handleTypeChange(e)} 
+                      options = {catalogs}
+                    />
                   </FormGroup>
                 </CardHeader>
               <CardBody>
