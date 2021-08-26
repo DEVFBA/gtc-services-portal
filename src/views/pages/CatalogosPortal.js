@@ -30,8 +30,10 @@ import {
   ModalFooter,
   FormGroup,
   Label,
-  Input
+  Input,
 } from "reactstrap";
+
+import Select from "react-select";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js"; 
@@ -156,12 +158,45 @@ function CatalogosPortal(props) {
   const [emailState, setemailState] = React.useState("");
   const [numberState, setnumberState] = React.useState("");
 
-  //Descargar la lista de registros
+  //Guardar todos los catálogos para el select
+  //const [catalogs, setCatalogs] = React.useState([]);
+  const catalogs =[
+    { value: "Afghanistan", label: " Afghanistan " },
+    { value: "Albania", label: " Albania " },
+    { value: "Algeria", label: " Algeria " },
+    { value: "American Samoa", label: " American Samoa " },
+    { value: "Andorra", label: " Andorra " },
+    { value: "Angola", label: " Angola " },
+    { value: "Anguilla", label: " Anguilla " },
+    { value: "Antarctica", label: " Antarctica " },
+  ]
+
+  //Guardar catalogo seleccionado para descargar su lista de opciones
+  const [catalog, setCatalog] = React.useState();
+
+  //Descargar la lista de opciones del catálogo seleccionado
   const [records, setRecords] = useState([]);
+ 
 
   useEffect(() => {
-    //Aqui vamos a descargar la lista de registros de la base de datos por primera vez
+    //Aqui vamos a descargar la lista de catalogos de la base de datos por primera vez
+    //se van a guardar en catalogs
+    //en el select por primera vez vamos a seleccionar la primera opcion
+    //downloadRecords(catalog)
   }, []);
+
+  function updateRecords(value){
+    console.log("entres");
+    setCatalog(value);
+    console.log(catalog);
+    //downloadRecords(catalog)
+  }
+
+  function downloadRecords(catalog){
+    //Aqui vamos a descargar la lista de opciones del catálogo seleccionado
+    //Nos sirve para pintar la tabla
+    //Vamos a guardar los valores en records
+  }
 
   function updateRecord(){
     //A la hora de crear un nuevo registro necesitamos actualizar la tabla para que
@@ -193,6 +228,14 @@ function CatalogosPortal(props) {
     }
   }
 
+  //Guardar evento al seleccionar en el catálogo
+  const handleTypeChange = (e) => {
+    //checar problema a la hora de hacer el setCatalog
+    setCatalog(e.value);
+    console.log(e.value)
+    //console.log(catalog)
+  }
+
   return (
     <>
       {/*console.log(props.example)*/}
@@ -204,15 +247,14 @@ function CatalogosPortal(props) {
                 <CardTitle tag="h4">Portal Catalog</CardTitle>
                 <FormGroup>
                   {/*Al seleccionar un catálogo se hará fetch para actualizar sus configuraciones*/}
-                  <Label for="exampleSelect">Selecciona un catálogo para administrar sus configuraciones</Label>
-                  <Input type="select" name="select" id="exampleSelect">
-                    {/*Las opciones se van a descargar del primer useeffect*/}
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </Input>
+                  <Select 
+                    placeholder = "Selecciona un catálogo para administrar sus configuraciones"
+                    options = {catalogs}
+                    onChange={(e) => {
+                      setCatalog(e.value);
+                      console.log(e.value)
+                    }}
+                  />
                 </FormGroup>
               </CardHeader>
               <CardBody>

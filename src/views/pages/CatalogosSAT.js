@@ -33,6 +33,8 @@ import {
   ModalFooter
 } from "reactstrap";
 
+import Select from "react-select";
+
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalUpdateSat from "../components/modals/ModalUpdateSat.js";
@@ -156,6 +158,22 @@ function CatalogosSAT(props) {
   const [emailState, setemailState] = React.useState("");
   const [numberState, setnumberState] = React.useState("");
 
+  //Guardar todos los catálogos para el select
+  //const [catalogs, setCatalogs] = React.useState([]);
+  const catalogs =[
+    { value: "Afghanistan", label: " Afghanistan " },
+    { value: "Albania", label: " Albania " },
+    { value: "Algeria", label: " Algeria " },
+    { value: "American Samoa", label: " American Samoa " },
+    { value: "Andorra", label: " Andorra " },
+    { value: "Angola", label: " Angola " },
+    { value: "Anguilla", label: " Anguilla " },
+    { value: "Antarctica", label: " Antarctica " },
+  ]
+
+  //Guardar catalogo seleccionado para descargar su lista de opciones
+  const [catalog, setCatalog] = React.useState();
+  
   //Descargar la lista de registros
   const [records, setRecords] = useState([]);
 
@@ -203,15 +221,14 @@ function CatalogosSAT(props) {
               <CardTitle tag="h4">SAT Catalog</CardTitle>
                 <FormGroup>
                   {/*Al seleccionar un catálogo se hará fetch para actualizar sus configuraciones*/}
-                  <Label for="exampleSelect">Selecciona un catálogo para administrar sus configuraciones</Label>
-                  <Input type="select" name="select" id="exampleSelect">
-                    {/*Las opciones se van a descargar del primer useeffect*/}
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </Input>
+                  <Select 
+                    placeholder = "Selecciona un catálogo para administrar sus configuraciones"
+                    options = {catalogs}
+                    onChange={(e) => {
+                      setCatalog(e.value);
+                      console.log(e.value)
+                    }}
+                  />
                 </FormGroup>
               </CardHeader>
               <CardBody>
