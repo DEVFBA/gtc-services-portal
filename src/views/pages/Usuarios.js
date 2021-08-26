@@ -40,6 +40,7 @@ import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalAddUser from "../components/modals/ModalAddUser.js";
 import ModalUpdateUser from "../components/modals/ModalUpdateUser.js";
 import ModalReadUser from "../components/modals/ModalReadUser.js";
+import { data } from "jquery";
 
 const dataTable = [
   ["Tiger Nixon", "System Architect", "Edinburgh", "61"],
@@ -87,68 +88,8 @@ const dataTable = [
 ];
 
 function Usuarios() {
-  const [dataState, setDataState] = React.useState(
-    dataTable.map((prop, key) => {
-      return {
-        id: key,
-        name: prop[0],
-        email: prop[1],
-        position: prop[2],
-        status: prop[3],
-        actions: (
-          // ACCIONES A REALIZAR EN CADA REGISTRO
-          <div className="actions-right">
-            {/*IMPLEMENTAR VER REGISTRO A DETALLE*/}
-            <Button
-              onClick={() => {
-                let obj = dataState.find((o) => o.id === key);
-                alert(
-                  "You've clicked LIKE button on \n{ \nName: " +
-                    obj.name +
-                    ", \nposition: " +
-                    obj.position +
-                    ", \noffice: " +
-                    obj.office +
-                    ", \nage: " +
-                    obj.age +
-                    "\n}."
-                );
-              }}
-              color="info"
-              size="sm"
-              className="btn-icon btn-link like"
-              onClick={toggleModalReadRecord}
-            >
-              <i className="fa fa-list" />
-            </Button>{" "}
-            {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-            <Button
-              onClick={() => {
-                let obj = dataState.find((o) => o.id === key);
-                alert(
-                  "You've clicked EDIT button on \n{ \nName: " +
-                    obj.name +
-                    ", \nposition: " +
-                    obj.position +
-                    ", \noffice: " +
-                    obj.office +
-                    ", \nage: " +
-                    obj.age +
-                    "\n}."
-                );
-              }}
-              color="warning"
-              size="sm"
-              className="btn-icon btn-link edit"
-              onClick={toggleModalUpdateRecord}
-            >
-              <i className="fa fa-edit" />
-            </Button>
-          </div>
-        ),
-      };
-    })
-  );
+  const [dataTable, setDataTable] = useState([]);
+  const [dataState, setDataState] = React.useState([]);
 
   const [modalAddRecord, setModalAddRecord] = useState(false);
   const [modalPrueba, setModalPrueba] = useState(false);
@@ -159,8 +100,84 @@ function Usuarios() {
   const [records, setRecords] = useState([]);
 
   useEffect(() => {
-    //Aqui vamos a descargar la lista de registros de la base de datos por primera vez
+    const datos = [
+      ["Tiger Nixon", "System Architect", "Edinburgh", "61"],
+      ["Garrett Winters", "Accountant", "Tokyo", "63"],
+      ["Ashton Cox", "Junior Technical Author", "San Francisco", "66"],
+      ["Cedric Kelly", "Senior Javascript Developer", "Edinburgh", "22"],
+      ["Airi Satou", "Accountant", "Tokyo", "33"],
+      ["Brielle Williamson", "Integration Specialist", "New York", "61"],
+    ];
+    
+    setDataTable(datos);
+    
   }, []);
+
+  useEffect(() => {
+    setDataState(
+      dataTable.map((prop, key) => {
+        return {
+          id: key,
+          name: prop[0],
+          email: prop[1],
+          position: prop[2],
+          status: prop[3],
+          actions: (
+            // ACCIONES A REALIZAR EN CADA REGISTRO
+            <div className="actions-right">
+              {/*IMPLEMENTAR VER REGISTRO A DETALLE*/}
+              <Button
+                onClick={() => {
+                  let obj = dataState.find((o) => o.id === key);
+                  alert(
+                    "You've clicked LIKE button on \n{ \nName: " +
+                      obj.name +
+                      ", \nposition: " +
+                      obj.position +
+                      ", \noffice: " +
+                      obj.office +
+                      ", \nage: " +
+                      obj.age +
+                      "\n}."
+                  );
+                }}
+                color="info"
+                size="sm"
+                className="btn-icon btn-link like"
+                onClick={toggleModalReadRecord}
+              >
+                <i className="fa fa-list" />
+              </Button>{" "}
+              {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
+              <Button
+                onClick={() => {
+                  let obj = dataState.find((o) => o.id === key);
+                  alert(
+                    "You've clicked EDIT button on \n{ \nName: " +
+                      obj.name +
+                      ", \nposition: " +
+                      obj.position +
+                      ", \noffice: " +
+                      obj.office +
+                      ", \nage: " +
+                      obj.age +
+                      "\n}."
+                  );
+                }}
+                color="warning"
+                size="sm"
+                className="btn-icon btn-link edit"
+                onClick={toggleModalUpdateRecord}
+              >
+                <i className="fa fa-edit" />
+              </Button>
+            </div>
+          ),
+        };
+      })
+    )
+    
+  }, [dataTable.length]);
 
   function addRecord(event) {
     //Código para añadir un registro a la tabla

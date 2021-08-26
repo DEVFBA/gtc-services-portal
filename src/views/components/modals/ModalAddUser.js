@@ -255,7 +255,15 @@ function ModalAddUser({abierto, toggleModalAddRecord}) {
                     <option>Servicio</option>
                 </Input>
                 </FormGroup>
-                <label><input type="checkbox" id="cbox1" value="first_checkbox"/> Habilitado *</label> 
+                <FormGroup check>
+                    <Label check>
+                    <Input type="checkbox" checked/>{' '}
+                    Habilitado *
+                    <span className="form-check-sign">
+                        <span className="check"></span>
+                    </span>
+                    </Label>
+                </FormGroup>
                 <div className="category form-category">
                 * Required fields
                 </div>
