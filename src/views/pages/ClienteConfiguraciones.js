@@ -91,7 +91,7 @@ function ClienteConfiguraciones() {
         age: prop[3],
         actions: (
           // ACCIONES A REALIZAR EN CADA REGISTRO
-          <div className="actions-right">
+          <div className="actions-center">
             {/*IMPLEMENTAR VER REGISTRO A DETALLE*/}
             <Button
               onClick={() => {

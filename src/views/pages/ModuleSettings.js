@@ -15,7 +15,7 @@
 
 */
 import React, { useState, useEffect } from "react";
-import { Link, BrowserRouter, useLocation } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 
 // reactstrap components
@@ -39,44 +39,36 @@ import {
 import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalUpdateSettings from "../components/modals/ModalUpdateSettings.js";
 import ModalReadSettings from "../components/modals/ModalReadSettings.js";
+import EditApplication from "./EditApplication.js";
 
-function ModuleSettings(props) {
+const datos = [
+  ["APP1", "System Architect", "Edinburgh", "61"],
+  ["APP2", "Accountant", "Tokyo", "63"],
+  ["APP3", "Junior Technical Author", "San Francisco", "66"],
+  ["APP4", "Senior Javascript Developer", "Edinburgh", "22"],
+  ["APP5", "Accountant", "Tokyo", "33"],
+  ["APP6", "Integration Specialist", "New York", "61"],
+];
+
+function ModuleSettings() {
 
   //Guardar datos para la tabla
   const [dataTable, setDataTable] = useState([]);
 
+  const history = useHistory();
+
   //Guardar el estado de la tabla
-  const [dataState, setDataState] = React.useState([]);
-
-  //Banderas para abrir modals
-  const [modalReadRecord, setModalReadRecord] = useState(false);
-  const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
-
-  useEffect(() => {
-    //Aqui vamos a descargar la lista de registros de la base de datos por primera vez
-    const datos = [
-      ["APP1", "System Architect", "Edinburgh", "61"],
-      ["APP2", "Accountant", "Tokyo", "63"],
-      ["APP3", "Junior Technical Author", "San Francisco", "66"],
-      ["APP4", "Senior Javascript Developer", "Edinburgh", "22"],
-      ["APP5", "Accountant", "Tokyo", "33"],
-      ["APP6", "Integration Specialist", "New York", "61"],
-    ];
-    setDataTable(datos);
-  }, []);
-
-  useEffect(() => {
-    setDataState(
-      dataTable.map((prop, key) => {
+  const [dataState, setDataState] = useState(
+      datos.map((prop, key) => {
         return {
           id: key,
-          name: prop[0],
-          position: prop[1],
-          office: prop[2],
-          age: prop[3],
+          idAplicacion: prop[0],
+          version: prop[1],
+          suite: prop[2],
+          status: prop[3],
           actions: (
             // ACCIONES A REALIZAR EN CADA REGISTRO
-            <div className="actions-right">
+            <div className="actions-center">
               {/*IMPLEMENTAR VER REGISTRO A DETALLE*/}
               <Button
                 onClick={() => {
@@ -104,22 +96,11 @@ function ModuleSettings(props) {
               <Button
                 onClick={() => {
                   let obj = dataState.find((o) => o.id === key);
-                  alert(
-                    "You've clicked EDIT button on \n{ \nName: " +
-                      obj.name +
-                      ", \nposition: " +
-                      obj.position +
-                      ", \noffice: " +
-                      obj.office +
-                      ", \nage: " +
-                      obj.age +
-                      "\n}."
-                  );
+                  history.push(`/admin/edit-application/${obj.idAplicacion}/`);
                 }}
                 color="warning"
                 size="sm"
                 className="btn-icon btn-link edit"
-                onClick={toggleModalUpdateRecord}
               >
                 <i className="fa fa-edit" />
               </Button>
@@ -128,7 +109,19 @@ function ModuleSettings(props) {
         };
       })
     );
-  }, [dataTable.length]);
+
+  //Banderas para abrir modals
+  const [modalReadRecord, setModalReadRecord] = useState(false);
+  const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
+
+  //Para obtener el registro que se va a editar
+  const [editApplication, setEditApplication] = useState();
+
+  useEffect(() => {
+    //Aqui vamos a descargar la lista de registros de la base de datos por primera vez
+    
+    setDataTable(datos);
+  }, []);
 
 
   function updateRecord(){
@@ -185,19 +178,19 @@ function ModuleSettings(props) {
                   columns={[
                     {
                       Header: "Aplicación",
-                      accessor: "name",
+                      accessor: "idAplicacion",
                     },
                     {
                       Header: "Versión",
-                      accessor: "position",
+                      accessor: "version",
                     },
                     {
                       Header: "Suite",
-                      accessor: "office",
+                      accessor: "suite",
                     },
                     {
                       Header: "Estatus",
-                      accessor: "age",
+                      accessor: "status",
                     },
                     {
                       Header: "Actions",
@@ -222,7 +215,7 @@ function ModuleSettings(props) {
 
       {/*MODAL PARA MODIFICAR REGISTRO*/}
       <ModalUpdateSettings abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord}/>
-    </>
+    </> 
   );
 }
 
