@@ -126,7 +126,8 @@ function Dashboard() {
       udtCommercialRelease.rows.add(Id_Item, countries[i].Id_Country, 1, 19000101, Modify_By, fecha.getDate(), "IPALEXIS");  
     }
     console.log(udtCommercialRelease);*/
-    const commercialRelease = {
+
+    /*const commercialRelease = {
       pvOptionCRUD: "C",
       pvIdLanguageUser: "ANG",
       //pudtCommercialRelease: udtCommercialRelease,
@@ -153,7 +154,9 @@ function Dashboard() {
       else{
         console.log(data)
       }
-    });
+    });*/
+
+    
   }
 
   return (
