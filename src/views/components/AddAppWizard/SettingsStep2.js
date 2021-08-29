@@ -32,28 +32,54 @@ import {
 import Select from "react-select";
 import ReactTable from "components/ReactTable/ReactTable.js";
 import AddConfiguration from "./AddConfiguration.js";
+import { Day } from "react-big-calendar";
 
-
-
-  const SettingsStep2 = React.forwardRef((props, ref) => {
-  
-
+const SettingsStep2 = React.forwardRef((props, ref) => {
+  //Aqui iremos guardando los registros de las configuraciones
   const [dataTable, setDataTable] = useState([]);
-  const [dataState, setDataState] = useState([])
+
+  const [dataState, setDataState] = useState(
+    dataTable.map((prop, key) => {
+      return {
+        id: key,
+        configuracion: prop[0],
+        requerida: prop[1],
+        editable: prop[2],
+        visible: prop[3],
+        tooltip: prop[4],
+        actions: (
+          // ACCIONES A REALIZAR EN CADA REGISTRO
+          <div className="actions-center">
+            {/* use this button to remove the data row */}
+            <Button
+              onClick={() => {
+                var data = dataState;
+                data.find((o, i) => {
+                  if (o.id === key) {
+                    // here you should add some custom code so you can delete the data
+                    // from this component and from your server as well
+                    data.splice(i, 1);
+                    console.log(data.length);
+                    return true;
+                  }
+                  return false;
+                });
+                setDataState(data);
+              }}
+              color="danger"
+              size="sm"
+              className="btn-icon btn-link remove"
+            ><i className="fa fa-times" />
+            </Button>{" "}
+          </div>
+        ),
+      };
+    })
+  )
 
   //Si el usuario no ha agredado configuraciones no se le permitirá guardar la aplicación o servicio
   const [dataTableState, setDataTableState] = React.useState("");
   const [dataTableFocus, setDataTableFocus] = React.useState("");
-
-  //Guardar todos los catálogos para el select
-  //const [catalogs, setCatalogs] = React.useState([]);
-  const tipoDato =[
-    { value: "String", label: " String " },
-    { value: "Boolean", label: " Boolean " },
-    { value: "Number", label: " Number " },
-  ]
-
-  
 
   useEffect(() => {
     //Simular la descarga de datos por primera vez
@@ -66,50 +92,6 @@ import AddConfiguration from "./AddConfiguration.js";
     ];
     setDataTable(datos);*/
   },[]);
-
-
-  useEffect(() => {
-    //Actualizar la tabla cada que cambien los datos
-    setDataState(
-      dataTable.map((prop, key) => {
-        return {
-          id: key,
-          configuracion: prop[0],
-          tipoconfiguracion: prop[1],
-          requerida: prop[2],
-          editable: prop[3],
-          visible: prop[4],
-          tooltip: prop[5],
-          actions: (
-            // ACCIONES A REALIZAR EN CADA REGISTRO
-            <div className="actions-right">
-              {/* use this button to remove the data row */}
-              <Button
-                onClick={() => {
-                  var data = dataState;
-                  data.find((o, i) => {
-                    if (o.id === key) {
-                      // here you should add some custom code so you can delete the data
-                      // from this component and from your server as well
-                      data.splice(i, 1);
-                      console.log(data.length);
-                      return true;
-                    }
-                    return false;
-                  });
-                  //setDataState(data);
-                }}
-                color="danger"
-                size="sm"
-                className="btn-icon btn-link remove"
-              ><i className="fa fa-times" />
-              </Button>{" "}
-            </div>
-          ),
-        };
-      })
-    );
-  }, [dataTable.length]);
   
   React.useImperativeHandle(ref, () => ({
     isValidated: () => {
@@ -140,13 +122,56 @@ import AddConfiguration from "./AddConfiguration.js";
     }
   };
 
+  function updateTable(){
+    console.log(dataTable)
+    setDataState(
+      dataTable.map((prop, key) => {
+        return {
+          id: key,
+          configuracion: prop[0],
+          requerida: prop[1],
+          editable: prop[2],
+          visible: prop[3],
+          tooltip: prop[4],
+          actions: (
+            // ACCIONES A REALIZAR EN CADA REGISTRO
+            <div className="actions-center">
+              {/* use this button to remove the data row */}
+              <Button
+                onClick={() => {
+                  var data = dataState;
+                  console.log(dataState)
+                  data.find((o, i) => {
+                    if (o.id === key) {
+                      // here you should add some custom code so you can delete the data
+                      // from this component and from your server as well
+                      data.splice(i, 1);
+                      return true;
+                    }
+                    return false;
+                  });
+                  //ISSUE AL ELIMINAR - PENDIENTE...
+                  setDataState(data);
+                }}
+                color="danger"
+                size="sm"
+                className="btn-icon btn-link remove"
+              ><i className="fa fa-times" />
+              </Button>{" "}
+            </div>
+          ),
+        };
+      })
+    )
+  }
+
   return (
     <>
       <h5 className="info-text">
         Agregar configuración
       </h5>
       <Row className="justify-content-center">
-        <AddConfiguration dataTable = {dataTable} setDataTable = {setDataTable} setDataState = {setDataState}/>
+        <AddConfiguration dataTable = {dataTable} setDataTable = {setDataTable} updateTable = {updateTable} />
         <Col className="mt-1" lg="12">
             <FormGroup
               className={classnames(dataTableState, {
@@ -165,10 +190,6 @@ import AddConfiguration from "./AddConfiguration.js";
                 {
                   Header: "Configuración",
                   accessor: "configuracion",
-                },
-                {
-                  Header: "Tipo de configuración",
-                  accessor: "tipoconfiguracion",
                 },
                 {
                   Header: "Requerida",

@@ -15659,7 +15659,7 @@ This file was modified entirely by Creative Tim for React-Select v2.0.0
   text-align: center; }
 
 .ReactTable .rt-thead .rt-th:last-child {
-  text-align: right; }
+  text-align: center !important}
 
 .ReactTable .rt-thead .rt-th.-cursor-pointer > div:first-of-type:after {
   opacity: 0.6;
