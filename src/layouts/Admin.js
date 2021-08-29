@@ -45,6 +45,8 @@ function Admin(props) {
   //GUARDAR EL ESTADO PARA LAS RUTAS
   const [dbRoutes, setDbRoutes] = useState([]);
 
+  const [dbPrueba, setDbPrueba] = useState([]);
+
   //Para revisar qué tipo de RUTAS (En este caso MENU) mostrar
   const tipo = localStorage.getItem("tipo");
 
@@ -99,6 +101,100 @@ function Admin(props) {
       )*/
     }
   }, []);
+
+  useEffect(() => {
+
+    //estos parametros se van a tomar del local storage o del usecontext
+    const params = {
+      pvOptionCRUD: "R",
+      pIdCustomer : 1,
+	    pvIdRole : "GTCSUPPO"
+    };
+
+    var url = new URL(`http://localhost:8091/api/routes/`);
+
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+    console.log(url)
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+
+        var routesAux = [];
+        //console.log(data[0].Component_Module);
+        for(var i=0; i<data.length; i++)
+        {
+          if(data[i].Status === true)
+          {
+            if(data[i].Component_Module!=="")
+            {
+              routesAux.push(
+                {
+                  collapse: false,
+                  path: data[i].Url,
+                  name: data[i].Module_Desc,
+                  icon: data[i].Icon,
+                  component: data[i].Component_Module,
+                  layout: data[i].Layout_Module
+                }
+              )
+            }
+            else{
+              //if(data[i-1].Id_Module !== data[i].Id_Module && data[i].Status === true)
+              //{
+                var views = []
+                views.push(
+                  {
+                    path: data[i].Url,
+                    name: data[i].SubModule_Desc,
+                    component: data[i].Component_Submodule,
+                    layout: data[i].Layout_SubModule
+                  }
+                )
+                var j= i+1;
+                while(j<data.length)
+                {
+                  if(data[i].Id_Module === data[j].Id_Module && data[j].Status === true)
+                  {
+                    views.push(
+                      {
+                        path: data[j].Url,
+                        name: data[j].SubModule_Desc,
+                        component: data[j].Component_Submodule,
+                        layout: data[j].Layout_SubModule
+                      }
+                    )
+                  }
+                  j++
+                }
+                console.log("Valor de i: " + data[i].Id_Module + " y de i-1: " + data[i-1].Id_Module)
+                routesAux.push(
+                  {
+                    collapse: true,
+                    name: data[i].Module_Desc,
+                    icon: data[i].Icon,
+                    views: views,
+                  }
+                )
+              //}
+            }
+          }
+        }
+        console.log(routesAux)
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de las rutas");
+    });
+  }, []);
+
+
 
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {

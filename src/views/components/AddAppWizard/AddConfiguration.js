@@ -29,34 +29,26 @@ import {
 // react plugin used to create DropdownMenu for selecting items
 import Select from "react-select";
 
-function AddConfiguration ({dataTable, setDataTable, setDataState}){
+function AddConfiguration ({dataTable, setDataTable, updateTable}){
 
   const [configuracion, setConfiguracion] = React.useState("");
-  const [tipoConfiguracion, setTipoConfiguracion] = React.useState("");
   const [requerida, setRequerida] = React.useState(false);
   const [editable, setEditable] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
   const [tooltip, setTooltip] = React.useState("");
 
   const [configuracionState, setconfiguracionState] = React.useState("");
-  const [tipoconfiguracionState, settipoconfiguracionState] = React.useState("");
   const [requeridaState, setrequeridaState] = React.useState("");
   const [editableState, seteditableState] = React.useState("");
   const [visibleState, setvisibleState] = React.useState("");
   const [tooltipState, settooltipState] = React.useState("");
 
   const [configuracionFocus, setconfiguracionFocus] = React.useState("");
-  const [tipoconfiguracionFocus, settipoconfiguracionFocus] = React.useState("");
   const [requeridaFocus, setrequeridaFocus] = React.useState("");
   const [editableFocus, seteditableFocus] = React.useState("");
   const [visibleFocus, setvisibleFocus] = React.useState("");
   const [tooltipFocus, settooltipFocus] = React.useState("");
 
-  const tipoDato =[
-    { value: "String", label: " String " },
-    { value: "Boolean", label: " Boolean " },
-    { value: "Number", label: " Number " },
-  ]
 
   // function that verifies if a string has a given length or not
   const verifyLength = (value, length) => {
@@ -69,16 +61,12 @@ function AddConfiguration ({dataTable, setDataTable, setDataState}){
   const isValidated = () => {
     if (
       configuracionState === "has-success" &&
-      tipoconfiguracionState === "has-success" &&
       tooltipState === "has-success"
     ) {
       return true;
     } else {
       if (configuracionState !== "has-success") {
         setconfiguracionState("has-danger");
-      }
-      if (tipoconfiguracionState !== "has-success") {
-        settipoconfiguracionState("has-danger");
       }
       if (tooltipState !== "has-success") {
         settooltipState("has-danger");
@@ -89,59 +77,18 @@ function AddConfiguration ({dataTable, setDataTable, setDataState}){
 
   const handleClick = () => {
     if(isValidated() === true){
-        var data = [
+        var register = [
             configuracion,
-            tipoConfiguracion,
             requerida, 
             editable,
             visible,
             tooltip
         ]
         var auxiliar = dataTable;
-        auxiliar.push(data);
+        auxiliar.push(register);
         setDataTable(auxiliar);
-        console.log(dataTable)
-
         //Actualizar Tabla
-        setDataState(
-          dataTable.map((prop, key) => {
-            return {
-              id: key,
-              configuracion: prop[0],
-              tipoconfiguracion: prop[1],
-              requerida: prop[2],
-              editable: prop[3],
-              visible: prop[4],
-              tooltip: prop[5],
-              actions: (
-                // ACCIONES A REALIZAR EN CADA REGISTRO
-                <div className="actions-right">
-                  {/* use this button to remove the data row */}
-                  <Button
-                    onClick={() => {
-                      var data = dataState;
-                      data.find((o, i) => {
-                        if (o.id === key) {
-                          // here you should add some custom code so you can delete the data
-                          // from this component and from your server as well
-                          data.splice(i, 1);
-                          console.log(data.length);
-                          return true;
-                        }
-                        return false;
-                      });
-                      //setDataState(data);
-                    }}
-                    color="danger"
-                    size="sm"
-                    className="btn-icon btn-link remove"
-                  ><i className="fa fa-times" />
-                  </Button>{" "}
-                </div>
-              ),
-            };
-          })
-        )
+        updateTable();
     }
   };
 
@@ -170,32 +117,6 @@ function AddConfiguration ({dataTable, setDataTable, setDataState}){
               }}
             />
             {configuracionState === "has-danger" ? (
-              <label className="error">This field is required.</label>
-            ) : null}
-          </FormGroup>
-        </Col>
-        <Col className="mt-3" lg="10">
-          <FormGroup className={classnames(tipoconfiguracionState, {
-              "input-group-focus": tipoconfiguracionFocus,
-            })}
-            onFocus={(e) => settipoconfiguracionFocus(true)}
-            onBlur={(e) => settipoconfiguracionFocus(false)}
-          >
-            <Select
-                name="tipoConfiguracion" 
-                placeholder="Tipo de configuración (atributo 'serializeAs' del setting) (required)"
-                options = {tipoDato}
-                onChange={(e) => {
-                  if(e.value === null) {
-                    settipoconfiguracionState("has-danger");
-                  } else {
-                    settipoconfiguracionState("has-success");
-                  }
-                  setTipoConfiguracion(e.value);
-                  console.log(e.value)
-                }}
-            />
-            {tipoconfiguracionState === "has-danger" ? (
               <label className="error">This field is required.</label>
             ) : null}
           </FormGroup>
