@@ -1,19 +1,3 @@
-/*!
-
-=========================================================
-* Paper Dashboard PRO React - v1.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-pro-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React, { useState, useEffect } from "react";
 
 // reactstrap components
@@ -47,7 +31,7 @@ const dataTable = [
   ["Brielle Williamson", "Integration Specialist", "New York", "61","Tiger Nixon", "System Architect", "Edinburgh", 0],
 ];
 
-function Clientes() {
+function CustomerApplications() {
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
       var status;
@@ -215,4 +199,4 @@ function Clientes() {
   );
 }
 
-export default Clientes;
+export default CustomerApplications;

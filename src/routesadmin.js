@@ -20,7 +20,7 @@ const routes = [
     collapse: true,
     name: "Configuración",
     icon: "nc-icon nc-settings-gear-65",
-    state: "ConfigCollapse",
+    state: "Configuración",
     views:[
       {
         path: "/users",

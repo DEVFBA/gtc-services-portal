@@ -34,6 +34,7 @@ function EditApplication({edit}) {
 
     useEffect(() => {
         //Es necesario descargar la información de toda la app y pasarsela como prop a los componentes...
+        //Aqui vamos a utilizar idApp para bajar la informacion
       },[]);
 
     var steps = [

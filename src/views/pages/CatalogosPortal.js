@@ -49,7 +49,7 @@ const dataTable2 = [
   ["Brielle Williamson", "Integration Specialist", "New York", "61"],
 ];
 
-function CatalogosPortal(props) {
+function CatalogosPortal() {
   //Para guardar los datos de los catálogos
   const [dataTable, setDataTable] = useState([]);
 
