@@ -18,7 +18,7 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalAddUser({abierto, toggleModalAddRecord, updateTable, setUpdateTable}) {
+function ModalAddUser({modalAddRecord, setModalAddRecord, updateTable, setUpdateTable}) {
         // register form
     const [registerEmail, setregisterEmail] = React.useState("");
     const [registerFullName, setregisterFullName] = React.useState("");
@@ -34,7 +34,7 @@ function ModalAddUser({abierto, toggleModalAddRecord, updateTable, setUpdateTabl
     const [registerRolState, setregisterRolState] = React.useState("");
 
     const handleModalClick = () => {
-        toggleModalAddRecord(!abierto);
+        setModalAddRecord(!modalAddRecord);
     };
 
         // function that returns true if value is email, false otherwise
@@ -104,8 +104,9 @@ function ModalAddUser({abierto, toggleModalAddRecord, updateTable, setUpdateTabl
             //El password deberá encriptarse en SHA256
             //console.log(sha256(registerPassword));
 
-            //para actualizar la tabla en el componente padre
+            //Para actualizar la tabla en componente principal
             setUpdateTable(updateTable+1)
+            //Cerramos el modal
             handleModalClick()
         }
         else{
@@ -116,7 +117,7 @@ function ModalAddUser({abierto, toggleModalAddRecord, updateTable, setUpdateTabl
     
 
     return (
-        <Modal isOpen={abierto} toggle={handleModalClick} size="lg">
+        <Modal isOpen={modalAddRecord} toggle={handleModalClick} size="lg">
             <div className="modal-header justify-content-center">
             <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
                 <span aria-hidden="true">×</span>

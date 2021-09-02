@@ -38,6 +38,9 @@ import DashboardSoporte from "../views/DashboardSupport.js";
 import SupportClients from "../views/pages/SupportClients.js";
 import DashboardCliente from "../views/DashboardClient.js";
 import ClienteConfiguraciones from "../views/pages/ClienteConfiguraciones.js";
+import EditConfiguration from "../views/pages/EditConfiguration.js";
+import CustomerApplications from "../views/pages/CustomerApplications.js";
+import Articulo69 from "../views/pages/Articulo69";
 import { string } from "prop-types";
 
 
@@ -82,7 +85,7 @@ function Admin(props) {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
-
+      
         var routesAux = [];
 
         for(var i=0; i<data.length; i++)
@@ -201,12 +204,24 @@ function Admin(props) {
                     }
                   )
                 }
-                else{
+                else if(data[i].Component_Submodule === "ClienteConfiguraciones")
+                {
                   views.push(
                     {
                       path: data[i].Url,
                       name: data[i].SubModule_Desc,
                       component: ClienteConfiguraciones,
+                      layout: data[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(data[i].Component_Submodule === "Articulo69")
+                {
+                  views.push(
+                    {
+                      path: data[i].Url,
+                      name: data[i].SubModule_Desc,
+                      component: Articulo69,
                       layout: data[i].Layout_SubModule
                     }
                   )
@@ -284,12 +299,24 @@ function Admin(props) {
                         }
                       )
                     }
-                    else{
+                    else if(data[j].Component_Submodule === "ClienteConfiguraciones")
+                    {
                       views.push(
                         {
                           path: data[j].Url,
                           name: data[j].SubModule_Desc,
                           component: ClienteConfiguraciones,
+                          layout: data[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(data[j].Component_Submodule === "CustomerApplications")
+                    {
+                      views.push(
+                        {
+                          path: data[j].Url,
+                          name: data[j].SubModule_Desc,
+                          component: CustomerApplications,
                           layout: data[j].Layout_SubModule
                         }
                       )
@@ -315,32 +342,54 @@ function Admin(props) {
             }
           }
         }
-
-        routesAux.push(
-          {
-            invisible: true,
-            path: "/add-application",
-            name: "Add Application",
-            icon: "nc-icon nc-bank",
-            component: AddApplication,
-            layout: "/admin",
-          }
-        )
-        routesAux.push(
-          {
-            invisible: true,
-            path: "/edit-application/:idApp/",
-            name: "Edit Application",
-            icon: "nc-icon nc-bank",
-            component: EditApplication,
-            layout: "/admin",
-          }
-        )
+        //Agregar rutas solo para roles en específico
+        if(params.pvIdRole == "GTCADMIN")
+        {
+          routesAux.push(
+            {
+              invisible: true,
+              path: "/add-application",
+              name: "Add Application",
+              icon: "nc-icon nc-bank",
+              component: AddApplication,
+              layout: "/admin",
+            }
+          )
+          routesAux.push(
+            {
+              invisible: true,
+              path: "/edit-application/:idApp/",
+              name: "Edit Application",
+              icon: "nc-icon nc-bank",
+              component: EditApplication,
+              layout: "/admin",
+            }
+          )
+        }
+        else if(params.pvIdRole == "CUSAPPLI")
+        {
+          routesAux.push(
+            {
+              invisible: true,
+              path: "/edit-configuration/:idApp/",
+              name: "Edit Configuration",
+              icon: "nc-icon nc-bank",
+              component: EditConfiguration,
+              layout: "/admin",
+            },
+          )
+        }
+        console.log(routesAux)
         setDbRoutes(routesAux)
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de las rutas" + err);
     });
+  }, []);
+
+  useEffect(() => {
+    //useEffect para armar el arreglo de rutas
+
   }, []);
 
 

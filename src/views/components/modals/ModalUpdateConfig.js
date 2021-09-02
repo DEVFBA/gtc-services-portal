@@ -35,9 +35,10 @@ function ModalUpdateConfig({abierto, toggleModalUpdateRecord, record, setRecord}
     const [tooltipFocus, settooltipFocus] = React.useState("");
 
     useEffect(() => {
-        //Se tiene que descargar la informacion de cada configuracion porque del prop no la está jalando para usarla
-        //en las variables
-      }, []);
+        console.log(record)
+
+       
+      }, [record]);
 
     //Funcion para cerrar modal
     const handleModalClick = () => {

@@ -27,46 +27,52 @@ const opciones = [
     { value: "Servicio", label: " Servicio " }
 ]
 
-function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpdateTable}) {
+function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable, setUpdateTable, record}) {
     // register form
-    const [registerFullName, setregisterFullName] = React.useState("");
-    const [registerRfc, setregisterRfc] = React.useState("");
-    const [registerStreet, setregisterStreet] = React.useState("");
-    const [registerNoExterior, setregisterNoExterior] = React.useState("");
-    const [registerNoInterior, setregisterNoInterior] = React.useState("");
-    const [registerCountry, setregisterCountry] = React.useState("Administrador");
-    const [registerCity, setregisterCity] = React.useState("");
-    const [registerZipCode, setregisterZipCode] = React.useState("");
-    const [registerContact, setregisterContact] = React.useState("");
-    const [registerTelephone1, setregisterTelephone1] = React.useState("");
-    const [registerTelephone2, setregisterTelephone2] = React.useState("");
-    const [registerWebPage, setregisterWebPage] = React.useState("");
-    const [registerLogo, setregisterLogo] = React.useState(null);
-    const [registerStatus, setregisterStatus] = useState(false);
+    const [updateFullName, setupdateFullName] = React.useState("");
+    const [updateRfc, setupdateRfc] = React.useState("");
+    const [updateStreet, setupdateStreet] = React.useState("");
+    const [updateNoExterior, setupdateNoExterior] = React.useState("");
+    const [updateNoInterior, setupdateNoInterior] = React.useState("");
+    const [updateCountry, setupdateCountry] = React.useState("Administrador");
+    const [updateCity, setupdateCity] = React.useState("");
+    const [updateZipCode, setupdateZipCode] = React.useState("");
+    const [updateContact, setupdateContact] = React.useState("");
+    const [updateTelephone1, setupdateTelephone1] = React.useState("");
+    const [updateTelephone2, setupdateTelephone2] = React.useState("");
+    const [updateWebPage, setupdateWebPage] = React.useState("");
+    const [updateLogo, setupdateLogo] = React.useState(null);
+    const [updateStatus, setupdateStatus] = useState(false);
 
     //Mandar error en caso de que ya exista el Country/TaxId
-    const [registerError, setregisterError] = useState("");
+    const [updateError, setregisterError] = useState("");
 
-    const [registerFullNameState, setregisterFullNameState] = React.useState("");
-    const [registerRfcState, setregisterRfcState] = React.useState("");
-    const [registerStreetState, setregisterStreetState] = React.useState("");
-    const [registerNoExteriorState, setregisterNoExteriorState] = React.useState("");
-    const [registerNoInteriorState, setregisterNoInteriorState] = React.useState("");
-    const [registerCountryState, setregisterCountryState] = React.useState("");
-    const [registerCityState, setregisterCityState] = React.useState("");
-    const [registerZipCodeState, setregisterZipCodeState] = React.useState("");
-    const [registerContactState, setregisterContactState] = React.useState("");
-    const [registerTelephone1State, setregisterTelephone1State] = React.useState("");
-    const [registerTelephone2State, setregisterTelephone2State] = React.useState("");
-    const [registerWebPageState, setregisterWebPageState] = React.useState("");
-    const [registerLogoState, setregisterLogoState] = React.useState("");
-    const [registerStatusState, setregisterStatusState] = useState(false);
+    const [updateFullNameState, setupdateFullNameState] = React.useState("");
+    const [updateRfcState, setupdateRfcState] = React.useState("");
+    const [updateStreetState, setupdateStreetState] = React.useState("");
+    const [updateNoExteriorState, setupdateNoExteriorState] = React.useState("");
+    const [updateNoInteriorState, setupdateNoInteriorState] = React.useState("");
+    const [updateCountryState, setupdateCountryState] = React.useState("");
+    const [updateCityState, setupdateCityState] = React.useState("");
+    const [updateZipCodeState, setupdateZipCodeState] = React.useState("");
+    const [updateContactState, setupdateContactState] = React.useState("");
+    const [updateTelephone1State, setupdateTelephone1State] = React.useState("");
+    const [updateTelephone2State, setupdateTelephone2State] = React.useState("");
+    const [updateWebPageState, setupdateWebPageState] = React.useState("");
+    const [updateLogoState, setupdateLogoState] = React.useState("");
+    const [updateStatusState, setupdateStatusState] = useState(false);
 
     //Mandar error en caso de que ya exista el Country/TaxId
-    const [registerErrorState, setregisterErrorState] = useState("");
+    const [updateErrorState, setupdateErrorState] = useState("");
+
+    useEffect(() => {
+        //se tienen que jalar los datos de la base de datos...
+        //los datos los guardamos en las variables para posteriormente usarlos como default en los inputs
+        console.log(record)
+    },[record]);
 
     const handleModalClick = () => {
-        setModalAddRecord(!modalAddRecord);
+        setModalUpdateRecord(!modalUpdateRecord);
     };
 
     // function that verifies if a string has a given length or not
@@ -102,15 +108,15 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
         }
     };
 
-    const registerClick = () => {
+    const updateClick = () => {
         if(isValidated()===true)
         {
-            console.log(registerLogo);
+            console.log(updateLogo);
             //haremos el fetch a la base de datos para agregar el registro
             //Para actualizar la tabla en componente principal
             setUpdateTable(updateTable+1)
             //si el country/taxid ya existe mandar mensaje de error al modal 
-            setregisterErrorState("has-danger")
+            setupdateErrorState("has-danger")
             //Cerramos el modal
             //handleModalClick()
         }
@@ -119,53 +125,60 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
         }
     };
 
+    //Para buscar el país elegido y ponerlo en el select
+    function isCountry(country) {
+        return country.value === updateCountry;
+    }
+
     return (
-        <Modal isOpen={modalAddRecord} toggle={handleModalClick} size="lg">
+        <Modal isOpen={modalUpdateRecord} toggle={handleModalClick} size="lg">
             <div className="modal-header justify-content-center">
             <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
                 <span aria-hidden="true">×</span>
             </button>
-            <h5 className="modal-title">Add new record</h5>
+            <h5 className="modal-title">Update Client {record.name}</h5>
             </div>
             <ModalBody>
             <Form id="RegisterValidation">
                 <Row className="justify-content-center">
                     <Col className="mt-3" lg="10">
-                        <FormGroup className={`has-label ${registerFullNameState}`}>
+                        <FormGroup className={`has-label ${updateFullNameState}`}>
                         <label>Full Name *</label>
                         <Input
                             name="name"
                             type="text"
+                            placeholder = {updateFullName}
                             onChange={(e) => {
                                 if (!verifyLength(e.target.value, 1)) {
-                                    setregisterFullNameState("has-danger");
+                                    setupdateFullNameState("has-danger");
                                 } else {
-                                    setregisterFullNameState("has-success");
+                                    setupdateFullNameState("has-success");
                                 }
-                                setregisterFullName(e.target.value);
+                                setupdateFullName(e.target.value);
                             }}
                         />
-                        {registerFullNameState === "has-danger" ? (
+                        {updateFullNameState === "has-danger" ? (
                             <label className="error">
                             This field is required.
                             </label>
                         ) : null}
                         </FormGroup>
-                        <FormGroup className={`has-label ${registerRfcState}`}>
+                        <FormGroup className={`has-label ${updateRfcState}`}>
                         <label>Rfc / Tax Id *</label>
                         <Input
                             name="rfc"
                             type="text"
+                            placeholder = {updateRfc}
                             onChange={(e) => {
                                 if (!verifyLength(e.target.value, 1)) {
-                                    setregisterRfcState("has-danger");
+                                    setupdateRfcState("has-danger");
                                 } else {
-                                    setregisterRfcState("has-success");
+                                    setupdateRfcState("has-success");
                                 }
-                                setregisterRfc(e.target.value);
+                                setupdateRfc(e.target.value);
                             }}
                         />
-                        {registerRfcState === "has-danger" ? (
+                        {updateRfcState === "has-danger" ? (
                             <label className="error">
                             This field is required.
                             </label>
@@ -175,9 +188,10 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                             <label>Street</label>
                             <Input
                                 name="street"
+                                placeholder = {updateStreet}
                                 type="text"
                                 onChange={(e) => {
-                                    setregisterStreet(e.target.value);
+                                    setupdateStreet(e.target.value);
                                 }}
                             />
                         </FormGroup>
@@ -185,9 +199,10 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                             <label>No. Exterior</label>
                             <Input
                                 name="noExterior"
+                                placeholder = {updateNoExterior}
                                 type="text"
                                 onChange={(e) => {
-                                    setregisterNoExterior(e.target.value);
+                                    setupdateNoExterior(e.target.value);
                                 }}
                             />
                         </FormGroup>
@@ -195,9 +210,10 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                             <label>No. Interior</label>
                             <Input
                                 name="noInterior"
+                                placeholder = {updateNoInterior}
                                 type="text"
                                 onChange={(e) => {
-                                    setregisterNoInterior(e.target.value);
+                                    setupdateNoInterior(e.target.value);
                                 }}
                             />
                         </FormGroup>
@@ -207,9 +223,9 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                                 name="country"
                                 className="react-select"
                                 classNamePrefix="react-select"
-                                defaultValue={opciones[0]}
+                                defaultValue={opciones.find(isCountry)}
                                 onChange={(value) => {
-                                    setregisterCountry(value)
+                                    setupdateCountry(value)
                                     console.log(registerCountry)
                                 }}
                                 options={opciones}
@@ -220,9 +236,10 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                             <Input
                                 name="city"
                                 type="text"
+                                placeholder = {updateCity}
                                 autoComplete="off"
                                 onChange={(e) => {
-                                    setregisterCity(e.target.value);
+                                    setupdateCity(e.target.value);
                                 }}
                             />
                         </FormGroup>
@@ -231,9 +248,9 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                             <Input
                                 name="zipCode"
                                 type="text"
-                                autoComplete="off"
+                                placeholder = {updateZipCode}
                                 onChange={(e) => {
-                                    setregisterZipCode(e.target.value);
+                                    setupdateZipCode(e.target.value);
                                 }}
                             />
                         </FormGroup>
@@ -242,9 +259,10 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                             <Input
                                 name="contact"
                                 type="text"
+                                placeholder = {updateContact}
                                 autoComplete="off"
                                 onChange={(e) => {
-                                    setregisterContact(e.target.value);
+                                    setupdateContact(e.target.value);
                                 }}
                             />
                         </FormGroup>
@@ -253,9 +271,9 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                             <Input
                                 name="telephone1"
                                 type="text"
-                                autoComplete="off"
+                                placeholder = {updateTelephone1}
                                 onChange={(e) => {
-                                    setregisterTelephone1(e.target.value);
+                                    setupdateTelephone1(e.target.value);
                                 }}
                             />
                         </FormGroup>
@@ -264,15 +282,15 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                             <Input
                                 name="telephone2"
                                 type="text"
-                                autoComplete="off"
+                                placeholder = {updateTelephone2}
                                 onChange={(e) => {
-                                    setregisterTelephone2(e.target.value);
+                                    setupdateTelephone2(e.target.value);
                                 }}
                             />
                         </FormGroup>
                     </Col>
                     <Col sm="4">
-                        <UploadLogo registerLogo = {registerLogo} setregisterLogo={setregisterLogo} registerCountry = {registerCountry} registerRfc = {registerRfc}/>
+                        <UploadLogo registerLogo = {updateLogo} setregisterLogo={setupdateLogo} registerCountry = {updateCountry} registerRfc = {updateRfc}/>
                     </Col>
                     <Col sm="6">
                         <FormGroup>
@@ -280,9 +298,9 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                             <Input
                                 name="webpage"
                                 type="text"
-                                autoComplete="off"
+                                placeholder = {updateWebPage}
                                 onChange={(e) => {
-                                    setregisterWebPage(e.target.value);
+                                    setupdateWebPage(e.target.value);
                                 }}
                             />
                         </FormGroup>
@@ -291,7 +309,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                             <Input 
                                 type="checkbox" 
                                 onChange={(e) => {
-                                    setregisterStatus(e.target.checked)
+                                    setupdateStatus(e.target.checked)
                                 }}
                             />{' '}
                             Habilitado
@@ -307,8 +325,8 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                         </div>
                     </Col>  
                     <Col className="mt-3" lg="10">
-                        <FormGroup className={`has-label ${registerErrorState}`}>
-                            {registerErrorState === "has-danger" ? (
+                        <FormGroup className={`has-label ${updateErrorState}`}>
+                            {updateErrorState === "has-danger" ? (
                                 <label className="error">
                                 ERROR. El Tax Id / Country ya existe.
                                 </label>
@@ -323,7 +341,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                 <Button className="buttons" color="secondary" onClick={handleModalClick}>
                     Close
                 </Button>
-                <Button className="buttons" color="primary" onClick={registerClick}>
+                <Button className="buttons" color="primary" onClick={updateClick}>
                     Save changes
                 </Button>
                 </div>
@@ -332,4 +350,4 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
     );
 }
 
-export default ModalAddClient;
+export default ModalUpdateClient;

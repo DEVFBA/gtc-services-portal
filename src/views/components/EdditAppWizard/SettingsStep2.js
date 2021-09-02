@@ -35,26 +35,50 @@ import ModalUpdateConfig from "../modals/ModalUpdateConfig.js";
 
 
 const datos = [
-      ["Tiger Nixon", "System Architect", "Edinburgh", "61", "Edinburgh", "61"],
-      ["Garrett Winters", "Accountant", "Tokyo", "63", "Edinburgh", "61"],
-      ["Ashton Cox", "Junior Technical Author", "San Francisco", "66", "Edinburgh", "61"],
-      ["Cedric Kelly", "Senior Javascript Developer", "Edinburgh", "22", "Edinburgh", "61"],
-      ["Airi Satou", "Accountant", "Tokyo", "33", "Edinburgh", "61"],
+      ["Tiger Nixon", 0, 1, 1, "Edinburgh", "61"],
+      ["Garrett Winters", 0, 1, 1, "Edinburgh", "61"],
+      ["Ashton Cox", 1, 0, 0, "Edinburgh", "61"],
+      ["Cedric Kelly", 0, 0, 1, "Edinburgh", "61"],
+      ["Airi Satou", 0, 1, 1, "Edinburgh", "61"],
 ];
 
   const SettingsStep2 = React.forwardRef((props, ref) => {
 
     const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
 
+    //Para saber que configuracion se va a editar
+    const [record, setRecord] = useState({});
+
     const [dataTable, setDataTable] = useState([]);
     const [dataState, setDataState] = useState(
       datos.map((prop, key) => {
+          var requerida;
+          var editable;
+          var visible;
+          if(prop[1] === 1){
+              requerida = "Requerida"
+          }
+          else{
+              requerida = "No Requerida"
+          }
+          if(prop[2] === 1){
+              editable = "Editable"
+          }
+          else{
+              editable = "No Editable"
+          }
+          if(prop[3] === 1){
+              visible = "Visible"
+          }
+          else{
+              visible = "No Visible"
+          }
           return {
             id: key,
             configuracion: prop[0],
-            requerida: prop[1],
-            editable: prop[2],
-            visible: prop[3],
+            requerida: requerida,
+            editable: editable,
+            visible: visible,
             tooltip: prop[4],
             actions: (
               // ACCIONES A REALIZAR EN CADA REGISTRO
@@ -63,7 +87,7 @@ const datos = [
               <Button
                   onClick={() => {
                       let obj = dataState.find((o) => o.id === key);
-                      setRecord(obj);
+                      getRegistro(key)
                       toggleModalUpdateRecord();
                       /*alert(
                       "You've clicked EDIT button on \n{ \nName: " +
@@ -92,9 +116,6 @@ const datos = [
   //Si el usuario no ha agredado configuraciones no se le permitirá guardar la aplicación o servicio
   const [dataTableState, setDataTableState] = React.useState("");
   const [dataTableFocus, setDataTableFocus] = React.useState("");
-
-  //Para saber que configuracion se va a editar
-  const [record, setRecord] = useState({});
   
   React.useImperativeHandle(ref, () => ({
     isValidated: () => {
@@ -105,13 +126,12 @@ const datos = [
     },
   }));
 
-  // function that verifies if a string has a given length or not
-  const verifyLength = (value, length) => {
-    if (value.length >= length) {
-      return true;
-    }
-    return false;
-  };
+  function getRegistro(key)
+  {
+    var registro = dataState.find((o) => o.id === key)
+    setRecord(registro) 
+    //setModalOpen(modalOpen+1)
+  }
 
   const isValidated = () => {
     if(dataTable.length > 0)

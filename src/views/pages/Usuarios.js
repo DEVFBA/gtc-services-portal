@@ -39,74 +39,47 @@ import {
 import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalAddUser from "../components/modals/ModalAddUser.js";
 import ModalUpdateUser from "../components/modals/ModalUpdateUser.js";
-import ModalReadUser from "../components/modals/ModalReadUser.js";
+
 import { data } from "jquery";
 
 const datos = [
-  ["Tiger Nixon", "System Architect", "Edinburgh", "61"],
-  ["Garrett Winters", "Accountant", "Tokyo", "63"],
-  ["Ashton Cox", "Junior Technical Author", "San Francisco", "66"],
-  ["Cedric Kelly", "Senior Javascript Developer", "Edinburgh", "22"],
-  ["Airi Satou", "Accountant", "Tokyo", "33"],
-  ["Brielle Williamson", "Integration Specialist", "New York", "61"],
+  ["Tiger Nixon", "hola@hola.com", "Administrador", 1],
+  ["Garrett Winters", "hola@hola.com", "Soporte", "63"],
+  ["Ashton Cox", "hola@hola.com", "Cliente", 1],
+  ["Cedric Kelly", "hola@hola.com", "Administrador", 0],
+  ["Airi Satou", "hola@hola.com", "Soporte", 0],
+  ["Brielle Williamson", "hola@hola.com", "Cliente", 1],
 ];
 
 function Usuarios() {
-  const [dataTable, setDataTable] = useState([]);
   const [dataState, setDataState] = useState(
     datos.map((prop, key) => {
+      var status;
+      if(prop[3] === 1){
+        status = "Habilitado"
+      }
+      else{
+        status = "No Habilitado"
+      }
       return {
         id: key,
         name: prop[0],
         email: prop[1],
         rol: prop[2],
-        status: prop[3],
+        status: status,
         actions: (
           // ACCIONES A REALIZAR EN CADA REGISTRO
           <div className="actions-center">
-            {/*IMPLEMENTAR VER REGISTRO A DETALLE*/}
-            <Button
-              onClick={() => {
-                let obj = dataState.find((o) => o.id === key);
-                alert(
-                  "You've clicked LIKE button on \n{ \nName: " +
-                    obj.name +
-                    ", \nemail: " +
-                    obj.email +
-                    ", \nrol: " +
-                    obj.rol +
-                    ", \restatus: " +
-                    obj.status +
-                    "\n}."
-                );
-              }}
-              color="info"
-              size="sm"
-              className="btn-icon btn-link like"
-              //onClick={toggleModalReadRecord}
-            >
-              <i className="fa fa-list" />
-            </Button>{" "}
             {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
             <Button
               onClick={() => {
                 let obj = dataState.find((o) => o.id === key);
-                alert(
-                  "You've clicked EDIT button on \n{ \nName: " +
-                    obj.name +
-                    ", \nposition: " +
-                    obj.position +
-                    ", \noffice: " +
-                    obj.office +
-                    ", \nage: " +
-                    obj.age +
-                    "\n}."
-                );
+                getRegistro(key);
+                toggleModalUpdateRecord()
               }}
               color="warning"
               size="sm"
               className="btn-icon btn-link edit"
-              //onClick={toggleModalUpdateRecord}
             >
               <i className="fa fa-edit" />
             </Button>
@@ -123,48 +96,29 @@ function Usuarios() {
   //Para actualizar cada que agreguen un campo a la tabla
   const [updateTable, setUpdateTable] = useState(0);
 
-  //Descargar la lista de registros
-  const [records, setRecords] = useState([]);
+  //Para saber que usuario se va a editar
+  const [record, setRecord] = useState({});
 
   useEffect(() => {
-    //Para jalar datos de manera asincrona por primera vez
-   console.log(dataState)
+    //Descargar la lista de usuarios
+    //Los datos se van a guardar en dataState (se arma el array de objetos por primera vez)
+    //console.log(dataState)
   },[]);
 
   useEffect(() => {
     //Para actualizar la tabla cada que se agreguen usuarios.
+    //Se hace fetch de nuevo a la base de datos
+
+    //Los datos se van a guardar en dataState
+    console.log(dataState)
 
     //El renderizado se hará cada que cambiemos el valor de updateTable.
   },[updateTable]);
 
-
-  function addRecord(event) {
-    //Código para añadir un registro a la tabla
-    //EndPoint CREATE
-
-    //una vez que añadimos el nuevo usuario, vamos a actualizar la tabla
-    //updateRecords();
-  }
-
-  function updateRecord(){
-    //A la hora de crear un nuevo registro necesitamos actualizar la tabla para que
-    //se pinten todos los registros incluido el nuevo
-    //Hacemos fetch nuevamente a todos los registros
-    //setRecords(nuevadata)
-  }
-
-  function readRecord(){
-    //Leemos la informacion completa del registo para pintarla en el modal
-    //tal vez no sea necesaria porque ya se leyó anteriormente...
-  }
-
-  function toggleModalPrueba(){
-    if(modalPrueba == false){
-      setModalPrueba(true);
-    }
-    else{
-      setModalPrueba(false);
-    }
+  function getRegistro(key)
+  {
+    var registro = dataState.find((o) => o.id === key)
+    setRecord(registro) 
   }
 
   function toggleModalAddRecord(){
@@ -173,15 +127,6 @@ function Usuarios() {
     }
     else{
       setModalAddRecord(false);
-    }
-  }
-
-  function toggleModalReadRecord(){
-    if(modalReadRecord == false){
-      setModalReadRecord(true);
-    }
-    else{
-      setModalReadRecord(false);
     }
   }
 
@@ -249,13 +194,10 @@ function Usuarios() {
       </div>
 
       {/*MODAL PARA AÑADIR REGISTROS*/}
-      <ModalAddUser abierto = {modalAddRecord} toggleModalAddRecord = {toggleModalAddRecord} updateTable = {updateTable} setUpdateTable = {setUpdateTable}/>
-
-      {/*MODAL PARA LEER REGISTRO*/}
-      <ModalReadUser abierto = {modalReadRecord} toggleModalReadRecord = {toggleModalReadRecord}/>          
+      <ModalAddUser modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateTable = {updateTable} setUpdateTable = {setUpdateTable}/>       
 
       {/*MODAL PARA MODIFICAR REGISTRO*/}
-      <ModalUpdateUser abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord}/>
+      <ModalUpdateUser abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateTable = {updateTable} setUpdateTable = {setUpdateTable}/>
     </>
   );
 }
