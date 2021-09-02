@@ -59,7 +59,7 @@ function Usuarios() {
         id: key,
         name: prop[0],
         email: prop[1],
-        position: prop[2],
+        rol: prop[2],
         status: prop[3],
         actions: (
           // ACCIONES A REALIZAR EN CADA REGISTRO
@@ -71,12 +71,12 @@ function Usuarios() {
                 alert(
                   "You've clicked LIKE button on \n{ \nName: " +
                     obj.name +
-                    ", \nposition: " +
-                    obj.position +
-                    ", \noffice: " +
-                    obj.office +
-                    ", \nage: " +
-                    obj.age +
+                    ", \nemail: " +
+                    obj.email +
+                    ", \nrol: " +
+                    obj.rol +
+                    ", \restatus: " +
+                    obj.status +
                     "\n}."
                 );
               }}
@@ -117,21 +117,25 @@ function Usuarios() {
   );
 
   const [modalAddRecord, setModalAddRecord] = useState(false);
-  const [modalPrueba, setModalPrueba] = useState(false);
   const [modalReadRecord, setModalReadRecord] = useState(false);
   const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
+
+  //Para actualizar cada que agreguen un campo a la tabla
+  const [updateTable, setUpdateTable] = useState(0);
 
   //Descargar la lista de registros
   const [records, setRecords] = useState([]);
 
   useEffect(() => {
-    //Para jalar datos de manera asincrona
-    /*(async () => {
-      const result = await axios("https://api.tvmaze.com/search/shows?q=snow");
-      setDataTable(result.data);
-    })();
-    */
+    //Para jalar datos de manera asincrona por primera vez
+   console.log(dataState)
   },[]);
+
+  useEffect(() => {
+    //Para actualizar la tabla cada que se agreguen usuarios.
+
+    //El renderizado se hará cada que cambiemos el valor de updateTable.
+  },[updateTable]);
 
 
   function addRecord(event) {
@@ -219,8 +223,8 @@ function Usuarios() {
                       accessor: "email",
                     },
                     {
-                      Header: "Descripción",
-                      accessor: "position",
+                      Header: "Rol",
+                      accessor: "rol",
                     },
                     {
                       Header: "Estatus",
@@ -245,7 +249,7 @@ function Usuarios() {
       </div>
 
       {/*MODAL PARA AÑADIR REGISTROS*/}
-      <ModalAddUser abierto = {modalAddRecord} toggleModalAddRecord = {toggleModalAddRecord}/>
+      <ModalAddUser abierto = {modalAddRecord} toggleModalAddRecord = {toggleModalAddRecord} updateTable = {updateTable} setUpdateTable = {setUpdateTable}/>
 
       {/*MODAL PARA LEER REGISTRO*/}
       <ModalReadUser abierto = {modalReadRecord} toggleModalReadRecord = {toggleModalReadRecord}/>          

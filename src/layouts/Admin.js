@@ -24,10 +24,23 @@ import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
-import routes from "routes.js";
-import routesadmin from "routesadmin.js";
-import routessupport from "routessupport";
-import routesclient from "routesclient";
+
+//Importando todos los componentes que se van a utilizar
+import DashboardAdmin from "../views/Dashboard.js";
+import Usuarios from "../views/pages/Usuarios.js";
+import ModuleSettings from "../views/pages/ModuleSettings";
+import Clientes from "../views/pages/Clientes.js";
+import CatalogosPortal from "../views/pages/CatalogosPortal";
+import CatalogosSAT from "../views/pages/CatalogosSAT";
+import AddApplication from "../views/pages/AddApplication";
+import EditApplication from "../views/pages/EditApplication";
+import DashboardSoporte from "../views/DashboardSupport.js";
+import SupportClients from "../views/pages/SupportClients.js";
+import DashboardCliente from "../views/DashboardClient.js";
+import ClienteConfiguraciones from "../views/pages/ClienteConfiguraciones.js";
+import { string } from "prop-types";
+
+
 
 var ps;
 
@@ -38,83 +51,26 @@ function Admin(props) {
   const [sidebarMini, setSidebarMini] = React.useState(false);
   const mainPanel = React.useRef();
 
-  //Renderizado condicionado para saber las rutas dependiendo el tipo de usuario
-  const [side, setSide] = useState();
-  const [adminNav, setAdminNav] = useState();
-
   //GUARDAR EL ESTADO PARA LAS RUTAS
   const [dbRoutes, setDbRoutes] = useState([]);
 
-  const [dbPrueba, setDbPrueba] = useState([]);
 
   //Para revisar qué tipo de RUTAS (En este caso MENU) mostrar
   const tipo = localStorage.getItem("tipo");
-
-  useEffect(() => {
-    //Para saber qué tipo de rutas se van a tomar
-    //Se van a jalar de la base de datos dependiendo el tipo de usuario
-    //Por el momento se usará el tipo del localstorage
-    setDbRoutes(routesadmin);
-    console.log(dbRoutes)
-    if(tipo === "administrador"){
-      setDbRoutes(routesadmin)
-      /*setSide(
-        <Sidebar
-        {...props}
-        routes={routesadmin}
-        bgColor={backgroundColor}
-        activeColor={activeColor}
-      />
-      );
-      setAdminNav(
-        <Switch>{getRoutes(routesadmin)}</Switch>
-      )*/
-    }
-    else if(tipo == "support"){
-      setDbRoutes(routessupport)
-      /*setSide(
-        <Sidebar
-        {...props}
-        routes={routessupport}
-        bgColor={backgroundColor}
-        activeColor={activeColor}
-      />
-      );
-        console.log(side)
-      setAdminNav(
-        <Switch>{getRoutes(routessupport)}</Switch>
-      )*/
-    }
-    else{
-      setDbRoutes(routesclient) 
-      /*setSide(
-        <Sidebar
-        {...props}
-        routes={routesclient}
-        bgColor={backgroundColor}
-        activeColor={activeColor}
-      />
-      );
-        console.log(side)
-      setAdminNav(
-        <Switch>{getRoutes(routesclient)}</Switch>
-      )*/
-    }
-  }, []);
 
   useEffect(() => {
 
     //estos parametros se van a tomar del local storage o del usecontext
     const params = {
       pvOptionCRUD: "R",
-      pIdCustomer : 1,
-	    pvIdRole : "GTCSUPPO"
+      piIdCustomer : 1,
+	    pvIdRole : "GTCADMIN"
     };
 
     var url = new URL(`http://localhost:8091/api/routes/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-    console.log(url)
+    //console.log(url)
 
     fetch(url, {
         method: "GET",
@@ -128,69 +84,262 @@ function Admin(props) {
     .then(function(data) {
 
         var routesAux = [];
-        //console.log(data[0].Component_Module);
+
         for(var i=0; i<data.length; i++)
         {
           if(data[i].Status === true)
           {
             if(data[i].Component_Module!=="")
             {
-              routesAux.push(
-                {
-                  collapse: false,
-                  path: data[i].Url,
-                  name: data[i].Module_Desc,
-                  icon: data[i].Icon,
-                  component: data[i].Component_Module,
-                  layout: data[i].Layout_Module
-                }
-              )
-            }
-            else{
-              //if(data[i-1].Id_Module !== data[i].Id_Module && data[i].Status === true)
-              //{
-                var views = []
-                views.push(
+              if(data[i].Component_Module === "DashboardAdmin")
+              {
+                routesAux.push(
                   {
+                    collapse: false,
                     path: data[i].Url,
-                    name: data[i].SubModule_Desc,
-                    component: data[i].Component_Submodule,
-                    layout: data[i].Layout_SubModule
+                    name: data[i].Module_Desc,
+                    icon: String(data[i].Icon),
+                    component: DashboardAdmin,
+                    layout: data[i].Layout_Module
                   }
                 )
+              }
+              else if(data[i].Component_Module === "DashboardSoporte")
+              {
+                routesAux.push(
+                  {
+                    collapse: false,
+                    path: data[i].Url,
+                    name: data[i].Module_Desc,
+                    icon: String(data[i].Icon),
+                    component: DashboardSoporte,
+                    layout: data[i].Layout_Module
+                  }
+                )
+              }
+              else{
+                routesAux.push(
+                  {
+                    collapse: false,
+                    path: data[i].Url,
+                    name: data[i].Module_Desc,
+                    icon: String(data[i].Icon),
+                    component: DashboardCliente,
+                    layout: data[i].Layout_Module
+                  }
+                )
+              }
+            }
+            //El componente es padre pero collapse
+            else{
+              if(data[i-1].Module_Desc !== data[i].Module_Desc)
+              {
+                var views = []
+                if(data[i].Component_Submodule === "Usuarios")
+                {
+                  views.push(
+                    {
+                      path: data[i].Url,
+                      name: data[i].SubModule_Desc,
+                      component: Usuarios,
+                      layout: data[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(data[i].Component_Submodule === "CatalogosPortal")
+                {
+                  views.push(
+                    {
+                      path: data[i].Url,
+                      name: data[i].SubModule_Desc,
+                      component: CatalogosPortal,
+                      layout: data[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(data[i].Component_Submodule === "CatalogosSAT")
+                {
+                  views.push(
+                    {
+                      path: data[i].Url,
+                      name: data[i].SubModule_Desc,
+                      component: CatalogosSAT,
+                      layout: data[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(data[i].Component_Submodule === "Clientes")
+                {
+                  views.push(
+                    {
+                      path: data[i].Url,
+                      name: data[i].SubModule_Desc,
+                      component: Clientes,
+                      layout: data[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(data[i].Component_Submodule === "SupportClients")
+                {
+                  views.push(
+                    {
+                      path: data[i].Url,
+                      name: data[i].SubModule_Desc,
+                      component: SupportClients,
+                      layout: data[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(data[i].Component_Submodule === "ModuleSettings")
+                {
+                  views.push(
+                    {
+                      path: data[i].Url,
+                      name: data[i].SubModule_Desc,
+                      component: ModuleSettings,
+                      layout: data[i].Layout_SubModule
+                    }
+                  )
+                }
+                else{
+                  views.push(
+                    {
+                      path: data[i].Url,
+                      name: data[i].SubModule_Desc,
+                      component: ClienteConfiguraciones,
+                      layout: data[i].Layout_SubModule
+                    }
+                  )
+                }
+                
                 var j= i+1;
                 while(j<data.length)
                 {
+                  //Este ciclo se utiliza para meter a los demás hijos (cuando un padre tiene más de 1 hijo)
                   if(data[i].Id_Module === data[j].Id_Module && data[j].Status === true)
                   {
-                    views.push(
-                      {
-                        path: data[j].Url,
-                        name: data[j].SubModule_Desc,
-                        component: data[j].Component_Submodule,
-                        layout: data[j].Layout_SubModule
-                      }
-                    )
+                    if(data[j].Component_Submodule === "Usuarios")
+                    {
+                      views.push(
+                        {
+                          path: data[j].Url,
+                          name: data[j].SubModule_Desc,
+                          component: Usuarios,
+                          layout: data[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(data[j].Component_Submodule === "CatalogosPortal")
+                    {
+                      views.push(
+                        {
+                          path: data[j].Url,
+                          name: data[j].SubModule_Desc,
+                          component: CatalogosPortal,
+                          layout: data[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(data[j].Component_Submodule === "CatalogosSAT")
+                    {
+                      views.push(
+                        {
+                          path: data[j].Url,
+                          name: data[j].SubModule_Desc,
+                          component: CatalogosSAT,
+                          layout: data[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(data[j].Component_Submodule === "Clientes")
+                    {
+                      views.push(
+                        {
+                          path: data[j].Url,
+                          name: data[j].SubModule_Desc,
+                          component: Clientes,
+                          layout: data[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(data[j].Component_Submodule === "SupportClients")
+                    {
+                      views.push(
+                        {
+                          path: data[j].Url,
+                          name: data[j].SubModule_Desc,
+                          component: SupportClients,
+                          layout: data[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(data[j].Component_Submodule === "ModuleSettings")
+                    {
+                      views.push(
+                        {
+                          path: data[j].Url,
+                          name: data[j].SubModule_Desc,
+                          component: ModuleSettings,
+                          layout: data[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else{
+                      views.push(
+                        {
+                          path: data[j].Url,
+                          name: data[j].SubModule_Desc,
+                          component: ClienteConfiguraciones,
+                          layout: data[j].Layout_SubModule
+                        }
+                      )
+                    }
                   }
                   j++
                 }
-                console.log("Valor de i: " + data[i].Id_Module + " y de i-1: " + data[i-1].Id_Module)
+
+                //Ya cuando se terminan de meter a los hijos agregamos la ruta
+                //console.log(data[i].Icon)
+                var iconn = String(data[i].Icon.toString())
                 routesAux.push(
                   {
                     collapse: true,
                     name: data[i].Module_Desc,
-                    icon: data[i].Icon,
+                    icon: iconn,
+                    state: data[i].Module_Desc,
                     views: views,
                   }
                 )
-              //}
+                //console.log(routesAux[x])
+              }
             }
           }
         }
-        console.log(routesAux)
+
+        routesAux.push(
+          {
+            invisible: true,
+            path: "/add-application",
+            name: "Add Application",
+            icon: "nc-icon nc-bank",
+            component: AddApplication,
+            layout: "/admin",
+          }
+        )
+        routesAux.push(
+          {
+            invisible: true,
+            path: "/edit-application/:idApp/",
+            name: "Edit Application",
+            icon: "nc-icon nc-bank",
+            component: EditApplication,
+            layout: "/admin",
+          }
+        )
+        setDbRoutes(routesAux)
     })
     .catch(function(err) {
-        alert("No se pudo consultar la informacion de las rutas");
+        alert("No se pudo consultar la informacion de las rutas" + err);
     });
   }, []);
 

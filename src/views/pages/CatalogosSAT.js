@@ -23,24 +23,24 @@ import {
   CardHeader,
   CardBody,
   CardTitle,
-  FormGroup,
-  Input,
-  Label,
   Row,
   Col,
   Modal, 
   ModalBody, 
-  ModalFooter
+  ModalFooter,
+  FormGroup,
+  Label,
+  Input,
 } from "reactstrap";
 
 import Select from "react-select";
 
 // core components
-import ReactTable from "components/ReactTable/ReactTable.js";
-import ModalUpdateSat from "../components/modals/ModalUpdateSat.js";
-import ModalReadSat from "../components/modals/ModalReadSat.js";
+import ReactTable from "components/ReactTable/ReactTable.js"; 
+import ModalUpdatePortal from "../components/modals/ModalUpdatePortal.js";
+import ModalReadPortal from "../components/modals/ModalReadPortal.js";
 
-const dataTable = [
+const dataTable2 = [
   ["Tiger Nixon", "System Architect", "Edinburgh", "61"],
   ["Garrett Winters", "Accountant", "Tokyo", "63"],
   ["Ashton Cox", "Junior Technical Author", "San Francisco", "66"],
@@ -49,9 +49,12 @@ const dataTable = [
   ["Brielle Williamson", "Integration Specialist", "New York", "61"],
 ];
 
-function CatalogosSAT(props) {
+function CatalogosSAT() {
+  //Para guardar los datos de los catálogos
+  const [dataTable, setDataTable] = useState([]);
+
   const [dataState, setDataState] = React.useState(
-    dataTable.map((prop, key) => {
+    dataTable2.map((prop, key) => {
       return {
         id: key,
         name: prop[0],
@@ -137,13 +140,30 @@ function CatalogosSAT(props) {
 
   //Guardar catalogo seleccionado para descargar su lista de opciones
   const [catalog, setCatalog] = React.useState();
-  
-  //Descargar la lista de registros
+
+  //Descargar la lista de opciones del catálogo seleccionado
   const [records, setRecords] = useState([]);
+ 
 
   useEffect(() => {
-    //Aqui vamos a descargar la lista de registros de la base de datos por primera vez
+    //Aqui vamos a descargar la lista de catalogos de la base de datos por primera vez
+    //se van a guardar en catalogs
+    //en el select por primera vez vamos a seleccionar la primera opcion
+    //downloadRecords(catalog)
   }, []);
+
+  function updateRecords(value){
+    console.log("entres");
+    setCatalog(value);
+    console.log(catalog);
+    //downloadRecords(catalog)
+  }
+
+  function downloadRecords(catalog){
+    //Aqui vamos a descargar la lista de opciones del catálogo seleccionado
+    //Nos sirve para pintar la tabla
+    //Vamos a guardar los valores en records
+  }
 
   function updateRecord(){
     //A la hora de crear un nuevo registro necesitamos actualizar la tabla para que
@@ -175,14 +195,23 @@ function CatalogosSAT(props) {
     }
   }
 
+  //Guardar evento al seleccionar en el catálogo
+  const handleTypeChange = (e) => {
+    //checar problema a la hora de hacer el setCatalog
+    setCatalog(e.value);
+    console.log(e.value)
+    //console.log(catalog)
+  }
+
   return (
     <>
+      {/*console.log(props.example)*/}
       <div className="content">
         <Row>
           <Col md="12">
             <Card>
               <CardHeader>
-              <CardTitle tag="h4">SAT Catalog</CardTitle>
+                <CardTitle tag="h4">SAT Catalog</CardTitle>
                 <FormGroup>
                   {/*Al seleccionar un catálogo se hará fetch para actualizar sus configuraciones*/}
                   <Select 
@@ -234,10 +263,11 @@ function CatalogosSAT(props) {
       </div>
 
       {/*MODAL PARA LEER REGISTRO*/}
-      <ModalReadSat abierto = {modalReadRecord} toggleModalReadRecord = {toggleModalReadRecord}/>
+      <ModalReadPortal abierto = {modalReadRecord} toggleModalReadRecord = {toggleModalReadRecord}/>
 
       {/*MODAL PARA MODIFICAR REGISTRO*/}
-      <ModalUpdateSat abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord}/>
+      <ModalUpdatePortal abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord}/>
+
     </>
   );
 }
