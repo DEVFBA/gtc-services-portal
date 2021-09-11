@@ -37,8 +37,8 @@ import {
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
-import ModalUpdateSettings from "../components/modals/ModalUpdateSettings.js";
-import ModalReadSettings from "../components/modals/ModalReadSettings.js";
+import ModalUpdateSettings from "../components/Modals/ModalUpdateSettings.js";
+import ModalReadSettings from "../components/Modals/ModalReadSettings.js";
 import EditApplication from "./EditApplication.js";
 
 const datos = [

@@ -19,8 +19,8 @@ import {
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
-import ModalAddClient from "../components/modals/ModalAddClient.js";
-import ModalUpdateClient from "../components/modals/ModalUpdateClient.js";
+import ModalAddClient from "../components/Modals/ModalAddClient.js";
+import ModalUpdateClient from "../components/Modals/ModalUpdateClient.js";
 
 const dataTable = [
   ["Tiger Nixon", "System Architect", "Edinburgh", "61","Tiger Nixon", "System Architect", "Edinburgh", 1],

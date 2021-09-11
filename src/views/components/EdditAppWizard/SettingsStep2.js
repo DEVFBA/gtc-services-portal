@@ -31,7 +31,7 @@ import {
 // react plugin used to create DropdownMenu for selecting items
 import Select from "react-select";
 import ReactTable from "components/ReactTable/ReactTable.js";
-import ModalUpdateConfig from "../modals/ModalUpdateConfig.js";
+import ModalUpdateConfig from "../Modals/ModalUpdateConfig.js";
 
 
 const datos = [

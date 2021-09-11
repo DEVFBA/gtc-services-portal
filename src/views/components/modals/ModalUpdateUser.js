@@ -40,10 +40,8 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record}) {
     };
 
     useEffect(() => {
-        //se tienen que jalar los datos de la base de datos...
         setupdateFullName(record.name);
         setupdateRol(record.rol)
-        console.log(record.rol)
     },[record]);
 
 
