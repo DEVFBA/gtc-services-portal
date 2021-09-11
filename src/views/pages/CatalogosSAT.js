@@ -1,19 +1,3 @@
-/*!
-
-=========================================================
-* Paper Dashboard PRO React - v1.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-pro-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React, { useState, useEffect } from "react";
 
 // reactstrap components
@@ -35,177 +19,203 @@ import {
 
 import Select from "react-select";
 
-// core components
-import ReactTable from "components/ReactTable/ReactTable.js"; 
-import ModalUpdatePortal from "../components/modals/ModalUpdatePortal.js";
-import ModalReadPortal from "../components/modals/ModalReadPortal.js";
 
-const dataTable2 = [
-  ["Tiger Nixon", "System Architect", "Edinburgh", "61"],
-  ["Garrett Winters", "Accountant", "Tokyo", "63"],
-  ["Ashton Cox", "Junior Technical Author", "San Francisco", "66"],
-  ["Cedric Kelly", "Senior Javascript Developer", "Edinburgh", "22"],
-  ["Airi Satou", "Accountant", "Tokyo", "33"],
-  ["Brielle Williamson", "Integration Specialist", "New York", "61"],
-];
+import CFDIUses from "views/components/Catalogs/SAT/CFDIUses";
+import Countries from "views/components/Catalogs/SAT/Countries";
+import Currencies from "views/components/Catalogs/SAT/Currencies";
+import Customs from "views/components/Catalogs/SAT/Customs";
+import CustomsUnits from "views/components/Catalogs/SAT/CustomsUnits";
+import Incoterm from "views/components/Catalogs/SAT/Incoterm";
+import KeyProduct from "views/components/Catalogs/SAT/KeyProduct";
+import KeyUnit from "views/components/Catalogs/SAT/KeyUnit";
+import PaymentMethods from "views/components/Catalogs/SAT/PaymentMethods";
+import PaymentWays from "views/components/Catalogs/SAT/PaymentWays";
+import PetitionTypes from "views/components/Catalogs/SAT/PetitionTypes";
+import ReasonsTransfer from "views/components/Catalogs/SAT/ReasonsTransfer";
+import TariffFractions from "views/components/Catalogs/SAT/TariffFractions";
+import Taxes from "views/components/Catalogs/SAT/Taxes";
+import TaxRegimes from "views/components/Catalogs/SAT/TaxRegimes";
+import TypesOperation from "views/components/Catalogs/SAT/TypesOperation";
+import VoucherTypes from "views/components/Catalogs/SAT/VoucherTypes";
+import RelationshipTypes from "views/components/Catalogs/SAT/RelationshipTypes";
 
 function CatalogosSAT() {
   //Para guardar los datos de los catálogos
   const [dataTable, setDataTable] = useState([]);
 
-  const [dataState, setDataState] = React.useState(
-    dataTable2.map((prop, key) => {
-      return {
-        id: key,
-        name: prop[0],
-        position: prop[1],
-        office: prop[2],
-        age: prop[3],
-        actions: (
-          // ACCIONES A REALIZAR EN CADA REGISTRO
-          <div className="actions-center">
-            {/*IMPLEMENTAR VER REGISTRO A DETALLE*/}
-            <Button
-              onClick={() => {
-                let obj = dataState.find((o) => o.id === key);
-                alert(
-                  "You've clicked LIKE button on \n{ \nName: " +
-                    obj.name +
-                    ", \nposition: " +
-                    obj.position +
-                    ", \noffice: " +
-                    obj.office +
-                    ", \nage: " +
-                    obj.age +
-                    "\n}."
-                );
-              }}
-              color="info"
-              size="sm"
-              className="btn-icon btn-link like"
-              onClick={toggleModalReadRecord}
-            >
-              <i className="fa fa-list" />
-            </Button>{" "}
-            {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-            <Button
-              onClick={() => {
-                let obj = dataState.find((o) => o.id === key);
-                alert(
-                  "You've clicked EDIT button on \n{ \nName: " +
-                    obj.name +
-                    ", \nposition: " +
-                    obj.position +
-                    ", \noffice: " +
-                    obj.office +
-                    ", \nage: " +
-                    obj.age +
-                    "\n}."
-                );
-              }}
-              color="warning"
-              size="sm"
-              className="btn-icon btn-link edit"
-              onClick={toggleModalUpdateRecord}
-            >
-              <i className="fa fa-edit" />
-            </Button>
-          </div>
-        ),
-      };
-    })
-  );
-
-  const [modalAddRecord, setModalAddRecord] = useState(false);
-  const [modalReadRecord, setModalReadRecord] = useState(false);
-  const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
-
-  //Validaciones en formularios de Modals
-  const [requiredState, setrequiredState] = React.useState("");
-  const [emailState, setemailState] = React.useState("");
-  const [numberState, setnumberState] = React.useState("");
-
   //Guardar todos los catálogos para el select
-  //const [catalogs, setCatalogs] = React.useState([]);
-  const catalogs =[
-    { value: "Afghanistan", label: " Afghanistan " },
-    { value: "Albania", label: " Albania " },
-    { value: "Algeria", label: " Algeria " },
-    { value: "American Samoa", label: " American Samoa " },
-    { value: "Andorra", label: " Andorra " },
-    { value: "Angola", label: " Angola " },
-    { value: "Anguilla", label: " Anguilla " },
-    { value: "Antarctica", label: " Antarctica " },
-  ]
+  const [options, setOptions] = useState([]);
 
   //Guardar catalogo seleccionado para descargar su lista de opciones
-  const [catalog, setCatalog] = React.useState();
+  const [catalog, setCatalog] = React.useState("");
 
-  //Descargar la lista de opciones del catálogo seleccionado
-  const [records, setRecords] = useState([]);
+  //Para guardar los datos del catalogo seleccionado
+  const [dataCatalog, setDataCatalog] = useState([]);
  
 
   useEffect(() => {
     //Aqui vamos a descargar la lista de catalogos de la base de datos por primera vez
-    //se van a guardar en catalogs
-    //en el select por primera vez vamos a seleccionar la primera opcion
-    //downloadRecords(catalog)
+    const params = {
+      pvOptionCRUD: "R",
+      piIdCatalogType : 2,
+    };
+
+    var url = new URL(`http://localhost:8091/api/cat-catalogs/`);
+
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+      //console.log(data)
+      
+      //Creamos el arreglo de opciones para el select
+      var optionsAux = [];
+      var i;
+      for(i=0; i<data.length; i++)
+      {
+        optionsAux.push({
+          value: data[i].Component, label: data[i].Short_Desc 
+        })
+      }
+
+      setOptions(optionsAux)
+      
+      //Guardamos el respaldo de los datos
+      setDataTable(data);
+      
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de los catálogos" + err);
+    });
   }, []);
 
-  function updateRecords(value){
-    console.log("entres");
-    setCatalog(value);
-    console.log(catalog);
-    //downloadRecords(catalog)
-  }
-
-  function downloadRecords(catalog){
-    //Aqui vamos a descargar la lista de opciones del catálogo seleccionado
-    //Nos sirve para pintar la tabla
-    //Vamos a guardar los valores en records
-  }
-
-  function updateRecord(){
-    //A la hora de crear un nuevo registro necesitamos actualizar la tabla para que
-    //se pinten todos los registros incluido el nuevo
-    //Hacemos fetch nuevamente a todos los registros
-    //setRecords(nuevadata)
-  }
-
-  function readRecord(){
-    //Leemos la informacion completa del registo para pintarla en el modal
-    //tal vez no sea necesaria porque ya se leyó anteriormente...
-  }
-
-  function toggleModalReadRecord(){
-    if(modalReadRecord == false){
-      setModalReadRecord(true);
+  //Renderizado condicional
+  function Catalog(props) {
+    const catalog = props.component;
+    if (catalog === "CFDIUses") {
+      return <CFDIUses dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
     }
-    else{
-      setModalReadRecord(false);
+    if (catalog === "Countries") {
+      return <Countries dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
     }
+    if (catalog === "Currencies") {
+      return <Currencies dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+    }
+    if (catalog === "Customs") {
+      return <Customs dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+    }
+    if (catalog === "CustomsUnits") {
+      return <CustomsUnits dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+    }
+    if (catalog === "Incoterm") {
+      return <Incoterm dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+    }
+    if (catalog === "KeyProduct") {
+      return <KeyProduct dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+    }
+    if (catalog === "KeyUnit") {
+      return <KeyUnit dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+    }
+    if (catalog === "PaymentMethods") {
+      return <PaymentMethods dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+    }
+    if (catalog === "PaymentWays") {
+      return <PaymentWays dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+    }
+    if (catalog === "PetitionTypes") {
+      return <PetitionTypes dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+    }
+    if (catalog === "ReasonsTransfer") {
+      return <ReasonsTransfer dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+    }
+    if (catalog === "TariffFractions") {
+      return <TariffFractions dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+    }
+    if (catalog === "Taxes") {
+      return <Taxes dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+    }
+    if (catalog === "TaxRegimes") {
+      return <TaxRegimes dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+    }
+    if (catalog === "TypesOperation") {
+      return <TypesOperation dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+    }
+    if (catalog === "VoucherTypes") {
+      return <VoucherTypes dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+    }
+    if (catalog === "RelationshipTypes") {
+      return <RelationshipTypes dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+    }
+    return <p></p>
   }
 
-  function toggleModalUpdateRecord(){
-    if(modalUpdateRecord == false){
-      setModalUpdateRecord(true);
-    }
-    else{
-      setModalUpdateRecord(false);
-    }
+  //Nos servirá para pasarle los datos a la tabla ya descargados
+  function updateData(datos){
+    const params = {
+      pvOptionCRUD: "R",
+      pSpCatalog : datos.CRUD_References,
+    };
+
+    var url = new URL(`http://localhost:8091/api/cat-catalogs/catalog`);
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+      setDataCatalog(data)
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de los catálogos" + err);
+    });
   }
 
-  //Guardar evento al seleccionar en el catálogo
-  const handleTypeChange = (e) => {
-    //checar problema a la hora de hacer el setCatalog
-    setCatalog(e.value);
-    console.log(e.value)
-    //console.log(catalog)
+  //Para actualizar la tabla al insertar registro
+  function updateAddData(){
+    var datos = dataTable.find(o => o.Component === catalog)
+   
+    const params = {
+      pvOptionCRUD: "R",
+      pSpCatalog : datos.CRUD_References,
+    };
+
+    var url = new URL(`http://localhost:8091/api/cat-catalogs/catalog`);
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+      setDataCatalog(data)
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de los catálogos" + err);
+    });
   }
+
 
   return (
     <>
-      {/*console.log(props.example)*/}
       <div className="content">
         <Row>
           <Col md="12">
@@ -216,58 +226,21 @@ function CatalogosSAT() {
                   {/*Al seleccionar un catálogo se hará fetch para actualizar sus configuraciones*/}
                   <Select 
                     placeholder = "Selecciona un catálogo para administrar sus configuraciones"
-                    options = {catalogs}
+                    options = {options}
                     onChange={(e) => {
                       setCatalog(e.value);
-                      console.log(e.value)
+                      updateData(dataTable.find(o => o.Component === e.value))
                     }}
                   />
                 </FormGroup>
               </CardHeader>
               <CardBody>
-                <ReactTable
-                  data={dataState}
-                  columns={[
-                    {
-                      Header: "Id",
-                      accessor: "name",
-                    },
-                    {
-                      Header: "Desc. Corta",
-                      accessor: "position",
-                    },
-                    {
-                      Header: "Desc. Larga",
-                      accessor: "office",
-                    },
-                    {
-                      Header: "Estatus",
-                      accessor: "age",
-                    },
-                    {
-                      Header: "Actions",
-                      accessor: "actions",
-                      sortable: false,
-                      filterable: false,
-                    },
-                  ]}
-                  /*
-                      You can choose between primary-pagination, info-pagination, success-pagination, warning-pagination, danger-pagination or none - which will make the pagination buttons gray
-                    */
-                  className="-striped -highlight primary-pagination"
-                />
+                    <Catalog component = {catalog} />
               </CardBody>
             </Card>
           </Col>
         </Row>
       </div>
-
-      {/*MODAL PARA LEER REGISTRO*/}
-      <ModalReadPortal abierto = {modalReadRecord} toggleModalReadRecord = {toggleModalReadRecord}/>
-
-      {/*MODAL PARA MODIFICAR REGISTRO*/}
-      <ModalUpdatePortal abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord}/>
-
     </>
   );
 }

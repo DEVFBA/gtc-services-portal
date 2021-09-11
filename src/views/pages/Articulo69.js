@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 
+//Convertir excel a json
+import * as XLSX from 'xlsx'
+
 // reactstrap components
 import {
   Button,
@@ -10,6 +13,7 @@ import {
   Row,
   Col,
   FormGroup,
+  Form,
   Label,
   Input,
   Modal, 
@@ -19,104 +23,48 @@ import {
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
-import ModalAddClient from "../components/modals/ModalAddClient.js";
-import ModalUpdateClient from "../components/modals/ModalUpdateClient.js";
-
-const dataTable = [
-  ["Tiger Nixon", "System Architect", "Edinburgh", "61","Tiger Nixon", "System Architect", "Edinburgh", 1],
-  ["Garrett Winters", "Accountant", "Tokyo", "63","Tiger Nixon", "System Architect", "Edinburgh", "61"],
-  ["Ashton Cox", "Junior Technical Author", "San Francisco", "66","Tiger Nixon", "System Architect", "Edinburgh", 0],
-  ["Cedric Kelly", "Senior Javascript Developer", "Edinburgh", "22","Tiger Nixon", "System Architect", "Edinburgh", 1],
-  ["Airi Satou", "Accountant", "Tokyo", "33","Tiger Nixon", "System Architect", "Edinburgh", 1],
-  ["Brielle Williamson", "Integration Specialist", "New York", "61","Tiger Nixon", "System Architect", "Edinburgh", 0],
-];
+import ModalAddClient from "../components/Modals/ModalAddClient.js";
+import ModalUpdateClient from "../components/Modals/ModalUpdateClient.js";
 
 function Articulo69() {
-  const [dataState, setDataState] = React.useState(
-    dataTable.map((prop, key) => {
-      var status;
-      if(prop[7] === 1){
-        status = "Habilitado"
-      }
-      else{
-        status = "No Habilitado"
-      }
-      return {
-        id: key,
-        name: prop[0],
-        rfc: prop[1],
-        calle: prop[2],
-        noExterior: prop[3],
-        noInterior: prop[4],
-        estado: prop[5],
-        pais: prop[6],
-        status: status,
-        actions: (
-          // ACCIONES A REALIZAR EN CADA REGISTRO
-          <div className="actions-center">
-            {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-            <Button
-              onClick={() => {
-                let obj = dataState.find((o) => o.id === key);
-                getRegistro(key);
-                toggleModalUpdateRecord()
-              }}
-              color="warning"
-              size="sm"
-              className="btn-icon btn-link edit"
-            >
-              <i className="fa fa-edit" />
-            </Button>
-          </div>
-        ),
-      };
-    })
-  );
 
-  const [modalAddRecord, setModalAddRecord] = useState(false);
-  const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
+  //Para guardar el archivo
+  const [excel, setExcel] = useState(null);
+  const [JsonData, setJsonData]=useState([]);
 
-  //Para actualizar cada que agreguen un campo a la tabla
-  const [updateTable, setUpdateTable] = useState(0);
-
-  //Para saber que cliente se va a editar
-  const [record, setRecord] = useState({});
+  const [excelState, setExcelState] = useState("Hola")
 
   useEffect(() => {
     //Aqui vamos a descargar la lista de registros de la base de datos por primera vez
   }, []);
 
-  useEffect(() => {
-    //Para actualizar la tabla cada que se agreguen usuarios.
-    //Se hace fetch de nuevo a la base de datos
-
-    //Los datos se van a guardar en dataState
-    console.log(dataState)
-
-    //El renderizado se hará cada que cambiemos el valor de updateTable.
-  },[updateTable]);
-
-  function getRegistro(key)
+  function uploadExcel()
   {
-    var registro = dataState.find((o) => o.id === key)
-    setRecord(registro) 
-  }
-
-  function toggleModalAddRecord(){
-    if(modalAddRecord == false){
-      setModalAddRecord(true);
+    if(excel !== null)
+    {
+      let fileReader = new FileReader();
+      fileReader.readAsArrayBuffer(excel);
+      fileReader.onload = (event) => {
+        let data = new Uint8Array(event.target.result);
+        let workbook = XLSX.read(data, {type: "array"});
+        console.log(workbook);
+        var hojas =[];
+        workbook.SheetNames.forEach(function(sheetName) {
+          // Here is your object
+          var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+          hojas.push({
+            data: XL_row_object,
+            sheetName
+          })
+        })
+        //setJsonData(JSON.stringify(hojas));
+        console.log(hojas)
+      };
     }
     else{
-      setModalAddRecord(false);
-    }
-  }
-
-  function toggleModalUpdateRecord(){
-    if(modalUpdateRecord == false){
-      setModalUpdateRecord(true);
-    }
-    else{
-      setModalUpdateRecord(false);
+      if (excelState !== "has-success") {
+        setExcelState("has-danger");
+      }
     }
   }
 
@@ -129,72 +77,39 @@ function Articulo69() {
             <Card>
               <CardHeader>
                 <CardTitle tag="h4">Articulo 69</CardTitle>
-                <Button color="primary" onClick={toggleModalAddRecord}>
-                  <span className="btn-label">
-                    <i className="nc-icon nc-simple-add" />
-                  </span>
-                  Add new record
-                </Button>
               </CardHeader>
               <CardBody>
-                <ReactTable
-                  data={dataState}
-                  columns={[
-                    {
-                      Header: "Name",
-                      accessor: "name",
-                    },
-                    {
-                      Header: "RFC / Tax Id",
-                      accessor: "rfc",
-                    },
-                    {
-                      Header: "Calle",
-                      accessor: "calle",
-                    },
-                    {
-                      Header: "No. Exterior",
-                      accessor: "noExterior",
-                    },
-                    {
-                      Header: "No. Interior",
-                      accessor: "noInterior",
-                    },
-                    {
-                      Header: "Estado",
-                      accessor: "estado",
-                    },
-                    {
-                      Header: "País",
-                      accessor: "pais",
-                    },
-                    {
-                      Header: "Estatus",
-                      accessor: "status",
-                    },
-                    {
-                      Header: "Actions",
-                      accessor: "actions",
-                      sortable: false,
-                      filterable: false,
-                    },
-                  ]}
-                  /*
-                      You can choose between primary-pagination, info-pagination, success-pagination, warning-pagination, danger-pagination or none - which will make the pagination buttons gray
-                    */
-                  className="-striped -highlight primary-pagination"
-                />
+                <Form> 
+                  <Row> 
+                    <Col>
+                      <FormGroup className={`has-label ${excelState}`}>
+                        <Input 
+                          className="form-control" 
+                          type="file" id="fileUpload" 
+                          accept=".xls, .xlsx, .csv" 
+                          onChange={(e) => {
+                            setExcel(e.target.files[0]);
+                          }}/>
+                        {excelState === "has-danger" ? (
+                          <label className="error">
+                            Selecciona un documento válido.
+                          </label>
+                        ) : null}
+                      </FormGroup>
+                    </Col>
+                    <Col>
+                      <Button color="primary" onClick={uploadExcel}>
+                        Convert Excel To Json
+                      </Button> 
+                    </Col>
+                  </Row>
+                </Form>
+                {JsonData}
               </CardBody>
             </Card>
           </Col>
         </Row>
       </div>
-
-      {/*MODAL PARA AÑADIR REGISTROS*/}
-      <ModalAddClient modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateTable = {updateTable} setUpdateTable = {setUpdateTable}/> 
-
-      {/*MODAL PARA MODIFICAR REGISTRO*/}
-      <ModalUpdateClient modalUpdateRecord = {modalUpdateRecord} setModalUpdateRecord = {setModalUpdateRecord} updateTable = {updateTable} setUpdateTable = {setUpdateTable} record = {record}/> 
     </>
   );
 }

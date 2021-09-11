@@ -18,7 +18,7 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalAddUser({modalAddRecord, setModalAddRecord, updateTable, setUpdateTable}) {
+function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles}) {
         // register form
     const [registerEmail, setregisterEmail] = React.useState("");
     const [registerFullName, setregisterFullName] = React.useState("");
@@ -103,9 +103,6 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, updateTable, setUpdate
             //haremos el fetch a la base de datos para agregar el registro
             //El password deberá encriptarse en SHA256
             //console.log(sha256(registerPassword));
-
-            //Para actualizar la tabla en componente principal
-            setUpdateTable(updateTable+1)
             //Cerramos el modal
             handleModalClick()
         }
@@ -219,12 +216,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, updateTable, setUpdate
                         setregisterRol(value)
                         setregisterRolState("has-success");
                     }}
-                    options={[
-                        { value: "Administrador", label: " Administrador "},
-                        { value: "Soporte", label: " Soporte " },
-                        { value: "Cliente", label: " Cliente " },
-                        { value: "Servicio", label: " Servicio " }
-                    ]}
+                    options={dataRoles}
                 />
                 {registerRolState === "has-danger" ? (
                     <label className="error">Selecciona un rol.</label>

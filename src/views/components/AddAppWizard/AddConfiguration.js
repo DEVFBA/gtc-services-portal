@@ -29,7 +29,7 @@ import {
 // react plugin used to create DropdownMenu for selecting items
 import Select from "react-select";
 
-function AddConfiguration ({dataTable, setDataTable, updateTable}){
+function AddConfiguration ({dataState, setDataState, updateTable, setAddRegister}){
 
   const [configuracion, setConfiguracion] = React.useState("");
   const [requerida, setRequerida] = React.useState(false);
@@ -49,6 +49,7 @@ function AddConfiguration ({dataTable, setDataTable, updateTable}){
   const [visibleFocus, setvisibleFocus] = React.useState("");
   const [tooltipFocus, settooltipFocus] = React.useState("");
 
+  
 
   // function that verifies if a string has a given length or not
   const verifyLength = (value, length) => {
@@ -77,18 +78,43 @@ function AddConfiguration ({dataTable, setDataTable, updateTable}){
 
   const handleClick = () => {
     if(isValidated() === true){
-        var register = [
-            configuracion,
-            requerida, 
-            editable,
-            visible,
-            tooltip
-        ]
-        var auxiliar = dataTable;
-        auxiliar.push(register);
-        setDataTable(auxiliar);
-        //Actualizar Tabla
-        updateTable();
+        const key = dataState.length
+        var register = {
+            id: key,
+            configuracion: configuracion,
+            requerida: requerida,
+            editable: editable,
+            visible: visible,
+            tooltip: tooltip,
+            actions: (
+              // ACCIONES A REALIZAR EN CADA REGISTRO
+              <div className="actions-center">
+                {/* use this button to remove the data row */}
+                <Button
+                  onClick={() => {
+                    var data = dataState;
+                    data.find((o, i) => {
+                      if (o.id === key) {
+                        // here you should add some custom code so you can delete the data
+                        // from this component and from your server as well
+                        data.splice(i, 1);
+                        console.log(data.length);
+                        return true;
+                      }
+                      return false;
+                    });
+                    setDataState(data);
+                  }}
+                  color="danger"
+                  size="sm"
+                  className="btn-icon btn-link remove"
+                ><i className="fa fa-times" />
+                </Button>{" "}
+              </div>
+            ),
+        }
+        setAddRegister(register)
+        updateTable()
     }
   };
 
@@ -106,6 +132,7 @@ function AddConfiguration ({dataTable, setDataTable, updateTable}){
             <Input
               name="configuracion"
               placeholder="Configuración (atributo 'name' del setting) (required)"
+              autoComplete="off"
               type="text"
               onChange={(e) => {
                 if (!verifyLength(e.target.value, 1)) {
@@ -184,6 +211,7 @@ function AddConfiguration ({dataTable, setDataTable, updateTable}){
               name="tooltip"
               placeholder="Tooltip (required)"
               type="text"
+              autoComplete="off"
               onChange={(e) => {
                 if (!verifyLength(e.target.value, 1)) {
                   settooltipState("has-danger");

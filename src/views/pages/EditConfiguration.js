@@ -23,7 +23,7 @@ import {
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
-import ModalUpdateClientSettings from "../components/modals/ModalUpdateClientSettings.js";
+import ModalUpdateClientSettings from "../components/Modals/ModalUpdateClientSettings.js";
 
 const dataTable = [
   ["Tiger Nixon", 1, 1, 1],
