@@ -26,6 +26,8 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
     const [error, setError] = React.useState();
     const [errorState, setErrorState] = React.useState("");
 
+    const user = localStorage.getItem("User");
+
     const handleModalClick = () => {
         setModalAddRecord(!modalAddRecord);
     };
@@ -76,8 +78,7 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
             pvShortDesc: shortDescription,
             pvLongDesc: longDescription,
             pbStatus: status,
-            pvUser: 'ahernandez@gtcta.mx',
-            pvIP : "IPALEXIS"
+            pvUser: user,
         };
     
         fetch(`http://localhost:8091/api/cat-catalogs/create-portal`, {
@@ -183,7 +184,7 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
                         type="checkbox" 
                         checked = {status}
                         onChange={(e) => {
-                            setStatus(e.target.checked)
+                            setregisterStatus(e.target.checked)
                         }}
                     />{' '}
                     Habilitado

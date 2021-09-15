@@ -24,6 +24,9 @@ function ModalUpdateTypesOperation({abierto, toggleModalUpdateRecord, record, up
 
     const [error, setError] = React.useState();
     const [errorState, setErrorState] = React.useState("");
+    const [errorMessage, setErrorMessage] = useState("")
+
+    const user = localStorage.getItem("User");
 
     useEffect(() => {
         setId(record.idR);
@@ -39,6 +42,15 @@ function ModalUpdateTypesOperation({abierto, toggleModalUpdateRecord, record, up
     },[record]);
 
     const handleModalClick = () => {
+        setId("")
+        setShortDescription("")
+        setLongDescription("")
+        setStatus(true)
+        setShortDescriptionState("")
+        setLongDescriptionState("")
+        setError("")
+        setErrorState("")
+        setErrorMessage("")
         toggleModalUpdateRecord(!abierto);
     };
 
@@ -100,8 +112,7 @@ function ModalUpdateTypesOperation({abierto, toggleModalUpdateRecord, record, up
             pvShortDesc: shortDescription,
             pvLongDesc: longDescription,
             pbStatus: status,
-            pvUser: 'ahernandez@gtcta.mx',
-            pvIP : "IPALEXIS"
+            pvUser: user,
         };
     
         fetch(`http://localhost:8091/api/cat-catalogs/update-sat`, {
@@ -119,8 +130,14 @@ function ModalUpdateTypesOperation({abierto, toggleModalUpdateRecord, record, up
                 );
             }
             else{
+                if(data[0].Code_Type === "Error")
+                {
+                    setErrorMessage(data[0].Code_Message_User)
+                    setErrorState("has-danger")
+                }
                 if(data[0].Code_Type === "Warning")
                 {
+                    setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
                 }
                 else{
@@ -212,7 +229,7 @@ function ModalUpdateTypesOperation({abierto, toggleModalUpdateRecord, record, up
                 </FormGroup>
             <FormGroup className={`has-label ${errorState}`}>
                 {errorState === "has-danger" ? (
-                        <label className="error">An error has occurred. Try again.</label>
+                        <label className="error">{errorMessage}</label>
                 ) : null}
             </FormGroup>
           </Form>

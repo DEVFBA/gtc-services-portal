@@ -73,16 +73,6 @@ function DashboardClient() {
   const history = useHistory();
 
   React.useEffect(() => {
-    //Si el usuario no ha iniciado sesión que se le redirija al login
-    //Por el momento se usará la bandera logged
-    if(logged!="true")
-    {
-      history.push("/auth/login");
-      return;
-    }
-  }, []);
-
-  React.useEffect(() => {
     /*fetch(`http://localhost:8091/api/cat-countries`, {
       method: "GET",
       headers: {

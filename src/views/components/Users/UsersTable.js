@@ -10,19 +10,9 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import { prototype } from "react-datetime";
 
-
-const dataa = [
-  ["Tiger Nixon", "System Architect", "Edinburgh", 0],
-  ["Garrett Winters", "Accountant", "Tokyo", "63"],
-  ["Ashton Cox", "Junior Technical Author", "San Francisco", 0],
-  ["Cedric Kelly", "Senior Javascript Developer", "Edinburgh", 0],
-  ["Airi Satou", "Accountant", "Tokyo", "33"],
-  ["Brielle Williamson", "Integration Specialist", "New York", 0],
-];
-
-function UsersTable({dataTable, dataRoles, updateAddData}){
-    console.log(dataTable)
+function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDays}){
     const [dataState, setDataState] = useState(
         dataTable.map((prop, key) => {
           var status;
@@ -37,7 +27,12 @@ function UsersTable({dataTable, dataRoles, updateAddData}){
             name: prop.Name,
             email: prop.User,
             rol: prop.Role_Desc,
+            idRole: prop.Id_Role,
             status: status,
+            customer: prop.Customer,
+            idCustomer: prop.Id_Customer,
+            password: prop.Password,
+            finalEffectiveDate: prop.Final_Effective_Date,
             actions: (
               // ACCIONES A REALIZAR EN CADA REGISTRO
               <div className="actions-center">
@@ -137,10 +132,10 @@ function UsersTable({dataTable, dataRoles, updateAddData}){
         </div>
     
         {/*MODAL PARA AÑADIR REGISTROS*/}
-        <ModalAddUser modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataRoles = {dataRoles}/>       
+        <ModalAddUser modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays}/>       
 
         {/*MODAL PARA MODIFICAR REGISTRO*/}
-        <ModalUpdateUser abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record}/>
+        <ModalUpdateUser abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays}/>
     
         </>
     );

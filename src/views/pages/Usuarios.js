@@ -22,6 +22,9 @@ import {
 // core components
 import UsersTable from "../components/Users/UsersTable.js";
 
+import { useContext } from "react";
+import { UserContext } from "../../UserContext";
+
 function Usuarios() {
 
   //Para actualizar cada que agreguen un campo a la tabla
@@ -33,6 +36,14 @@ function Usuarios() {
   //Para guardar los datos de los roles
   const [dataRoles, setDataRoles] = useState([]);
 
+  //Para guardar los datos de los customers
+  const [dataCustomers, setDataCustomers] = useState([]);
+
+  //Para guardar los días transcurridos
+  const [validDays, setValidDays] = React.useState();
+
+  const {user,setUser} = useContext(UserContext);
+
   useEffect(() => {
     //Aqui vamos a descargar la lista de usuarios de la base de datos por primera vez
     const params = {
@@ -42,8 +53,6 @@ function Usuarios() {
     var url = new URL(`http://localhost:8091/api/security-users/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-
-    console.log(url)
 
     fetch(url, {
         method: "GET",
@@ -99,6 +108,105 @@ function Usuarios() {
     });
   }, []);
 
+  useEffect(() => {
+    //Aqui vamos a descargar la lista de customers de la base de datos por primera vez
+    const params = {
+      pvOptionCRUD: "R"
+    };
+
+    var url = new URL(`http://localhost:8091/api/customers/`);
+
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+
+        //Creamos el arreglo de customers para el select
+        var optionsAux = [];
+        var i;
+        for(i=0; i<data.length; i++)
+        {
+          optionsAux.push({
+            value: data[i].Id_Customer, label: data[i].Name
+          })
+        }
+        setDataCustomers(optionsAux)
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de los roles" + err);
+    });
+  }, []);
+
+  useEffect(() => {
+    //Aqui vamos a descargar la lista de general parameters para revisar la vigencia del password
+    const params = {
+      pvOptionCRUD: "R"
+    };
+
+    var url = new URL(`http://localhost:8091/api/general-parameters/`);
+
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+        var aux = data.find( o => o.Id_Catalog === 3 )
+        setValidDays(parseInt(aux.Value,10))
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de los general parameters" + err);
+    });
+  }, []);
+
+   //Renderizado condicional
+  function Users() {
+      return <UsersTable dataTable = {dataUsers} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays}/>;
+  }
+
+  //Para actualizar la tabla al insertar registro
+  function updateAddData(){
+    console.log("Entre al final")
+    const params = {
+      pvOptionCRUD: "R"
+    };
+
+    var url = new URL(`http://localhost:8091/api/security-users/`);
+
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+      console.log("Entre al final")
+      setDataUsers(data)
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de los usuarios" + err);
+    });
+  }
+
   return dataUsers.length === 0 ? (
     <>
     </>
@@ -112,7 +220,7 @@ function Usuarios() {
                 <CardTitle tag="h4">Users Catalog</CardTitle>
               </CardHeader>
               <CardBody>
-                <UsersTable dataTable = {dataUsers} dataRoles = {dataRoles}/>
+                <Users />
               </CardBody>
             </Card>
           </Col>

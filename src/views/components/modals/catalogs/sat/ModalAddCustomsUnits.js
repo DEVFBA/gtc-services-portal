@@ -25,8 +25,21 @@ function ModalAddCustomsUnits({modalAddRecord, setModalAddRecord, updateAddData}
 
     const [error, setError] = React.useState();
     const [errorState, setErrorState] = React.useState("");
+    const [errorMessage, setErrorMessage] = useState("")
+
+    const user = localStorage.getItem("User");
 
     const handleModalClick = () => {
+        setId("")
+        setShortDescription("")
+        setLongDescription("")
+        setStatus(true)
+        setIdState("")
+        setShortDescriptionState("")
+        setLongDescriptionState("")
+        setError("")
+        setErrorState("")
+        setErrorMessage("")
         setModalAddRecord(!modalAddRecord);
     };
 
@@ -73,14 +86,13 @@ function ModalAddCustomsUnits({modalAddRecord, setModalAddRecord, updateAddData}
     function addRegister(){
         //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
         const catRegister = {
-            pSpCatalog: "spSAT_Cat_Custom_UoMs_CRUD_Records",
+            pSpCatalog: "spSAT_Cat_CFDI_Uses_CRUD_Records",
             pvOptionCRUD: "C",
             pvIdCatalog: id,
             pvShortDesc: shortDescription,
             pvLongDesc: longDescription,
             pbStatus: status,
-            pvUser: 'ahernandez@gtcta.mx',
-            pvIP : "IPALEXIS"
+            pvUser: user,
         };
     
         fetch(`http://localhost:8091/api/cat-catalogs/create-sat`, {
@@ -92,16 +104,29 @@ function ModalAddCustomsUnits({modalAddRecord, setModalAddRecord, updateAddData}
         })
         .then((response) => response.json())
         .then((data) => {
-            if(data[0].Code_Type === "Error")
-            {
-                setErrorState("has-danger")
+            if (data.errors) {
+                setError(
+                <p>Hubo un error al realizar tu solicitud</p>
+                );
             }
             else{
-                setErrorState("has-success");
-                //Para actualizar la tabla en componente principal
-                updateAddData()
-                //Cerramos el modal
-                handleModalClick()
+                if(data[0].Code_Type === "Error")
+                {
+                    setErrorMessage(data[0].Code_Message_User)
+                    setErrorState("has-danger")
+                }
+                if(data[0].Code_Type === "Warning")
+                {
+                    setErrorMessage(data[0].Code_Message_User)
+                    setErrorState("has-danger")
+                }
+                else{
+                    setErrorState("has-success");
+                    //Para actualizar la tabla en componente principal
+                    updateAddData()
+                    //Cerramos el modal
+                    handleModalClick()
+                }
             }
         });
     }
@@ -193,7 +218,7 @@ function ModalAddCustomsUnits({modalAddRecord, setModalAddRecord, updateAddData}
             </div>
             <FormGroup className={`has-label ${errorState}`}>
                 {errorState === "has-danger" ? (
-                        <label className="error">The record already exists, please validate</label>
+                        <label className="error">{errorMessage}</label>
                 ) : null}
             </FormGroup>
           </Form>

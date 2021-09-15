@@ -24,6 +24,8 @@ import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
+import { Link, useHistory } from "react-router-dom";
+
 
 //Importando todos los componentes que se van a utilizar
 import DashboardAdmin from "../views/Dashboard.js";
@@ -43,8 +45,6 @@ import CustomerApplications from "../views/pages/CustomerApplications.js";
 import Articulo69 from "../views/pages/Articulo69";
 import { string } from "prop-types";
 
-
-
 var ps;
 
 function Admin(props) {
@@ -57,17 +57,27 @@ function Admin(props) {
   //GUARDAR EL ESTADO PARA LAS RUTAS
   const [dbRoutes, setDbRoutes] = useState([]);
 
+  const history = useHistory();
 
-  //Para revisar qué tipo de RUTAS (En este caso MENU) mostrar
-  const tipo = localStorage.getItem("tipo");
+  const logged = localStorage.getItem("Logged");
+  const role = localStorage.getItem("Id_Role");
+  const customer = localStorage.getItem("Id_Customer");
 
+  React.useEffect(() => {
+    //Si el usuario no ha iniciado sesión que se le redirija al login
+    if(logged !== "true")
+    {
+      history.push("/auth/login");
+    }
+  }, []);
+  
   useEffect(() => {
 
     //estos parametros se van a tomar del local storage o del usecontext
     const params = {
       pvOptionCRUD: "R",
-      piIdCustomer : 1,
-	    pvIdRole : "GTCADMIN"
+      piIdCustomer : customer,
+	    pvIdRole : role
     };
 
     var url = new URL(`http://localhost:8091/api/routes/`);
@@ -379,20 +389,12 @@ function Admin(props) {
             },
           )
         }
-        console.log(routesAux)
         setDbRoutes(routesAux)
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de las rutas" + err);
     });
   }, []);
-
-  useEffect(() => {
-    //useEffect para armar el arreglo de rutas
-
-  }, []);
-
-
 
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
@@ -453,24 +455,25 @@ function Admin(props) {
 
   return (
     <div className="wrapper">
-      <Sidebar
-        {...props}
-        routes={dbRoutes}
-        bgColor={backgroundColor}
-        activeColor={activeColor}
-      />
-      {/*side*/}
-      <div className="main-panel" ref={mainPanel}>
-        <AdminNavbar {...props} handleMiniClick={handleMiniClick} />
-        <Switch>{getRoutes(dbRoutes)}</Switch>
-        {/*adminNav*/}
-        {
-          // we don't want the Footer to be rendered on full screen maps page
-          props.location.pathname.indexOf("full-screen-map") !== -1 ? null : (
-            <Footer fluid />
-          )
-        }
-      </div>
+        <Sidebar
+          {...props}
+          routes={dbRoutes}
+          bgColor={backgroundColor}
+          activeColor={activeColor}
+        />
+        {/*side*/}
+        <div className="main-panel" ref={mainPanel}>
+          <AdminNavbar {...props} handleMiniClick={handleMiniClick} />
+          <Switch>{getRoutes(dbRoutes)}</Switch>
+          {/*adminNav*/}
+          {
+            // we don't want the Footer to be rendered on full screen maps page
+            props.location.pathname.indexOf("full-screen-map") !== -1 ? null : (
+              <Footer fluid />
+            )
+          }
+        </div>
+      
       {/*<FixedPlugin
         bgColor={backgroundColor}
         activeColor={activeColor}

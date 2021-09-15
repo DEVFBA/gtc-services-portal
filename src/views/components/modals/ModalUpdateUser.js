@@ -18,32 +18,55 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalUpdateUser({abierto, toggleModalUpdateRecord, record}) {
+function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, dataCustomers, updateAddData, validDays}) {
         // register form
     const [updateEmail, setupdateEmail] = React.useState("");
     const [updateFullName, setupdateFullName] = React.useState("");
     const [updatePassword, setupdatePassword] = React.useState("");
     const [updateChangePassword, setupdateChangePassword] = useState();
-    const [updateTemporal, setupdateTemporal] = useState();
-    const [updateRol, setupdateRol] = React.useState("");
-    const [updateStatus, setupdateStatus] = useState(false);
+    const [updateTemporal, setupdateTemporal] = useState(true);
+    const [updateRol, setupdateRol] = React.useState({});
+    const [updateCustomer, setupdateCustomer] = React.useState("");
+    const [updateStatus, setupdateStatus] = useState();
     const [updateConfirmPassword, setupdateConfirmPassword] = React.useState("");
+    const [updateFinalEffectiveDate, setupdateFinalEffectiveDate] = useState();
 
     const [updateEmailState, setupdateEmailState] = React.useState("");
     const [updateFullNameState, setupdateFullNameState] = React.useState("");
     const [updatePasswordState, setupdatePasswordState] = React.useState("");
     const [updateConfirmPasswordState, setupdateConfirmPasswordState] = React.useState("");
     const [updateRolState, setupdateRolState] = React.useState("");
+    const [updateCustomerState, setupdateCustomerState] = React.useState("");
+
+    const [error, setError] = React.useState();
+    const [errorState, setErrorState] = React.useState("");
+    const [errorMessage, setErrorMessage] = React.useState("");
+
+    const user = localStorage.getItem("User");
 
     const handleModalClick = () => {
       toggleModalUpdateRecord(!abierto);
     };
 
     useEffect(() => {
-        setupdateFullName(record.name);
-        setupdateRol(record.rol)
+        setupdateEmail(record.email);
+        setupdateFullName(record.name)
+        setupdateRol({
+            value: record.idRole,
+            label: record.rol
+        })
+        setupdateCustomer({
+            value: record.idCustomer,
+            label: record.customer
+        })
+        if(record.status === "Habilitado")
+        {
+            setupdateStatus(true);
+        }
+        else{
+            setupdateStatus(false);
+        }
     },[record]);
-
 
     // function that verifies if a string has a given length or not
     const verifyLength = (value, length) => {
@@ -67,41 +90,62 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record}) {
         }
         return false;
     };
+
+    //Funcion para validar que no se queden en blanco los inputs en caso de que haga cambios
+    const verifyInputs = () =>{
+        var fullname = document.getElementById("fullname").value
+
+        if (!verifyLength(fullname, 1)) {
+            setupdateFullNameState("has-danger");
+        } else {
+            setupdateFullNameState("has-success");
+        }
+        setupdateFullName(fullname);
+
+        if(updateChangePassword === true)
+        {
+            var password = document.getElementById("password").value
+            var passwordConfirmation = document.getElementById("passwordConfirmation").value
+            if (!verifyLength(password, 1)) {
+                setupdatePasswordState("has-danger");
+            } else {
+                setupdatePasswordState("has-success");
+            }
+            setupdatePassword(password);
+    
+            if (!verifyLength(passwordConfirmation, 1)) {
+                setupdateConfirmPasswordState("has-danger");
+            } else {
+                setupdateConfirmPasswordState("has-success");
+            }
+            setupdateConfirmPassword(passwordConfirmation)
+        }   
+    }
     
     const isValidated = () => {
+
+        verifyInputs()
         if (
-            updateFullNameState === "has-success" &&
-            updateRolState === "has-success"
+            updateFullNameState !== "has-danger"
         ) {
           if(updateChangePassword === true)
           {
             if(
-              updatePasswordState === "has-success" &&
-              updateConfirmPasswordState === "has-success"
+              updatePasswordState !== "has-danger" &&
+              updateConfirmPasswordState !== "has-danger"
             )
             {
               return true;
             }
             else{
-              if (updatePasswordState !== "has-success") {
-                setupdatePasswordState("has-danger");
-              }
-              if (updateConfirmPasswordState !== "has-success") {
-                setupdateConfirmPasswordState("has-danger");
-              }
               return false;
             }
           }
           else{
+              console.log("entre al final")
             return true;
           }
         } else {
-          if (updateFullNameState !== "has-success") {
-            setupdateFullNameState("has-danger");
-          }
-          if (updateRolState !== "has-success") {
-            setupdateRolState("has-danger");
-          }
           return false;
         }
       };
@@ -112,15 +156,120 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record}) {
             //haremos el fetch a la base de datos para actualizar el registro
             //El password deberá encriptarse en SHA256
             //console.log(sha256(registerPassword));
-
-            //Para actualizar la tabla en componente principal
-            setUpdateTable(updateTable+1)
+            updateRegister()
             //Cerramos el modal
-            handleModalClick()
+            //handleModalClick()
         }
     };
 
-    
+    function updateRegister(){
+        //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
+        if(updateChangePassword === true)
+        {
+            var d = new Date();
+            var finalDate = sumarDias(d, validDays);
+            var date = finalDate.getDate();
+            var month = finalDate.getMonth() + 1
+            var year = finalDate.getFullYear()
+
+            var finalDate2 = "" + year + "" + month + "" + date;
+
+            const catRegister = {
+                pvOptionCRUD: "U",
+                piIdCustomer: updateCustomer.value,
+                pvIdUser: updateEmail,
+                pvIdRole: updateRol.value,
+                pvPassword: updatePassword,
+                pbTempPassword: updateTemporal,
+                pvName: updateFullName,
+                pbStatus: updateStatus,
+                pvFinalEffectiveDate: finalDate2,
+                pvUser: user,
+            };
+        
+            fetch(`http://localhost:8091/api/security-users/update-user/`, {
+                method: "PUT",
+                body: JSON.stringify(catRegister),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.errors) {
+                    setError(
+                        <p>Hubo un error al realizar tu solicitud</p>
+                    );
+                }
+                else{
+                    if(data[0].Code_Type === "Warning")
+                    {
+                        setErrorMessage(data[0].Code_Message_User)
+                        setErrorState("has-danger")
+                    }
+                    if(data[0].Code_Type === "Error")
+                    {
+                        setErrorMessage(data[0].Code_Message_User)
+                        setErrorState("has-danger")
+                    }
+                    else{
+                        setErrorState("has-success");
+                        //Para actualizar la tabla en componente principal
+                        updateAddData()
+                        //Cerramos el modal
+                        handleModalClick()
+                    }
+                }
+            });
+        }
+        else{
+            const catRegister = {
+                pvOptionCRUD: "U",
+                piIdCustomer: updateCustomer.value,
+                pvIdUser: updateEmail,
+                pvIdRole: updateRol.value,
+                pvName: updateFullName,
+                pbStatus: updateStatus,
+                pvUser: user,
+            };
+        
+            fetch(`http://localhost:8091/api/security-users/update-user-wp/`, {
+                method: "PUT",
+                body: JSON.stringify(catRegister),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.errors) {
+                    setError(
+                        <p>Hubo un error al realizar tu solicitud</p>
+                    );
+                }
+                else{
+                    if(data[0].Code_Type === "Warning")
+                    {
+                        setErrorState("has-danger")
+                    }
+                    else{
+                        setErrorState("has-success");
+                        //Para actualizar la tabla en componente principal
+                        updateAddData()
+                        //Cerramos el modal
+                        handleModalClick()
+                    }
+                }
+            });
+        }
+    }
+
+    /* Función que suma o resta días a una fecha, si el parámetro
+   días es negativo restará los días*/
+    function sumarDias(fecha, dias){
+        fecha.setDate(fecha.getDate() + dias);
+        return fecha;
+    }
 
     return (
         <Modal isOpen={abierto} toggle={handleModalClick} size="lg">
@@ -128,25 +277,26 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record}) {
             <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
                 <span aria-hidden="true">×</span>
             </button>
-            <h5 className="modal-title">Update User {record.name} </h5>
+            <h5 className="modal-title">Update User</h5>
             </div>
             <ModalBody>
             <Form id="RegisterValidation">
                 <FormGroup>
-                <label>Id Usuario</label>
-                <Input
-                    name="email"
-                    type="email"
-                    placeholder = {updateEmail}
-                    readOnly
-                />
+                    <label>Id Usuario</label>
+                    <Input
+                        name="email"
+                        type="email"
+                        placeholder = {updateEmail}
+                        readOnly
+                    />
                 </FormGroup>
                 <FormGroup className={`has-label ${updateFullNameState}`}>
                     <label>Full Name *</label>
                     <Input
                     name="fullname"
+                    id="fullname"
                     type="text"
-                    placeholder = {updateFullName}
+                    value = {updateFullName}
                     onChange={(e) => {
                         if (!verifyLength(e.target.value, 1)) {
                         setupdateFullNameState("has-danger");
@@ -178,7 +328,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record}) {
                         <FormGroup className={`has-label ${updatePasswordState}`}>
                           <label>Password *</label>
                           <Input
-                              id="registerPassword"
+                              id="password"
                               name="password"
                               type="password"
                               autoComplete="off"
@@ -198,8 +348,8 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record}) {
                         <FormGroup className={`has-label ${updateConfirmPasswordState}`}>
                           <label>Confirm Password *</label>
                           <Input
-                              equalto="#registerPassword"
-                              id="registerPasswordConfirmation"
+                              equalto="#password"
+                              id="passwordConfirmation"
                               name="password_confirmation"
                               type="password"
                               autoComplete="off"
@@ -222,6 +372,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record}) {
                           <Label check>
                           <Input 
                               type="checkbox" 
+                              checked = {updateTemporal}
                               onChange={(e) => {
                                   setupdateTemporal(e.target.checked)
                               }}
@@ -236,32 +387,47 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record}) {
                     ) : null}
                 </FormGroup>
                 <FormGroup className={`has-label ${updateRolState}`}>
-                <Label for="exampleSelect">Rol * </Label>
-                <Select
-                    name=""
-                    className="react-select"
-                    defaultValue = {updateRol}
-                    classNamePrefix="react-select"
-                    value={updateRol}
-                    onChange={(value) => {
-                        setupdateRol(value)
-                        setupdateRolState("has-success");
-                    }}
-                    options={[
-                        { value: "Administrador", label: " Administrador "},
-                        { value: "Soporte", label: " Soporte " },
-                        { value: "Cliente", label: " Cliente " },
-                        { value: "Servicio", label: " Servicio " }
-                    ]}
-                />
-                {updateRolState === "has-danger" ? (
-                    <label className="error">Selecciona un rol.</label>
-                ) : null}
+                    <Label for="exampleSelect">Rol * </Label>
+                    <Select
+                        name=""
+                        className="react-select"
+                        defaultValue = {updateRol}
+                        classNamePrefix="react-select"
+                        value={updateRol}
+                        onChange={(value) => {
+                            console.log(value)
+                            setupdateRol(value)
+                            setupdateRolState("has-success");
+                        }}
+                        options={dataRoles}
+                    />
+                    {updateRolState === "has-danger" ? (
+                        <label className="error">Selecciona un rol.</label>
+                    ) : null}
+                </FormGroup>
+                <FormGroup className={`has-label ${updateCustomerState}`}>
+                    <Label for="exampleSelect">Customer * </Label>
+                    <Select
+                        name=""
+                        className="react-select"
+                        defaultValue = {updateCustomer}
+                        classNamePrefix="react-select"
+                        value={updateCustomer}
+                        onChange={(value) => {
+                            setupdateCustomer(value)
+                            setupdateCustomerState("has-success");
+                        }}
+                        options={dataCustomers}
+                    />
+                    {updateCustomerState === "has-danger" ? (
+                        <label className="error">Selecciona un customer.</label>
+                    ) : null}
                 </FormGroup>
                 <FormGroup check>
                     <Label check>
                     <Input 
-                        type="checkbox" 
+                        type="checkbox"
+                        checked = {updateStatus} 
                         onChange={(e) => {
                             setupdateStatus(e.target.checked)
                         }}
@@ -275,6 +441,11 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record}) {
                 <div className="category form-category">
                 * Required fields
                 </div>
+                <FormGroup className={`has-label ${errorState}`}>
+                {errorState === "has-danger" ? (
+                        <label className="error">{errorMessage}</label>
+                ) : null}
+            </FormGroup>
             </Form>
             </ModalBody>
             <ModalFooter>

@@ -25,6 +25,8 @@ function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record,
     const [error, setError] = React.useState();
     const [errorState, setErrorState] = React.useState("");
 
+    const user = localStorage.getItem("User");
+
     useEffect(() => {
         setId(record.idR);
         setShortDescription(record.shortDescription)
@@ -100,8 +102,7 @@ function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record,
             pvShortDesc: shortDescription,
             pvLongDesc: longDescription,
             pbStatus: status,
-            pvUser: 'ahernandez@gtcta.mx',
-            pvIP : "IPALEXIS"
+            pvUser: user,
         };
     
         fetch(`http://localhost:8091/api/cat-catalogs/update-portal`, {

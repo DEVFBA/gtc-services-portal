@@ -25,8 +25,21 @@ function ModalAddCFDIUses({modalAddRecord, setModalAddRecord, updateAddData}) {
 
     const [error, setError] = React.useState();
     const [errorState, setErrorState] = React.useState("");
+    const [errorMessage, setErrorMessage] = useState("")
+
+    const user = localStorage.getItem("User");
     
     const handleModalClick = () => {
+        setId("")
+        setShortDescription("")
+        setLongDescription("")
+        setStatus(true)
+        setIdState("")
+        setShortDescriptionState("")
+        setLongDescriptionState("")
+        setError("")
+        setErrorState("")
+        setErrorMessage("")
         setModalAddRecord(!modalAddRecord);
     };
 
@@ -79,8 +92,7 @@ function ModalAddCFDIUses({modalAddRecord, setModalAddRecord, updateAddData}) {
             pvShortDesc: shortDescription,
             pvLongDesc: longDescription,
             pbStatus: status,
-            pvUser: 'ahernandez@gtcta.mx',
-            pvIP : "IPALEXIS"
+            pvUser: user,
         };
     
         fetch(`http://localhost:8091/api/cat-catalogs/create-sat`, {
@@ -100,6 +112,12 @@ function ModalAddCFDIUses({modalAddRecord, setModalAddRecord, updateAddData}) {
             else{
                 if(data[0].Code_Type === "Error")
                 {
+                    setErrorMessage(data[0].Code_Message_User)
+                    setErrorState("has-danger")
+                }
+                if(data[0].Code_Type === "Warning")
+                {
+                    setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
                 }
                 else{
@@ -200,7 +218,7 @@ function ModalAddCFDIUses({modalAddRecord, setModalAddRecord, updateAddData}) {
             </div>
             <FormGroup className={`has-label ${errorState}`}>
                 {errorState === "has-danger" ? (
-                        <label className="error">The record already exists, please validate</label>
+                        <label className="error">{errorMessage}</label>
                 ) : null}
             </FormGroup>
           </Form>

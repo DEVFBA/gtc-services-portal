@@ -23,9 +23,23 @@ function ModalAddVoucherTypes({modalAddRecord, setModalAddRecord, updateAddData}
     const [shortDescriptionState, setShortDescriptionState] = React.useState("");
     const [longDescriptionState, setLongDescriptionState] = React.useState("");
 
-    
+    const [error, setError] = React.useState();
+    const [errorState, setErrorState] = React.useState("");
+    const [errorMessage, setErrorMessage] = useState("")
+
+    const user = localStorage.getItem("User");
 
     const handleModalClick = () => {
+        setId("")
+        setShortDescription("")
+        setLongDescription("")
+        setStatus(true)
+        setIdState("")
+        setShortDescriptionState("")
+        setLongDescriptionState("")
+        setError("")
+        setErrorState("")
+        setErrorMessage("")
         setModalAddRecord(!modalAddRecord);
     };
 
@@ -82,8 +96,7 @@ function ModalAddVoucherTypes({modalAddRecord, setModalAddRecord, updateAddData}
             pvShortDesc: shortDescription,
             pvLongDesc: longDescription,
             pbStatus: status,
-            pvUser: 'ahernandez@gtcta.mx',
-            pvIP : "IPALEXIS"
+            pvUser: user,
         };
     
         fetch(`http://localhost:8091/api/cat-catalogs/create-sat`, {
@@ -95,14 +108,30 @@ function ModalAddVoucherTypes({modalAddRecord, setModalAddRecord, updateAddData}
         })
         .then((response) => response.json())
         .then((data) => {
-        if (data.errors) {
-            setError(
-            <p>Hubo un error al realizar tu solicitud</p>
-            );
-        }
-        else{
-            console.log(data)
-        }
+            if (data.errors) {
+                setError(
+                <p>Hubo un error al realizar tu solicitud</p>
+                );
+            }
+            else{
+                if(data[0].Code_Type === "Error")
+                {
+                    setErrorMessage(data[0].Code_Message_User)
+                    setErrorState("has-danger")
+                }
+                if(data[0].Code_Type === "Warning")
+                {
+                    setErrorMessage(data[0].Code_Message_User)
+                    setErrorState("has-danger")
+                }
+                else{
+                    setErrorState("has-success");
+                    //Para actualizar la tabla en componente principal
+                    updateAddData()
+                    //Cerramos el modal
+                    handleModalClick()
+                }
+            }
         });
     }
  
@@ -191,7 +220,13 @@ function ModalAddVoucherTypes({modalAddRecord, setModalAddRecord, updateAddData}
             <div className="category form-category">
                 * Required fields
             </div>
+            <FormGroup className={`has-label ${errorState}`}>
+                {errorState === "has-danger" ? (
+                        <label className="error">{errorMessage}</label>
+                ) : null}
+            </FormGroup>
           </Form>
+          {error}
         </ModalBody>
         <ModalFooter>
           <div className="center-side">

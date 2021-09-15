@@ -18,6 +18,10 @@ import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useState, useEffect} from "react";
 
+import { useContext } from "react";
+import { UserContext } from "../../UserContext";
+
+
 // reactstrap components
 import {
   Button,
@@ -41,16 +45,19 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const history = useHistory();
-  const logged = localStorage.getItem("logged");
+  const logged = localStorage.getItem("Logged");
+
+  const [errorState, setErrorState] = React.useState("");
+  const [error, setError] = React.useState();
   
+  const {user,setUser} = useContext(UserContext);
 
   useEffect(() => {
     //Si el usuario ya ha iniciado sesión que se le redirija al dashboard
     //Por el momento se usará la bandera logged
-    if(logged==="true")
+    if(logged===true)
     {
       history.push("/admin/dashboard");
-      return;
     }
   }, []);
 
@@ -74,15 +81,72 @@ function Login() {
 
     const credentials = { email, password };
 
+    const catRegister = {
+      pvIdUser: email,
+      pvPassword: password
+    };
+
+    fetch(`http://localhost:8091/api/security-users/login/`, {
+        method: "POST",
+        body: JSON.stringify(catRegister),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        if (data.errors) {
+            setError(
+                <p>Hubo un error al realizar tu solicitud</p>
+            );
+        }
+        else{
+            if(data[0].Code_Type === "Error")
+            {
+                setErrorState("has-danger")
+            }
+            else{
+                setErrorState("has-success");
+                //Obtenemos la información del usuario y la guardamos en el useContext
+                getUser(email, data[1].token)
+            }
+        }
+    });
+
     //Aquí se hará el fetch a la API 
     //Por el momento se va a guardar en el local storage una bandera para simular el token
-    localStorage.setItem("logged", true);
+    
 
     //Vamos a tener 3 tipos de usuario, dependiendo cual sea se les van a mostrar cosas diferentes en la aplicación
     //Por el momento guardaremos el tipo de usuario en el localstorage, pero eso se tiene que saber en la aplicación de usuario que va "abrazar" todo el sitio una vez que se haya loggeado
-    localStorage.setItem("tipo", "administrador")
     
-    history.push("/admin/dashboard");
+  }
+
+  function getUser(email, token){
+
+    var url = new URL(`http://localhost:8091/api/security-users/${email}`);
+    fetch(url, {
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+      }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+        
+        localStorage.setItem("User", data[0].User);
+        localStorage.setItem("Id_Customer", data[0].Id_Customer)
+        localStorage.setItem("Id_Role", data[0].Id_Role)
+        localStorage.setItem("Token", token)
+        localStorage.setItem("Logged", true)
+
+        history.push("/admin/dashboard");
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de los roles" + err);
+    });
   }
 
   return (
@@ -124,7 +188,7 @@ function Login() {
                     />
                   </InputGroup>
                   <br />
-{/*                   <FormGroup>
+                  {/*<FormGroup>
                     <FormGroup check>
                       <Label check>
                         <Input defaultChecked defaultValue="" type="checkbox" />
@@ -140,10 +204,13 @@ function Login() {
                       Iniciar Sesión
                     </Button>
                   </div>
+                  {error}
+                  <FormGroup className={`has-label ${errorState}`}>
+                    {errorState === "has-danger" ? (
+                            <label className="error">The user does not have access, please validate</label>
+                    ) : null}
+                  </FormGroup>
                 </CardFooter>
-                <Link className="need-account" to="/">
-                    ¿Olvidaste tu contraseña?
-                </Link>
               </Card>
             </Form>
           </Col>

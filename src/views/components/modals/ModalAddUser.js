@@ -18,13 +18,14 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles}) {
+function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustomers, updateAddData, validDays}) {
         // register form
     const [registerEmail, setregisterEmail] = React.useState("");
     const [registerFullName, setregisterFullName] = React.useState("");
     const [registerPassword, setregisterPassword] = React.useState("");
     const [registerRol, setregisterRol] = React.useState("");
-    const [registerStatus, setregisterStatus] = useState(false);
+    const [registerCustomer, setregisterCustomer] = React.useState();
+    const [registerStatus, setregisterStatus] = useState(true);
     const [registerConfirmPassword, setregisterConfirmPassword] = React.useState("");
 
     const [registerEmailState, setregisterEmailState] = React.useState("");
@@ -32,8 +33,32 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles}) {
     const [registerPasswordState, setregisterPasswordState] = React.useState("");
     const [registerConfirmPasswordState, setregisterConfirmPasswordState] = React.useState("");
     const [registerRolState, setregisterRolState] = React.useState("");
+    const [registerCustomerState, setregisterCustomerState] = React.useState("");
+
+    const [error, setError] = React.useState();
+    const [errorState, setErrorState] = React.useState("");
+    const [errorMessage, setErrorMessage] = React.useState("");
+
+    const user = localStorage.getItem("User");
 
     const handleModalClick = () => {
+        //Regresamos todo a su estado inicial
+        setregisterEmail("");
+        setregisterFullName("");
+        setregisterPassword("");
+        setregisterRol("");
+        setregisterCustomer();
+        setregisterStatus(true);
+        setregisterConfirmPassword("");
+        setregisterEmailState("");
+        setregisterFullNameState("");
+        setregisterPasswordState("");
+        setregisterConfirmPasswordState("");
+        setregisterRolState("");
+        setregisterCustomerState();
+        setErrorState("")
+
+        //Cerramos el modal
         setModalAddRecord(!modalAddRecord);
     };
 
@@ -74,6 +99,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles}) {
             registerFullNameState === "has-success" &&
             registerPasswordState === "has-success" &&
             registerRolState === "has-success" &&
+            registerCustomerState === "has-success" &&
             registerConfirmPasswordState === "has-success"
         ) {
           return true;
@@ -93,25 +119,91 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles}) {
           if (registerRolState !== "has-success") {
             setregisterRolState("has-danger");
           }
+          if (registerCustomerState !== "has-success") {
+            setregisterCustomerState("has-danger");
+          }
           return false;
         }
       };
 
     const registerClick = () => {
+        
         if(isValidated()===true)
         {
-            //haremos el fetch a la base de datos para agregar el registro
-            //El password deberá encriptarse en SHA256
-            //console.log(sha256(registerPassword));
-            //Cerramos el modal
-            handleModalClick()
+           //haremos el fetch a la base de datos para agregar el registro
+           addRegister()
         }
         else{
             console.log("no entre")
         }
     };
 
+    /* Función que suma o resta días a una fecha, si el parámetro
+   días es negativo restará los días*/
+    function sumarDias(fecha, dias){
+        fecha.setDate(fecha.getDate() + dias);
+        return fecha;
+    }
+
+    function addRegister(){
+
+        var d = new Date();
+        var finalDate = sumarDias(d, validDays);
+        var date = finalDate.getDate();
+        var month = finalDate.getMonth() + 1
+        var year = finalDate.getFullYear()
+
+        var finalDate2 = "" + year + "" + month + "" + date;
+        
+        //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
+        const catRegister = {
+            pvOptionCRUD: "C",
+            piIdCustomer: registerCustomer.value,
+            pvIdUser: registerEmail,
+            pvIdRole: registerRol.value,
+            pvPassword: registerPassword,
+            pvName: registerFullName,
+            pbTempPassword: true,
+            pvFinalEffectiveDate: finalDate2,
+            pbStatus: registerStatus,
+            pvUser: user,
+        };
     
+        fetch(`http://localhost:8091/api/security-users/create-user/`, {
+            method: "POST",
+            body: JSON.stringify(catRegister),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.errors) {
+                setError(
+                    <p>Hubo un error al realizar tu solicitud</p>
+                );
+            }
+            else{
+                if(data[0].Code_Type === "Warning")
+                {
+                    setErrorMessage(data[0].Code_Message_User)
+                    setErrorState("has-danger")
+                }
+                if(data[0].Code_Type === "Error")
+                {
+                    setErrorMessage(data[0].Code_Message_User)
+                    setErrorState("has-danger")
+                }
+                else{
+                    setErrorState("has-success");
+                    //Para actualizar la tabla en componente principal
+                    updateAddData()
+                    //Cerramos el modal
+                    handleModalClick()
+                }
+            }
+        });
+    }
 
     return (
         <Modal isOpen={modalAddRecord} toggle={handleModalClick} size="lg">
@@ -128,6 +220,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles}) {
                 <Input
                     name="email"
                     type="email"
+                    autoComplete="off"
                     onChange={(e) => {
                     if (!verifyEmail(e.target.value)) {
                         setregisterEmailState("has-danger");
@@ -148,6 +241,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles}) {
                     <Input
                     name="fullname"
                     type="text"
+                    autoComplete="off"
                     onChange={(e) => {
                         if (!verifyLength(e.target.value, 1)) {
                         setregisterFullNameState("has-danger");
@@ -205,41 +299,65 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles}) {
                 ) : null}
                 </FormGroup>
                 <FormGroup className={`has-label ${registerRolState}`}>
-                <Label for="exampleSelect">Rol * </Label>
-                <Select
-                    name=""
-                    className="react-select"
-                    placeholder="Selecciona un rol"
-                    classNamePrefix="react-select"
-                    value={registerRol}
-                    onChange={(value) => {
-                        setregisterRol(value)
-                        setregisterRolState("has-success");
-                    }}
-                    options={dataRoles}
-                />
-                {registerRolState === "has-danger" ? (
-                    <label className="error">Selecciona un rol.</label>
-                ) : null}
+                    <Label for="exampleSelect">Rol * </Label>
+                    <Select
+                        name=""
+                        className="react-select"
+                        placeholder="Selecciona un rol"
+                        classNamePrefix="react-select"
+                        value={registerRol}
+                        onChange={(value) => {
+                            setregisterRol(value)
+                            setregisterRolState("has-success");
+                        }}
+                        options={dataRoles}
+                    />
+                    {registerRolState === "has-danger" ? (
+                        <label className="error">Selecciona un rol.</label>
+                    ) : null}
+                </FormGroup>
+                <FormGroup className={`has-label ${registerRolState}`}>
+                    <Label for="exampleSelect">Customer * </Label>
+                    <Select
+                        name=""
+                        className="react-select"
+                        placeholder="Selecciona un customer"
+                        classNamePrefix="react-select"
+                        value={registerCustomer}
+                        onChange={(value) => {
+                            setregisterCustomer(value)
+                            setregisterCustomerState("has-success");
+                        }}
+                        options={dataCustomers}
+                    />
+                    {registerCustomerState === "has-danger" ? (
+                        <label className="error">Selecciona un customer.</label>
+                    ) : null}
                 </FormGroup>
                 <FormGroup check>
                     <Label check>
                     <Input 
                         type="checkbox" 
+                        checked = {registerStatus}
                         onChange={(e) => {
                             setregisterStatus(e.target.checked)
-                            console.log(registerStatus)
                         }}
                     />{' '}
-                    Habilitado *
+                    Habilitado
                     <span className="form-check-sign">
                         <span className="check"></span>
                     </span>
                     </Label>
-                </FormGroup>
+            </FormGroup>
                 <div className="category form-category">
                 * Required fields
                 </div>
+
+            <FormGroup className={`has-label ${errorState}`}>
+                {errorState === "has-danger" ? (
+                        <label className="error">{errorMessage}</label>
+                ) : null}
+            </FormGroup>
             </Form>
             </ModalBody>
             <ModalFooter>
