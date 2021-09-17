@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import classnames from "classnames";
 
 // reactstrap components
 import {
@@ -8,222 +9,149 @@ import {
     ModalFooter,
     FormGroup,
     Form,
+    Row,
+    Col,
     Input,
     Label,
 } from "reactstrap";
 
-function ModalUpdateClientSettings({abierto, toggleModalUpdateRecord}) {
-        // register form
-    const [registerEmail, setregisterEmail] = React.useState("");
-    const [registerFullName, setregisterFullName] = React.useState("");
-    const [registerPassword, setregisterPassword] = React.useState("");
-    const [registerRol, setregisterRol] = React.useState("");
-    const [registerConfirmPassword, setregisterConfirmPassword] = React.useState(
-        ""
-    );
-    const [registerEmailState, setregisterEmailState] = React.useState("");
-    const [registerFullNameState, setregisterFullNameState] = React.useState("");
-    const [registerPasswordState, setregisterPasswordState] = React.useState("");
-    const [
-        registerConfirmPasswordState,
-        setregisterConfirmPasswordState,
-    ] = React.useState("");
+function ModalUpdateClientSettings({modalUpdateRecord, setModalUpdateRecord, updateTable, setUpdateTable, record}) {
+    const [configName, setConfigName] = useState("")
+    const [tooltip, setTooltip] = useState("");
+    const [requerido, setRequerido] = useState(true); 
+    const [settingsValue, setSettingsValue] = useState();
+    const [regularExpression, setRegularExpression] = useState()
 
+    const [settingsValueState, setsettingsValueState] = React.useState("");
+    const [settingsValueFocus, setSettingsValueFocus] = React.useState("");
+
+    useEffect(() => {
+        console.log(record)
+        /*setConfigName()
+        setTooltip()
+        setRequerido()
+        setSettingsValue()
+        setRegularExpression()*/
+        //Se tienen que descargar los datos de la base de datos.
+        /*fetch(`http://localhost:8091/api/app-config-client/${record.id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+          })
+          .then(function(response) {
+              return response.ok ? response.json() : Promise.reject();
+          })
+          .then(function(data) {
+      
+              var routesAux = [];
+          })
+          .catch(function(err) {
+              alert("No se pudo consultar la informacion de la configuracion" + err);
+        });*/
+        //Se tiene que descargar la informacion de cada configuracion porque del prop no la está jalando para usarla
+        //en las variables
+    }, [record]);
+
+    //Funcion para cerrar modal
     const handleModalClick = () => {
-        toggleModalUpdateRecord(!abierto);
+        setModalUpdateRecord(!modalUpdateRecord);
     };
 
-        // function that returns true if value is email, false otherwise
-    const verifyEmail = (value) => {
-        var emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (emailRex.test(value)) {
-        return true;
+    const verifySettingsValue = (value, length) => {
+        if(requerido === true)
+        {
+            if(regularExpression !== "")
+            {
+                var regEx = new RegExp(regularExpression);
+                if (regEx.test(value)) {
+                    return true;
+                }
+                return false;
+            }
+            else if(value.length >= length){
+                return true;
+            }
+            return false;
         }
-        return false;
-    };
-    // function that verifies if a string has a given length or not
-    const verifyLength = (value, length) => {
-        if (value.length >= length) {
-        return true;
+        else 
+        {
+            return true;   
         }
-        return false;
-    };
-    // function that verifies if two strings are equal
-    const compare = (string1, string2) => {
-        if (string1 === string2) {
-        return true;
-        }
-        return false;
-    };
-    // function that verifies if value contains only numbers
-    const verifyNumber = (value) => {
-        var numberRex = new RegExp("^[0-9]+$");
-        if (numberRex.test(value)) {
-        return true;
-        }
-        return false;
-    };
-    // verifies if value is a valid URL
-    const verifyUrl = (value) => {
-        try {
-        new URL(value);
-        return true;
-        } catch (_) {
-        return false;
-        }
-    };
+    }
 
-    const registerClick = () => {
-        //Función para agregar registro
-        if (registerEmailState === "") {
-        setregisterEmailState("has-danger");
-        }
-        if (registerFullNameState === "") {
-        setregisterFullNameState("has-danger");
-        }
-        if (registerPasswordState === "" || registerConfirmPasswordState === "") {
-        setregisterPasswordState("has-danger");
-        setregisterConfirmPasswordState("has-danger");
-        }
-    };
-
-    const updateClick = () => {
-        //Función para editar registro
-        if (registerEmailState === "") {
-        setregisterEmailState("has-danger");
-        }
-        if (registerFullNameState === "") {
-        setregisterFullNameState("has-danger");
-        }
-        if (registerPasswordState === "" || registerConfirmPasswordState === "") {
-        setregisterPasswordState("has-danger");
-        setregisterConfirmPasswordState("has-danger");
+    const isValidated = () => {
+        //Solo se valida el único campo que es obligatorio.
+        if (settingsValueState === "has-success") 
+        {
+            return true;
+        } else {
+            if (settingsValueState !== "has-success") {
+                setsettingsValueState("has-danger");
+            }
+            return false;
         }
     };
-
-    const loginClick = () => {
-        if (loginFullNameState === "") {
-        setloginFullNameState("has-danger");
-        }
-        if (loginEmailState === "") {
-        setloginEmailState("has-danger");
-        }
-        if (loginPasswordState === "") {
-        setloginPasswordState("has-danger");
+    
+    const handleClick = () => {
+        if(isValidated() === true){
+            //Hacemos fetch a la base de datos con la nueva configuracion
+            
+            //Le decimos al padre que actualice la tabla con los nuevos datos
+            console.log("entre")
+            setUpdateTable(updateTable+1)
         }
     };
-
-    const typeClick = () => {
-        if (requiredState === "") {
-        setrequiredState("has-danger");
-        }
-        if (emailState === "") {
-        setemailState("has-danger");
-        }
-        if (numberState === "") {
-        setnumberState("has-danger");
-        }
-        if (urlState === "") {
-        seturlState("has-danger");
-        }
-        if (sourceState === "" || destinationState === "") {
-        setsourceState("has-danger");
-        setdestinationState("has-danger");
-        }
-    };
-
-    const rangeClick = () => {
-        if (minLengthState === "") {
-        setminLengthState("has-danger");
-        }
-        if (maxLengthState === "") {
-        setmaxLengthState("has-danger");
-        }
-        if (rangeState === "") {
-        setrangeState("has-danger");
-        }
-        if (minState === "") {
-        setminState("has-danger");
-        }
-        if (maxState === "") {
-        setmaxState("has-danger");
-        }
-    };
-
-
     
     return (
-        <Modal isOpen={abierto} toggle={handleModalClick} size="lg">
+        <Modal isOpen={modalUpdateRecord} toggle={handleModalClick} size="lg">
         <div className="modal-header justify-content-center">
         <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
             <span aria-hidden="true">×</span>
         </button>
-        <h5 className="modal-title">Edit Record</h5>
+        <h5 className="modal-title">Edit Configuration {record.configuracion}</h5>
         </div>
         <ModalBody>
-        <Form id="RegisterValidation">
-            <FormGroup className={`has-label ${registerEmailState}`}>
-              <label>Id</label>
-              <Input
-                name="id"
-                type="text"
-                valuee="Hola" 
-                readOnly
-              />
-            </FormGroup>
-            <FormGroup className={`has-label ${registerFullNameState}`}>
-                <label>Descripción corta *</label>
+            <Row className="justify-content-center">
+            <Col className="mt-3" lg="10">
+              <Label>
+                Tooltip: {tooltip}
+              </Label>
+            </Col>
+            <Col className="mt-3" lg="10">
+            <FormGroup
+                className={classnames(settingsValueState, {
+                "input-group-focus": settingsValueFocus,
+                })}
+                onFocus={(e) => setSettingsValueFocus(true)}
+                onBlur={(e) => setSettingsValueFocus(false)}
+            >
                 <Input
-                  name="fullname"
-                  type="text"
-                  onChange={(e) => {
-                    if (!verifyLength(e.target.value, 1)) {
-                      setregisterFullNameState("has-danger");
+                name="tooltip"
+                placeholder={settingsValue}
+                type="text"
+                onChange={(e) => {
+                    if (!verifySettingsValue(e.target.value, 1)) {
+                        setsettingsValueState("has-danger");
                     } else {
-                      setregisterFullNameState("has-success");
+                        setsettingsValueState("has-success");
                     }
-                    setregisterFullName(e.target.value);
-                  }}
+                    setSettingsValue(e.target.value);
+                }}
                 />
-                {registerFullNameState === "has-danger" ? (
-                  <label className="error">This field is required.</label>
+                {settingsValueState === "has-danger" ? (
+                <label className="error">This field is required.</label>
                 ) : null}
             </FormGroup>
-            <FormGroup className={`has-label ${registerPasswordState}`}>
-              <label>Descripción larga *</label>
-              <Input
-                id="registerPassword"
-                name="desc-larga"
-                type="text"
-                autoComplete="off"
-                onChange={(e) => {
-                  if (!verifyLength(e.target.value, 1)) {
-                    setregisterPasswordState("has-danger");
-                  } else {
-                    setregisterPasswordState("has-success");
-                  }
-                  setregisterPassword(e.target.value);
-                }}
-              />
-              {registerPasswordState === "has-danger" ? (
-                <label className="error">This field is required.</label>
-              ) : null}
-            </FormGroup>
-            <FormGroup check>
-              <Input type="checkbox" name="check" id="exampleCheck" checked/>
-              <Label for="exampleCheck" check>Habilitado *</Label>
-            </FormGroup>
-            <div className="category form-category">
-              * Required fields
-            </div>
-          </Form>
+            </Col>
+        </Row>
         </ModalBody>
         <ModalFooter>
           <div className="center-side">
             <Button color="secondary" onClick={handleModalClick}>
                 Close
             </Button>
-            <Button color="primary">
+            <Button color="primary" onClick={handleClick}>
                 Save changes
             </Button>
           </div>

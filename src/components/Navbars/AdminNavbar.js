@@ -38,12 +38,17 @@ import {
   Container,
 } from "reactstrap";
 
+import { useContext } from "react";
+import { UserContext } from "../../UserContext";
+
 function AdminNavbar(props) {
   const [collapseOpen, setCollapseOpen] = React.useState(false);
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const [color, setColor] = React.useState("navbar-transparent");
   const location = useLocation();
   const history = useHistory();
+  const {user,setUser} = useContext(UserContext);
+
   React.useEffect(() => {
     window.addEventListener("resize", updateColor);
   });
@@ -83,7 +88,11 @@ function AdminNavbar(props) {
   function logout() {
     //setUser(null);
     //Borramos del localstorage la bandera de logged
-    localStorage.removeItem("logged");
+    localStorage.setItem("Logged", false);
+    localStorage.removeItem("User");
+    localStorage.removeItem("Id_Role");
+    localStorage.removeItem("Id_Customer");
+    localStorage.removeItem("Token");
     history.push("/auth/login");
   }
   

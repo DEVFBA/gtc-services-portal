@@ -37,8 +37,8 @@ import Select from "react-select";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
-import ModalUpdateSupport from "../components/modals/ModalUpdateSupport.js";
-import ModalReadSupport from "../components/modals/ModalReadSupport.js";
+import ModalUpdateSupport from "../components/Modals/ModalUpdateSupport.js";
+import ModalReadSupport from "../components/Modals/ModalReadSupport.js";
 
 const dataTable = [
   ["Tiger Nixon", "System Architect", "Edinburgh", "61"],

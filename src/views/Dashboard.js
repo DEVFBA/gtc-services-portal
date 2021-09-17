@@ -21,7 +21,8 @@ import { Line, Bar, Doughnut } from "react-chartjs-2";
 import { VectorMap } from "react-jvectormap";
 
 import { Link, useHistory } from "react-router-dom";
-import { useState, useEffect} from "react";
+import { useState, useEffect, useContext} from "react";
+import { UserContext } from "../UserContext";
 
 // reactstrap components
 import {
@@ -72,15 +73,7 @@ function Dashboard() {
   const logged = localStorage.getItem("logged");
   const history = useHistory();
 
-  React.useEffect(() => {
-    //Si el usuario no ha iniciado sesión que se le redirija al login
-    //Por el momento se usará la bandera logged
-    if(logged!="true")
-    {
-      history.push("/auth/login");
-      return;
-    }
-  }, []);
+  const {user,setUser} = useContext(UserContext);
 
   React.useEffect(() => {
     /*fetch(`http://localhost:8091/api/cat-countries`, {
@@ -99,6 +92,10 @@ function Dashboard() {
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los paises");
     });*/
+  }, []);
+
+  useEffect(() => {
+    console.log(user)
   }, []);
 
   function crearCommercialRelease(event) {
@@ -162,9 +159,7 @@ function Dashboard() {
   return (
     <>
         <div className="content">
-          <button onClick={crearCommercialRelease}>
-                  Crear Commercial Release
-          </button>
+          <h3 className="title">Dashboard Admin</h3>
         </div>
     </>
   );

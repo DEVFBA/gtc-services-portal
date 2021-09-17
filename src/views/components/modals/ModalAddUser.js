@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
 
+//Importar módulo para encriptar contraseña
+import { sha256, sha224 } from 'js-sha256';
+
+//React plugin used to create DropdownMenu for selecting items
+import Select from "react-select";
+
 // reactstrap components
 import {
     Button,
@@ -12,25 +18,48 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalAddUser({abierto, toggleModalAddRecord}) {
+function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustomers, updateAddData, validDays}) {
         // register form
     const [registerEmail, setregisterEmail] = React.useState("");
     const [registerFullName, setregisterFullName] = React.useState("");
     const [registerPassword, setregisterPassword] = React.useState("");
     const [registerRol, setregisterRol] = React.useState("");
-    const [registerConfirmPassword, setregisterConfirmPassword] = React.useState(
-        ""
-    );
+    const [registerCustomer, setregisterCustomer] = React.useState();
+    const [registerStatus, setregisterStatus] = useState(true);
+    const [registerConfirmPassword, setregisterConfirmPassword] = React.useState("");
+
     const [registerEmailState, setregisterEmailState] = React.useState("");
     const [registerFullNameState, setregisterFullNameState] = React.useState("");
     const [registerPasswordState, setregisterPasswordState] = React.useState("");
-    const [
-        registerConfirmPasswordState,
-        setregisterConfirmPasswordState,
-    ] = React.useState("");
+    const [registerConfirmPasswordState, setregisterConfirmPasswordState] = React.useState("");
+    const [registerRolState, setregisterRolState] = React.useState("");
+    const [registerCustomerState, setregisterCustomerState] = React.useState("");
+
+    const [error, setError] = React.useState();
+    const [errorState, setErrorState] = React.useState("");
+    const [errorMessage, setErrorMessage] = React.useState("");
+
+    const user = localStorage.getItem("User");
 
     const handleModalClick = () => {
-        toggleModalAddRecord(!abierto);
+        //Regresamos todo a su estado inicial
+        setregisterEmail("");
+        setregisterFullName("");
+        setregisterPassword("");
+        setregisterRol("");
+        setregisterCustomer();
+        setregisterStatus(true);
+        setregisterConfirmPassword("");
+        setregisterEmailState("");
+        setregisterFullNameState("");
+        setregisterPasswordState("");
+        setregisterConfirmPasswordState("");
+        setregisterRolState("");
+        setregisterCustomerState();
+        setErrorState("")
+
+        //Cerramos el modal
+        setModalAddRecord(!modalAddRecord);
     };
 
         // function that returns true if value is email, false otherwise
@@ -55,105 +84,129 @@ function ModalAddUser({abierto, toggleModalAddRecord}) {
         }
         return false;
     };
-    // function that verifies if value contains only numbers
-    const verifyNumber = (value) => {
-        var numberRex = new RegExp("^[0-9]+$");
-        if (numberRex.test(value)) {
+
+    const verifyPassword = (value) => {
+        var passwordRex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{10,50}$/;
+        if (passwordRex.test(value)) {
         return true;
         }
         return false;
     };
-    // verifies if value is a valid URL
-    const verifyUrl = (value) => {
-        try {
-        new URL(value);
-        return true;
-        } catch (_) {
-        return false;
+    
+    const isValidated = () => {
+        if (
+            registerEmailState === "has-success" &&
+            registerFullNameState === "has-success" &&
+            registerPasswordState === "has-success" &&
+            registerRolState === "has-success" &&
+            registerCustomerState === "has-success" &&
+            registerConfirmPasswordState === "has-success"
+        ) {
+          return true;
+        } else {
+          if (registerEmailState !== "has-success") {
+            setregisterEmailState("has-danger");
+          }
+          if (registerFullNameState !== "has-success") {
+            setregisterFullNameState("has-danger");
+          }
+          if (registerPasswordState !== "has-success") {
+            setregisterPasswordState("has-danger");
+          }
+          if (registerConfirmPasswordState !== "has-success") {
+            setregisterConfirmPasswordState("has-danger");
+          }
+          if (registerRolState !== "has-success") {
+            setregisterRolState("has-danger");
+          }
+          if (registerCustomerState !== "has-success") {
+            setregisterCustomerState("has-danger");
+          }
+          return false;
         }
-    };
+      };
 
     const registerClick = () => {
-        //Función para agregar registro
-        if (registerEmailState === "") {
-        setregisterEmailState("has-danger");
+        
+        if(isValidated()===true)
+        {
+           //haremos el fetch a la base de datos para agregar el registro
+           addRegister()
         }
-        if (registerFullNameState === "") {
-        setregisterFullNameState("has-danger");
-        }
-        if (registerPasswordState === "" || registerConfirmPasswordState === "") {
-        setregisterPasswordState("has-danger");
-        setregisterConfirmPasswordState("has-danger");
+        else{
+            console.log("no entre")
         }
     };
 
-    const updateClick = () => {
-        //Función para editar registro
-        if (registerEmailState === "") {
-        setregisterEmailState("has-danger");
-        }
-        if (registerFullNameState === "") {
-        setregisterFullNameState("has-danger");
-        }
-        if (registerPasswordState === "" || registerConfirmPasswordState === "") {
-        setregisterPasswordState("has-danger");
-        setregisterConfirmPasswordState("has-danger");
-        }
-    };
+    /* Función que suma o resta días a una fecha, si el parámetro
+   días es negativo restará los días*/
+    function sumarDias(fecha, dias){
+        fecha.setDate(fecha.getDate() + dias);
+        return fecha;
+    }
 
-    const loginClick = () => {
-        if (loginFullNameState === "") {
-        setloginFullNameState("has-danger");
-        }
-        if (loginEmailState === "") {
-        setloginEmailState("has-danger");
-        }
-        if (loginPasswordState === "") {
-        setloginPasswordState("has-danger");
-        }
-    };
+    function addRegister(){
 
-    const typeClick = () => {
-        if (requiredState === "") {
-        setrequiredState("has-danger");
-        }
-        if (emailState === "") {
-        setemailState("has-danger");
-        }
-        if (numberState === "") {
-        setnumberState("has-danger");
-        }
-        if (urlState === "") {
-        seturlState("has-danger");
-        }
-        if (sourceState === "" || destinationState === "") {
-        setsourceState("has-danger");
-        setdestinationState("has-danger");
-        }
-    };
+        var d = new Date();
+        var finalDate = sumarDias(d, validDays);
+        var date = finalDate.getDate();
+        var month = finalDate.getMonth() + 1
+        var year = finalDate.getFullYear()
 
-    const rangeClick = () => {
-        if (minLengthState === "") {
-        setminLengthState("has-danger");
-        }
-        if (maxLengthState === "") {
-        setmaxLengthState("has-danger");
-        }
-        if (rangeState === "") {
-        setrangeState("has-danger");
-        }
-        if (minState === "") {
-        setminState("has-danger");
-        }
-        if (maxState === "") {
-        setmaxState("has-danger");
-        }
-    };
-
-
+        var finalDate2 = "" + year + "" + month + "" + date;
+        
+        //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
+        const catRegister = {
+            pvOptionCRUD: "C",
+            piIdCustomer: registerCustomer.value,
+            pvIdUser: registerEmail,
+            pvIdRole: registerRol.value,
+            pvPassword: registerPassword,
+            pvName: registerFullName,
+            pbTempPassword: true,
+            pvFinalEffectiveDate: finalDate2,
+            pbStatus: registerStatus,
+            pvUser: user,
+        };
     
+        fetch(`http://localhost:8091/api/security-users/create-user/`, {
+            method: "POST",
+            body: JSON.stringify(catRegister),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.errors) {
+                setError(
+                    <p>Hubo un error al realizar tu solicitud</p>
+                );
+            }
+            else{
+                if(data[0].Code_Type === "Warning")
+                {
+                    setErrorMessage(data[0].Code_Message_User)
+                    setErrorState("has-danger")
+                }
+                if(data[0].Code_Type === "Error")
+                {
+                    setErrorMessage(data[0].Code_Message_User)
+                    setErrorState("has-danger")
+                }
+                else{
+                    setErrorState("has-success");
+                    //Para actualizar la tabla en componente principal
+                    updateAddData()
+                    //Cerramos el modal
+                    handleModalClick()
+                }
+            }
+        });
+    }
+
     return (
-        <Modal isOpen={abierto} toggle={handleModalClick} size="lg">
+        <Modal isOpen={modalAddRecord} toggle={handleModalClick} size="lg">
             <div className="modal-header justify-content-center">
             <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
                 <span aria-hidden="true">×</span>
@@ -167,6 +220,7 @@ function ModalAddUser({abierto, toggleModalAddRecord}) {
                 <Input
                     name="email"
                     type="email"
+                    autoComplete="off"
                     onChange={(e) => {
                     if (!verifyEmail(e.target.value)) {
                         setregisterEmailState("has-danger");
@@ -187,6 +241,7 @@ function ModalAddUser({abierto, toggleModalAddRecord}) {
                     <Input
                     name="fullname"
                     type="text"
+                    autoComplete="off"
                     onChange={(e) => {
                         if (!verifyLength(e.target.value, 1)) {
                         setregisterFullNameState("has-danger");
@@ -208,7 +263,7 @@ function ModalAddUser({abierto, toggleModalAddRecord}) {
                     type="password"
                     autoComplete="off"
                     onChange={(e) => {
-                    if (!verifyLength(e.target.value, 1)) {
+                    if (!verifyPassword(e.target.value)) {
                         setregisterPasswordState("has-danger");
                     } else {
                         setregisterPasswordState("has-success");
@@ -217,56 +272,92 @@ function ModalAddUser({abierto, toggleModalAddRecord}) {
                     }}
                 />
                 {registerPasswordState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
+                    <label className="error">La contraseña debe tener una longitud mínima de 10 caracteres, al menos un número, una letra mayúscula y minúscula, y un caracter especial.</label>
                 ) : null}
                 </FormGroup>
-                <FormGroup
-                className={`has-label ${registerConfirmPasswordState}`}
-                >
-                <label>Confirm Password *</label>
-                <Input
-                    equalto="#registerPassword"
-                    id="registerPasswordConfirmation"
-                    name="password_confirmation"
-                    type="password"
-                    autoComplete="off"
-                    onChange={(e) => {
-                    if (!compare(e.target.value, registerPassword)) {
-                        setregisterConfirmPasswordState("has-danger");
-                        setregisterPasswordState("has-danger");
-                    } else {
-                        setregisterConfirmPasswordState("has-success");
-                        setregisterPasswordState("has-success");
-                    }
-                    setregisterConfirmPassword(e.target.value);
-                    }}
-                />
+                <FormGroup className={`has-label ${registerConfirmPasswordState}`}>
+                    <label>Confirm Password *</label>
+                    <Input
+                        equalto="#registerPassword"
+                        id="registerPasswordConfirmation"
+                        name="password_confirmation"
+                        type="password"
+                        autoComplete="off"
+                        onChange={(e) => {
+                        if (!compare(e.target.value, registerPassword)) {
+                            setregisterConfirmPasswordState("has-danger");
+                            //setregisterPasswordState("has-danger");
+                        } else {
+                            setregisterConfirmPasswordState("has-success");
+                            //setregisterPasswordState("has-success");
+                        }
+                        setregisterConfirmPassword(e.target.value);
+                        }}
+                    />
                 {registerConfirmPasswordState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
+                    <label className="error">La contraseña no coincide.</label>
                 ) : null}
                 </FormGroup>
-                <FormGroup>
-                {/*Falta guardar en variable*/}
-                <Label for="exampleSelect">Rol * </Label>
-                <Input type="select" name="select" id="exampleSelect">
-                    <option>Administrador</option>
-                    <option>Soporte</option>
-                    <option>Cliente</option>
-                    <option>Servicio</option>
-                </Input>
+                <FormGroup className={`has-label ${registerRolState}`}>
+                    <Label for="exampleSelect">Rol * </Label>
+                    <Select
+                        name=""
+                        className="react-select"
+                        placeholder="Selecciona un rol"
+                        classNamePrefix="react-select"
+                        value={registerRol}
+                        onChange={(value) => {
+                            setregisterRol(value)
+                            setregisterRolState("has-success");
+                        }}
+                        options={dataRoles}
+                    />
+                    {registerRolState === "has-danger" ? (
+                        <label className="error">Selecciona un rol.</label>
+                    ) : null}
+                </FormGroup>
+                <FormGroup className={`has-label ${registerRolState}`}>
+                    <Label for="exampleSelect">Customer * </Label>
+                    <Select
+                        name=""
+                        className="react-select"
+                        placeholder="Selecciona un customer"
+                        classNamePrefix="react-select"
+                        value={registerCustomer}
+                        onChange={(value) => {
+                            setregisterCustomer(value)
+                            setregisterCustomerState("has-success");
+                        }}
+                        options={dataCustomers}
+                    />
+                    {registerCustomerState === "has-danger" ? (
+                        <label className="error">Selecciona un customer.</label>
+                    ) : null}
                 </FormGroup>
                 <FormGroup check>
                     <Label check>
-                    <Input type="checkbox" checked/>{' '}
-                    Habilitado *
+                    <Input 
+                        type="checkbox" 
+                        checked = {registerStatus}
+                        onChange={(e) => {
+                            setregisterStatus(e.target.checked)
+                        }}
+                    />{' '}
+                    Habilitado
                     <span className="form-check-sign">
                         <span className="check"></span>
                     </span>
                     </Label>
-                </FormGroup>
+            </FormGroup>
                 <div className="category form-category">
                 * Required fields
                 </div>
+
+            <FormGroup className={`has-label ${errorState}`}>
+                {errorState === "has-danger" ? (
+                        <label className="error">{errorMessage}</label>
+                ) : null}
+            </FormGroup>
             </Form>
             </ModalBody>
             <ModalFooter>

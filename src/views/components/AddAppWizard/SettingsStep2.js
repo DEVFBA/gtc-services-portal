@@ -33,10 +33,14 @@ import Select from "react-select";
 import ReactTable from "components/ReactTable/ReactTable.js";
 import AddConfiguration from "./AddConfiguration.js";
 import { Day } from "react-big-calendar";
+import { data } from "jquery";
 
 const SettingsStep2 = React.forwardRef((props, ref) => {
   //Aqui iremos guardando los registros de las configuraciones
   const [dataTable, setDataTable] = useState([]);
+
+  //Para agregar una configuracion
+  const [addRegister, setAddRegister] = useState({})
 
   const [dataState, setDataState] = useState(
     dataTable.map((prop, key) => {
@@ -93,12 +97,13 @@ const SettingsStep2 = React.forwardRef((props, ref) => {
     setDataTable(datos);*/
   },[]);
   
+ 
   React.useImperativeHandle(ref, () => ({
     isValidated: () => {
       return isValidated();
     },
     state: {
-      dataTable,
+      dataState,
     },
   }));
 
@@ -123,7 +128,11 @@ const SettingsStep2 = React.forwardRef((props, ref) => {
   };
 
   function updateTable(){
-    console.log(dataTable)
+    var aux = dataState;
+    aux.push(addRegister);
+    setDataState(aux)
+    //setAddRegister({})
+    /*console.log(dataTable)
     setDataState(
       dataTable.map((prop, key) => {
         return {
@@ -136,7 +145,7 @@ const SettingsStep2 = React.forwardRef((props, ref) => {
           actions: (
             // ACCIONES A REALIZAR EN CADA REGISTRO
             <div className="actions-center">
-              {/* use this button to remove the data row */}
+              {//use this button to remove the data row }
               <Button
                 onClick={() => {
                   var data = dataState;
@@ -162,7 +171,7 @@ const SettingsStep2 = React.forwardRef((props, ref) => {
           ),
         };
       })
-    )
+    )*/
   }
 
   return (
@@ -171,7 +180,7 @@ const SettingsStep2 = React.forwardRef((props, ref) => {
         Agregar configuración
       </h5>
       <Row className="justify-content-center">
-        <AddConfiguration dataTable = {dataTable} setDataTable = {setDataTable} updateTable = {updateTable} />
+        <AddConfiguration dataState = {dataState} setDataState = {setDataState} updateTable= {updateTable} setAddRegister = {setAddRegister} />
         <Col className="mt-1" lg="12">
             <FormGroup
               className={classnames(dataTableState, {

@@ -70,17 +70,7 @@ function DashboardClient() {
   //const sql = require("mssql"); //necesitamos el paquete sql
   const [countries, setCountries] = useState([]);
   const logged = localStorage.getItem("logged");
-  const history = useHistory();
-
-  React.useEffect(() => {
-    //Si el usuario no ha iniciado sesión que se le redirija al login
-    //Por el momento se usará la bandera logged
-    if(logged!="true")
-    {
-      history.push("/auth/login");
-      return;
-    }
-  }, []);
+  const history = useHistory(); 
 
   React.useEffect(() => {
     /*fetch(`http://localhost:8091/api/cat-countries`, {
