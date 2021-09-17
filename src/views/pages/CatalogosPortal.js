@@ -35,6 +35,7 @@ function CatalogosPortal() {
 
   //Para guardar los datos del catalogo seleccionado
   const [dataCatalog, setDataCatalog] = useState([]);
+  const token = localStorage.getItem("Token");
 
   useEffect(() => {
     //Aqui vamos a descargar la lista de catalogos de la base de datos por primera vez
@@ -51,6 +52,7 @@ function CatalogosPortal() {
     fetch(url, {
         method: "GET",
         headers: {
+            "access-token": token,
             "Content-Type": "application/json",
         }
     })
@@ -104,6 +106,7 @@ function CatalogosPortal() {
     fetch(url, {
         method: "GET",
         headers: {
+            "access-token": token,
             "Content-Type": "application/json",
         }
     })
@@ -133,6 +136,7 @@ function CatalogosPortal() {
     fetch(url, {
         method: "GET",
         headers: {
+            "access-token": token,
             "Content-Type": "application/json",
         }
     })
