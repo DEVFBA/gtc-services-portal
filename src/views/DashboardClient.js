@@ -70,7 +70,7 @@ function DashboardClient() {
   //const sql = require("mssql"); //necesitamos el paquete sql
   const [countries, setCountries] = useState([]);
   const logged = localStorage.getItem("logged");
-  const history = useHistory();
+  const history = useHistory(); 
 
   React.useEffect(() => {
     /*fetch(`http://localhost:8091/api/cat-countries`, {
