@@ -23,9 +23,11 @@ import Select from "react-select";
 import ReactTable from "components/ReactTable/ReactTable.js"; 
 import ModalUpdateCFDIUsers from "views/components/Modals/catalogs/sat/ModalUpdateCFDIUses";
 import ModalAddCFDIUses from "views/components/Modals/catalogs/sat/ModalAddCFDIUses.js";
+import { data } from "jquery";
 
 function CFDIUses({dataTable, updateAddData}) {
 
+  console.log(dataTable)
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
       var status;

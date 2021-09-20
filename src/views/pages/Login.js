@@ -49,8 +49,6 @@ function Login() {
 
   const [errorState, setErrorState] = React.useState("");
   const [error, setError] = React.useState();
-  
-  const {user,setUser} = useContext(UserContext);
 
   useEffect(() => {
     //Si el usuario ya ha iniciado sesión que se le redirija al dashboard
@@ -86,7 +84,7 @@ function Login() {
       pvPassword: password
     };
 
-    fetch(`http://localhost:8091/api/security-users/login/`, {
+    fetch(`http://129.159.99.152/develop-api/api/security-users/login/`, {
         method: "POST",
         body: JSON.stringify(catRegister),
         headers: {
@@ -111,6 +109,7 @@ function Login() {
                 getUser(email, data[1].token)
             }
         }
+        console.log(data)
     });
 
     //Aquí se hará el fetch a la API 
@@ -124,10 +123,11 @@ function Login() {
 
   function getUser(email, token){
 
-    var url = new URL(`http://localhost:8091/api/security-users/${email}`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/security-users/${email}`);
     fetch(url, {
       method: "GET",
       headers: {
+          "access-token": token,
           "Content-Type": "application/json",
       }
     })
@@ -141,8 +141,16 @@ function Login() {
         localStorage.setItem("Id_Role", data[0].Id_Role)
         localStorage.setItem("Token", token)
         localStorage.setItem("Logged", true)
-
-        history.push("/admin/dashboard");
+        //Comparar fechas
+        var f1 = new Date();
+        var f2 = new Date(data[0].Final_Effective_Date)
+        if(f2 < f1)
+        {
+          history.push("/auth/edit-password");
+        }
+        else{
+          history.push("/admin/dashboard");
+        }
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los roles" + err);

@@ -14,7 +14,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useState, useEffect } from "react";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
 import { Route, Switch } from "react-router-dom";
@@ -24,9 +24,62 @@ import Footer from "components/Footer/Footer.js";
 
 import routes from "routes.js";
 
+import Login from "views/pages/Login.js";
+import EditPassword from "views/pages/ChangePassword";
+import Register from "views/pages/Register.js";
+import LockScreen from "views/pages/LockScreen.js";
+
 var ps;
 
 function Pages() {
+  //GUARDAR EL ESTADO PARA LAS RUTAS
+  const [dbRoutes, setDbRoutes] = useState([]);
+
+  useEffect(() => {
+    var routesAux = [];
+    //Agregando las rutas del auth
+    routesAux.push(
+      {
+        invisible: true,
+        path: "/edit-password/",
+        name: "Edit Password",
+        icon: "nc-icon nc-bank",
+        component: EditPassword,
+        layout: "/auth",
+      },
+    )
+    routesAux.push(
+      {
+        invisible: true,
+        path: "/login/",
+        name: "Login",
+        icon: "nc-icon nc-bank",
+        component: Login,
+        layout: "/auth",
+      },
+    )
+    routesAux.push(
+      {
+        invisible: true,
+        path: "/register/",
+        name: "Register",
+        icon: "nc-icon nc-bank",
+        component: Register,
+        layout: "/auth",
+      },
+    )
+    routesAux.push(
+      {
+        invisible: true,
+        path: "/lock-screen/",
+        name: "Lock Screen",
+        icon: "nc-icon nc-bank",
+        component: LockScreen,
+        layout: "/auth",
+      },
+    )
+    setDbRoutes(routesAux)
+  }, []);
   const fullPages = React.useRef();
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
@@ -61,7 +114,7 @@ function Pages() {
       <AuthNavbar />
       <div className="wrapper wrapper-full-page" ref={fullPages}>
         <div className="full-page section-image">
-          <Switch>{getRoutes(routes)}</Switch>
+          <Switch>{getRoutes(dbRoutes)}</Switch>
           <Footer fluid />
         </div>
       </div>

@@ -51,7 +51,8 @@ function CatalogosSAT() {
 
   //Para guardar los datos del catalogo seleccionado
   const [dataCatalog, setDataCatalog] = useState([]);
- 
+
+  const token = localStorage.getItem("Token");
 
   useEffect(() => {
     //Aqui vamos a descargar la lista de catalogos de la base de datos por primera vez
@@ -60,13 +61,14 @@ function CatalogosSAT() {
       piIdCatalogType : 2,
     };
 
-    var url = new URL(`http://localhost:8091/api/cat-catalogs/`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/cat-catalogs/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
     fetch(url, {
         method: "GET",
         headers: {
+            "access-token": token,
             "Content-Type": "application/json",
         }
     })
@@ -85,7 +87,6 @@ function CatalogosSAT() {
           value: data[i].Component, label: data[i].Short_Desc 
         })
       }
-
       setOptions(optionsAux)
       
       //Guardamos el respaldo de los datos
@@ -164,12 +165,13 @@ function CatalogosSAT() {
       pSpCatalog : datos.CRUD_References,
     };
 
-    var url = new URL(`http://localhost:8091/api/cat-catalogs/catalog`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/cat-catalogs/catalog`);
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
     fetch(url, {
         method: "GET",
         headers: {
+            "access-token": token,
             "Content-Type": "application/json",
         }
     })
@@ -193,7 +195,7 @@ function CatalogosSAT() {
       pSpCatalog : datos.CRUD_References,
     };
 
-    var url = new URL(`http://localhost:8091/api/cat-catalogs/catalog`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/cat-catalogs/catalog`);
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
     fetch(url, {

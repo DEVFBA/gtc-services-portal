@@ -43,6 +43,7 @@ import ClienteConfiguraciones from "../views/pages/ClienteConfiguraciones.js";
 import EditConfiguration from "../views/pages/EditConfiguration.js";
 import CustomerApplications from "../views/pages/CustomerApplications.js";
 import Articulo69 from "../views/pages/Articulo69";
+import ChangePassword from "../views/pages/ChangePassword";
 import { string } from "prop-types";
 
 var ps;
@@ -62,6 +63,7 @@ function Admin(props) {
   const logged = localStorage.getItem("Logged");
   const role = localStorage.getItem("Id_Role");
   const customer = localStorage.getItem("Id_Customer");
+  const token = localStorage.getItem("Token");
 
   React.useEffect(() => {
     //Si el usuario no ha iniciado sesión que se le redirija al login
@@ -80,7 +82,7 @@ function Admin(props) {
 	    pvIdRole : role
     };
 
-    var url = new URL(`http://localhost:8091/api/routes/`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/routes/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
     //console.log(url)
@@ -88,6 +90,7 @@ function Admin(props) {
     fetch(url, {
         method: "GET",
         headers: {
+            "access-token": token,
             "Content-Type": "application/json",
         }
     })
@@ -389,6 +392,7 @@ function Admin(props) {
             },
           )
         }
+        //Ruta para cambiar contraseña
         setDbRoutes(routesAux)
     })
     .catch(function(err) {
