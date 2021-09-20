@@ -38,16 +38,12 @@ import {
   Container,
 } from "reactstrap";
 
-import { useContext } from "react";
-import { UserContext } from "../../UserContext";
-
 function AdminNavbar(props) {
   const [collapseOpen, setCollapseOpen] = React.useState(false);
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const [color, setColor] = React.useState("navbar-transparent");
   const location = useLocation();
   const history = useHistory();
-  const {user,setUser} = useContext(UserContext);
 
   React.useEffect(() => {
     window.addEventListener("resize", updateColor);

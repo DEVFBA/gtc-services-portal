@@ -10,15 +10,13 @@ function App() {
     const [user, setUser] = useState([]);
     return(
         <>
-            <UserContext.Provider value={{user,setUser}}>
-                <BrowserRouter>
-                    <Switch>
-                    <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
-                    <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-                    <Redirect to="/auth/login" />
-                    </Switch>
-                </BrowserRouter>
-            </UserContext.Provider>
+            <BrowserRouter>
+                <Switch>
+                <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
+                <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+                <Redirect to="/auth/login" />
+                </Switch>
+            </BrowserRouter>
         </>
     )
 }

@@ -43,7 +43,7 @@ import ClienteConfiguraciones from "../views/pages/ClienteConfiguraciones.js";
 import EditConfiguration from "../views/pages/EditConfiguration.js";
 import CustomerApplications from "../views/pages/CustomerApplications.js";
 import Articulo69 from "../views/pages/Articulo69";
-import Register from "../views/pages/Register";
+import ChangePassword from "../views/pages/ChangePassword";
 import { string } from "prop-types";
 
 var ps;
@@ -82,7 +82,7 @@ function Admin(props) {
 	    pvIdRole : role
     };
 
-    var url = new URL(`http://localhost:8091/api/routes/`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/routes/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
     //console.log(url)
@@ -392,16 +392,7 @@ function Admin(props) {
             },
           )
         }
-        routesAux.push(
-          {
-            invisible: true,
-            path: "/edit-password/",
-            name: "Edit Password",
-            icon: "nc-icon nc-bank",
-            component: Register,
-            layout: "/admin",
-          },
-        )
+        //Ruta para cambiar contraseña
         setDbRoutes(routesAux)
     })
     .catch(function(err) {

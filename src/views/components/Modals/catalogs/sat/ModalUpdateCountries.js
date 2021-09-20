@@ -116,7 +116,7 @@ function ModalUpdateCountries({abierto, toggleModalUpdateRecord, record, updateA
             pvUser: user,
         };
     
-        fetch(`http://localhost:8091/api/cat-catalogs/update-sat`, {
+        fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/update-sat`, {
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {

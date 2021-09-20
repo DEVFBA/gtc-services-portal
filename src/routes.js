@@ -40,6 +40,7 @@ import ValidationForms from "views/forms/ValidationForms.js";
 import VectorMap from "views/maps/VectorMap.js";
 import Widgets from "views/Widgets.js";
 import Wizard from "views/forms/Wizard.js";
+import EditPassword from "views/pages/ChangePassword";
 
 const routes = [
   {
@@ -67,6 +68,13 @@ const routes = [
         name: "Login",
         mini: "L",
         component: Login,
+        layout: "/auth",
+      },
+      {
+        path: "/edit-password",
+        name: "Edit Password",
+        mini: "EP",
+        component: EditPassword,
         layout: "/auth",
       },
       {

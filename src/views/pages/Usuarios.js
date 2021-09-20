@@ -22,9 +22,6 @@ import {
 // core components
 import UsersTable from "../components/Users/UsersTable.js";
 
-import { useContext } from "react";
-import { UserContext } from "../../UserContext";
-
 function Usuarios() {
 
   //Para actualizar cada que agreguen un campo a la tabla
@@ -42,8 +39,6 @@ function Usuarios() {
   //Para guardar los días transcurridos
   const [validDays, setValidDays] = React.useState();
 
-  const {user,setUser} = useContext(UserContext);
-
   const token = localStorage.getItem("Token");
 
   useEffect(() => {
@@ -52,7 +47,7 @@ function Usuarios() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://localhost:8091/api/security-users/`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/security-users/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -80,7 +75,7 @@ function Usuarios() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://localhost:8091/api/security-roles/`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/security-roles/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -118,7 +113,7 @@ function Usuarios() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://localhost:8091/api/customers/`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/customers/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -156,7 +151,7 @@ function Usuarios() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://localhost:8091/api/general-parameters/`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/general-parameters/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -191,7 +186,7 @@ function Usuarios() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://localhost:8091/api/security-users/`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/security-users/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 

@@ -216,7 +216,7 @@ function Sidebar(props) {
                     <span className="sidebar-mini-icon">C</span>
                     <span className="sidebar-normal">Configuración</span>
                   </NavLink>
-                  <NavLink to="/admin/user-profile" activeClassName="">
+                  <NavLink to="/auth/login" activeClassName="">
                     <span className="sidebar-mini-icon">CS</span>
                     <span className="sidebar-normal">Cerrar Sesión</span>
                   </NavLink>

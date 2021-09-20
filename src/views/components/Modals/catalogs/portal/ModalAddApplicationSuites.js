@@ -82,7 +82,7 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
             pvUser: user,
         };
     
-        fetch(`http://localhost:8091/api/cat-catalogs/create-portal`, {
+        fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/create-portal`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {

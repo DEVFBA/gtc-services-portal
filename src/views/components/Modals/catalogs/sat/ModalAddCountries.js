@@ -95,7 +95,7 @@ function ModalAddCountries({modalAddRecord, setModalAddRecord, updateAddData}) {
             pvUser: user,
         };
     
-        fetch(`http://localhost:8091/api/cat-catalogs/create-sat`, {
+        fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/create-sat`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {

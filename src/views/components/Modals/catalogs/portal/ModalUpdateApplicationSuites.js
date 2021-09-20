@@ -106,7 +106,7 @@ function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record,
             pvUser: user,
         };
     
-        fetch(`http://localhost:8091/api/cat-catalogs/update-portal`, {
+        fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/update-portal`, {
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {

@@ -73,8 +73,6 @@ function Dashboard() {
   const logged = localStorage.getItem("logged");
   const history = useHistory();
 
-  const {user,setUser} = useContext(UserContext);
-
   React.useEffect(() => {
     /*fetch(`http://localhost:8091/api/cat-countries`, {
       method: "GET",
@@ -92,10 +90,6 @@ function Dashboard() {
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los paises");
     });*/
-  }, []);
-
-  useEffect(() => {
-    console.log(user)
   }, []);
 
   function crearCommercialRelease(event) {

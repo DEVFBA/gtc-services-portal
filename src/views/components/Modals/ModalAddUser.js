@@ -78,6 +78,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
         }
         return false;
     };
+    
     // function that verifies if two strings are equal
     const compare = (string1, string2) => {
         if (string1 === string2) {
@@ -170,7 +171,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
             pvUser: user,
         };
     
-        fetch(`http://localhost:8091/api/security-users/create-user/`, {
+        fetch(`http://129.159.99.152/develop-api/api/security-users/create-user/`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {
