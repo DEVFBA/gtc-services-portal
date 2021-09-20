@@ -43,6 +43,7 @@ import ClienteConfiguraciones from "../views/pages/ClienteConfiguraciones.js";
 import EditConfiguration from "../views/pages/EditConfiguration.js";
 import CustomerApplications from "../views/pages/CustomerApplications.js";
 import Articulo69 from "../views/pages/Articulo69";
+import Register from "../views/pages/Register";
 import { string } from "prop-types";
 
 var ps;
@@ -62,6 +63,7 @@ function Admin(props) {
   const logged = localStorage.getItem("Logged");
   const role = localStorage.getItem("Id_Role");
   const customer = localStorage.getItem("Id_Customer");
+  const token = localStorage.getItem("Token");
 
   React.useEffect(() => {
     //Si el usuario no ha iniciado sesión que se le redirija al login
@@ -88,6 +90,7 @@ function Admin(props) {
     fetch(url, {
         method: "GET",
         headers: {
+            "access-token": token,
             "Content-Type": "application/json",
         }
     })
@@ -389,6 +392,16 @@ function Admin(props) {
             },
           )
         }
+        routesAux.push(
+          {
+            invisible: true,
+            path: "/edit-password/",
+            name: "Edit Password",
+            icon: "nc-icon nc-bank",
+            component: Register,
+            layout: "/admin",
+          },
+        )
         setDbRoutes(routesAux)
     })
     .catch(function(err) {

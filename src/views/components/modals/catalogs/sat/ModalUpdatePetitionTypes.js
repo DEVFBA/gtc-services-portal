@@ -27,6 +27,7 @@ function ModalUpdatePetitionTypes({abierto, toggleModalUpdateRecord, record, upd
     const [errorMessage, setErrorMessage] = useState("")
 
     const user = localStorage.getItem("User");
+    const token = localStorage.getItem("Token");
 
     useEffect(() => {
         setId(record.idR);
@@ -119,6 +120,7 @@ function ModalUpdatePetitionTypes({abierto, toggleModalUpdateRecord, record, upd
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {
+                "access-token": token,
                 "Content-Type": "application/json"
             }
         })

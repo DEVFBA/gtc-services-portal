@@ -111,6 +111,7 @@ function Login() {
                 getUser(email, data[1].token)
             }
         }
+        console.log(data)
     });
 
     //Aquí se hará el fetch a la API 
@@ -128,6 +129,7 @@ function Login() {
     fetch(url, {
       method: "GET",
       headers: {
+          "access-token": token,
           "Content-Type": "application/json",
       }
     })
@@ -141,8 +143,16 @@ function Login() {
         localStorage.setItem("Id_Role", data[0].Id_Role)
         localStorage.setItem("Token", token)
         localStorage.setItem("Logged", true)
-
-        history.push("/admin/dashboard");
+        //Comparar fechas
+        var f1 = new Date();
+        var f2 = new Date(data[0].Final_Effective_Date)
+        //if(f2 < f1)
+        //{
+          //history.push("/admin/edit-password");
+        //}
+        //else{
+          history.push("/admin/dashboard");
+        //}
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los roles" + err);

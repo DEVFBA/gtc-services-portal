@@ -40,6 +40,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
     const [errorMessage, setErrorMessage] = React.useState("");
 
     const user = localStorage.getItem("User");
+    const token = localStorage.getItem("Token");
 
     const handleModalClick = () => {
         //Regresamos todo a su estado inicial
@@ -173,6 +174,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {
+                "access-token": token,
                 "Content-Type": "application/json"
             }
         })

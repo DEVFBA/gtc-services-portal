@@ -27,6 +27,7 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
     const [errorState, setErrorState] = React.useState("");
 
     const user = localStorage.getItem("User");
+    const token = localStorage.getItem("Token");
 
     const handleModalClick = () => {
         setModalAddRecord(!modalAddRecord);
@@ -85,6 +86,7 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {
+                "access-token": token,
                 "Content-Type": "application/json"
             }
         })

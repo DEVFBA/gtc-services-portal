@@ -28,6 +28,7 @@ function ModalAddVoucherTypes({modalAddRecord, setModalAddRecord, updateAddData}
     const [errorMessage, setErrorMessage] = useState("")
 
     const user = localStorage.getItem("User");
+    const token = localStorage.getItem("Token");
 
     const handleModalClick = () => {
         setId("")
@@ -103,6 +104,7 @@ function ModalAddVoucherTypes({modalAddRecord, setModalAddRecord, updateAddData}
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {
+                "access-token": token,
                 "Content-Type": "application/json"
             }
         })

@@ -44,6 +44,8 @@ function Usuarios() {
 
   const {user,setUser} = useContext(UserContext);
 
+  const token = localStorage.getItem("Token");
+
   useEffect(() => {
     //Aqui vamos a descargar la lista de usuarios de la base de datos por primera vez
     const params = {
@@ -57,6 +59,7 @@ function Usuarios() {
     fetch(url, {
         method: "GET",
         headers: {
+            "access-token": token,
             "Content-Type": "application/json",
         }
     })
@@ -84,6 +87,7 @@ function Usuarios() {
     fetch(url, {
         method: "GET",
         headers: {
+            "access-token": token,
             "Content-Type": "application/json",
         }
     })
@@ -121,6 +125,7 @@ function Usuarios() {
     fetch(url, {
         method: "GET",
         headers: {
+            "access-token": token,
             "Content-Type": "application/json",
         }
     })
@@ -158,6 +163,7 @@ function Usuarios() {
     fetch(url, {
         method: "GET",
         headers: {
+            "access-token": token,
             "Content-Type": "application/json",
         }
     })
@@ -192,6 +198,7 @@ function Usuarios() {
     fetch(url, {
         method: "GET",
         headers: {
+            "access-token": token,
             "Content-Type": "application/json",
         }
     })

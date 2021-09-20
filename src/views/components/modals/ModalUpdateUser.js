@@ -43,6 +43,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
     const [errorMessage, setErrorMessage] = React.useState("");
 
     const user = localStorage.getItem("User");
+    const token = localStorage.getItem("Token");
 
     const handleModalClick = () => {
       toggleModalUpdateRecord(!abierto);
@@ -191,6 +192,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                 method: "PUT",
                 body: JSON.stringify(catRegister),
                 headers: {
+                    "access-token": token,
                     "Content-Type": "application/json"
                 }
             })
@@ -237,6 +239,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                 method: "PUT",
                 body: JSON.stringify(catRegister),
                 headers: {
+                    "access-token": token,
                     "Content-Type": "application/json"
                 }
             })

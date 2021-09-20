@@ -28,6 +28,7 @@ function ModalAddTypesOperation({modalAddRecord, setModalAddRecord, updateAddDat
     const [errorMessage, setErrorMessage] = useState("")
 
     const user = localStorage.getItem("User");
+    const token = localStorage.getItem("Token");
 
     const handleModalClick = () => {
         setId("")
@@ -96,6 +97,7 @@ function ModalAddTypesOperation({modalAddRecord, setModalAddRecord, updateAddDat
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {
+                "access-token": token,
                 "Content-Type": "application/json"
             }
         })

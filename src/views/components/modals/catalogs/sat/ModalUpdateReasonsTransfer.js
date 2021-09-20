@@ -27,6 +27,7 @@ function ModalUpdateReasonsTransfer({abierto, toggleModalUpdateRecord, record, u
     const [errorMessage, setErrorMessage] = useState("")
 
     const user = localStorage.getItem("User");
+    const token = localStorage.getItem("Token");
 
     useEffect(() => {
         setId(record.idR);
@@ -119,6 +120,7 @@ function ModalUpdateReasonsTransfer({abierto, toggleModalUpdateRecord, record, u
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {
+                "access-token": token,
                 "Content-Type": "application/json"
             }
         })
