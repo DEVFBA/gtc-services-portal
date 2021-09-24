@@ -23,12 +23,32 @@ import PerfectScrollbar from "perfect-scrollbar";
 import avatar from "assets/img/faces/ayo-ogunseinde-2.jpg";
 import logo from "assets/img/react-logo.png";
 
+// reactstrap components
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  Row,
+  Col,
+  FormGroup,
+  Form,
+  Label,
+  Input,
+  Modal, 
+  ModalBody, 
+  ModalFooter
+} from "reactstrap";
+
 var ps;
 
 function Sidebar(props) {
   const [openAvatar, setOpenAvatar] = React.useState(false);
   const [collapseStates, setCollapseStates] = React.useState({});
   const sidebar = React.useRef();
+  const name = localStorage.getItem("Name");
+  const ambiente = "/DEV"
   // this creates the intial state of this component based on the collapse routes
   // that it gets through props.routes
   const getCollapseStates = (routes) => {
@@ -175,7 +195,7 @@ function Sidebar(props) {
           href="https://www.creative-tim.com"
           className="simple-text logo-normal"
         >
-          Creative Tim
+          Portal de servicios GTC
         </a>
       </div>
 
@@ -186,37 +206,37 @@ function Sidebar(props) {
           </div>
           <div className="info">
             <a
-              href="#pablo"
+              href="#"
               data-toggle="collapse"
               aria-expanded={openAvatar}
               onClick={() => setOpenAvatar(!openAvatar)}
             >
               <span>
                 {/*AQUI VA EL NOMBRE DEL USUARIO*/}
-                Chet Faker
+                {name}
                 <b className="caret" />
               </span>
             </a>
             <Collapse isOpen={openAvatar}>
               <ul className="nav">
                 <li>
-                  <NavLink to="/admin/user-profile" activeClassName="">
+                  <NavLink to= {ambiente + "/admin/user-profile"} activeClassName="">
                     <span className="sidebar-mini-icon">MP</span>
                     <span className="sidebar-normal">Mi Perfil</span>
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/admin/user-profile" activeClassName="">
+                  <NavLink to= {ambiente + "/admin/user-profile"} activeClassName="">
                     <span className="sidebar-mini-icon">EP</span>
                     <span className="sidebar-normal">Editar Perfil</span>
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/admin/user-profile" activeClassName="">
+                  <NavLink to= {ambiente + "/admin/user-profile"} activeClassName="">
                     <span className="sidebar-mini-icon">C</span>
                     <span className="sidebar-normal">Configuración</span>
                   </NavLink>
-                  <NavLink to="/auth/login" activeClassName="">
+                  <NavLink to= {ambiente + "/auth/login"} activeClassName="">
                     <span className="sidebar-mini-icon">CS</span>
                     <span className="sidebar-normal">Cerrar Sesión</span>
                   </NavLink>

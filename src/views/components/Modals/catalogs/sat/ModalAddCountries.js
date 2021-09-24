@@ -86,7 +86,7 @@ function ModalAddCountries({modalAddRecord, setModalAddRecord, updateAddData}) {
     function addRegister(){
         //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
         const catRegister = {
-            pSpCatalog: "spSAT_Cat_CFDI_Uses_CRUD_Records",
+            pSpCatalog: "spSAT_Cat_Countries_CRUD_Records",
             pvOptionCRUD: "C",
             pvIdCatalog: id,
             pvShortDesc: shortDescription,

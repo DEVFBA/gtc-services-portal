@@ -49,8 +49,8 @@ function AuthNavbar(props) {
     >
       <Container>
         <div className="navbar-wrapper">
-          <NavbarBrand href="#pablo" onClick={(e) => e.preventDefault()}>
-            GTC Services Portal
+          <NavbarBrand href="#" onClick={(e) => e.preventDefault()}>
+            Portal de servicios GTC
           </NavbarBrand>
         </div>
 {/*         <button

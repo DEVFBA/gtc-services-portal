@@ -192,7 +192,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
                 }
-                if(data[0].Code_Type === "Error")
+                else if(data[0].Code_Type === "Error")
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")

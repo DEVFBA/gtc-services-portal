@@ -43,7 +43,7 @@ import ClienteConfiguraciones from "../views/pages/ClienteConfiguraciones.js";
 import EditConfiguration from "../views/pages/EditConfiguration.js";
 import CustomerApplications from "../views/pages/CustomerApplications.js";
 import Articulo69 from "../views/pages/Articulo69";
-import ChangePassword from "../views/pages/ChangePassword";
+import CustomerApplicationsUsers from "../views/components/Clients/CustomerApplicationsUsers";
 import { string } from "prop-types";
 
 var ps;
@@ -65,11 +65,13 @@ function Admin(props) {
   const customer = localStorage.getItem("Id_Customer");
   const token = localStorage.getItem("Token");
 
+  const ambiente = "/DEV"
+
   React.useEffect(() => {
     //Si el usuario no ha iniciado sesión que se le redirija al login
     if(logged !== "true")
     {
-      history.push("/auth/login");
+      history.push(ambiente + "/auth/login");
     }
   }, []);
   
@@ -100,7 +102,8 @@ function Admin(props) {
     .then(function(data) {
       
         var routesAux = [];
-
+        //const ambiente = "/QSDEV"
+       
         for(var i=0; i<data.length; i++)
         {
           if(data[i].Status === true)
@@ -116,7 +119,7 @@ function Admin(props) {
                     name: data[i].Module_Desc,
                     icon: String(data[i].Icon),
                     component: DashboardAdmin,
-                    layout: data[i].Layout_Module
+                    layout: ambiente + data[i].Layout_Module
                   }
                 )
               }
@@ -129,7 +132,7 @@ function Admin(props) {
                     name: data[i].Module_Desc,
                     icon: String(data[i].Icon),
                     component: DashboardSoporte,
-                    layout: data[i].Layout_Module
+                    layout: ambiente + data[i].Layout_Module
                   }
                 )
               }
@@ -141,7 +144,7 @@ function Admin(props) {
                     name: data[i].Module_Desc,
                     icon: String(data[i].Icon),
                     component: DashboardCliente,
-                    layout: data[i].Layout_Module
+                    layout: ambiente + data[i].Layout_Module
                   }
                 )
               }
@@ -158,7 +161,7 @@ function Admin(props) {
                       path: data[i].Url,
                       name: data[i].SubModule_Desc,
                       component: Usuarios,
-                      layout: data[i].Layout_SubModule
+                      layout: ambiente + data[i].Layout_SubModule
                     }
                   )
                 }
@@ -169,7 +172,7 @@ function Admin(props) {
                       path: data[i].Url,
                       name: data[i].SubModule_Desc,
                       component: CatalogosPortal,
-                      layout: data[i].Layout_SubModule
+                      layout: ambiente + data[i].Layout_SubModule
                     }
                   )
                 }
@@ -180,7 +183,7 @@ function Admin(props) {
                       path: data[i].Url,
                       name: data[i].SubModule_Desc,
                       component: CatalogosSAT,
-                      layout: data[i].Layout_SubModule
+                      layout: ambiente + data[i].Layout_SubModule
                     }
                   )
                 }
@@ -191,7 +194,7 @@ function Admin(props) {
                       path: data[i].Url,
                       name: data[i].SubModule_Desc,
                       component: Clientes,
-                      layout: data[i].Layout_SubModule
+                      layout: ambiente + data[i].Layout_SubModule
                     }
                   )
                 }
@@ -202,7 +205,7 @@ function Admin(props) {
                       path: data[i].Url,
                       name: data[i].SubModule_Desc,
                       component: SupportClients,
-                      layout: data[i].Layout_SubModule
+                      layout: ambiente + data[i].Layout_SubModule
                     }
                   )
                 }
@@ -213,7 +216,7 @@ function Admin(props) {
                       path: data[i].Url,
                       name: data[i].SubModule_Desc,
                       component: ModuleSettings,
-                      layout: data[i].Layout_SubModule
+                      layout: ambiente + data[i].Layout_SubModule
                     }
                   )
                 }
@@ -224,7 +227,7 @@ function Admin(props) {
                       path: data[i].Url,
                       name: data[i].SubModule_Desc,
                       component: ClienteConfiguraciones,
-                      layout: data[i].Layout_SubModule
+                      layout: ambiente + data[i].Layout_SubModule
                     }
                   )
                 }
@@ -235,7 +238,7 @@ function Admin(props) {
                       path: data[i].Url,
                       name: data[i].SubModule_Desc,
                       component: Articulo69,
-                      layout: data[i].Layout_SubModule
+                      layout: ambiente + data[i].Layout_SubModule
                     }
                   )
                 }
@@ -253,7 +256,7 @@ function Admin(props) {
                           path: data[j].Url,
                           name: data[j].SubModule_Desc,
                           component: Usuarios,
-                          layout: data[j].Layout_SubModule
+                          layout: ambiente + data[j].Layout_SubModule
                         }
                       )
                     }
@@ -264,7 +267,7 @@ function Admin(props) {
                           path: data[j].Url,
                           name: data[j].SubModule_Desc,
                           component: CatalogosPortal,
-                          layout: data[j].Layout_SubModule
+                          layout: ambiente + data[j].Layout_SubModule
                         }
                       )
                     }
@@ -275,7 +278,7 @@ function Admin(props) {
                           path: data[j].Url,
                           name: data[j].SubModule_Desc,
                           component: CatalogosSAT,
-                          layout: data[j].Layout_SubModule
+                          layout: ambiente + data[j].Layout_SubModule
                         }
                       )
                     }
@@ -286,7 +289,7 @@ function Admin(props) {
                           path: data[j].Url,
                           name: data[j].SubModule_Desc,
                           component: Clientes,
-                          layout: data[j].Layout_SubModule
+                          layout: ambiente + data[j].Layout_SubModule
                         }
                       )
                     }
@@ -297,7 +300,7 @@ function Admin(props) {
                           path: data[j].Url,
                           name: data[j].SubModule_Desc,
                           component: SupportClients,
-                          layout: data[j].Layout_SubModule
+                          layout: ambiente + data[j].Layout_SubModule
                         }
                       )
                     }
@@ -308,7 +311,7 @@ function Admin(props) {
                           path: data[j].Url,
                           name: data[j].SubModule_Desc,
                           component: ModuleSettings,
-                          layout: data[j].Layout_SubModule
+                          layout: ambiente + data[j].Layout_SubModule
                         }
                       )
                     }
@@ -319,7 +322,7 @@ function Admin(props) {
                           path: data[j].Url,
                           name: data[j].SubModule_Desc,
                           component: ClienteConfiguraciones,
-                          layout: data[j].Layout_SubModule
+                          layout: ambiente + data[j].Layout_SubModule
                         }
                       )
                     }
@@ -330,7 +333,7 @@ function Admin(props) {
                           path: data[j].Url,
                           name: data[j].SubModule_Desc,
                           component: CustomerApplications,
-                          layout: data[j].Layout_SubModule
+                          layout: ambiente + data[j].Layout_SubModule
                         }
                       )
                     }
@@ -365,7 +368,7 @@ function Admin(props) {
               name: "Add Application",
               icon: "nc-icon nc-bank",
               component: AddApplication,
-              layout: "/admin",
+              layout: ambiente + "/admin",
             }
           )
           routesAux.push(
@@ -375,7 +378,18 @@ function Admin(props) {
               name: "Edit Application",
               icon: "nc-icon nc-bank",
               component: EditApplication,
-              layout: "/admin",
+              layout:  ambiente + "/admin",
+            }
+          )
+
+          routesAux.push(
+            {
+              invisible: true,
+              path: "/customer-application-users/:idCus/:idApp/",
+              name: "Customer Application Users",
+              icon: "nc-icon nc-bank",
+              component: CustomerApplicationsUsers,
+              layout:  ambiente + "/admin",
             }
           )
         }
@@ -388,7 +402,7 @@ function Admin(props) {
               name: "Edit Configuration",
               icon: "nc-icon nc-bank",
               component: EditConfiguration,
-              layout: "/admin",
+              layout: ambiente + "/admin",
             },
           )
         }
@@ -426,7 +440,7 @@ function Admin(props) {
       if (prop.collapse) {
         return getRoutes(prop.views)
       }
-      if (prop.layout === "/admin") {
+      if (prop.layout === ambiente + "/admin") {
         return (
           <Route
             path={prop.layout + prop.path}

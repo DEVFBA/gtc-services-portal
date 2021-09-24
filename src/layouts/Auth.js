@@ -34,10 +34,12 @@ var ps;
 function Pages() {
   //GUARDAR EL ESTADO PARA LAS RUTAS
   const [dbRoutes, setDbRoutes] = useState([]);
-
+  const ambiente = "/DEV"
   useEffect(() => {
     var routesAux = [];
     //Agregando las rutas del auth
+    //const ambiente = "/QSDEV"
+    
     routesAux.push(
       {
         invisible: true,
@@ -45,7 +47,7 @@ function Pages() {
         name: "Edit Password",
         icon: "nc-icon nc-bank",
         component: EditPassword,
-        layout: "/auth",
+        layout: ambiente + "/auth",
       },
     )
     routesAux.push(
@@ -55,7 +57,7 @@ function Pages() {
         name: "Login",
         icon: "nc-icon nc-bank",
         component: Login,
-        layout: "/auth",
+        layout: ambiente + "/auth",
       },
     )
     routesAux.push(
@@ -65,7 +67,7 @@ function Pages() {
         name: "Register",
         icon: "nc-icon nc-bank",
         component: Register,
-        layout: "/auth",
+        layout: ambiente + "/auth",
       },
     )
     routesAux.push(
@@ -75,7 +77,7 @@ function Pages() {
         name: "Lock Screen",
         icon: "nc-icon nc-bank",
         component: LockScreen,
-        layout: "/auth",
+        layout: ambiente + "/auth",
       },
     )
     setDbRoutes(routesAux)
@@ -96,7 +98,7 @@ function Pages() {
       if (prop.collapse) {
         return getRoutes(prop.views);
       }
-      if (prop.layout === "/auth") {
+      if (prop.layout === ambiente + "/auth") {
         return (
           <Route
             path={prop.layout + prop.path}

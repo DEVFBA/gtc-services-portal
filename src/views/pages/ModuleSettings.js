@@ -56,6 +56,8 @@ function ModuleSettings() {
   const [dataTable, setDataTable] = useState([]);
 
   const history = useHistory();
+  
+  const ambiente = "/DEV"
 
   //Guardar el estado de la tabla
   const [dataState, setDataState] = useState(
@@ -96,7 +98,7 @@ function ModuleSettings() {
               <Button
                 onClick={() => {
                   let obj = dataState.find((o) => o.id === key);
-                  history.push(`/admin/edit-application/${obj.idAplicacion}/`);
+                  history.push(ambiente + `/admin/edit-application/${obj.idAplicacion}/`);
                 }}
                 color="warning"
                 size="sm"
@@ -163,7 +165,7 @@ function ModuleSettings() {
             <Card>
               <CardHeader>
                 <CardTitle tag="h4">Modules Catalog</CardTitle>
-                <Link to="/admin/add-application">
+                <Link to= {ambiente + "/admin/add-application"}>
                   <Button color="primary">
                     <span className="btn-label">
                       <i className="nc-icon nc-simple-add" />
