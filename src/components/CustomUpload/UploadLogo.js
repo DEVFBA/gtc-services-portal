@@ -1,4 +1,5 @@
 import React from "react";
+import fs from 'fs';
 
 import defaultImage from "assets/img/default-logo.png";
 
@@ -14,18 +15,23 @@ function UploadLogo(props) {
     let file = e.target.files[0];
 
     //Para cambiarle el nombre al archivo de acuerdo a las especificaciones
-    var newName = props.registerCountry.concat(props.registerRfc)
+   /* var newName = props.registerCountry.concat(props.registerRfc)
     Object.defineProperty(file, 'name', {
       writable: true,
       value: newName.concat(".", getFileExtension(file.name))
-    });
+    });*/
+
+    //const formData = new FormData();
+    //formData.append("image", file)
+    
 
     //Para enviar el archiv del logo al padre
     reader.onloadend = () => {
       
       setFileState(file);
-      props.setregisterLogo(file)
+      props.setregisterLogo(reader.result)
       setImagePreviewUrl(reader.result);
+      //console.log(reader.result)
     };
     if (file) {
       reader.readAsDataURL(file);
@@ -50,7 +56,7 @@ function UploadLogo(props) {
         <img src={imagePreviewUrl} className="picture-src" alt="..." />
         <input type="file" onChange={(e) => handleImageChange(e)} />
       </div>
-      <h6 className="description">Choose Logo</h6>
+      <h6 className="description">Elegir logo</h6>
     </div>
   );
 }

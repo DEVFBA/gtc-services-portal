@@ -30,7 +30,7 @@
   "bugs": {
     "url": "https://github.com/creativetimofficial/ct-paper-dashboard-pro-react/issues"
   },
-  "homepage": "https://demos.creative-tim.com/paper-dashboard-pro-react/#/",
+  "homepage": "http://129.159.99.152/DEV/",
   "dependencies": {
     "@agney/react-loading": "^0.1.2",
     "bootstrap": "4.6.0",

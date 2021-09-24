@@ -19,29 +19,26 @@ import {
     Row,
     Col,
 } from "reactstrap";
+import { data } from "jquery";
 
-const opciones = [
-    { value: "Administrador", label: " Administrador "},
-    { value: "Soporte", label: " Soporte " },
-    { value: "Cliente", label: " Cliente " },
-    { value: "Servicio", label: " Servicio " }
-]
+function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updateAddData, pathLogo}) {
 
-function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpdateTable}) {
+    const user = localStorage.getItem("User");
+    const token = localStorage.getItem("Token");
     // register form
     const [registerFullName, setregisterFullName] = React.useState("");
     const [registerRfc, setregisterRfc] = React.useState("");
     const [registerStreet, setregisterStreet] = React.useState("");
     const [registerNoExterior, setregisterNoExterior] = React.useState("");
     const [registerNoInterior, setregisterNoInterior] = React.useState("");
-    const [registerCountry, setregisterCountry] = React.useState("Administrador");
+    const [registerCountry, setregisterCountry] = React.useState("");
     const [registerCity, setregisterCity] = React.useState("");
     const [registerZipCode, setregisterZipCode] = React.useState("");
     const [registerContact, setregisterContact] = React.useState("");
     const [registerTelephone1, setregisterTelephone1] = React.useState("");
     const [registerTelephone2, setregisterTelephone2] = React.useState("");
     const [registerWebPage, setregisterWebPage] = React.useState("");
-    const [registerLogo, setregisterLogo] = React.useState(null);
+    const [registerLogo, setregisterLogo] = React.useState("");
     const [registerStatus, setregisterStatus] = useState(false);
 
     //Mandar error en caso de que ya exista el Country/TaxId
@@ -62,10 +59,27 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
     const [registerLogoState, setregisterLogoState] = React.useState("");
     const [registerStatusState, setregisterStatusState] = useState(false);
 
-    //Mandar error en caso de que ya exista el Country/TaxId
-    const [registerErrorState, setregisterErrorState] = useState("");
+    const [error, setError] = React.useState();
+    const [errorState, setErrorState] = React.useState("");
+    const [errorMessage, setErrorMessage] = React.useState("");
+    
 
     const handleModalClick = () => {
+        setregisterFullName("")
+        setregisterRfc("")
+        setregisterStreet("")
+        setregisterNoExterior("")
+        setregisterNoInterior("")
+        setregisterCountry("")
+        setregisterCity("")
+        setregisterZipCode("")
+        setregisterContact("")
+        setregisterTelephone1("")
+        setregisterTelephone2("")
+        setregisterWebPage("")
+        setregisterLogo("")
+        setregisterStatus(false)
+        
         setModalAddRecord(!modalAddRecord);
     };
 
@@ -88,6 +102,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
     const isValidated = () => {
         if (
             registerFullNameState === "has-success" &&
+            registerRfcState === "has-success" &&
             registerRfcState === "has-success"
         ) {
           return true;
@@ -98,6 +113,9 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
           if (registerRfcState !== "has-success") {
             setregisterRfcState("has-danger");
           }
+          if (registerCountryState !== "has-success") {
+            setregisterCountryState("has-danger");
+          }
           return false;
         }
     };
@@ -105,19 +123,74 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
     const registerClick = () => {
         if(isValidated()===true)
         {
-            console.log(registerLogo);
+            addRegister()
             //haremos el fetch a la base de datos para agregar el registro
-            //Para actualizar la tabla en componente principal
-            setUpdateTable(updateTable+1)
-            //si el country/taxid ya existe mandar mensaje de error al modal 
-            setregisterErrorState("has-danger")
-            //Cerramos el modal
-            //handleModalClick()
         }
         else{
             console.log("no entre")
         }
     };
+
+    function addRegister(){
+
+        const catRegister = {
+            pvOptionCRUD: "C",
+            pvIdCountry: registerCountry.value,
+            pvName: registerFullName,
+            pvTaxId: registerRfc,
+            pvStreet: registerStreet,
+            pvExtNumber: registerNoExterior,
+            pvIntNumber: registerNoInterior,
+            pvCity: registerCity,
+            pvZipCode: registerZipCode,
+            pvContactPerson: registerContact,
+            pvPhone1 : registerTelephone1,
+            pvPhone2 : registerTelephone2,
+            pvWebPage : registerWebPage,
+            pvLogo : registerLogo,
+            pbStatus : registerStatus,
+            pvUser : user,
+            pathLogo : pathLogo
+        };
+    
+        fetch(`http://129.159.99.152/develop-api/api/customers/create-customer/`, {
+            method: "POST",
+            body: JSON.stringify(catRegister),
+            headers: {
+                'Access-Control-Allow-Origin': 'http://localhost:3000',
+                "access-token": token,
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.errors) {
+                setError(
+                    <p>Hubo un error al realizar tu solicitud</p>
+                );
+            }
+            else{
+                if(data[0].Code_Type === "Warning")
+                {
+                    setErrorMessage(data[0].Code_Message_User)
+                    setErrorState("has-danger")
+                }
+                else if(data[0].Code_Type === "Error")
+                {
+                    setErrorMessage(data[0].Code_Message_User)
+                    setErrorState("has-danger")
+                }
+                else{
+                    setErrorState("has-success");
+                    //Para actualizar la tabla en componente principal
+                    updateAddData()
+                    //Cerramos el modal
+                    handleModalClick()
+                }
+            }
+        });
+    }
 
     return (
         <Modal isOpen={modalAddRecord} toggle={handleModalClick} size="lg">
@@ -125,57 +198,60 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
             <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
                 <span aria-hidden="true">×</span>
             </button>
-            <h5 className="modal-title">Add new record</h5>
+            <h5 className="modal-title">Agregar nuevo registro</h5>
             </div>
             <ModalBody>
             <Form id="RegisterValidation">
                 <Row className="justify-content-center">
                     <Col className="mt-3" lg="10">
                         <FormGroup className={`has-label ${registerFullNameState}`}>
-                        <label>Full Name *</label>
-                        <Input
-                            name="name"
-                            type="text"
-                            onChange={(e) => {
-                                if (!verifyLength(e.target.value, 1)) {
-                                    setregisterFullNameState("has-danger");
-                                } else {
-                                    setregisterFullNameState("has-success");
-                                }
-                                setregisterFullName(e.target.value);
-                            }}
-                        />
-                        {registerFullNameState === "has-danger" ? (
-                            <label className="error">
-                            This field is required.
-                            </label>
-                        ) : null}
+                            <label>Nombre Completo *</label>
+                            <Input
+                                name="name"
+                                type="text"
+                                autoComplete="off"
+                                onChange={(e) => {
+                                    if (!verifyLength(e.target.value, 1)) {
+                                        setregisterFullNameState("has-danger");
+                                    } else {
+                                        setregisterFullNameState("has-success");
+                                    }
+                                    setregisterFullName(e.target.value);
+                                }}
+                            />
+                            {registerFullNameState === "has-danger" ? (
+                                <label className="error">
+                                Este campo es requerido.
+                                </label>
+                            ) : null}
                         </FormGroup>
                         <FormGroup className={`has-label ${registerRfcState}`}>
                         <label>Rfc / Tax Id *</label>
-                        <Input
-                            name="rfc"
-                            type="text"
-                            onChange={(e) => {
-                                if (!verifyLength(e.target.value, 1)) {
-                                    setregisterRfcState("has-danger");
-                                } else {
-                                    setregisterRfcState("has-success");
-                                }
-                                setregisterRfc(e.target.value);
-                            }}
-                        />
-                        {registerRfcState === "has-danger" ? (
-                            <label className="error">
-                            This field is required.
-                            </label>
-                        ) : null}
+                            <Input
+                                name="rfc"
+                                type="text"
+                                autoComplete="off"
+                                onChange={(e) => {
+                                    if (!verifyLength(e.target.value, 1)) {
+                                        setregisterRfcState("has-danger");
+                                    } else {
+                                        setregisterRfcState("has-success");
+                                    }
+                                    setregisterRfc(e.target.value);
+                                }}
+                            />
+                            {registerRfcState === "has-danger" ? (
+                                <label className="error">
+                                Este campo es requerido.
+                                </label>
+                            ) : null}
                         </FormGroup>
                         <FormGroup>
-                            <label>Street</label>
+                            <label>Calle</label>
                             <Input
                                 name="street"
                                 type="text"
+                                autoComplete="off"
                                 onChange={(e) => {
                                     setregisterStreet(e.target.value);
                                 }}
@@ -186,6 +262,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                             <Input
                                 name="noExterior"
                                 type="text"
+                                autoComplete="off"
                                 onChange={(e) => {
                                     setregisterNoExterior(e.target.value);
                                 }}
@@ -196,27 +273,35 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                             <Input
                                 name="noInterior"
                                 type="text"
+                                autoComplete="off"
                                 onChange={(e) => {
                                     setregisterNoInterior(e.target.value);
                                 }}
                             />
                         </FormGroup>
-                        <FormGroup>
-                            <Label for="exampleSelect">Country</Label>
+                        <FormGroup  className={`has-label ${registerCountryState}`}>
+                            <Label for="exampleSelect">País</Label>
                             <Select
                                 name="country"
                                 className="react-select"
+                                placeholder = "Selecciona un país"
                                 classNamePrefix="react-select"
-                                defaultValue={opciones[0]}
+                                value={registerCountry}
                                 onChange={(value) => {
                                     setregisterCountry(value)
-                                    console.log(registerCountry)
+                                    setregisterCountryState("has-success")
+                                    //console.log(registerCountry)
                                 }}
-                                options={opciones}
+                                options={dataCountries}
                             />
+                            {registerCountryState === "has-danger" ? (
+                                <label className="error">
+                                    Este campo es requerido.
+                                </label>
+                            ) : null}
                         </FormGroup>
                         <FormGroup>
-                            <label>City</label>
+                            <label>Ciudad</label>
                             <Input
                                 name="city"
                                 type="text"
@@ -227,7 +312,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                             />
                         </FormGroup>
                         <FormGroup>
-                            <label>Zip Code</label>
+                            <label>Código Postal</label>
                             <Input
                                 name="zipCode"
                                 type="text"
@@ -238,7 +323,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                             />
                         </FormGroup>
                         <FormGroup>
-                            <label>Contact</label>
+                            <label>Contacto</label>
                             <Input
                                 name="contact"
                                 type="text"
@@ -249,7 +334,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                             />
                         </FormGroup>
                         <FormGroup>
-                            <label>Telephone 1</label>
+                            <label>Teléfono 1</label>
                             <Input
                                 name="telephone1"
                                 type="text"
@@ -260,7 +345,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                             />
                         </FormGroup>
                         <FormGroup>
-                            <label>Telephone 2</label>
+                            <label>Telefono 2</label>
                             <Input
                                 name="telephone2"
                                 type="text"
@@ -272,11 +357,11 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                         </FormGroup>
                     </Col>
                     <Col sm="4">
-                        <UploadLogo registerLogo = {registerLogo} setregisterLogo={setregisterLogo} registerCountry = {registerCountry} registerRfc = {registerRfc}/>
+                        <UploadLogo registerLogo = {registerLogo} setregisterLogo={setregisterLogo} registerCountry = {registerCountry.value} registerRfc = {registerRfc}/>
                     </Col>
                     <Col sm="6">
                         <FormGroup>
-                            <label>Web Page</label>
+                            <label>Página Web</label>
                             <Input
                                 name="webpage"
                                 type="text"
@@ -303,28 +388,29 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, updateTable, setUpda
                     </Col> 
                     <Col className="mt-3" lg="10">
                         <div className="category form-category">
-                        * Required fields
+                        * Campos requeridos
                         </div>
                     </Col>  
                     <Col className="mt-3" lg="10">
-                        <FormGroup className={`has-label ${registerErrorState}`}>
-                            {registerErrorState === "has-danger" ? (
+                        <FormGroup className={`has-label ${errorState}`}>
+                            {errorState === "has-danger" ? (
                                 <label className="error">
-                                ERROR. El Tax Id / Country ya existe.
+                                    {errorMessage}
                                 </label>
                             ) : null}
                         </FormGroup>
                     </Col>    
+                    {error}
                 </Row>
             </Form>
             </ModalBody>
             <ModalFooter>
                 <div className="center-side">
                 <Button className="buttons" color="secondary" onClick={handleModalClick}>
-                    Close
+                    Cerrar 
                 </Button>
                 <Button className="buttons" color="primary" onClick={registerClick}>
-                    Save changes
+                    Guardar cambios
                 </Button>
                 </div>
             </ModalFooter>

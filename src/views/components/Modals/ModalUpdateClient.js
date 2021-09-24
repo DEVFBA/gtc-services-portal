@@ -20,15 +20,13 @@ import {
     Col,
 } from "reactstrap";
 
-const opciones = [
-    { value: "Administrador", label: " Administrador "},
-    { value: "Soporte", label: " Soporte " },
-    { value: "Cliente", label: " Cliente " },
-    { value: "Servicio", label: " Servicio " }
-]
+function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dataCountries, updateAddData}) {
 
-function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable, setUpdateTable, record}) {
+    const user = localStorage.getItem("User");
+    const token = localStorage.getItem("Token");
+
     // register form
+    const [updateIdCustomer, setupdateIdCustomer] = React.useState("");
     const [updateFullName, setupdateFullName] = React.useState("");
     const [updateRfc, setupdateRfc] = React.useState("");
     const [updateStreet, setupdateStreet] = React.useState("");
@@ -41,7 +39,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable
     const [updateTelephone1, setupdateTelephone1] = React.useState("");
     const [updateTelephone2, setupdateTelephone2] = React.useState("");
     const [updateWebPage, setupdateWebPage] = React.useState("");
-    const [updateLogo, setupdateLogo] = React.useState(null);
+    const [updateLogo, setupdateLogo] = React.useState("");
     const [updateStatus, setupdateStatus] = useState(false);
 
     //Mandar error en caso de que ya exista el Country/TaxId
@@ -62,16 +60,52 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable
     const [updateLogoState, setupdateLogoState] = React.useState("");
     const [updateStatusState, setupdateStatusState] = useState(false);
 
-    //Mandar error en caso de que ya exista el Country/TaxId
-    const [updateErrorState, setupdateErrorState] = useState("");
+    const [error, setError] = React.useState();
+    const [errorState, setErrorState] = React.useState("");
+    const [errorMessage, setErrorMessage] = React.useState("");
 
     useEffect(() => {
-        //se tienen que jalar los datos de la base de datos...
-        //los datos los guardamos en las variables para posteriormente usarlos como default en los inputs
-        console.log(record)
+        setupdateIdCustomer(record.idCus)
+        setupdateFullName(record.nombre)
+        setupdateRfc(record.taxId)
+        setupdateStreet(record.street)
+        setupdateNoExterior(record.exteriorNumber)
+        setupdateNoInterior(record.interiorNumber)
+        setupdateCountry({
+            value: record.idCountry,
+            label: record.country
+        })
+        setupdateCity(record.city)
+        setupdateZipCode(record.zipCode)
+        setupdateContact(record.contact)
+        setupdateTelephone1(record.phone1)
+        setupdateTelephone2(record.phone2)
+        setupdateWebPage(record.webPage)
+        if(record.status === "Habilitado")
+        {
+            setupdateStatus(true);
+        }
+        else{
+            setupdateStatus(false);
+        }
     },[record]);
 
     const handleModalClick = () => {
+        setupdateFullName("")
+        setupdateRfc("")
+        setupdateStreet("")
+        setupdateNoExterior("")
+        setupdateNoInterior("")
+        setupdateCountry("")
+        setupdateCity("")
+        setupdateZipCode("")
+        setupdateContact("")
+        setupdateTelephone1("")
+        setupdateTelephone2("")
+        setupdateWebPage("")
+        setupdateLogo("")
+        setupdateStatus(false)
+
         setModalUpdateRecord(!modalUpdateRecord);
     };
 
@@ -82,28 +116,16 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable
         }
         return false;
     };
-
-    // function that verifies if two strings are equal
-    const compare = (string1, string2) => {
-        if (string1 === string2) {
-        return true;
-        }
-        return false;
-    };
     
     const isValidated = () => {
+        verifyInputs()
         if (
-            registerFullNameState === "has-success" &&
-            registerRfcState === "has-success"
+            updateFullNameState !== "has-danger" &&
+            updateRfcState !== "has-danger" &&
+            updateCountryState !== "has-danger"
         ) {
           return true;
         } else {
-          if (registerFullNameState !== "has-success") {
-            setregisterFullNameState("has-danger");
-          }
-          if (registerRfcState !== "has-success") {
-            setregisterRfcState("has-danger");
-          }
           return false;
         }
     };
@@ -111,23 +133,92 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable
     const updateClick = () => {
         if(isValidated()===true)
         {
-            console.log(updateLogo);
-            //haremos el fetch a la base de datos para agregar el registro
-            //Para actualizar la tabla en componente principal
-            setUpdateTable(updateTable+1)
-            //si el country/taxid ya existe mandar mensaje de error al modal 
-            setupdateErrorState("has-danger")
-            //Cerramos el modal
-            //handleModalClick()
+            updateRegister()
         }
         else{
             console.log("no entre")
         }
     };
 
-    //Para buscar el país elegido y ponerlo en el select
-    function isCountry(country) {
-        return country.value === updateCountry;
+    //Funcion para validar que no se queden en blanco los inputs en caso de que haga cambios
+    const verifyInputs = () =>{
+        var fullname = document.getElementById("fullname").value
+
+        if (!verifyLength(fullname, 1)) {
+            setupdateFullNameState("has-danger");
+        } else {
+            setupdateFullNameState("has-success");
+        }
+        setupdateFullName(fullname);
+        
+        var rfc = document.getElementById("rfc").value
+        if (!verifyLength(rfc, 1)) {
+            setupdateRfcState("has-danger");
+        } else {
+            setupdateRfcState("has-success");
+        }
+        setupdateRfc(rfc);
+    }
+
+    function updateRegister(){
+
+        console.log(updateCountry.value)
+        const catRegister = {
+            pvOptionCRUD: "U",
+            piIdCustomer: updateIdCustomer,
+            pvIdCountry: updateCountry.value,
+            pvName: updateFullName,
+            pvTaxId: updateRfc,
+            pvStreet: updateStreet,
+            pvExtNumber: updateNoExterior,
+            pvIntNumber: updateNoInterior,
+            pvCity: updateCity,
+            pvZipCode: updateZipCode,
+            pvContactPerson: updateContact,
+            pvPhone1 : updateTelephone1,
+            pvPhone2 : updateTelephone2,
+            pvWebPage : updateWebPage,
+            pvLogo : updateLogo,
+            pbStatus : updateStatus,
+            pvUser : user,
+            pathLogo : pathLogo
+        };
+    
+        fetch(`http://129.159.99.152/develop-api/api/customers/update-customer/`, {
+            method: "PUT",
+            body: JSON.stringify(catRegister),
+            headers: {
+                "access-token": token,
+                "Content-Type": "application/json"
+            }
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.errors) {
+                setError(
+                    <p>Hubo un error al realizar tu solicitud</p>
+                );
+            }
+            else{
+                if(data[0].Code_Type === "Warning")
+                {
+                    setErrorMessage(data[0].Code_Message_User)
+                    setErrorState("has-danger")
+                }
+                else if(data[0].Code_Type === "Error")
+                {
+                    setErrorMessage(data[0].Code_Message_User)
+                    setErrorState("has-danger")
+                }
+                else{
+                    setErrorState("has-success");
+                    //Para actualizar la tabla en componente principal
+                    updateAddData()
+                    //Cerramos el modal
+                    handleModalClick()
+                }
+            }
+        });
     }
 
     return (
@@ -136,18 +227,19 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable
             <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
                 <span aria-hidden="true">×</span>
             </button>
-            <h5 className="modal-title">Update Client {record.name}</h5>
+            <h5 className="modal-title">Actualizar registro</h5>
             </div>
             <ModalBody>
             <Form id="RegisterValidation">
                 <Row className="justify-content-center">
                     <Col className="mt-3" lg="10">
                         <FormGroup className={`has-label ${updateFullNameState}`}>
-                        <label>Full Name *</label>
+                        <label>Nombre completo *</label>
                         <Input
                             name="name"
                             type="text"
-                            placeholder = {updateFullName}
+                            value = {updateFullName}
+                            id="fullname"
                             onChange={(e) => {
                                 if (!verifyLength(e.target.value, 1)) {
                                     setupdateFullNameState("has-danger");
@@ -159,7 +251,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable
                         />
                         {updateFullNameState === "has-danger" ? (
                             <label className="error">
-                            This field is required.
+                            Este campo es requerido.
                             </label>
                         ) : null}
                         </FormGroup>
@@ -168,7 +260,8 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable
                         <Input
                             name="rfc"
                             type="text"
-                            placeholder = {updateRfc}
+                            id="rfc"
+                            value = {updateRfc}
                             onChange={(e) => {
                                 if (!verifyLength(e.target.value, 1)) {
                                     setupdateRfcState("has-danger");
@@ -180,15 +273,15 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable
                         />
                         {updateRfcState === "has-danger" ? (
                             <label className="error">
-                            This field is required.
+                            Este campo es requerido.
                             </label>
                         ) : null}
                         </FormGroup>
                         <FormGroup>
-                            <label>Street</label>
+                            <label>Calle</label>
                             <Input
                                 name="street"
-                                placeholder = {updateStreet}
+                                value = {updateStreet}
                                 type="text"
                                 onChange={(e) => {
                                     setupdateStreet(e.target.value);
@@ -199,7 +292,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable
                             <label>No. Exterior</label>
                             <Input
                                 name="noExterior"
-                                placeholder = {updateNoExterior}
+                                value = {updateNoExterior}
                                 type="text"
                                 onChange={(e) => {
                                     setupdateNoExterior(e.target.value);
@@ -210,7 +303,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable
                             <label>No. Interior</label>
                             <Input
                                 name="noInterior"
-                                placeholder = {updateNoInterior}
+                                value = {updateNoInterior}
                                 type="text"
                                 onChange={(e) => {
                                     setupdateNoInterior(e.target.value);
@@ -218,25 +311,24 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable
                             />
                         </FormGroup>
                         <FormGroup>
-                            <Label for="exampleSelect">Country</Label>
+                            <Label for="exampleSelect">País</Label>
                             <Select
                                 name="country"
                                 className="react-select"
                                 classNamePrefix="react-select"
-                                defaultValue={opciones.find(isCountry)}
+                                defaultValue = {updateCountry}
                                 onChange={(value) => {
                                     setupdateCountry(value)
-                                    console.log(registerCountry)
                                 }}
-                                options={opciones}
+                                options={dataCountries}
                             />
                         </FormGroup>
                         <FormGroup>
-                            <label>City</label>
+                            <label>Ciudad</label>
                             <Input
                                 name="city"
                                 type="text"
-                                placeholder = {updateCity}
+                                value = {updateCity}
                                 autoComplete="off"
                                 onChange={(e) => {
                                     setupdateCity(e.target.value);
@@ -244,22 +336,22 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable
                             />
                         </FormGroup>
                         <FormGroup>
-                            <label>Zip Code</label>
+                            <label>Código Postal</label>
                             <Input
                                 name="zipCode"
                                 type="text"
-                                placeholder = {updateZipCode}
+                                value = {updateZipCode}
                                 onChange={(e) => {
                                     setupdateZipCode(e.target.value);
                                 }}
                             />
                         </FormGroup>
                         <FormGroup>
-                            <label>Contact</label>
+                            <label>Contacto</label>
                             <Input
                                 name="contact"
                                 type="text"
-                                placeholder = {updateContact}
+                                value = {updateContact}
                                 autoComplete="off"
                                 onChange={(e) => {
                                     setupdateContact(e.target.value);
@@ -267,22 +359,22 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable
                             />
                         </FormGroup>
                         <FormGroup>
-                            <label>Telephone 1</label>
+                            <label>Teléfono 1</label>
                             <Input
                                 name="telephone1"
                                 type="text"
-                                placeholder = {updateTelephone1}
+                                value = {updateTelephone1}
                                 onChange={(e) => {
                                     setupdateTelephone1(e.target.value);
                                 }}
                             />
                         </FormGroup>
                         <FormGroup>
-                            <label>Telephone 2</label>
+                            <label>Teléfono 2</label>
                             <Input
                                 name="telephone2"
                                 type="text"
-                                placeholder = {updateTelephone2}
+                                value = {updateTelephone2}
                                 onChange={(e) => {
                                     setupdateTelephone2(e.target.value);
                                 }}
@@ -294,11 +386,11 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable
                     </Col>
                     <Col sm="6">
                         <FormGroup>
-                            <label>Web Page</label>
+                            <label>Página Web</label>
                             <Input
                                 name="webpage"
                                 type="text"
-                                placeholder = {updateWebPage}
+                                value = {updateWebPage}
                                 onChange={(e) => {
                                     setupdateWebPage(e.target.value);
                                 }}
@@ -308,6 +400,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable
                             <Label check>
                             <Input 
                                 type="checkbox" 
+                                checked = {updateStatus} 
                                 onChange={(e) => {
                                     setupdateStatus(e.target.checked)
                                 }}
@@ -321,14 +414,14 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable
                     </Col> 
                     <Col className="mt-3" lg="10">
                         <div className="category form-category">
-                        * Required fields
+                        * Campos requeridos.
                         </div>
                     </Col>  
                     <Col className="mt-3" lg="10">
-                        <FormGroup className={`has-label ${updateErrorState}`}>
-                            {updateErrorState === "has-danger" ? (
+                        <FormGroup className={`has-label ${errorState}`}>
+                            {errorState === "has-danger" ? (
                                 <label className="error">
-                                ERROR. El Tax Id / Country ya existe.
+                                    {errorMessage}
                                 </label>
                             ) : null}
                         </FormGroup>
@@ -339,10 +432,10 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, updateTable
             <ModalFooter>
                 <div className="center-side">
                 <Button className="buttons" color="secondary" onClick={handleModalClick}>
-                    Close
+                    Cerrar
                 </Button>
                 <Button className="buttons" color="primary" onClick={updateClick}>
-                    Save changes
+                    Guardar cambios
                 </Button>
                 </div>
             </ModalFooter>

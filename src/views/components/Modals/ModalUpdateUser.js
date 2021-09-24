@@ -23,8 +23,8 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
     const [updateEmail, setupdateEmail] = React.useState("");
     const [updateFullName, setupdateFullName] = React.useState("");
     const [updatePassword, setupdatePassword] = React.useState("");
-    const [updateChangePassword, setupdateChangePassword] = useState();
-    const [updateTemporal, setupdateTemporal] = useState(true);
+    const [updateChangePassword, setupdateChangePassword] = useState(false);
+    const [updateTemporal, setupdateTemporal] = useState(false);
     const [updateRol, setupdateRol] = React.useState({});
     const [updateCustomer, setupdateCustomer] = React.useState("");
     const [updateStatus, setupdateStatus] = useState();
@@ -143,7 +143,6 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
             }
           }
           else{
-              console.log("entre al final")
             return true;
           }
         } else {
@@ -164,6 +163,14 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
     };
 
     function updateRegister(){
+        console.log(updateEmail)
+        console.log(updateFullName)
+        console.log(updatePassword)
+        console.log(updateRol.value)
+        console.log(updateStatus)
+        console.log(updateTemporal)
+        console.log(updateCustomer.value)
+
         //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
         if(updateChangePassword === true)
         {
@@ -209,7 +216,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                         setErrorMessage(data[0].Code_Message_User)
                         setErrorState("has-danger")
                     }
-                    if(data[0].Code_Type === "Error")
+                    else if(data[0].Code_Type === "Error")
                     {
                         setErrorMessage(data[0].Code_Message_User)
                         setErrorState("has-danger")

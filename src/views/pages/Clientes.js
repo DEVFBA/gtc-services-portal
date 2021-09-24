@@ -1,216 +1,197 @@
-/*!
-
-=========================================================
-* Paper Dashboard PRO React - v1.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-pro-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React, { useState, useEffect } from "react";
 
 // reactstrap components
 import {
   Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Row,
-  Col,
-  FormGroup,
-  Label,
-  Input,
   Modal, 
   ModalBody, 
-  ModalFooter
+  ModalFooter,
+  FormGroup,
+  Form,
+  Input,
+  Label,
+  Row,
+  Col,
+  Card,
+  CardBody,
+  CardHeader,
+  CardFooter,
+  CardTitle
 } from "reactstrap";
 
-// core components
-import ReactTable from "components/ReactTable/ReactTable.js";
-import ModalAddClient from "../components/Modals/ModalAddClient.js";
-import ModalUpdateClient from "../components/Modals/ModalUpdateClient.js";
+import Select from "react-select";
 
-const dataTable = [
-  ["Tiger Nixon", "System Architect", "Edinburgh", "61","Tiger Nixon", "System Architect", "Edinburgh", 1],
-  ["Garrett Winters", "Accountant", "Tokyo", "63","Tiger Nixon", "System Architect", "Edinburgh", "61"],
-  ["Ashton Cox", "Junior Technical Author", "San Francisco", "66","Tiger Nixon", "System Architect", "Edinburgh", 0],
-  ["Cedric Kelly", "Senior Javascript Developer", "Edinburgh", "22","Tiger Nixon", "System Architect", "Edinburgh", 1],
-  ["Airi Satou", "Accountant", "Tokyo", "33","Tiger Nixon", "System Architect", "Edinburgh", 1],
-  ["Brielle Williamson", "Integration Specialist", "New York", "61","Tiger Nixon", "System Architect", "Edinburgh", 0],
-];
+// core components
+import CustomersTable from "../components/Clients/CustomersTable.js";
 
 function Clientes() {
-  const [dataState, setDataState] = React.useState(
-    dataTable.map((prop, key) => {
-      var status;
-      if(prop[7] === 1){
-        status = "Habilitado"
-      }
-      else{
-        status = "No Habilitado"
-      }
-      return {
-        id: key,
-        name: prop[0],
-        rfc: prop[1],
-        calle: prop[2],
-        noExterior: prop[3],
-        noInterior: prop[4],
-        estado: prop[5],
-        pais: prop[6],
-        status: status,
-        actions: (
-          // ACCIONES A REALIZAR EN CADA REGISTRO
-          <div className="actions-center">
-            {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-            <Button
-              onClick={() => {
-                let obj = dataState.find((o) => o.id === key);
-                getRegistro(key);
-                toggleModalUpdateRecord()
-              }}
-              color="warning"
-              size="sm"
-              className="btn-icon btn-link edit"
-            >
-              <i className="fa fa-edit" />
-            </Button>
-          </div>
-        ),
-      };
-    })
-  );
 
-  const [modalAddRecord, setModalAddRecord] = useState(false);
-  const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
+  //Para guardar los datos de los usuarios
+  const [dataCustomers, setDataCustomers] = useState([]);
 
-  //Para actualizar cada que agreguen un campo a la tabla
-  const [updateTable, setUpdateTable] = useState(0);
+  //Para guardar los datos de las aplicaciones
+  const [dataCountries, setDataCountries] = useState([]);
 
-  //Para saber que cliente se va a editar
-  const [record, setRecord] = useState({});
+  //Para guardar el path de las imágenes
+  const [pathLogo, setPathLogo] = useState();
+
+  const token = localStorage.getItem("Token");
+  const user = localStorage.getItem("User");
+
+  const [registerUser, setregisterUser] = React.useState("");
+  const [registerUserState, setregisterUserState] = React.useState("");
+  const [error, setError] = React.useState();
+  const [errorState, setErrorState] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   useEffect(() => {
-    //Aqui vamos a descargar la lista de registros de la base de datos por primera vez
+    //Aqui vamos a descargar la lista de usuarios de la base de datos por primera vez
+    const params = {
+      pvOptionCRUD: "R",
+    };
+
+    var url = new URL(`http://129.159.99.152/develop-api/api/customers/`);
+
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+      setDataCustomers(data)
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de los customers" + err);
+    });
+  }, []);
+
+
+  useEffect(() => {
+    const params = {
+      pvOptionCRUD: "R",
+      pSpCatalog : "spSAT_Cat_Countries_CRUD_Records",
+    };
+
+    var url = new URL(`http://129.159.99.152/develop-api/api/cat-catalogs/catalog`);
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+      //Creamos el arreglo de opciones para el select
+      var optionsAux = [];
+      var i;
+      for(i=0; i<data.length; i++)
+      {
+        optionsAux.push({
+          value: data[i].Id_Catalog, label: data[i].Short_Desc 
+        })
+      }
+      setDataCountries(optionsAux)
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de los catálogos" + err);
+    });
   }, []);
 
   useEffect(() => {
-    //Para actualizar la tabla cada que se agreguen usuarios.
-    //Se hace fetch de nuevo a la base de datos
+    //Aqui vamos a descargar la lista de general parameters para revisar el path de los logos
+    const params = {
+      pvOptionCRUD: "R"
+    };
 
-    //Los datos se van a guardar en dataState
-    console.log(dataState)
+    var url = new URL(`http://129.159.99.152/develop-api/api/general-parameters/`);
 
-    //El renderizado se hará cada que cambiemos el valor de updateTable.
-  },[updateTable]);
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
-  function getRegistro(key)
-  {
-    var registro = dataState.find((o) => o.id === key)
-    setRecord(registro) 
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+        var aux = data.find( o => o.Id_Catalog === 1 )
+        console.log(aux.Value)
+        //setValidDays(aux)
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de los general parameters" + err);
+    });
+  }, []);
+
+   //Renderizado condicional
+  function Customers() {
+      return <CustomersTable dataTable = {dataCustomers} dataCountries = {dataCountries} updateAddData = {updateAddData} pathLogo = {pathLogo}/>;
   }
 
-  function toggleModalAddRecord(){
-    if(modalAddRecord == false){
-      setModalAddRecord(true);
-    }
-    else{
-      setModalAddRecord(false);
-    }
+  //Para actualizar la tabla al insertar registro
+  function updateAddData(){
+    //Aqui vamos a descargar la lista de usuarios de la base de datos por primera vez
+    const params = {
+      pvOptionCRUD: "R",
+    };
+
+    var url = new URL(`http://129.159.99.152/develop-api/api/customers/`);
+
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+      setDataCustomers(data)
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de los customers" + err);
+    });
   }
 
-  function toggleModalUpdateRecord(){
-    if(modalUpdateRecord == false){
-      setModalUpdateRecord(true);
-    }
-    else{
-      setModalUpdateRecord(false);
-    }
-  }
-
-  return (
+  return dataCountries.length === 0 ? (
     <>
-      {/*console.log(props.example)*/}
+    </>
+  ) : (
+    <>
       <div className="content">
         <Row>
           <Col md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">Clients Catalog</CardTitle>
-                <Button color="primary" onClick={toggleModalAddRecord}>
-                  <span className="btn-label">
-                    <i className="nc-icon nc-simple-add" />
-                  </span>
-                  Add new record
-                </Button>
+                <CardTitle tag="h4">Clientes</CardTitle>
               </CardHeader>
               <CardBody>
-                <ReactTable
-                  data={dataState}
-                  columns={[
-                    {
-                      Header: "Name",
-                      accessor: "name",
-                    },
-                    {
-                      Header: "RFC / Tax Id",
-                      accessor: "rfc",
-                    },
-                    {
-                      Header: "Calle",
-                      accessor: "calle",
-                    },
-                    {
-                      Header: "No. Exterior",
-                      accessor: "noExterior",
-                    },
-                    {
-                      Header: "No. Interior",
-                      accessor: "noInterior",
-                    },
-                    {
-                      Header: "Estado",
-                      accessor: "estado",
-                    },
-                    {
-                      Header: "País",
-                      accessor: "pais",
-                    },
-                    {
-                      Header: "Estatus",
-                      accessor: "status",
-                    },
-                    {
-                      Header: "Actions",
-                      accessor: "actions",
-                      sortable: false,
-                      filterable: false,
-                    },
-                  ]}
-                  /*
-                      You can choose between primary-pagination, info-pagination, success-pagination, warning-pagination, danger-pagination or none - which will make the pagination buttons gray
-                    */
-                  className="-striped -highlight primary-pagination"
-                />
+                <Customers />
               </CardBody>
             </Card>
           </Col>
         </Row>
       </div>
-
-      {/*MODAL PARA AÑADIR REGISTROS*/}
-      <ModalAddClient modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateTable = {updateTable} setUpdateTable = {setUpdateTable}/> 
-
-      {/*MODAL PARA MODIFICAR REGISTRO*/}
-      <ModalUpdateClient modalUpdateRecord = {modalUpdateRecord} setModalUpdateRecord = {setModalUpdateRecord} updateTable = {updateTable} setUpdateTable = {setUpdateTable} record = {record}/> 
     </>
   );
 }

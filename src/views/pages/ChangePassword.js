@@ -60,6 +60,9 @@ function Register() {
     const token = localStorage.getItem("Token");
     const role = localStorage.getItem("Id_Role");
     const customer = localStorage.getItem("Id_Customer");
+    const name = localStorage.getItem("Name");
+
+    const ambiente = "/DEV"
 
     useEffect(() => {
         //Aqui vamos a descargar la lista de general parameters para revisar la vigencia del password
@@ -166,13 +169,14 @@ function Register() {
             piIdCustomer : customer,
             pvIdUser: user,
             pvIdRole: role,
+            pvName: name,
             pvPassword: registerPassword,
-            pbTempPassword: true,
+            pbTempPassword: false,
             pvFinalEffectiveDate: finalDate2,
             pvUser: user,
         };
 
-        fetch(`http://129.159.99.152/develop-api/api/update-user-pass/`, {
+        fetch(`http://129.159.99.152/develop-api/api/security-users/update-user-pass/`, {
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {
@@ -201,7 +205,7 @@ function Register() {
                 else{
                     setErrorState("has-success");
                    
-                    history.push("/admin/dashboard");
+                    history.push(ambiente + "/admin/dashboard");
                 }
             }
         });
@@ -272,7 +276,6 @@ function Register() {
                     <Button
                     className="btn-round"
                     color="info"
-                    href="#pablo"
                     onClick={registerClick}
                     >
                     Enviar

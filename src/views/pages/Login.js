@@ -50,12 +50,14 @@ function Login() {
   const [errorState, setErrorState] = React.useState("");
   const [error, setError] = React.useState();
 
+  const ambiente = "/DEV"
+
   useEffect(() => {
     //Si el usuario ya ha iniciado sesión que se le redirija al dashboard
     //Por el momento se usará la bandera logged
-    if(logged===true)
+    if(logged==="true")
     {
-      history.push("/admin/dashboard");
+      history.push(ambiente + "/admin/dashboard");
     }
   }, []);
 
@@ -109,7 +111,6 @@ function Login() {
                 getUser(email, data[1].token)
             }
         }
-        console.log(data)
     });
 
     //Aquí se hará el fetch a la API 
@@ -139,21 +140,32 @@ function Login() {
         localStorage.setItem("User", data[0].User);
         localStorage.setItem("Id_Customer", data[0].Id_Customer)
         localStorage.setItem("Id_Role", data[0].Id_Role)
+        localStorage.setItem("Name", data[0].Name)
         localStorage.setItem("Token", token)
         localStorage.setItem("Logged", true)
         //Comparar fechas
         var f1 = new Date();
         var f2 = new Date(data[0].Final_Effective_Date)
-        if(f2 < f1)
+        if(data[0].Temporal_Password===true)
         {
-          history.push("/auth/edit-password");
+          history.push(ambiente + "/auth/edit-password");
+        }
+        else if (data[0].Final_Effective_Date === "NULL")
+        {
+          console.log("entre al NULL")
+          history.push(ambiente + "/auth/edit-password");      
+        }
+        else if(f2 < f1)
+        {
+          history.push(ambiente + "/auth/edit-password");
         }
         else{
-          history.push("/admin/dashboard");
+          history.push(ambiente + "/admin/dashboard");
         }
+        
     })
     .catch(function(err) {
-        alert("No se pudo consultar la informacion de los roles" + err);
+        alert("No se pudo consultar la informacion del usuario" + err);
     });
   }
 

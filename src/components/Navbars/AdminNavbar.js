@@ -44,6 +44,7 @@ function AdminNavbar(props) {
   const [color, setColor] = React.useState("navbar-transparent");
   const location = useLocation();
   const history = useHistory();
+  const ambiente = "/DEV"
 
   React.useEffect(() => {
     window.addEventListener("resize", updateColor);
@@ -89,7 +90,8 @@ function AdminNavbar(props) {
     localStorage.removeItem("Id_Role");
     localStorage.removeItem("Id_Customer");
     localStorage.removeItem("Token");
-    history.push("/auth/login");
+    localStorage.removeItem("Name");
+    history.push(ambiente+"/auth/login");
   }
   
   return (
@@ -126,7 +128,7 @@ function AdminNavbar(props) {
                 <span className="navbar-toggler-bar bar3" />
               </button>
             </div>
-            <NavbarBrand href="#pablo" onClick={(e) => e.preventDefault()}>
+            <NavbarBrand href="#" onClick={(e) => e.preventDefault()}>
               <span className="d-none d-md-block">
                 GTC Dashboard
               </span>
