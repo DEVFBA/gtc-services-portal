@@ -6,6 +6,9 @@ import { sha256, sha224 } from 'js-sha256';
 //React plugin used to create DropdownMenu for selecting items
 import Select from "react-select";
 
+// core components
+import UploadUserImage from "components/CustomUpload/UploadUserImage.js";
+
 // reactstrap components
 import {
     Button,
@@ -16,6 +19,8 @@ import {
     Form,
     Input,
     Label,
+    Col,
+    Row
 } from "reactstrap";
 
 function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustomers, updateAddData, validDays}) {
@@ -25,6 +30,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
     const [registerPassword, setregisterPassword] = React.useState("");
     const [registerRol, setregisterRol] = React.useState("");
     const [registerCustomer, setregisterCustomer] = React.useState();
+    const [registerImage, setregisterImage] = React.useState("");
     const [registerStatus, setregisterStatus] = useState(true);
     const [registerConfirmPassword, setregisterConfirmPassword] = React.useState("");
 
@@ -167,8 +173,10 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
             pvName: registerFullName,
             pbTempPassword: true,
             pvFinalEffectiveDate: finalDate2,
+            pvProfilePicPath: registerImage,
             pbStatus: registerStatus,
             pvUser: user,
+            pathImage : pathImage
         };
     
         fetch(`http://129.159.99.152/develop-api/api/security-users/create-user/`, {
@@ -214,162 +222,177 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
             <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
                 <span aria-hidden="true">×</span>
             </button>
-            <h5 className="modal-title">Add new record</h5>
+            <h5 className="modal-title">Añadir Usuario</h5>
             </div>
             <ModalBody>
             <Form id="RegisterValidation">
-                <FormGroup className={`has-label ${registerEmailState}`}>
-                <label>Email Address *</label>
-                <Input
-                    name="email"
-                    type="email"
-                    autoComplete="off"
-                    onChange={(e) => {
-                    if (!verifyEmail(e.target.value)) {
-                        setregisterEmailState("has-danger");
-                    } else {
-                        setregisterEmailState("has-success");
-                    }
-                    setregisterEmail(e.target.value);
-                    }}
-                />
-                {registerEmailState === "has-danger" ? (
-                    <label className="error">
-                    Please enter a valid email address.
-                    </label>
-                ) : null}
-                </FormGroup>
-                <FormGroup className={`has-label ${registerFullNameState}`}>
-                    <label>Full Name *</label>
-                    <Input
-                    name="fullname"
-                    type="text"
-                    autoComplete="off"
-                    onChange={(e) => {
-                        if (!verifyLength(e.target.value, 1)) {
-                        setregisterFullNameState("has-danger");
-                        } else {
-                        setregisterFullNameState("has-success");
-                        }
-                        setregisterFullName(e.target.value);
-                    }}
-                    />
-                    {registerFullNameState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
-                    ) : null}
-                </FormGroup>
-                <FormGroup className={`has-label ${registerPasswordState}`}>
-                <label>Password *</label>
-                <Input
-                    id="registerPassword"
-                    name="password"
-                    type="password"
-                    autoComplete="off"
-                    onChange={(e) => {
-                    if (!verifyPassword(e.target.value)) {
-                        setregisterPasswordState("has-danger");
-                    } else {
-                        setregisterPasswordState("has-success");
-                    }
-                    setregisterPassword(e.target.value);
-                    }}
-                />
-                {registerPasswordState === "has-danger" ? (
-                    <label className="error">La contraseña debe tener una longitud mínima de 10 caracteres, al menos un número, una letra mayúscula y minúscula, y un caracter especial.</label>
-                ) : null}
-                </FormGroup>
-                <FormGroup className={`has-label ${registerConfirmPasswordState}`}>
-                    <label>Confirm Password *</label>
-                    <Input
-                        equalto="#registerPassword"
-                        id="registerPasswordConfirmation"
-                        name="password_confirmation"
-                        type="password"
-                        autoComplete="off"
-                        onChange={(e) => {
-                        if (!compare(e.target.value, registerPassword)) {
-                            setregisterConfirmPasswordState("has-danger");
-                            //setregisterPasswordState("has-danger");
-                        } else {
-                            setregisterConfirmPasswordState("has-success");
-                            //setregisterPasswordState("has-success");
-                        }
-                        setregisterConfirmPassword(e.target.value);
-                        }}
-                    />
-                {registerConfirmPasswordState === "has-danger" ? (
-                    <label className="error">La contraseña no coincide.</label>
-                ) : null}
-                </FormGroup>
-                <FormGroup className={`has-label ${registerRolState}`}>
-                    <Label for="exampleSelect">Rol * </Label>
-                    <Select
-                        name=""
-                        className="react-select"
-                        placeholder="Selecciona un rol"
-                        classNamePrefix="react-select"
-                        value={registerRol}
-                        onChange={(value) => {
-                            setregisterRol(value)
-                            setregisterRolState("has-success");
-                        }}
-                        options={dataRoles}
-                    />
-                    {registerRolState === "has-danger" ? (
-                        <label className="error">Selecciona un rol.</label>
-                    ) : null}
-                </FormGroup>
-                <FormGroup className={`has-label ${registerRolState}`}>
-                    <Label for="exampleSelect">Customer * </Label>
-                    <Select
-                        name=""
-                        className="react-select"
-                        placeholder="Selecciona un customer"
-                        classNamePrefix="react-select"
-                        value={registerCustomer}
-                        onChange={(value) => {
-                            setregisterCustomer(value)
-                            setregisterCustomerState("has-success");
-                        }}
-                        options={dataCustomers}
-                    />
-                    {registerCustomerState === "has-danger" ? (
-                        <label className="error">Selecciona un customer.</label>
-                    ) : null}
-                </FormGroup>
-                <FormGroup check>
-                    <Label check>
-                    <Input 
-                        type="checkbox" 
-                        checked = {registerStatus}
-                        onChange={(e) => {
-                            setregisterStatus(e.target.checked)
-                        }}
-                    />{' '}
-                    Habilitado
-                    <span className="form-check-sign">
-                        <span className="check"></span>
-                    </span>
-                    </Label>
-            </FormGroup>
-                <div className="category form-category">
-                * Required fields
-                </div>
-
-            <FormGroup className={`has-label ${errorState}`}>
-                {errorState === "has-danger" ? (
-                        <label className="error">{errorMessage}</label>
-                ) : null}
-            </FormGroup>
+                <Row className="justify-content-center">
+                    <Col className="mt-3" lg="10">
+                        <FormGroup className={`has-label ${registerEmailState}`}>
+                        <label>Correo electrónico / Id Usuario *</label>
+                        <Input
+                            name="email"
+                            type="email"
+                            autoComplete="off"
+                            onChange={(e) => {
+                            if (!verifyEmail(e.target.value)) {
+                                setregisterEmailState("has-danger");
+                            } else {
+                                setregisterEmailState("has-success");
+                            }
+                            setregisterEmail(e.target.value);
+                            }}
+                        />
+                        {registerEmailState === "has-danger" ? (
+                            <label className="error">
+                            Por favor ingresa un correo electrónico válido.
+                            </label>
+                        ) : null}
+                        </FormGroup>
+                        <FormGroup className={`has-label ${registerFullNameState}`}>
+                            <label>Nombre Usuario *</label>
+                            <Input
+                            name="fullname"
+                            type="text"
+                            autoComplete="off"
+                            onChange={(e) => {
+                                if (!verifyLength(e.target.value, 1)) {
+                                setregisterFullNameState("has-danger");
+                                } else {
+                                setregisterFullNameState("has-success");
+                                }
+                                setregisterFullName(e.target.value);
+                            }}
+                            />
+                            {registerFullNameState === "has-danger" ? (
+                            <label className="error">Este campo es requerido.</label>
+                            ) : null}
+                        </FormGroup>
+                        <FormGroup className={`has-label ${registerPasswordState}`}>
+                        <label>Password *</label>
+                        <Input
+                            id="registerPassword"
+                            name="password"
+                            type="password"
+                            autoComplete="off"
+                            onChange={(e) => {
+                            if (!verifyPassword(e.target.value)) {
+                                setregisterPasswordState("has-danger");
+                            } else {
+                                setregisterPasswordState("has-success");
+                            }
+                            setregisterPassword(e.target.value);
+                            }}
+                        />
+                        {registerPasswordState === "has-danger" ? (
+                            <label className="error">La contraseña debe tener una longitud mínima de 10 caracteres, al menos un número, una letra mayúscula y minúscula, y un caracter especial.</label>
+                        ) : null}
+                        </FormGroup>
+                        <FormGroup className={`has-label ${registerConfirmPasswordState}`}>
+                            <label>Confirmar Password *</label>
+                            <Input
+                                equalto="#registerPassword"
+                                id="registerPasswordConfirmation"
+                                name="password_confirmation"
+                                type="password"
+                                autoComplete="off"
+                                onChange={(e) => {
+                                if (!compare(e.target.value, registerPassword)) {
+                                    setregisterConfirmPasswordState("has-danger");
+                                    //setregisterPasswordState("has-danger");
+                                } else {
+                                    setregisterConfirmPasswordState("has-success");
+                                    //setregisterPasswordState("has-success");
+                                }
+                                setregisterConfirmPassword(e.target.value);
+                                }}
+                            />
+                        {registerConfirmPasswordState === "has-danger" ? (
+                            <label className="error">La contraseña no coincide.</label>
+                        ) : null}
+                        </FormGroup>
+                        <FormGroup className={`has-label ${registerRolState}`}>
+                            <Label for="exampleSelect">Rol * </Label>
+                            <Select
+                                name=""
+                                className="react-select"
+                                placeholder="Selecciona un rol"
+                                classNamePrefix="react-select"
+                                value={registerRol}
+                                onChange={(value) => {
+                                    setregisterRol(value)
+                                    setregisterRolState("has-success");
+                                }}
+                                options={dataRoles}
+                            />
+                            {registerRolState === "has-danger" ? (
+                                <label className="error">Selecciona un rol.</label>
+                            ) : null}
+                        </FormGroup>
+                    </Col>
+                    <Col sm="4">
+                            <UploadUserImage registerImage = {registerImage} setregisterImage={setregisterImage}/>
+                    </Col>
+                    <Col sm="6">
+                        <FormGroup className={`has-label ${registerRolState}`}>
+                            <Label for="exampleSelect">Cliente * </Label>
+                            <Select
+                                name=""
+                                className="react-select"
+                                placeholder="Selecciona un cliente"
+                                classNamePrefix="react-select"
+                                value={registerCustomer}
+                                onChange={(value) => {
+                                    setregisterCustomer(value)
+                                    setregisterCustomerState("has-success");
+                                }}
+                                options={dataCustomers}
+                            />
+                            {registerCustomerState === "has-danger" ? (
+                                <label className="error">Selecciona un cliente.</label>
+                            ) : null}
+                        </FormGroup>
+                        <FormGroup check>
+                            <Label check>
+                            <Input 
+                                type="checkbox" 
+                                checked = {registerStatus}
+                                onChange={(e) => {
+                                    setregisterStatus(e.target.checked)
+                                }}
+                            />{' '}
+                            Habilitado
+                            <span className="form-check-sign">
+                                <span className="check"></span>
+                            </span>
+                            </Label>
+                        </FormGroup>
+                    </Col>
+                    <Col className="mt-3" lg="10">
+                        <div className="category form-category">
+                        * Campos requeridos
+                        </div>
+                    </Col>  
+                    <Col className="mt-3" lg="10">
+                        <FormGroup className={`has-label ${errorState}`}>
+                            {errorState === "has-danger" ? (
+                                <label className="error">
+                                    {errorMessage}
+                                </label>
+                            ) : null}
+                        </FormGroup>
+                    </Col>    
+                    {error}
+                </Row>
             </Form>
             </ModalBody>
             <ModalFooter>
                 <div className="center-side">
                 <Button className="buttons" color="secondary" onClick={handleModalClick}>
-                    Close
+                    Cerrar
                 </Button>
                 <Button className="buttons" color="primary" onClick={registerClick}>
-                    Save changes
+                   Guardar Cambios
                 </Button>
                 </div>
             </ModalFooter>

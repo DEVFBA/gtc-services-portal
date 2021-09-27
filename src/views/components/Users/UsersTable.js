@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 import { prototype } from "react-datetime";
 
-function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDays}){
+function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDays, pathImage}){
     const [dataState, setDataState] = useState(
         dataTable.map((prop, key) => {
           var status;
@@ -93,7 +93,7 @@ function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDa
                         <span className="btn-label">
                         <i className="nc-icon nc-simple-add" />
                         </span>
-                        Add new record
+                        Añadir Usuario
                     </Button>
                  
                     <ReactTable
@@ -116,7 +116,7 @@ function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDa
                                 accessor: "status",
                             },
                             {
-                                Header: "Actions",
+                                Header: "Acciones",
                                 accessor: "actions",
                                 sortable: false,
                                 filterable: false,
@@ -132,10 +132,10 @@ function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDa
         </div>
     
         {/*MODAL PARA AÑADIR REGISTROS*/}
-        <ModalAddUser modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays}/>       
+        <ModalAddUser modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage}/>       
 
         {/*MODAL PARA MODIFICAR REGISTRO*/}
-        <ModalUpdateUser abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays}/>
+        <ModalUpdateUser abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage}/>
     
         </>
     );
