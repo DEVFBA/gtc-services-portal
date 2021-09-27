@@ -20,7 +20,7 @@ import {
     Col,
 } from "reactstrap";
 
-function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dataCountries, updateAddData}) {
+function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dataCountries, updateAddData, pathLogo}) {
 
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");

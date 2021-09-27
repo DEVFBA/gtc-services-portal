@@ -22,6 +22,7 @@ import PerfectScrollbar from "perfect-scrollbar";
 
 import avatar from "assets/img/faces/ayo-ogunseinde-2.jpg";
 import logo from "assets/img/react-logo.png";
+import logogtc from "assets/img/favicon-GTC.png";
 
 // reactstrap components
 import {
@@ -188,14 +189,14 @@ function Sidebar(props) {
           className="simple-text logo-mini"
         >
           <div className="logo-img">
-            <img src={logo} alt="react-logo" />
+            <img src={logogtc} alt="react-logo" />
           </div>
         </a>
         <a
           href="https://www.creative-tim.com"
           className="simple-text logo-normal"
         >
-          Portal de servicios GTC
+          Portal GTC
         </a>
       </div>
 
@@ -214,10 +215,10 @@ function Sidebar(props) {
               <span>
                 {/*AQUI VA EL NOMBRE DEL USUARIO*/}
                 {name}
-                <b className="caret" />
+                {/*<b className="caret" />*/}
               </span>
             </a>
-            <Collapse isOpen={openAvatar}>
+            {/*<Collapse isOpen={openAvatar}>
               <ul className="nav">
                 <li>
                   <NavLink to= {ambiente + "/admin/user-profile"} activeClassName="">
@@ -242,7 +243,7 @@ function Sidebar(props) {
                   </NavLink>
                 </li>
               </ul>
-            </Collapse>
+            </Collapse>*/}
           </div>
         </div>
         <Nav>{createLinks(props.routes)}</Nav>

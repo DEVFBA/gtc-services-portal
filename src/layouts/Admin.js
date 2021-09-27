@@ -92,6 +92,7 @@ function Admin(props) {
     fetch(url, {
         method: "GET",
         headers: {
+            "Access-Control-Allow-Origin": "http://localhost:3000",
             "access-token": token,
             "Content-Type": "application/json",
         }

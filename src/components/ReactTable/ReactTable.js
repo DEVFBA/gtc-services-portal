@@ -25,7 +25,7 @@ function DefaultColumnFilter({
   return (
     <FormGroup>
       <Input
-        placeholder={`Search ${count} records...`}
+        placeholder={`Buscar ${count} registros...`}
         type="text"
         onChange={(e) => {
           setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
@@ -46,11 +46,11 @@ fuzzyTextFilterFn.autoRemove = (val) => !val;
 function Table({ columns, data }) {
   const [numberOfRows, setNumberOfRows] = React.useState({
     value: 10,
-    label: "10 rows",
+    label: "10 filas",
   });
   const [pageSelect, handlePageSelect] = React.useState({
     value: 0,
-    label: "Page 1",
+    label: "Página 1",
   });
   const filterTypes = React.useMemo(
     () => ({
@@ -129,7 +129,7 @@ function Table({ columns, data }) {
                 disabled={!canPreviousPage}
                 className="-btn"
               >
-                Previous
+                Previo
               </button>
             </div>
             <div className="-center">
@@ -148,7 +148,7 @@ function Table({ columns, data }) {
                       options={pageSelectData.map((prop, key) => {
                         return {
                           value: key,
-                          label: "Page " + (key + 1),
+                          label: "Página " + (key + 1),
                         };
                       })}
                       placeholder="Choose Page"
@@ -167,7 +167,7 @@ function Table({ columns, data }) {
                       options={numberOfRowsData.map((prop) => {
                         return {
                           value: prop,
-                          label: prop + " rows",
+                          label: prop + " filas",
                         };
                       })}
                       placeholder="Choose Rows"
@@ -183,7 +183,7 @@ function Table({ columns, data }) {
                 disabled={!canNextPage}
                 className="-btn"
               >
-                Next
+                Siguiente
               </button>
             </div>
           </div>

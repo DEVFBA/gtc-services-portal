@@ -131,8 +131,7 @@ function Clientes() {
     })
     .then(function(data) {
         var aux = data.find( o => o.Id_Catalog === 1 )
-        console.log(aux.Value)
-        //setValidDays(aux)
+        setPathLogo(aux.Value)
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los general parameters" + err);
