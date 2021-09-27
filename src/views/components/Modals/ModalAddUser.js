@@ -23,7 +23,7 @@ import {
     Row
 } from "reactstrap";
 
-function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustomers, updateAddData, validDays}) {
+function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustomers, updateAddData, validDays, pathImage}) {
         // register form
     const [registerEmail, setregisterEmail] = React.useState("");
     const [registerFullName, setregisterFullName] = React.useState("");
@@ -179,7 +179,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
             pathImage : pathImage
         };
     
-        fetch(`http://129.159.99.152/develop-api/api/security-users/create-user/`, {
+        fetch(`http://localhost:9000/api/security-users/create-user/`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {
