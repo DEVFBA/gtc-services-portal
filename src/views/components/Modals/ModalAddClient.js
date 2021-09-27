@@ -132,7 +132,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
     };
 
     function addRegister(){
-
+       
         const catRegister = {
             pvOptionCRUD: "C",
             pvIdCountry: registerCountry.value,
