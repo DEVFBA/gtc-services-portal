@@ -169,13 +169,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
     };
 
     function updateRegister(){
-        console.log(updateEmail)
-        console.log(updateFullName)
-        console.log(updatePassword)
-        console.log(updateRol.value)
-        console.log(updateStatus)
-        console.log(updateTemporal)
-        console.log(updateCustomer.value)
+        var finalDate2=""
 
         //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
         if(updateChangePassword === true)
@@ -186,7 +180,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
             var month = finalDate.getMonth() + 1
             var year = finalDate.getFullYear()
 
-            var finalDate2 = "" + year + "" + month + "" + date;
+            finalDate2 = "" + year + "" + month + "" + date;
 
             const catRegister = {
                 pvOptionCRUD: "U",
@@ -248,6 +242,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                 pvProfilePicPath: updateImage,
                 pvName: updateFullName,
                 pbStatus: updateStatus,
+                pvFinalEffectiveDate: finalDate2,
                 pvUser: user,
                 pathImage : pathImage
             };

@@ -205,7 +205,7 @@ function Sidebar(props) {
       <div className="sidebar-wrapper" ref={sidebar}>
         <div className="user">
           <div className="photo">
-            <img src={avatarDefault} alt="Avatar" />
+            <img src={image} alt="Avatar" />
           </div>
           <div className="info">
             <a
