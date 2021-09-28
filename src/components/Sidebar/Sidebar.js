@@ -21,6 +21,7 @@ import { Nav, Collapse } from "reactstrap";
 import PerfectScrollbar from "perfect-scrollbar";
 
 import avatar from "assets/img/faces/ayo-ogunseinde-2.jpg";
+import avatarDefault from "assets/img/avatar-default.png";
 import logo from "assets/img/react-logo.png";
 import logogtc from "assets/img/favicon-GTC.png";
 
@@ -49,6 +50,7 @@ function Sidebar(props) {
   const [collapseStates, setCollapseStates] = React.useState({});
   const sidebar = React.useRef();
   const name = localStorage.getItem("Name");
+  const image = localStorage.getItem("P_Picture");
   const ambiente = "/DEV"
   // this creates the intial state of this component based on the collapse routes
   // that it gets through props.routes
@@ -203,7 +205,7 @@ function Sidebar(props) {
       <div className="sidebar-wrapper" ref={sidebar}>
         <div className="user">
           <div className="photo">
-            <img src={avatar} alt="Avatar" />
+            <img src={avatarDefault} alt="Avatar" />
           </div>
           <div className="info">
             <a

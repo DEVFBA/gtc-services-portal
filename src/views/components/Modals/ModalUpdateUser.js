@@ -308,7 +308,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                             <Input
                                 name="email"
                                 type="email"
-                                placeholder = {updateEmail}
+                                value = {updateEmail}
                                 readOnly
                             />
                         </FormGroup>

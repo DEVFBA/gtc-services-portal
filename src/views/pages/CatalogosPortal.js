@@ -95,6 +95,7 @@ function CatalogosPortal() {
 
   //Nos servirá para pasarle los datos a la tabla ya descargados
   function updateData(datos){
+    console.log(datos.CRUD_References)
     const params = {
       pvOptionCRUD: "R",
       pSpCatalog : datos.CRUD_References,
@@ -159,7 +160,7 @@ function CatalogosPortal() {
           <Col md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">Portal Catalog</CardTitle>
+                <CardTitle tag="h4">Catálogos Portal</CardTitle>
                 <FormGroup>
                   {/*Al seleccionar un catálogo se hará fetch para actualizar sus configuraciones*/}
                   <Select 

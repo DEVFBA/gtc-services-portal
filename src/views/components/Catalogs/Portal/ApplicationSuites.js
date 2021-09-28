@@ -47,17 +47,19 @@ function ApplicationSuites({dataTable, updateAddData}) {
           // ACCIONES A REALIZAR EN CADA REGISTRO
           <div className="actions-center">
               {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-              <Button
-              onClick={() => {
-                  getRegistro(key);
-                  toggleModalUpdateRecord()
-              }}
-              color="warning"
-              size="sm"
-              className="btn-icon btn-link edit"
-              >
-              <i className="fa fa-edit" />
-              </Button>
+              <abbr title="Editar">
+                <Button
+                onClick={() => {
+                    getRegistro(key);
+                    toggleModalUpdateRecord()
+                }}
+                color="warning"
+                size="sm"
+                className="btn-icon btn-link edit"
+                >
+                <i className="fa fa-edit" />
+                </Button>
+              </abbr>
           </div>
           ),
       };
@@ -105,7 +107,7 @@ function ApplicationSuites({dataTable, updateAddData}) {
                     <span className="btn-label">
                     <i className="nc-icon nc-simple-add" />
                     </span>
-                    Add new record
+                    Añadir Suite
                 </Button>
              
                 <ReactTable
@@ -128,7 +130,7 @@ function ApplicationSuites({dataTable, updateAddData}) {
                       accessor: "status",
                     },
                     {
-                      Header: "Actions",
+                      Header: "Acciones",
                       accessor: "actions",
                       sortable: false,
                       filterable: false,

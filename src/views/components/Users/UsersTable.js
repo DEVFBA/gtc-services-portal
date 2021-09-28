@@ -37,17 +37,19 @@ function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDa
               // ACCIONES A REALIZAR EN CADA REGISTRO
               <div className="actions-center">
                 {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-                <Button
-                  onClick={() => {
-                    getRegistro(key);
-                    toggleModalUpdateRecord()
-                  }}
-                  color="warning"
-                  size="sm"
-                  className="btn-icon btn-link edit"
-                >
-                  <i className="fa fa-edit" />
-                </Button>
+                <abbr title="Editar">
+                  <Button
+                    onClick={() => {
+                      getRegistro(key);
+                      toggleModalUpdateRecord()
+                    }}
+                    color="warning"
+                    size="sm"
+                    className="btn-icon btn-link edit"
+                  >
+                    <i className="fa fa-edit" />
+                  </Button>
+                </abbr>
               </div>
             ),
           };

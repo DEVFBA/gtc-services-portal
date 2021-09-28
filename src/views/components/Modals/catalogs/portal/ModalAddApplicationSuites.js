@@ -14,17 +14,16 @@ import {
 
 function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAddData}) {
         
-    const [id, setId] = React.useState();
     const [shortDescription, setShortDescription] = React.useState("");
     const [longDescription, setLongDescription] = React.useState("");
     const [status, setStatus] = React.useState(true);
     
-    const [idState, setIdState] = React.useState("");
     const [shortDescriptionState, setShortDescriptionState] = React.useState("");
     const [longDescriptionState, setLongDescriptionState] = React.useState("");
 
     const [error, setError] = React.useState();
     const [errorState, setErrorState] = React.useState("");
+    const [errorMessage, setErrorMessage] = React.useState("");
 
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");
@@ -43,15 +42,11 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
 
     const isValidated = () => {
         if (
-            idState === "has-success" &&
             shortDescriptionState === "has-success" &&
             longDescriptionState === "has-success"
         ) {
           return true;
         } else {
-            if (idState !== "has-success") {
-                setIdState("has-danger");
-            }
             if (shortDescriptionState !== "has-success") {
                 setShortDescriptionState("has-danger");
             }
@@ -75,7 +70,6 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
         const catRegister = {
             pSpCatalog: "spCat_Suites_CRUD_Records",
             pvOptionCRUD: "C",
-            piIdSuite: id,
             pvShortDesc: shortDescription,
             pvLongDesc: longDescription,
             pbStatus: status,
@@ -100,6 +94,12 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
             else{
                 if(data[0].Code_Type === "Warning")
                 {
+                    setErrorMessage(data[0].Code_Message_User)
+                    setErrorState("has-danger")
+                }
+                else if(data[0].Code_Type === "Error")
+                {
+                    setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
                 }
                 else{
@@ -119,29 +119,10 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
         <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
             <span aria-hidden="true">×</span>
         </button>
-        <h5 className="modal-title">Edit Record</h5>
-        </div>
+        <h5 className="modal-title">Añadir Suite</h5>
+        </div> 
         <ModalBody>
         <Form id="RegisterValidation">
-            <FormGroup className={`has-label ${idState}`}>
-                <label>Id *</label>
-                <Input
-                    name="id"
-                    type="text"
-                    autoComplete="off"
-                    onChange={(e) => {
-                        if (!verifyLength(e.target.value, 1)) {
-                            setIdState("has-danger");
-                        } else {
-                            setIdState("has-success");
-                        }
-                        setId(e.target.value);
-                    }}
-                />
-                {idState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
-                ) : null}
-            </FormGroup>
             <FormGroup className={`has-label ${shortDescriptionState}`}>
                 <label>Descripción corta *</label>
                 <Input
@@ -158,7 +139,7 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
                     }}
                 />
                 {shortDescriptionState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
+                    <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
             <FormGroup className={`has-label ${longDescriptionState}`}>
@@ -177,7 +158,7 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
                     }}
                 />
                 {longDescriptionState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
+                    <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
             <FormGroup check>
@@ -196,11 +177,13 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
                     </Label>
             </FormGroup>
             <div className="category form-category">
-                * Required fields
+                * Campos requeridos
             </div>
             <FormGroup className={`has-label ${errorState}`}>
                 {errorState === "has-danger" ? (
-                        <label className="error">The record already exists, please validate</label>
+                        <label className="error">
+                            {errorMessage}
+                        </label>
                 ) : null}
             </FormGroup>
           </Form>
@@ -209,10 +192,10 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
         <ModalFooter>
           <div className="center-side">
             <Button color="secondary" onClick={handleModalClick}>
-                Close
+                Cerrar
             </Button>
             <Button color="primary" onClick={registerClick}>
-                Save changes
+                Guardar Cambios
             </Button>
           </div>
         </ModalFooter>

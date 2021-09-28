@@ -14,7 +14,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 // react plugin used to create a form with multiple steps
 import ReactWizard from "react-bootstrap-wizard";
 
@@ -32,11 +32,6 @@ import { useParams } from "react-router-dom";
 function EditApplication({edit}) {
     const { idApp } = useParams();
 
-    useEffect(() => {
-        //Es necesario descargar la información de toda la app y pasarsela como prop a los componentes...
-        //Aqui vamos a utilizar idApp para bajar la informacion
-      },[]);
-
     var steps = [
         {
           stepName: "Generales",
@@ -51,6 +46,10 @@ function EditApplication({edit}) {
           stepName: "Configuraciones",
           stepIcon: "nc-icon nc-settings",
           component: SettingsStep2,
+          stepProps: {
+            //Por el momento solo se le está pasando con prop el idApp
+            prop1: idApp,
+        }
         },
       ];
     
@@ -68,7 +67,7 @@ function EditApplication({edit}) {
                 steps={steps}
                 navSteps
                 validate
-                title= {"Edit Application " + idApp}
+                title= {"Editar Aplicación"}
                 headerTextCenter
                 finishButtonClasses="btn-wd"
                 nextButtonClasses="btn-wd"
