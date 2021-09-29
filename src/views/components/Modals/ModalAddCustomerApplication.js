@@ -143,7 +143,7 @@ function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCus
             pvUser: user
         };
     
-        fetch(`http://localhost:8091/api/customer-applications/create-customer-application`, {
+        fetch(`http://129.159.99.152/develop-api/api/customer-applications/create-customer-application`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {

@@ -56,7 +56,7 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
 
   useEffect(() => {
   
-    var url = new URL(`http://localhost:9000/api/cat-applications/${props.prop1}/`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/cat-applications/${props.prop1}/`);
 
     fetch(url, {
         method: "GET",

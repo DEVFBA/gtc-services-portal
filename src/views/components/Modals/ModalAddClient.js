@@ -157,7 +157,6 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {
-                'Access-Control-Allow-Origin': 'http://localhost:3000',
                 "access-token": token,
                 "Content-Type": "application/json",
                 Accept: "application/json",

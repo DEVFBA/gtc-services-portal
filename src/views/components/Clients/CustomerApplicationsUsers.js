@@ -56,7 +56,7 @@ function CustomerApplicationsUsers() {
       pIdApplication: idApp
     };
 
-    var url = new URL(`http://localhost:8091/api/customer-applications-users/`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/customer-applications-users/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
     console.log(url)
@@ -87,7 +87,7 @@ function CustomerApplicationsUsers() {
       piIdCustomer: idCus
     };
 
-    var url = new URL(`http://localhost:8091/api/security-users/get-users-customer-role-service/`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/security-users/get-users-customer-role-service/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -132,7 +132,7 @@ function CustomerApplicationsUsers() {
       pIdApplication: idApp
     };
 
-    var url = new URL(`http://localhost:8091/api/customer-applications-users/`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/customer-applications-users/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
     console.log(url)
@@ -190,7 +190,7 @@ function CustomerApplicationsUsers() {
         pvUser: user,
     };
 
-    fetch(`http://localhost:8091/api/customer-applications-users/create-customer-application-user`, {
+    fetch(`http://129.159.99.152/develop-api/api/customer-applications-users/create-customer-application-user`, {
         method: "POST",
         body: JSON.stringify(catRegister),
         headers: {

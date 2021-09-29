@@ -138,7 +138,7 @@ function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord
             pvUser: user
         };
     
-        fetch(`http://localhost:8091/api/customer-applications/update-customer-application`, {
+        fetch(`http://129.159.99.152/develop-api/customer-applications/update-customer-application`, {
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {

@@ -179,7 +179,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
             pathImage : pathImage
         };
     
-        fetch(`http://localhost:9000/api/security-users/create-user/`, {
+        fetch(`http://129.159.99.152/develop-api/api/security-users/create-user/`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {

@@ -197,7 +197,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                 pathImage : pathImage
             };
         
-            fetch(`http://localhost:9000/api/security-users/update-user/`, {
+            fetch(`http://129.159.99.152/develop-api/api/security-users/update-user/`, {
                 method: "PUT",
                 body: JSON.stringify(catRegister),
                 headers: {
@@ -247,7 +247,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                 pathImage : pathImage
             };
         
-            fetch(`http://localhost:9000/api/security-users/update-user-wp/`, {
+            fetch(`http://129.159.99.152/develop-api/api/security-users/update-user-wp/`, {
                 method: "PUT",
                 body: JSON.stringify(catRegister),
                 headers: {
