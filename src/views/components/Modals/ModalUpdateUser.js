@@ -52,7 +52,8 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
     const token = localStorage.getItem("Token");
 
     const handleModalClick = () => {
-      toggleModalUpdateRecord(!abierto);
+        setErrorMessage("") 
+        toggleModalUpdateRecord(!abierto);
     };
 
     useEffect(() => {
@@ -180,7 +181,22 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
             var month = finalDate.getMonth() + 1
             var year = finalDate.getFullYear()
 
-            finalDate2 = "" + year + "" + month + "" + date;
+            
+            if(month < 10 && date < 10)
+            {
+                finalDate2 = "" + year + "0" + month + "0" + date;  
+            }
+            else if(date < 10)
+            {
+                finalDate2 = "" + year + "" + month + "0" + date;
+            }
+            else if(month < 10) 
+            {  
+                finalDate2 = "" + year + "0" + month + "" + date;
+            }
+            else{
+                finalDate2 = "" + year + "" + month + "" + date;
+            }  
 
             const catRegister = {
                 pvOptionCRUD: "U",
@@ -197,7 +213,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                 pathImage : pathImage
             };
         
-            fetch(`http://129.159.99.152/develop-api/api/security-users/update-user/`, {
+            fetch(`http://localhost:9000/api/security-users/update-user/`, {
                 method: "PUT",
                 body: JSON.stringify(catRegister),
                 headers: {

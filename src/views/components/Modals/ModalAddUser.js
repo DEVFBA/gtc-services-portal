@@ -161,7 +161,21 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
         var month = finalDate.getMonth() + 1
         var year = finalDate.getFullYear()
 
-        var finalDate2 = "" + year + "" + month + "" + date;
+        if(month < 10 && date < 10)
+        {
+            finalDate2 = "" + year + "0" + month + "0" + date;  
+        }
+        else if(date < 10)
+        {
+            finalDate2 = "" + year + "" + month + "0" + date;
+        }
+        else if(month < 10) 
+        {  
+            finalDate2 = "" + year + "0" + month + "" + date;
+        }
+        else{
+            finalDate2 = "" + year + "" + month + "" + date;
+        }
         
         //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
         const catRegister = {
