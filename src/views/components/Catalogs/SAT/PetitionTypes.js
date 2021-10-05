@@ -44,6 +44,7 @@ function PetitionTypes({dataTable, updateAddData}) {
           // ACCIONES A REALIZAR EN CADA REGISTRO
           <div className="actions-center">
               {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
+              <abbr title="Editar">
               <Button
               onClick={() => {
                   getRegistro(key);
@@ -55,6 +56,7 @@ function PetitionTypes({dataTable, updateAddData}) {
               >
               <i className="fa fa-edit" />
               </Button>
+              </abbr>
           </div>
           ),
       };
@@ -106,7 +108,7 @@ function PetitionTypes({dataTable, updateAddData}) {
                     <span className="btn-label">
                     <i className="nc-icon nc-simple-add" />
                     </span>
-                    Add new record
+                    Agregar Nuevo Registro
                 </Button>
              
                 <ReactTable
@@ -129,7 +131,7 @@ function PetitionTypes({dataTable, updateAddData}) {
                       accessor: "status",
                     },
                     {
-                      Header: "Actions",
+                      Header: "Acciones",
                       accessor: "actions",
                       sortable: false,
                       filterable: false,

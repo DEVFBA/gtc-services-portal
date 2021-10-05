@@ -186,7 +186,7 @@ function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCus
             <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
                 <span aria-hidden="true">×</span>
             </button>
-            <h5 className="modal-title">Add new record</h5>
+            <h5 className="modal-title">Agregar Registro</h5>
             </div>
             <ModalBody>
             <Form id="RegisterValidation">
@@ -257,14 +257,14 @@ function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCus
                                         }}
                                     />
                                     {registerValidDateState === "has-danger" ? (
-                                        <label className="error">This field is required.</label>
+                                        <label className="error">Este campo es requerido.</label>
                                     ) : null}
                                 </FormGroup>    
                             </>
                             ) : null}
                         </FormGroup>
                         <div className="category form-category">
-                        * Required fields
+                        * Campos requeridos
                         </div>
                     </Col>  
                     <Col className="mt-3" lg="10">
@@ -285,7 +285,7 @@ function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCus
                     Close
                 </Button>
                 <Button className="buttons" color="primary" onClick={registerClick}>
-                    Save changes
+                    Guardar cambios
                 </Button>
                 </div>
             </ModalFooter>

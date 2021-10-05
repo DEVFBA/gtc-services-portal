@@ -324,7 +324,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                             }}
                             />
                             {updateFullNameState === "has-danger" ? (
-                            <label className="error">This field is required.</label>
+                            <label className="error">Este campo es requerido.</label>
                             ) : null}
                         </FormGroup>
                         <FormGroup check>
@@ -485,7 +485,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                     Close
                 </Button>
                 <Button className="buttons" color="primary" onClick={updateClick}>
-                    Save changes
+                    Guardar cambios
                 </Button>
                 </div>
             </ModalFooter>

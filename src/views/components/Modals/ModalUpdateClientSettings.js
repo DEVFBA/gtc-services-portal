@@ -140,7 +140,7 @@ function ModalUpdateClientSettings({modalUpdateRecord, setModalUpdateRecord, upd
                 }}
                 />
                 {settingsValueState === "has-danger" ? (
-                <label className="error">This field is required.</label>
+                <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
             </Col>
@@ -152,7 +152,7 @@ function ModalUpdateClientSettings({modalUpdateRecord, setModalUpdateRecord, upd
                 Close
             </Button>
             <Button color="primary" onClick={handleClick}>
-                Save changes
+                Guardar cambios
             </Button>
           </div>
         </ModalFooter>

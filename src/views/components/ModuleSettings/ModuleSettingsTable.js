@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 
 import ReactTable from "components/ReactTable/ReactTable.js";
-import ModalUpdateSettings from "views/components/Modals/ModalUpdateSettings.js";
-import ModalReadSettings from "views/components/Modals/ModalReadSettings.js";
-import EditApplication from "views/pages//EditApplication.js";
+import ModalAddApplication from "views/components/Modals/ModalAddApplication.js";
+import ModalUpdateApplication from "views/components/Modals/ModalUpdateApplication.js";
 
 import {
   Button,
@@ -17,7 +16,7 @@ import {
 } from "reactstrap";
 import { prototype } from "react-datetime";
 
-function ModuleSettingsTable({dataTable, dataRoles, dataCustomers, updateAddData, validDays, pathImage}){
+function ModuleSettingsTable({dataTable, dataSuites, updateAddData}){
 
     const ambiente = "/DEV"
     const history = useHistory();
@@ -37,9 +36,10 @@ function ModuleSettingsTable({dataTable, dataRoles, dataCustomers, updateAddData
             idAplicacion: prop.Id_Catalog,
             appName: prop.Short_Desc,
             version: prop.Version,
+            suiteId: prop.Id_Suite,
             suite: prop.Suite_Desc,
             status: status,
-            longDescription: prop.longDescription,
+            longDescription: prop.Long_Desc,
             technicalDescription: prop.Technical_Description,
             type: prop.Type,
             actions: (
@@ -48,8 +48,8 @@ function ModuleSettingsTable({dataTable, dataRoles, dataCustomers, updateAddData
                 {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
                 <Button
                 onClick={() => {
-                    let obj = dataState.find((o) => o.id === key);
-                    history.push(ambiente + `/admin/edit-application/${obj.idAplicacion}/`);
+                  getRegistro(key);
+                  toggleModalUpdateRecord()
                 }}
                 color="warning"
                 size="sm"
@@ -68,7 +68,13 @@ function ModuleSettingsTable({dataTable, dataRoles, dataCustomers, updateAddData
     const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
 
     //Para obtener el registro que se va a editar
-    const [editApplication, setEditApplication] = useState();
+    const [record, setRecord] = useState({});
+
+    function getRegistro(key)
+    {
+        var registro = dataState.find((o) => o.id === key)
+        setRecord(registro) 
+    }
 
     function toggleModalAddRecord(){
         if(modalAddRecord == false){
@@ -94,58 +100,52 @@ function ModuleSettingsTable({dataTable, dataRoles, dataCustomers, updateAddData
           <div className="content">
             <Row>
               <Col md="12">
-                <Card>
-                  <CardHeader>
-                    <CardTitle tag="h4">Modules Catalog</CardTitle>
-                    <Link to= {ambiente + "/admin/add-application"}>
-                      <Button color="primary">
-                        <span className="btn-label">
-                          <i className="nc-icon nc-simple-add" />
-                        </span>
-                        Add new record
-                      </Button>
-                    </Link>
-                  </CardHeader>
-                  <CardBody>
-                    <ReactTable
-                      data={dataState}
-                      columns={[
-                        {
-                          Header: "Aplicación",
-                          accessor: "appName",
-                        },
-                        {
-                          Header: "Versión",
-                          accessor: "version",
-                        },
-                        {
-                          Header: "Suite",
-                          accessor: "suite",
-                        },
-                        {
-                          Header: "Estatus",
-                          accessor: "status",
-                        },
-                        {
-                          Header: "Actions",
-                          accessor: "actions",
-                          sortable: false,
-                          filterable: false,
-                        },
-                      ]}
-                      /*
-                          You can choose between primary-pagination, info-pagination, success-pagination, warning-pagination, danger-pagination or none - which will make the pagination buttons gray
-                        */
-                      className="-striped -highlight primary-pagination"
-                    />
-                  </CardBody>
-                </Card>
+                <Button color="primary" onClick={toggleModalAddRecord}>
+                  <span className="btn-label">
+                  <i className="nc-icon nc-simple-add" />
+                  </span>
+                  Añadir Aplicación o Servicio
+                </Button>
+                <ReactTable
+                  data={dataState}
+                  columns={[
+                    {
+                      Header: "Aplicación",
+                      accessor: "appName",
+                    },
+                    {
+                      Header: "Versión",
+                      accessor: "version",
+                    },
+                    {
+                      Header: "Suite",
+                      accessor: "suite",
+                    },
+                    {
+                      Header: "Estatus",
+                      accessor: "status",
+                    },
+                    {
+                      Header: "Acciones",
+                      accessor: "actions",
+                      sortable: false,
+                      filterable: false,
+                    },
+                  ]}
+                  /*
+                      You can choose between primary-pagination, info-pagination, success-pagination, warning-pagination, danger-pagination or none - which will make the pagination buttons gray
+                    */
+                  className="-striped -highlight primary-pagination"
+                />
               </Col>
             </Row>
           </div>
     
+          {/*MODAL PARA CREAR REGISTRO*/}
+          <ModalAddApplication abierto = {modalAddRecord} toggleModalAddRecord = {toggleModalAddRecord} dataSuites = {dataSuites} updateAddData = {updateAddData}/>
+
           {/*MODAL PARA MODIFICAR REGISTRO*/}
-          <ModalUpdateSettings abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord}/>
+          <ModalUpdateApplication abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} dataSuites = {dataSuites} updateAddData = {updateAddData} record = {record}/>
         </> 
     );
 }

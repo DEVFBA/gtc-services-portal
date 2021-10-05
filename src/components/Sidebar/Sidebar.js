@@ -14,7 +14,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { Nav, Collapse } from "reactstrap";
 // javascript plugin used to create scrollbars on windows
@@ -51,7 +51,9 @@ function Sidebar(props) {
   const sidebar = React.useRef();
   const name = localStorage.getItem("Name");
   const image = localStorage.getItem("P_Picture");
+  const [routeProfile, setRouteProfile] = React.useState("");
   const ambiente = "/DEV"
+  const token = localStorage.getItem("Token");
   // this creates the intial state of this component based on the collapse routes
   // that it gets through props.routes
   const getCollapseStates = (routes) => {
@@ -68,6 +70,35 @@ function Sidebar(props) {
     });
     return initialState;
   };
+
+  useEffect(() => {
+    //Aqui vamos a descargar la lista de general parameters para revisar la vigencia del password
+    const params = {
+      pvOptionCRUD: "R"
+    };
+
+    var url = new URL(`http://129.159.99.152/develop-api/api/general-parameters/`);
+
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+        var aux = data.find( o => o.Id_Catalog === 9)
+        setRouteProfile(aux.Value)
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de la ruta Profile_Picture" + err);
+    });
+  }, []);
 
   // this verifies if any of the collapses should be default opened on a rerender of this component
   // for example, on the refresh of the page,
@@ -204,9 +235,17 @@ function Sidebar(props) {
 
       <div className="sidebar-wrapper" ref={sidebar}>
         <div className="user">
-          <div className="photo">
-            <img src={image} alt="Avatar" />
-          </div>
+          {image !== "null" ? (
+            <div className="photo">
+              <img src={routeProfile + image} alt="Avatar" />
+            </div>
+          ) : (
+            <div className="photo">
+              <img src={avatarDefault} alt="Avatar" />
+            </div>
+          )
+          }
+          
           <div className="info">
             <a
               href="#"

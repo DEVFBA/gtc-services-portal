@@ -140,7 +140,7 @@ function ModalAddCustoms({modalAddRecord, setModalAddRecord, updateTable, setUpd
         <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
             <span aria-hidden="true">×</span>
         </button>
-        <h5 className="modal-title">Add Record</h5>
+        <h5 className="modal-title">Agregar Registros</h5>
         </div>
         <ModalBody>
         <Form id="RegisterValidation">
@@ -160,7 +160,7 @@ function ModalAddCustoms({modalAddRecord, setModalAddRecord, updateTable, setUpd
                     }}
                 />
                 {idState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
+                    <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
             <FormGroup className={`has-label ${shortDescriptionState}`}>
@@ -179,7 +179,7 @@ function ModalAddCustoms({modalAddRecord, setModalAddRecord, updateTable, setUpd
                     }}
                 />
                 {shortDescriptionState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
+                    <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
             <FormGroup className={`has-label ${longDescriptionState}`}>
@@ -198,7 +198,7 @@ function ModalAddCustoms({modalAddRecord, setModalAddRecord, updateTable, setUpd
                     }}
                 />
                 {longDescriptionState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
+                    <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
             <FormGroup check>
@@ -217,7 +217,7 @@ function ModalAddCustoms({modalAddRecord, setModalAddRecord, updateTable, setUpd
                     </Label>
             </FormGroup>
             <div className="category form-category">
-                * Required fields
+                * Campos requeridos
             </div>
             <FormGroup className={`has-label ${errorState}`}>
                 {errorState === "has-danger" ? (
@@ -233,7 +233,7 @@ function ModalAddCustoms({modalAddRecord, setModalAddRecord, updateTable, setUpd
                 Close
             </Button>
             <Button color="primary" onClick={registerClick}>
-                Save changes
+                Guardar cambios
             </Button>
           </div>
         </ModalFooter>

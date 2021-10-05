@@ -201,6 +201,7 @@ function CatalogosSAT() {
     fetch(url, {
         method: "GET",
         headers: {
+            "access-token": token,
             "Content-Type": "application/json",
         }
     })
@@ -223,7 +224,7 @@ function CatalogosSAT() {
           <Col md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">SAT Catalog</CardTitle>
+                <CardTitle tag="h4">Catálogos del SAT</CardTitle>
                 <FormGroup>
                   {/*Al seleccionar un catálogo se hará fetch para actualizar sus configuraciones*/}
                   <Select 

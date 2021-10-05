@@ -242,14 +242,14 @@ function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord
                                         }}
                                     />
                                     {updateValidDateState === "has-danger" ? (
-                                        <label className="error">This field is required.</label>
+                                        <label className="error">Este campo es requerido.</label>
                                     ) : null}
                                 </FormGroup>    
                             </>
                             ) : null}
                         </FormGroup>
                         <div className="category form-category">
-                        * Required fields
+                        * Campos requeridos
                         </div>
                     </Col>  
                     <Col className="mt-3" lg="10">
@@ -271,7 +271,7 @@ function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord
                     Close
                 </Button>
                 <Button className="buttons" color="primary" onClick={updateClick}>
-                    Save changes
+                    Guardar cambios
                 </Button>
                 </div>
             </ModalFooter>

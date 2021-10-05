@@ -113,7 +113,7 @@ function CustomersTable({dataTable, dataCountries, updateAddData, pathLogo}){
                         <span className="btn-label">
                         <i className="nc-icon nc-simple-add" />
                         </span>
-                        Add new record
+                        Agregar Registro
                     </Button>
                  
                     <ReactTable
@@ -152,7 +152,7 @@ function CustomersTable({dataTable, dataCountries, updateAddData, pathLogo}){
                                 accessor: "status",
                             },
                             {
-                                Header: "Actions",
+                                Header: "Acciones",
                                 accessor: "actions",
                                 sortable: false,
                                 filterable: false,

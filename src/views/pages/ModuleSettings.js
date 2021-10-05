@@ -54,6 +54,9 @@ function ModuleSettings() {
   //Guardar datos para la tabla
   const [dataApplications, setDataApplications] = useState([]);
 
+  //Para guardar las suites del select
+  const [options, setOptions] = useState([]);
+
   const token = localStorage.getItem("Token");
 
   useEffect(() => {
@@ -85,9 +88,75 @@ function ModuleSettings() {
     });
   }, []);
 
+  useEffect(() => {
+
+    const params = {
+      pvOptionCRUD: "R",
+      pSpCatalog : "spCat_Suites_CRUD_Records",
+    };
+  
+    var url = new URL(`http://129.159.99.152/develop-api/api/cat-catalogs/catalog`);
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+      //Creamos el arreglo de opciones para el select
+      var optionsAux = [];
+      var i;
+      for(i=0; i<data.length; i++)
+      {
+        optionsAux.push({
+          value: data[i].Id_Catalog, label: data[i].Short_Desc 
+        })
+      }
+      setOptions(optionsAux)
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de las suites" + err);
+    });
+  }, []);
+
   //Renderizado condicional
   function Applications() {
-    return <ModuleSettingsTable dataTable = {dataApplications}/>;
+    return <ModuleSettingsTable dataTable = {dataApplications} dataSuites = {options} updateAddData = {updateAddData}/>;
+  }
+
+  function updateAddData(){
+    //Aqui vamos a descargar la lista de usuarios de la base de datos por primera vez
+    const params = {
+      pvOptionCRUD: "R"
+    };
+
+    var url = new URL(`http://129.159.99.152/develop-api/api/cat-applications/`);
+
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+      console.log(data)
+      setDataApplications(data)
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de los aplicaciones" + err);
+    });
   }
 
   return dataApplications.length === 0 ? (

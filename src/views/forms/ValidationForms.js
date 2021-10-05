@@ -218,7 +218,7 @@ function ValidationForms() {
                       }}
                     />
                     {registerPasswordState === "has-danger" ? (
-                      <label className="error">This field is required.</label>
+                      <label className="error">Este campo es requerido.</label>
                     ) : null}
                   </FormGroup>
                   <FormGroup
@@ -243,11 +243,11 @@ function ValidationForms() {
                       }}
                     />
                     {registerConfirmPasswordState === "has-danger" ? (
-                      <label className="error">This field is required.</label>
+                      <label className="error">Este campo es requerido.</label>
                     ) : null}
                   </FormGroup>
                   <div className="category form-category">
-                    * Required fields
+                    * Campos requeridos
                   </div>
                 </CardBody>
                 <CardFooter className="text-right">
@@ -287,7 +287,7 @@ function ValidationForms() {
                       }}
                     />
                     {loginFullNameState === "has-danger" ? (
-                      <label className="error">This field is required.</label>
+                      <label className="error">Este campo es requerido.</label>
                     ) : null}
                   </FormGroup>
                   <FormGroup className={`has-label ${loginEmailState}`}>
@@ -326,11 +326,11 @@ function ValidationForms() {
                       }}
                     />
                     {loginPasswordState === "has-danger" ? (
-                      <label className="error">This field is required.</label>
+                      <label className="error">Este campo es requerido.</label>
                     ) : null}
                   </FormGroup>
                   <div className="category form-category">
-                    * Required fields
+                    * Campos requeridos
                   </div>
                 </CardBody>
                 <CardFooter className="text-center">
@@ -366,7 +366,7 @@ function ValidationForms() {
                         />
                         {requiredState === "has-danger" ? (
                           <label className="error">
-                            This field is required.
+                            Este campo es requerido.
                           </label>
                         ) : null}
                       </FormGroup>

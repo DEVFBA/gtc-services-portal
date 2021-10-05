@@ -161,7 +161,7 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
               }}
             />
             {idaplicacionState === "has-danger" ? (
-              <label className="error">This field is required.</label>
+              <label className="error">Este campo es requerido.</label>
             ) : null}
           </FormGroup>
         </Col>
@@ -188,7 +188,7 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
               
             />
             {aplicacionState === "has-danger" ? (
-              <label className="error">This field is required.</label>
+              <label className="error">Este campo es requerido.</label>
             ) : null}
           </FormGroup>
         </Col>
@@ -215,7 +215,7 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
               
             />
             {versionState === "has-danger" ? (
-              <label className="error">This field is required.</label>
+              <label className="error">Este campo es requerido.</label>
             ) : null}
           </FormGroup>
         </Col>
@@ -242,7 +242,7 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
                 }}
             />
             {suiteState === "has-danger" ? (
-              <label className="error">This field is required.</label>
+              <label className="error">Este campo es requerido.</label>
             ) : null}
           </FormGroup>
         </Col>
@@ -269,7 +269,7 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
               
             />
             {descripcionappState === "has-danger" ? (
-              <label className="error">This field is required.</label>
+              <label className="error">Este campo es requerido.</label>
             ) : null}
           </FormGroup>
         </Col>
@@ -295,7 +295,7 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
               }}
             />
             {descripciontecState === "has-danger" ? (
-              <label className="error">This field is required.</label>
+              <label className="error">Este campo es requerido.</label>
             ) : null}
           </FormGroup>
         </Col>

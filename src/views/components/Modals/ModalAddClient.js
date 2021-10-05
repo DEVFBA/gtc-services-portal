@@ -197,7 +197,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
             <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
                 <span aria-hidden="true">×</span>
             </button>
-            <h5 className="modal-title">Agregar nuevo registro</h5>
+            <h5 className="modal-title">Agregar Registro</h5>
             </div>
             <ModalBody>
             <Form id="RegisterValidation">

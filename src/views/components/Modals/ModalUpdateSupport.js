@@ -74,7 +74,7 @@ function ModalUpdateSupport({abierto, toggleModalUpdateRecord}) {
     };
 
     const registerClick = () => {
-        //Función para agregar registro
+        //Función para Agregar Registro
         if (registerEmailState === "") {
         setregisterEmailState("has-danger");
         }
@@ -158,7 +158,7 @@ function ModalUpdateSupport({abierto, toggleModalUpdateRecord}) {
         <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
             <span aria-hidden="true">×</span>
         </button>
-        <h5 className="modal-title">Edit Record</h5>
+        <h5 className="modal-title">Editar Registro</h5>
         </div>
         <ModalBody>
         <Form id="RegisterValidation">
@@ -186,7 +186,7 @@ function ModalUpdateSupport({abierto, toggleModalUpdateRecord}) {
                   }}
                 />
                 {registerFullNameState === "has-danger" ? (
-                  <label className="error">This field is required.</label>
+                  <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
             <FormGroup className={`has-label ${registerPasswordState}`}>
@@ -206,7 +206,7 @@ function ModalUpdateSupport({abierto, toggleModalUpdateRecord}) {
                 }}
               />
               {registerPasswordState === "has-danger" ? (
-                <label className="error">This field is required.</label>
+                <label className="error">Este campo es requerido.</label>
               ) : null}
             </FormGroup>
             <FormGroup check>
@@ -214,7 +214,7 @@ function ModalUpdateSupport({abierto, toggleModalUpdateRecord}) {
               <Label for="exampleCheck" check>Habilitado *</Label>
             </FormGroup>
             <div className="category form-category">
-              * Required fields
+              * Campos requeridos
             </div>
           </Form>
         </ModalBody>
@@ -224,7 +224,7 @@ function ModalUpdateSupport({abierto, toggleModalUpdateRecord}) {
                 Close
             </Button>
             <Button color="primary">
-                Save changes
+                Guardar cambios
             </Button>
           </div>
         </ModalFooter>

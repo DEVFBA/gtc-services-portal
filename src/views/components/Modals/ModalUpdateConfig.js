@@ -225,7 +225,7 @@ function ModalUpdateConfig({abierto, toggleModalUpdateRecord, record}) {
                 Close
             </Button>
             <Button color="primary" onClick={handleClick}>
-                Save changes
+                Guardar cambios
             </Button>
           </div>
         </ModalFooter>

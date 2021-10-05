@@ -123,7 +123,7 @@ const Step1 = React.forwardRef((props, ref) => {
               onBlur={(e) => setfirstnameFocus(false)}
             />
             {firstnameState === "has-danger" ? (
-              <label className="error">This field is required.</label>
+              <label className="error">Este campo es requerido.</label>
             ) : null}
           </InputGroup>
           <InputGroup
@@ -152,7 +152,7 @@ const Step1 = React.forwardRef((props, ref) => {
               onBlur={(e) => setlastnameFocus(false)}
             />
             {lastnameState === "has-danger" ? (
-              <label className="error">This field is required.</label>
+              <label className="error">Este campo es requerido.</label>
             ) : null}
           </InputGroup>
         </Col>
@@ -183,7 +183,7 @@ const Step1 = React.forwardRef((props, ref) => {
               onBlur={(e) => setemailFocus(false)}
             />
             {emailState === "has-danger" ? (
-              <label className="error">This field is required.</label>
+              <label className="error">Este campo es requerido.</label>
             ) : null}
           </InputGroup>
         </Col>

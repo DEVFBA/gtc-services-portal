@@ -252,41 +252,41 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
                         <FormGroup className={`has-label ${registerFullNameState}`}>
                             <label>Nombre Usuario *</label>
                             <Input
-                            name="fullname"
-                            type="text"
-                            autoComplete="off"
-                            onChange={(e) => {
-                                if (!verifyLength(e.target.value, 1)) {
-                                setregisterFullNameState("has-danger");
-                                } else {
-                                setregisterFullNameState("has-success");
-                                }
-                                setregisterFullName(e.target.value);
-                            }}
+                                name="fullname"
+                                type="text"
+                                autoComplete="off"
+                                onChange={(e) => {
+                                    if (!verifyLength(e.target.value, 1)) {
+                                    setregisterFullNameState("has-danger");
+                                    } else {
+                                    setregisterFullNameState("has-success");
+                                    }
+                                    setregisterFullName(e.target.value);
+                                }}
                             />
                             {registerFullNameState === "has-danger" ? (
                             <label className="error">Este campo es requerido.</label>
                             ) : null}
                         </FormGroup>
                         <FormGroup className={`has-label ${registerPasswordState}`}>
-                        <label>Password *</label>
-                        <Input
-                            id="registerPassword"
-                            name="password"
-                            type="password"
-                            autoComplete="off"
-                            onChange={(e) => {
-                            if (!verifyPassword(e.target.value)) {
-                                setregisterPasswordState("has-danger");
-                            } else {
-                                setregisterPasswordState("has-success");
-                            }
-                            setregisterPassword(e.target.value);
-                            }}
-                        />
-                        {registerPasswordState === "has-danger" ? (
-                            <label className="error">La contraseña debe tener una longitud mínima de 10 caracteres, al menos un número, una letra mayúscula y minúscula, y un caracter especial.</label>
-                        ) : null}
+                            <label>Password *</label>
+                            <Input
+                                id="registerPassword"
+                                name="password"
+                                type="password"
+                                autoComplete="off"
+                                onChange={(e) => {
+                                if (!verifyPassword(e.target.value)) {
+                                    setregisterPasswordState("has-danger");
+                                } else {
+                                    setregisterPasswordState("has-success");
+                                }
+                                setregisterPassword(e.target.value);
+                                }}
+                            />
+                            {registerPasswordState === "has-danger" ? (
+                                <label className="error">La contraseña debe tener una longitud mínima de 10 caracteres, al menos un número, una letra mayúscula y minúscula, y un caracter especial.</label>
+                            ) : null}
                         </FormGroup>
                         <FormGroup className={`has-label ${registerConfirmPasswordState}`}>
                             <label>Confirmar Password *</label>
