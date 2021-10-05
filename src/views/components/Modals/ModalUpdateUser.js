@@ -52,7 +52,21 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
     const token = localStorage.getItem("Token");
 
     const handleModalClick = () => {
+        setupdateEmail("")
+        setupdateFullName("")
+        setupdatePassword("")
+        setupdateChangePassword(false)
+        setupdateTemporal(false)
+        setupdateRol({})
+        setupdateCustomer("")
+        setupdateImage("")
+        setupdateStatus()
+        setupdateConfirmPassword("")
         setErrorMessage("") 
+        setupdateFullNameState("")
+        setupdatePasswordState("")
+        setupdateConfirmPasswordState("")
+        setupdateRolState("")
         toggleModalUpdateRecord(!abierto);
     };
 
@@ -213,7 +227,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                 pathImage : pathImage
             };
         
-            fetch(`http://localhost:9000/api/security-users/update-user/`, {
+            fetch(`http://129.159.99.152/develop-api/api/security-users/update-user/`, {
                 method: "PUT",
                 body: JSON.stringify(catRegister),
                 headers: {

@@ -56,10 +56,11 @@ function Register() {
     //Para guardar los días transcurridos
     const [validDays, setValidDays] = React.useState();
 
+    const Logged = localStorage.getItem("Logged");
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");
     const role = localStorage.getItem("Id_Role");
-    const customer = localStorage.getItem("Id_Customer");
+    const [customer, setCustomer] = React.useState("");
     const name = localStorage.getItem("Name");
 
     const ambiente = "/DEV"
@@ -92,6 +93,30 @@ function Register() {
             alert("No se pudo consultar la informacion de los general parameters" + err);
         });
     }, []);
+
+    useEffect(() => {
+        //Si el usuario no está loggeado no se va a descargar la imagen
+        if(Logged === "true")
+        {
+          var url = new URL(`http://129.159.99.152/develop-api/api/security-users/${user}`);
+          fetch(url, {
+            method: "GET",
+            headers: {
+                "access-token": token,
+                "Content-Type": "application/json",
+            }
+          })
+          .then(function(response) {
+              return response.ok ? response.json() : Promise.reject();
+          })
+          .then(function(data) {
+              setCustomer(data[0].Id_Customer)
+          })
+          .catch(function(err) {
+              alert("No se pudo consultar la informacion del usuario" + err);
+          });
+        }  
+    },[]);
 
     React.useEffect(() => {
         document.body.classList.toggle("register-page");
@@ -160,8 +185,22 @@ function Register() {
         var month = finalDate.getMonth() + 1
         var year = finalDate.getFullYear()
 
-        var finalDate2 = "" + year + "" + month + "" + date;
-        console.log(finalDate2)
+        var finalDate2 = "" 
+        if(month < 10 && date < 10)
+        {
+            finalDate2 = "" + year + "0" + month + "0" + date;  
+        }
+        else if(date < 10)
+        {
+            finalDate2 = "" + year + "" + month + "0" + date;
+        }
+        else if(month < 10) 
+        {  
+            finalDate2 = "" + year + "0" + month + "" + date;
+        }
+        else{
+            finalDate2 = "" + year + "" + month + "" + date;
+        }  
         
         //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
         const catRegister = {

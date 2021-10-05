@@ -123,6 +123,7 @@ function Login() {
   }
 
   function getUser(email, token){
+    console.log(email)
 
     var url = new URL(`http://129.159.99.152/develop-api/api/security-users/${email}`);
     fetch(url, {
@@ -140,10 +141,8 @@ function Login() {
         localStorage.setItem("User", data[0].User);
         localStorage.setItem("Id_Customer", data[0].Id_Customer)
         localStorage.setItem("Id_Role", data[0].Id_Role)
-        localStorage.setItem("Name", data[0].Name)
         localStorage.setItem("Token", token)
         localStorage.setItem("Logged", true)
-        localStorage.setItem("P_Picture", data[0].Profile_Pic_Path)
         //Comparar fechas
         var f1 = new Date();
         var f2 = new Date(data[0].Final_Effective_Date)

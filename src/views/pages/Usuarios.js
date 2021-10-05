@@ -214,7 +214,6 @@ function Usuarios() {
 
   //Para actualizar la tabla al insertar registro
   function updateAddData(){
-    console.log("Entre al final")
     const params = {
       pvOptionCRUD: "R"
     };
@@ -234,7 +233,6 @@ function Usuarios() {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
-      console.log("Entre al final")
       setDataUsers(data)
     })
     .catch(function(err) {

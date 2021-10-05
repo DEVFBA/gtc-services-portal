@@ -15,7 +15,6 @@
 
 */
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
 import { Nav, Collapse } from "reactstrap";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
@@ -24,6 +23,7 @@ import avatar from "assets/img/faces/ayo-ogunseinde-2.jpg";
 import avatarDefault from "assets/img/avatar-default.png";
 import logo from "assets/img/react-logo.png";
 import logogtc from "assets/img/favicon-GTC.png";
+import { NavLink, useHistory } from "react-router-dom";
 
 // reactstrap components
 import {
@@ -48,12 +48,14 @@ var ps;
 function Sidebar(props) {
   const [openAvatar, setOpenAvatar] = React.useState(false);
   const [collapseStates, setCollapseStates] = React.useState({});
+  const [image, setImage] = React.useState("");
+  const [name, setName] = React.useState("");
   const sidebar = React.useRef();
-  const name = localStorage.getItem("Name");
-  const image = localStorage.getItem("P_Picture");
+  const Logged = localStorage.getItem("Logged");
   const [routeProfile, setRouteProfile] = React.useState("");
   const ambiente = "/DEV"
-  const token = localStorage.getItem("Token");
+  
+  const history = useHistory();
   // this creates the intial state of this component based on the collapse routes
   // that it gets through props.routes
   const getCollapseStates = (routes) => {
@@ -72,6 +74,7 @@ function Sidebar(props) {
   };
 
   useEffect(() => {
+    const token = localStorage.getItem("Token");
     //Aqui vamos a descargar la lista de general parameters para revisar la vigencia del password
     const params = {
       pvOptionCRUD: "R"
@@ -93,12 +96,40 @@ function Sidebar(props) {
     })
     .then(function(data) {
         var aux = data.find( o => o.Id_Catalog === 9)
+        console.log(aux.Value)
         setRouteProfile(aux.Value)
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de la ruta Profile_Picture" + err);
     });
   }, []);
+
+  useEffect(() => {
+    //Si el usuario no está loggeado no se va a descargar la imagen
+    if(Logged === "true")
+    {
+      var user = localStorage.getItem("User");
+      const token = localStorage.getItem("Token");
+      var url = new URL(`http://129.159.99.152/develop-api/api/security-users/${user}`);
+      fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
+        }
+      })
+      .then(function(response) {
+          return response.ok ? response.json() : Promise.reject();
+      })
+      .then(function(data) {
+          setImage(data[0].Profile_Pic_Path)
+          setName(data[0].Name)
+      })
+      .catch(function(err) {
+          alert("No se pudo consultar la informacion del usuario" + err);
+      });
+    }  
+  },[]);
 
   // this verifies if any of the collapses should be default opened on a rerender of this component
   // for example, on the refresh of the page,

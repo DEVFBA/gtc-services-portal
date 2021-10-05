@@ -63,6 +63,7 @@ function Admin(props) {
   const logged = localStorage.getItem("Logged");
   const role = localStorage.getItem("Id_Role");
   const customer = localStorage.getItem("Id_Customer");
+  const user = localStorage.getItem("User");
   const token = localStorage.getItem("Token");
 
   const ambiente = "/DEV"
@@ -413,6 +414,38 @@ function Admin(props) {
         alert("No se pudo consultar la informacion de las rutas" + err);
     });
   }, []);
+
+  useEffect(() => {
+
+    var url = new URL(`http://129.159.99.152/develop-api/api/security-users/${user}`);
+    fetch(url, {
+      method: "GET",
+      headers: {
+          "access-token": token,
+          "Content-Type": "application/json",
+      }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+        if(data[0].Temporal_Password===true)
+        {
+          localStorage.setItem("Logged", false);
+          localStorage.removeItem("User");
+          localStorage.removeItem("Id_Role");
+          localStorage.removeItem("Id_Customer");
+          localStorage.removeItem("Token");
+          localStorage.removeItem("Name");
+          localStorage.removeItem("P_Picture");
+          history.push(ambiente + "/auth/login");
+          
+        }
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion del usuario" + err);
+    });
+  },[]);
 
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
