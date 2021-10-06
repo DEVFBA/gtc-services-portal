@@ -21,7 +21,7 @@ import {
 } from "reactstrap";
 import { data } from "jquery";
 
-function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updateAddData, pathLogo}) {
+function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updateAddData, pathLogo, ip}) {
 
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");
@@ -79,7 +79,9 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
         setregisterWebPage("")
         setregisterLogo("")
         setregisterStatus(false)
-        
+        setError("")
+        setErrorState("")
+        setErrorMessage("")
         setModalAddRecord(!modalAddRecord);
     };
 
@@ -150,7 +152,8 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
             pvLogo : registerLogo,
             pbStatus : registerStatus,
             pvUser : user,
-            pathLogo : pathLogo
+            pathLogo : pathLogo,
+            pvIP : ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/customers/create-customer/`, {

@@ -12,7 +12,7 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalUpdateVoucherTypes({abierto, toggleModalUpdateRecord, record, updateAddData}) {
+function ModalUpdateVoucherTypes({abierto, toggleModalUpdateRecord, record, updateAddData, ip}) {
         // update form
     const [id, setId] = React.useState("Hola");
     const [shortDescription, setShortDescription] = React.useState("");
@@ -43,10 +43,6 @@ function ModalUpdateVoucherTypes({abierto, toggleModalUpdateRecord, record, upda
     },[record]);
 
     const handleModalClick = () => {
-        setId("")
-        setShortDescription("")
-        setLongDescription("")
-        setStatus(true)
         setShortDescriptionState("")
         setLongDescriptionState("")
         setError("")
@@ -114,6 +110,7 @@ function ModalUpdateVoucherTypes({abierto, toggleModalUpdateRecord, record, upda
             pvLongDesc: longDescription,
             pbStatus: status,
             pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/update-sat`, {

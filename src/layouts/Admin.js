@@ -101,6 +101,7 @@ function Admin(props) {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
+      console.log(data)
       
         var routesAux = [];
         //const ambiente = "/QSDEV"
@@ -154,6 +155,7 @@ function Admin(props) {
             else{
               if(data[i-1].Module_Desc !== data[i].Module_Desc)
               {
+                console.log(data[i-1].Module_Desc)
                 var views = []
                 if(data[i].Component_Submodule === "Usuarios")
                 {
@@ -417,34 +419,36 @@ function Admin(props) {
 
   useEffect(() => {
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/security-users/${user}`);
-    fetch(url, {
-      method: "GET",
-      headers: {
-          "access-token": token,
-          "Content-Type": "application/json",
-      }
-    })
-    .then(function(response) {
-        return response.ok ? response.json() : Promise.reject();
-    })
-    .then(function(data) {
-        if(data[0].Temporal_Password===true)
-        {
-          localStorage.setItem("Logged", false);
-          localStorage.removeItem("User");
-          localStorage.removeItem("Id_Role");
-          localStorage.removeItem("Id_Customer");
-          localStorage.removeItem("Token");
-          localStorage.removeItem("Name");
-          localStorage.removeItem("P_Picture");
-          history.push(ambiente + "/auth/login");
-          
+    if(logged === "true")
+    {
+      var url = new URL(`http://129.159.99.152/develop-api/api/security-users/${user}`);
+      fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
         }
-    })
-    .catch(function(err) {
-        alert("No se pudo consultar la informacion del usuario" + err);
-    });
+      })
+      .then(function(response) {
+          return response.ok ? response.json() : Promise.reject();
+      })
+      .then(function(data) {
+          if(data[0].Temporal_Password===true)
+          {
+            localStorage.setItem("Logged", false);
+            localStorage.removeItem("User");
+            localStorage.removeItem("Id_Role");
+            localStorage.removeItem("Id_Customer");
+            localStorage.removeItem("Token");
+            localStorage.removeItem("Name");
+            localStorage.removeItem("P_Picture");
+            history.push(ambiente + "/auth/login");
+          }
+      })
+      .catch(function(err) {
+          alert("No se pudo consultar la informacion del usuario" + err);
+      });
+    }
   },[]);
 
   React.useEffect(() => {

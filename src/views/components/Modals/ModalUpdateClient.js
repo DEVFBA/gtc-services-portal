@@ -20,7 +20,7 @@ import {
     Col,
 } from "reactstrap";
 
-function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dataCountries, updateAddData, pathLogo}) {
+function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dataCountries, updateAddData, pathLogo, ip}) {
 
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");
@@ -91,21 +91,8 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
     },[record]);
 
     const handleModalClick = () => {
-        setupdateFullName("")
-        setupdateRfc("")
-        setupdateStreet("")
-        setupdateNoExterior("")
-        setupdateNoInterior("")
-        setupdateCountry("")
-        setupdateCity("")
-        setupdateZipCode("")
-        setupdateContact("")
-        setupdateTelephone1("")
-        setupdateTelephone2("")
-        setupdateWebPage("")
-        setupdateLogo("")
-        setupdateStatus(false)
-
+        setupdateFullNameState("")
+        setupdateRfcState("")
         setModalUpdateRecord(!modalUpdateRecord);
     };
 
@@ -181,7 +168,8 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
             pvLogo : updateLogo,
             pbStatus : updateStatus,
             pvUser : user,
-            pathLogo : pathLogo
+            pathLogo : pathLogo,
+            pvIP : ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/customers/update-customer/`, {

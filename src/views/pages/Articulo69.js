@@ -22,9 +22,7 @@ import {
 } from "reactstrap";
 
 // core components
-import ReactTable from "components/ReactTable/ReactTable.js";
-import ModalAddClient from "../components/Modals/ModalAddClient.js";
-import ModalUpdateClient from "../components/Modals/ModalUpdateClient.js";
+import Articulo69Table from "../components/Articulo69/Articulo69Table";
 
 function Articulo69() {
 
@@ -32,11 +30,20 @@ function Articulo69() {
   const [excel, setExcel] = useState(null);
   const [JsonData, setJsonData]=useState([]);
 
-  const [excelState, setExcelState] = useState("Hola")
+  //Para guardar los datos de los usuarios
+  const [dataArticulo69, setDataArticulo69] = useState([]);
+
+  const [excelState69, setExcelState69] = useState("")
+  const [excelState69B, setExcelState69B] = useState("")
 
   useEffect(() => {
     //Aqui vamos a descargar la lista de registros de la base de datos por primera vez
   }, []);
+
+  //Renderizado condicional
+  function Articulo69TableData() {
+    return <Articulo69Table dataTable = {dataArticulo69}/>;
+  }
 
   function uploadExcel()
   {
@@ -45,32 +52,236 @@ function Articulo69() {
       let fileReader = new FileReader();
       fileReader.readAsArrayBuffer(excel);
       fileReader.onload = (event) => {
-        let data = new Uint8Array(event.target.result);
-        let workbook = XLSX.read(data, {type: "array"});
-        console.log(workbook);
-        var hojas =[];
-        workbook.SheetNames.forEach(function(sheetName) {
-          // Here is your object
-          var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
-          hojas.push({
-            data: XL_row_object,
-            sheetName
-          })
+      let data = new Uint8Array(event.target.result);
+
+      var config = {
+        type: 'array',
+        cellDates: true,
+        WTF: false,
+        cellStyles: true,
+        dateNF : 'dd/mm/yy',
+        cellINF: true
+      }
+      let workbook = XLSX.read(data, config);
+      var hojas =[];
+      workbook.SheetNames.forEach(function(sheetName) {
+        // Here is your object
+        var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+        hojas.push({
+          data: XL_row_object,
+          sheetName
         })
-        //setJsonData(JSON.stringify(hojas));
-        console.log(hojas)
+      })
+      
+      var date;
+      var month;
+      var year;
+      var fecha = "";
+      for(var i=0; i< hojas[0].data.length; i++)
+      {
+        date = hojas[0].data[i]["FECHAS DE PRIMERA PUBLICACION"].getDate()
+        month = hojas[0].data[i]["FECHAS DE PRIMERA PUBLICACION"].getMonth()
+        year = hojas[0].data[i]["FECHAS DE PRIMERA PUBLICACION"].getFullYear()
+
+        if(month < 10 && date < 10)
+        {
+          fecha = "0" + date + "/0" + (month+1) + "/" + year;  
+        }
+        else if(date < 10)
+        {
+          fecha = "0" + date + "/" + (month+1) + "/" + year;
+        }
+        else if(month < 10) 
+        {  
+          fecha = "" + date + "/0" + (month+1) + "/" + year;
+        }
+        else{
+          fecha = "" + date + "/" + (month+1) + "/" + year;
+        }
+        hojas[0].data[i]["FECHAS DE PRIMERA PUBLICACION"] = fecha
+        //console.log(hojas[0].data[i])
+      }
+        //console.log(JSON.stringify(hojas[0].data))
+        setDataArticulo69(hojas[0].data)
       };
     }
     else{
-      if (excelState !== "has-success") {
-        setExcelState("has-danger");
+      if (excelState69 !== "has-success") {
+        setExcelState69("has-danger");
       }
     }
   }
 
-  return (
+  return dataArticulo69.length === 0 ? (
     <>
-      {/*console.log(props.example)*/}
+      <div className="content">
+        <Row>
+          <Col md="12">
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4">Articulo 69</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <Form> 
+                  <Row> 
+                    <Col>
+                      <FormGroup className={`has-label ${excelState69}`}>
+                        <Input 
+                          className="form-control" 
+                          type="file" id="fileUpload" 
+                          accept=".xls, .xlsx, .csv" 
+                          onChange={(e) => {
+                            setExcel(e.target.files[0]);
+                            setExcelState69("has-success")
+                          }}/>
+                        {excelState69 === "has-danger" ? (
+                          <label className="error">
+                            Selecciona un documento válido.
+                          </label>
+                        ) : null}
+                      </FormGroup>
+                    </Col>
+                    <Col>
+                      <Button color="primary" onClick={uploadExcel}>
+                        Subir datos
+                      </Button> 
+                    </Col>
+                  </Row>
+                </Form>
+                {JsonData}
+              </CardBody>
+            </Card>
+          </Col>
+          <Col md="12">
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4">Articulo 69-B</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <Form> 
+                  <Row> 
+                    <Col>
+                      <FormGroup className={`has-label ${excelState69B}`}>
+                        <Input 
+                          className="form-control" 
+                          type="file" id="fileUpload" 
+                          accept=".xls, .xlsx, .csv" 
+                          onChange={(e) => {
+                            setExcel(e.target.files[0]);
+                          }}/>
+                        {excelState69B === "has-danger" ? (
+                          <label className="error">
+                            Selecciona un documento válido.
+                          </label>
+                        ) : null}
+                      </FormGroup>
+                    </Col>
+                    <Col>
+                      <Button color="primary" onClick={console.log("hola")}>
+                        Subir datos
+                      </Button> 
+                    </Col>
+                  </Row>
+                </Form>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </div>
+    </>
+  ) : (
+    <>
+      <div className="content">
+      <Row>
+          <Col md="12">
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4">Articulo 69</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <Form> 
+                  <Row> 
+                    <Col>
+                      <FormGroup className={`has-label ${excelState69}`}>
+                        <Input 
+                          className="form-control" 
+                          type="file" id="fileUpload" 
+                          accept=".xls, .xlsx, .csv" 
+                          onChange={(e) => {
+                            setExcel(e.target.files[0]);
+                            setExcelState69("has-success")
+                          }}/>
+                        {excelState69 === "has-danger" ? (
+                          <label className="error">
+                            Selecciona un documento válido.
+                          </label>
+                        ) : null}
+                      </FormGroup>
+                    </Col>
+                    <Col>
+                      <Button color="primary" onClick={uploadExcel}>
+                        Subir datos
+                      </Button> 
+                    </Col>
+                  </Row>
+                </Form>
+                {JsonData}
+              </CardBody>
+            </Card>
+          </Col>
+          <Col md="12">
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4">Articulo 69-B</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <Form> 
+                  <Row> 
+                    <Col>
+                      <FormGroup className={`has-label ${excelState69B}`}>
+                        <Input 
+                          className="form-control" 
+                          type="file" id="fileUpload" 
+                          accept=".xls, .xlsx, .csv" 
+                          onChange={(e) => {
+                            setExcel(e.target.files[0]);
+                          }}/>
+                        {excelState69B === "has-danger" ? (
+                          <label className="error">
+                            Selecciona un documento válido.
+                          </label>
+                        ) : null}
+                      </FormGroup>
+                    </Col>
+                    <Col>
+                      <Button color="primary" onClick={console.log("hola")}>
+                        Subir datos
+                      </Button> 
+                    </Col>
+                  </Row>
+                </Form>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col md="12">
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4">Artículo 69</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <Articulo69TableData />
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </div>
+    </>
+  );
+
+  /*return (
+    <>
       <div className="content">
         <Row>
           <Col md="12">
@@ -99,7 +310,42 @@ function Articulo69() {
                     </Col>
                     <Col>
                       <Button color="primary" onClick={uploadExcel}>
-                        Convert Excel To Json
+                        Subir datos
+                      </Button> 
+                    </Col>
+                  </Row>
+                </Form>
+                {JsonData}
+              </CardBody>
+            </Card>
+          </Col>
+          <Col md="12">
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4">Articulo 69-B</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <Form> 
+                  <Row> 
+                    <Col>
+                      <FormGroup className={`has-label ${excelState}`}>
+                        <Input 
+                          className="form-control" 
+                          type="file" id="fileUpload" 
+                          accept=".xls, .xlsx, .csv" 
+                          onChange={(e) => {
+                            setExcel(e.target.files[0]);
+                          }}/>
+                        {excelState === "has-danger" ? (
+                          <label className="error">
+                            Selecciona un documento válido.
+                          </label>
+                        ) : null}
+                      </FormGroup>
+                    </Col>
+                    <Col>
+                      <Button color="primary" onClick={uploadExcel}>
+                        Subir
                       </Button> 
                     </Col>
                   </Row>
@@ -111,7 +357,7 @@ function Articulo69() {
         </Row>
       </div>
     </>
-  );
+  );*/
 }
 
 export default Articulo69;

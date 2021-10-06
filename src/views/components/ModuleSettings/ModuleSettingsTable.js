@@ -16,7 +16,7 @@ import {
 } from "reactstrap";
 import { prototype } from "react-datetime";
 
-function ModuleSettingsTable({dataTable, dataSuites, updateAddData}){
+function ModuleSettingsTable({dataTable, dataSuites, updateAddData, ip}){
 
     const ambiente = "/DEV"
     const history = useHistory();
@@ -142,10 +142,10 @@ function ModuleSettingsTable({dataTable, dataSuites, updateAddData}){
           </div>
     
           {/*MODAL PARA CREAR REGISTRO*/}
-          <ModalAddApplication abierto = {modalAddRecord} toggleModalAddRecord = {toggleModalAddRecord} dataSuites = {dataSuites} updateAddData = {updateAddData}/>
+          <ModalAddApplication abierto = {modalAddRecord} toggleModalAddRecord = {toggleModalAddRecord} dataSuites = {dataSuites} updateAddData = {updateAddData} ip = {ip}/>
 
           {/*MODAL PARA MODIFICAR REGISTRO*/}
-          <ModalUpdateApplication abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} dataSuites = {dataSuites} updateAddData = {updateAddData} record = {record}/>
+          <ModalUpdateApplication abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} dataSuites = {dataSuites} updateAddData = {updateAddData} record = {record} ip = {ip}/>
         </> 
     );
 }

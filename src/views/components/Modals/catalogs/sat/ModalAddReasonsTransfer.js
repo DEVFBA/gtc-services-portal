@@ -12,7 +12,7 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalAddReasonsTransfer({modalAddRecord, setModalAddRecord, updateAddData}) {
+function ModalAddReasonsTransfer({modalAddRecord, setModalAddRecord, updateAddData, ip}) {
         // update form
     const [id, setId] = React.useState("Hola");
     const [shortDescription, setShortDescription] = React.useState("");
@@ -26,9 +26,6 @@ function ModalAddReasonsTransfer({modalAddRecord, setModalAddRecord, updateAddDa
     const [error, setError] = React.useState();
     const [errorState, setErrorState] = React.useState("");
     const [errorMessage, setErrorMessage] = useState("")
-
-    const user = localStorage.getItem("User");
-    const token = localStorage.getItem("Token");
 
     const handleModalClick = () => {
         setId("")
@@ -94,6 +91,7 @@ function ModalAddReasonsTransfer({modalAddRecord, setModalAddRecord, updateAddDa
             pvLongDesc: longDescription,
             pbStatus: status,
             pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/create-sat`, {

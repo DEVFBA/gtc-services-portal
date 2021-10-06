@@ -24,7 +24,7 @@ import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalUpdateCurrencies from "views/components/Modals/catalogs/sat/ModalUpdateCurrencies";
 import ModalAddCurrencies from "views/components/Modals/catalogs/sat/ModalAddCurrencies";
 
-function Currencies({dataTable, updateAddData}) {
+function Currencies({dataTable, updateAddData, ip}) {
   
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
@@ -145,10 +145,10 @@ function Currencies({dataTable, updateAddData}) {
     </div>
 
     {/*MODAL PARA AÑADIR REGISTROS*/}
-    <ModalAddCurrencies modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData}/>       
+    <ModalAddCurrencies modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData} ip = {ip}/>       
 
     {/*MODAL PARA MODIFICAR REGISTRO*/}
-    <ModalUpdateCurrencies abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData}/>
+    <ModalUpdateCurrencies abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData} ip = {ip}/>
 
     </>
   );

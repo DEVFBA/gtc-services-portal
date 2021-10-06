@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios'
 
 // reactstrap components
 import {
@@ -36,6 +37,17 @@ function CatalogosPortal() {
   //Para guardar los datos del catalogo seleccionado
   const [dataCatalog, setDataCatalog] = useState([]);
   const token = localStorage.getItem("Token");
+
+  const [ip, setIP] = React.useState("");
+  const getData = async () => {
+    const res = await axios.get('https://geolocation-db.com/json/')
+    setIP(res.data.IPv4)
+  }
+
+  useEffect(() => {
+      //Descargamos la IP del usuario
+      getData()
+  }, []);
 
   useEffect(() => {
     //Aqui vamos a descargar la lista de catalogos de la base de datos por primera vez
@@ -88,7 +100,7 @@ function CatalogosPortal() {
     const catalog = props.component;
     if(catalog === "ApplicationSuites")
     {
-      return <ApplicationSuites dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <ApplicationSuites dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     return <></>
   }

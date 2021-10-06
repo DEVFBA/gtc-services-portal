@@ -23,7 +23,7 @@ import {
     Row
 } from "reactstrap";
 
-function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustomers, updateAddData, validDays, pathImage}) {
+function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip}) {
         // register form
     const [registerEmail, setregisterEmail] = React.useState("");
     const [registerFullName, setregisterFullName] = React.useState("");
@@ -160,6 +160,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
         var date = finalDate.getDate();
         var month = finalDate.getMonth() + 1
         var year = finalDate.getFullYear()
+        var finalDate2 = ""
 
         if(month < 10 && date < 10)
         {
@@ -190,7 +191,8 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
             pvProfilePicPath: registerImage,
             pbStatus: registerStatus,
             pvUser: user,
-            pathImage : pathImage
+            pathImage : pathImage,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/security-users/create-user/`, {

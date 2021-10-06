@@ -12,11 +12,12 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAddData}) {
+function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAddData, ip}) {
         
     const [shortDescription, setShortDescription] = React.useState("");
     const [longDescription, setLongDescription] = React.useState("");
     const [status, setStatus] = React.useState(true);
+    
     
     const [shortDescriptionState, setShortDescriptionState] = React.useState("");
     const [longDescriptionState, setLongDescriptionState] = React.useState("");
@@ -29,6 +30,11 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
     const token = localStorage.getItem("Token");
 
     const handleModalClick = () => {
+        setShortDescriptionState("")
+        setLongDescriptionState("")
+        setError("")
+        setErrorState("")
+        setErrorMessage("")
         setModalAddRecord(!modalAddRecord);
     };
 
@@ -74,6 +80,7 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
             pvLongDesc: longDescription,
             pbStatus: status,
             pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/create-portal`, {

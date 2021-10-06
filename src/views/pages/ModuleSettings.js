@@ -1,20 +1,5 @@
-/*!
-
-=========================================================
-* Paper Dashboard PRO React - v1.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-pro-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React, { useState, useEffect } from "react";
+import axios from 'axios'
 
 
 // reactstrap components
@@ -58,6 +43,18 @@ function ModuleSettings() {
   const [options, setOptions] = useState([]);
 
   const token = localStorage.getItem("Token");
+
+  const [ip, setIP] = React.useState("");
+
+  const getData = async () => {
+    const res = await axios.get('https://geolocation-db.com/json/')
+    setIP(res.data.IPv4)
+  }
+
+  useEffect(() => {
+      //Descargamos la IP del usuario
+      getData()
+  }, []);
 
   useEffect(() => {
     //Aqui vamos a descargar la lista de usuarios de la base de datos por primera vez
@@ -127,7 +124,7 @@ function ModuleSettings() {
 
   //Renderizado condicional
   function Applications() {
-    return <ModuleSettingsTable dataTable = {dataApplications} dataSuites = {options} updateAddData = {updateAddData}/>;
+    return <ModuleSettingsTable dataTable = {dataApplications} dataSuites = {options} updateAddData = {updateAddData} ip = {ip}/>;
   }
 
   function updateAddData(){

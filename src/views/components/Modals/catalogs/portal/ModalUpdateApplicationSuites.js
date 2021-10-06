@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios'
 
 // reactstrap components
 import {
@@ -12,7 +13,7 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record, updateAddData}) {
+function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record, updateAddData, ip}) {
         // update form
     const [id, setId] = React.useState("");
     const [shortDescription, setShortDescription] = React.useState("");
@@ -43,6 +44,9 @@ function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record,
     },[record]);
 
     const handleModalClick = () => {
+        setError("")
+        setErrorState("")
+        setErrorMessage("")
         toggleModalUpdateRecord(!abierto);
     };
 
@@ -105,6 +109,7 @@ function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record,
             pvLongDesc: longDescription,
             pbStatus: status,
             pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/update-portal`, {

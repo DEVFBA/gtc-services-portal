@@ -74,34 +74,37 @@ function Sidebar(props) {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("Token");
-    //Aqui vamos a descargar la lista de general parameters para revisar la vigencia del password
-    const params = {
-      pvOptionCRUD: "R"
-    };
-
-    var url = new URL(`http://129.159.99.152/develop-api/api/general-parameters/`);
-
-    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-
-    fetch(url, {
-        method: "GET",
-        headers: {
-            "access-token": token,
-            "Content-Type": "application/json",
-        }
-    })
-    .then(function(response) {
-        return response.ok ? response.json() : Promise.reject();
-    })
-    .then(function(data) {
-        var aux = data.find( o => o.Id_Catalog === 9)
-        console.log(aux.Value)
-        setRouteProfile(aux.Value)
-    })
-    .catch(function(err) {
-        alert("No se pudo consultar la informacion de la ruta Profile_Picture" + err);
-    });
+    if(Logged === "true")
+    {
+      const token = localStorage.getItem("Token");
+      //Aqui vamos a descargar la lista de general parameters para revisar la vigencia del password
+      const params = {
+        pvOptionCRUD: "R"
+      };
+  
+      var url = new URL(`http://129.159.99.152/develop-api/api/general-parameters/`);
+  
+      Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+  
+      fetch(url, {
+          method: "GET",
+          headers: {
+              "access-token": token,
+              "Content-Type": "application/json",
+          }
+      })
+      .then(function(response) {
+          return response.ok ? response.json() : Promise.reject();
+      })
+      .then(function(data) {
+          var aux = data.find( o => o.Id_Catalog === 9)
+          console.log(aux.Value)
+          setRouteProfile(aux.Value)
+      })
+      .catch(function(err) {
+          alert("No se pudo consultar la informacion de la Profile_Picture" + err);
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -124,9 +127,10 @@ function Sidebar(props) {
       .then(function(data) {
           setImage(data[0].Profile_Pic_Path)
           setName(data[0].Name)
+          console.log(data)
       })
       .catch(function(err) {
-          alert("No se pudo consultar la informacion del usuario" + err);
+          alert("No se pudo consultar la informacion del usuario en sidebar" + err);
       });
     }  
   },[]);
@@ -241,7 +245,10 @@ function Sidebar(props) {
     setCollapseStates(getCollapseStates(props.routes));
   }, []);
 
-  return (
+  return image === "" ? (
+    <>
+    </>
+    ) : (
     <div
       className="sidebar"
       data-color={props.bgColor}
@@ -266,7 +273,7 @@ function Sidebar(props) {
 
       <div className="sidebar-wrapper" ref={sidebar}>
         <div className="user">
-          {image !== "null" ? (
+          {image !== null ? (
             <div className="photo">
               <img src={routeProfile + image} alt="Avatar" />
             </div>
@@ -290,32 +297,6 @@ function Sidebar(props) {
                 {/*<b className="caret" />*/}
               </span>
             </a>
-            {/*<Collapse isOpen={openAvatar}>
-              <ul className="nav">
-                <li>
-                  <NavLink to= {ambiente + "/admin/user-profile"} activeClassName="">
-                    <span className="sidebar-mini-icon">MP</span>
-                    <span className="sidebar-normal">Mi Perfil</span>
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to= {ambiente + "/admin/user-profile"} activeClassName="">
-                    <span className="sidebar-mini-icon">EP</span>
-                    <span className="sidebar-normal">Editar Perfil</span>
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to= {ambiente + "/admin/user-profile"} activeClassName="">
-                    <span className="sidebar-mini-icon">C</span>
-                    <span className="sidebar-normal">Configuración</span>
-                  </NavLink>
-                  <NavLink to= {ambiente + "/auth/login"} activeClassName="">
-                    <span className="sidebar-mini-icon">CS</span>
-                    <span className="sidebar-normal">Cerrar Sesión</span>
-                  </NavLink>
-                </li>
-              </ul>
-            </Collapse>*/}
           </div>
         </div>
         <Nav>{createLinks(props.routes)}</Nav>

@@ -24,7 +24,7 @@ import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalUpdateKeyProduct from "views/components/Modals/catalogs/sat/ModalUpdateKeyProduct";
 import ModalAddKeyProduct from "views/components/Modals/catalogs/sat/ModalAddKeyProduct";
 
-function KeyProduct({dataTable, updateAddData}) {
+function KeyProduct({dataTable, updateAddData, ip}) {
   
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
@@ -148,10 +148,10 @@ function KeyProduct({dataTable, updateAddData}) {
     </div>
 
     {/*MODAL PARA AÑADIR REGISTROS*/}
-    <ModalAddKeyProduct modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData}/>       
+    <ModalAddKeyProduct modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData} ip = {ip}/>       
 
     {/*MODAL PARA MODIFICAR REGISTRO*/}
-    <ModalUpdateKeyProduct abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData}/>
+    <ModalUpdateKeyProduct abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData} ip = {ip}/>
 
     </>
   );

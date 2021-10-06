@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios'
 
 // reactstrap components
 import {
@@ -38,11 +39,17 @@ function Clientes() {
   const token = localStorage.getItem("Token");
   const user = localStorage.getItem("User");
 
-  const [registerUser, setregisterUser] = React.useState("");
-  const [registerUserState, setregisterUserState] = React.useState("");
-  const [error, setError] = React.useState();
-  const [errorState, setErrorState] = React.useState("");
-  const [errorMessage, setErrorMessage] = React.useState("");
+  const [ip, setIP] = React.useState("");
+
+  const getData = async () => {
+    const res = await axios.get('https://geolocation-db.com/json/')
+    setIP(res.data.IPv4)
+  }
+
+  useEffect(() => {
+      //Descargamos la IP del usuario
+      getData()
+  }, []);
 
   useEffect(() => {
     //Aqui vamos a descargar la lista de usuarios de la base de datos por primera vez
@@ -140,7 +147,7 @@ function Clientes() {
 
    //Renderizado condicional
   function Customers() {
-      return <CustomersTable dataTable = {dataCustomers} dataCountries = {dataCountries} updateAddData = {updateAddData} pathLogo = {pathLogo}/>;
+      return <CustomersTable dataTable = {dataCustomers} dataCountries = {dataCountries} updateAddData = {updateAddData} pathLogo = {pathLogo} ip={ip}/>;
   }
 
   //Para actualizar la tabla al insertar registro

@@ -22,7 +22,7 @@ import {
     Col,
 } from "reactstrap";
 
-function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord, record, updateAddData}) {
+function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord, record, updateAddData, ip}) {
     
     const [updateCustomer, setupdateCustomer] = React.useState("");
     const [updateApplication, setupdateApplication] = React.useState("");
@@ -135,7 +135,8 @@ function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord
             piIdCustomer: updateCustomer,
             piIdApplication: updateApplication.value,
             pvFinalEffectiveDate: finalDate2,
-            pvUser: user
+            pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/customer-applications/update-customer-application`, {

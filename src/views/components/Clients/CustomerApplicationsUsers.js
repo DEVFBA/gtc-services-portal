@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios'
 
 // reactstrap components
 import {
@@ -47,6 +48,18 @@ function CustomerApplicationsUsers() {
   const [error, setError] = React.useState();
   const [errorState, setErrorState] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
+
+  const [ip, setIP] = React.useState("");
+
+  const getData = async () => {
+    const res = await axios.get('https://geolocation-db.com/json/')
+    setIP(res.data.IPv4)
+  }
+
+  useEffect(() => {
+      //Descargamos la IP del usuario
+      getData()
+  }, []);
 
   useEffect(() => {
     //Aqui vamos a descargar la lista de usuarios de la base de datos por primera vez
@@ -188,6 +201,7 @@ function CustomerApplicationsUsers() {
         pIdApplication: idApp,
         pvIdUser: registerUser.value,
         pvUser: user,
+        pvIP: ip
     };
 
     fetch(`http://129.159.99.152/develop-api/api/customer-applications-users/create-customer-application-user`, {

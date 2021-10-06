@@ -24,7 +24,7 @@ import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalUpdateCustomsUnits from "views/components/Modals/catalogs/sat/ModalUpdateCustomsUnits";
 import ModalAddCustomsUnits from "views/components/Modals/catalogs/sat/ModalAddCustomsUnits";
 
-function CustomsUnits({dataTable, updateAddData}) {
+function CustomsUnits({dataTable, updateAddData, ip}) {
 
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
@@ -148,10 +148,10 @@ function CustomsUnits({dataTable, updateAddData}) {
     </div>
 
     {/*MODAL PARA AÑADIR REGISTROS*/}
-    <ModalAddCustomsUnits modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData}/>       
+    <ModalAddCustomsUnits modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData} ip = {ip}/>       
 
     {/*MODAL PARA MODIFICAR REGISTRO*/}
-    <ModalUpdateCustomsUnits abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData}/>
+    <ModalUpdateCustomsUnits abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData} ip = {ip}/>
 
     </>
   );

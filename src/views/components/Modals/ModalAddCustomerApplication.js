@@ -23,7 +23,7 @@ import {
 } from "reactstrap";
 import { data } from "jquery";
 
-function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCustomers, dataApplications, updateAddData}) {
+function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCustomers, dataApplications, updateAddData, ip}) {
     
     const [registerCustomer, setregisterCustomer] = React.useState("");
     const [registerApplication, setregisterApplication] = React.useState("");
@@ -140,7 +140,8 @@ function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCus
             piIdCustomer: registerCustomer.value,
             piIdApplication: registerApplication.value,
             pvFinalEffectiveDate: finalDate2,
-            pvUser: user
+            pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/customer-applications/create-customer-application`, {

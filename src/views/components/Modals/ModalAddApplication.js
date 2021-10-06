@@ -28,7 +28,7 @@ var types = [
     { value: "Server", label: "Server"},
 ]
 
-function ModalAddApplication({abierto, toggleModalAddRecord, dataSuites, updateAddData}) {
+function ModalAddApplication({abierto, toggleModalAddRecord, dataSuites, updateAddData, ip}) {
     const [aplicacion, setAplicacion] = React.useState("");
     const [version, setVersion] = React.useState("");
     const [suite, setSuite] = React.useState("");
@@ -135,6 +135,7 @@ function ModalAddApplication({abierto, toggleModalAddRecord, dataSuites, updateA
             pvType: type.value,
             pbStatus: status,
             pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/cat-applications/create-application/`, {
@@ -281,7 +282,7 @@ function ModalAddApplication({abierto, toggleModalAddRecord, dataSuites, updateA
                                 <Select
                                     name=""
                                     className="react-select"
-                                    placeholder="Selecciona una suite"
+                                    placeholder="Selecciona un tipo de aplicación"
                                     classNamePrefix="react-select"
                                     value={type}
                                     onChange={(value) => {

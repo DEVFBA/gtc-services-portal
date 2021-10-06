@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 import { prototype } from "react-datetime";
 
-function CustomerApplicationsTable({dataTable, dataApplications, dataCustomers, updateAddData}){
+function CustomerApplicationsTable({dataTable, dataApplications, dataCustomers, updateAddData, ip}){
     const ambiente = "/DEV"
     const history = useHistory();
     const [dataState, setDataState] = useState(
@@ -174,10 +174,10 @@ function CustomerApplicationsTable({dataTable, dataApplications, dataCustomers, 
         </div>
     
         {/*MODAL PARA AÑADIR REGISTROS*/}
-        <ModalAddCustomerApplication modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} record = {record} dataApplications = {dataApplications} dataCustomers = {dataCustomers} updateAddData = {updateAddData}/>       
+        <ModalAddCustomerApplication modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} record = {record} dataApplications = {dataApplications} dataCustomers = {dataCustomers} updateAddData = {updateAddData} ip={ip}/>       
 
         {/*MODAL PARA MODIFICAR REGISTRO*/}
-        <ModalUpdateCustomerApplication modalUpdateRecord = {modalUpdateRecord} setModalUpdateRecord = {setModalUpdateRecord} record = {record} dataApplications = {dataApplications} updateAddData = {updateAddData}/>
+        <ModalUpdateCustomerApplication modalUpdateRecord = {modalUpdateRecord} setModalUpdateRecord = {setModalUpdateRecord} record = {record} dataApplications = {dataApplications} updateAddData = {updateAddData} ip={ip}/>
     
         </>
     );

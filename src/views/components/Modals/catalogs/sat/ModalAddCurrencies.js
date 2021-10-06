@@ -12,13 +12,13 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalAddCurrencies({modalAddRecord, setModalAddRecord, updateAddData}) {
+function ModalAddCurrencies({modalAddRecord, setModalAddRecord, updateAddData, ip}) {
         // update form
     const [id, setId] = React.useState("Hola");
     const [shortDescription, setShortDescription] = React.useState("");
     const [longDescription, setLongDescription] = React.useState("");
     const [status, setStatus] = React.useState(true);
-    
+
     const [idState, setIdState] = React.useState("");
     const [shortDescriptionState, setShortDescriptionState] = React.useState("");
     const [longDescriptionState, setLongDescriptionState] = React.useState("");
@@ -29,7 +29,6 @@ function ModalAddCurrencies({modalAddRecord, setModalAddRecord, updateAddData}) 
 
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");
-
     
     const handleModalClick = () => {
         setId("")
@@ -95,6 +94,7 @@ function ModalAddCurrencies({modalAddRecord, setModalAddRecord, updateAddData}) 
             pvLongDesc: longDescription,
             pbStatus: status,
             pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/create-sat`, {

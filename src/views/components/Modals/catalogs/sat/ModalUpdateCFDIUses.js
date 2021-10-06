@@ -12,7 +12,7 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalUpdateCFDIUses({abierto, toggleModalUpdateRecord, record, updateAddData}) {
+function ModalUpdateCFDIUses({abierto, toggleModalUpdateRecord, record, updateAddData, ip}) {
         // update form
     const [id, setId] = React.useState("");
     const [shortDescription, setShortDescription] = React.useState("");
@@ -43,10 +43,6 @@ function ModalUpdateCFDIUses({abierto, toggleModalUpdateRecord, record, updateAd
     },[record]);
 
     const handleModalClick = () => {
-        setId("")
-        setShortDescription("")
-        setLongDescription("")
-        setStatus(true)
         setShortDescriptionState("")
         setLongDescriptionState("")
         setError("")
@@ -114,6 +110,7 @@ function ModalUpdateCFDIUses({abierto, toggleModalUpdateRecord, record, updateAd
             pvLongDesc: longDescription,
             pbStatus: status,
             pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/update-sat`, {

@@ -24,7 +24,7 @@ import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalUpdatePaymentMethods from "views/components/Modals/catalogs/sat/ModalUpdatePaymentMethods";
 import ModalAddPaymentMethods from "views/components/Modals/catalogs/sat/ModalAddPaymentMethods";
 
-function PaymentMethods({dataTable, updateAddData}) {
+function PaymentMethods({dataTable, updateAddData, ip}) {
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
       var status;
@@ -147,10 +147,10 @@ function PaymentMethods({dataTable, updateAddData}) {
     </div>
 
     {/*MODAL PARA AÑADIR REGISTROS*/}
-    <ModalAddPaymentMethods modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData}/>       
+    <ModalAddPaymentMethods modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData} ip = {ip}/>       
 
     {/*MODAL PARA MODIFICAR REGISTRO*/}
-    <ModalUpdatePaymentMethods abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData}/>
+    <ModalUpdatePaymentMethods abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData} ip = {ip}/>
 
     </>
   );

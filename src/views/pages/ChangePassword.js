@@ -61,7 +61,7 @@ function Register() {
     const token = localStorage.getItem("Token");
     const role = localStorage.getItem("Id_Role");
     const [customer, setCustomer] = React.useState("");
-    const name = localStorage.getItem("Name");
+    const [name, setName] = React.useState("");
 
     const ambiente = "/DEV"
 
@@ -111,6 +111,7 @@ function Register() {
           })
           .then(function(data) {
               setCustomer(data[0].Id_Customer)
+              setName(data[0].Name)
           })
           .catch(function(err) {
               alert("No se pudo consultar la informacion del usuario" + err);

@@ -24,7 +24,7 @@ import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalUpdateIncoterm from "views/components/Modals/catalogs/sat/ModalUpdateIncoterm";
 import ModalAddIncoterm from "views/components/Modals/catalogs/sat/ModalAddIncoterm";
 
-function Incoterm({dataTable, updateAddData}) {
+function Incoterm({dataTable, updateAddData, ip}) {
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
       var status;
@@ -147,10 +147,10 @@ function Incoterm({dataTable, updateAddData}) {
     </div>
 
     {/*MODAL PARA AÑADIR REGISTROS*/}
-    <ModalAddIncoterm modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData}/>       
+    <ModalAddIncoterm modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData} ip = {ip}/>       
 
     {/*MODAL PARA MODIFICAR REGISTRO*/}
-    <ModalUpdateIncoterm abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData}/>
+    <ModalUpdateIncoterm abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData} ip = {ip}/>
 
     </>
   );

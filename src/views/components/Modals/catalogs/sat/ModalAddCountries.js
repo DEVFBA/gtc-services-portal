@@ -12,7 +12,7 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalAddCountries({modalAddRecord, setModalAddRecord, updateAddData}) {
+function ModalAddCountries({modalAddRecord, setModalAddRecord, updateAddData, ip}) {
         // update form
     const [id, setId] = React.useState("");
     const [shortDescription, setShortDescription] = React.useState("");
@@ -28,6 +28,7 @@ function ModalAddCountries({modalAddRecord, setModalAddRecord, updateAddData}) {
     const [errorMessage, setErrorMessage] = useState("")
 
     const user = localStorage.getItem("User");
+    const token = localStorage.getItem("Token");
 
     const handleModalClick = () => {
         setId("")
@@ -93,12 +94,14 @@ function ModalAddCountries({modalAddRecord, setModalAddRecord, updateAddData}) {
             pvLongDesc: longDescription,
             pbStatus: status,
             pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/create-sat`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {
+                "access-token": token,
                 "Content-Type": "application/json"
             }
         })

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios'
 
 // reactstrap components
 import {
@@ -54,6 +55,17 @@ function CatalogosSAT() {
 
   const token = localStorage.getItem("Token");
 
+  const [ip, setIP] = React.useState("");
+  const getData = async () => {
+    const res = await axios.get('https://geolocation-db.com/json/')
+    setIP(res.data.IPv4)
+  }
+
+  useEffect(() => {
+      //Descargamos la IP del usuario
+      getData()
+  }, []);
+
   useEffect(() => {
     //Aqui vamos a descargar la lista de catalogos de la base de datos por primera vez
     const params = {
@@ -102,58 +114,58 @@ function CatalogosSAT() {
   function Catalog(props) {
     const catalog = props.component;
     if (catalog === "CFDIUses") {
-      return <CFDIUses dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <CFDIUses dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     if (catalog === "Countries") {
-      return <Countries dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <Countries dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     if (catalog === "Currencies") {
-      return <Currencies dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <Currencies dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     if (catalog === "Customs") {
-      return <Customs dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <Customs dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     if (catalog === "CustomsUnits") {
-      return <CustomsUnits dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <CustomsUnits dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     if (catalog === "Incoterm") {
-      return <Incoterm dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <Incoterm dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     if (catalog === "KeyProduct") {
-      return <KeyProduct dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <KeyProduct dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     if (catalog === "KeyUnit") {
-      return <KeyUnit dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <KeyUnit dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     if (catalog === "PaymentMethods") {
-      return <PaymentMethods dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <PaymentMethods dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     if (catalog === "PaymentWays") {
-      return <PaymentWays dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <PaymentWays dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     if (catalog === "PetitionTypes") {
-      return <PetitionTypes dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <PetitionTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     if (catalog === "ReasonsTransfer") {
-      return <ReasonsTransfer dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <ReasonsTransfer dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     if (catalog === "TariffFractions") {
-      return <TariffFractions dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <TariffFractions dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     if (catalog === "Taxes") {
-      return <Taxes dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <Taxes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     if (catalog === "TaxRegimes") {
-      return <TaxRegimes dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <TaxRegimes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     if (catalog === "TypesOperation") {
-      return <TypesOperation dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <TypesOperation dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     if (catalog === "VoucherTypes") {
-      return <VoucherTypes dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <VoucherTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     if (catalog === "RelationshipTypes") {
-      return <RelationshipTypes dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <RelationshipTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
     }
     return <p></p>
   }

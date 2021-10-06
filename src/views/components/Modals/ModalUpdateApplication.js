@@ -28,7 +28,7 @@ var types = [
     { value: "Server", label: "Server"},
 ]
 
-function ModalUpdateApplication({abierto, toggleModalUpdateRecord, dataSuites, updateAddData, record}) {
+function ModalUpdateApplication({abierto, toggleModalUpdateRecord, dataSuites, updateAddData, record, ip}) {
     const [idAplicacion, setIdAplicacion] = React.useState("");
     const [aplicacion, setAplicacion] = React.useState("");
     const [version, setVersion] = React.useState("");
@@ -54,18 +54,15 @@ function ModalUpdateApplication({abierto, toggleModalUpdateRecord, dataSuites, u
 
     const handleModalClick = () => {
         //Regresamos todo a su estado inicial
-        setAplicacion("");
-        setVersion("");
-        setSuite("");
-        setDescripcionApp("");
-        setDescripcionTec(true);
-        setType("")
         setaplicacionState("");
         setVersionState("");
         setsuiteState("");
         setdescripcionappState("");
         setdescripciontecState("");
         settypeState("");
+        setError("")
+        setErrorState("")
+        setErrorMessage("")
         //Cerramos el modal
         toggleModalUpdateRecord(!abierto);
     };
@@ -179,6 +176,7 @@ function ModalUpdateApplication({abierto, toggleModalUpdateRecord, dataSuites, u
             pvType: type.value,
             pbStatus: status,
             pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/cat-applications/update-application/`, {

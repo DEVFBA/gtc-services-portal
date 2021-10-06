@@ -23,7 +23,7 @@ import {
     Col,
 } from "reactstrap";
 
-function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, dataCustomers, updateAddData, validDays, pathImage}) {
+function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip}) {
         // register form
     const [updateEmail, setupdateEmail] = React.useState("");
     const [updateFullName, setupdateFullName] = React.useState("");
@@ -52,21 +52,14 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
     const token = localStorage.getItem("Token");
 
     const handleModalClick = () => {
-        setupdateEmail("")
-        setupdateFullName("")
-        setupdatePassword("")
-        setupdateChangePassword(false)
-        setupdateTemporal(false)
-        setupdateRol({})
-        setupdateCustomer("")
-        setupdateImage("")
-        setupdateStatus()
-        setupdateConfirmPassword("")
         setErrorMessage("") 
         setupdateFullNameState("")
         setupdatePasswordState("")
         setupdateConfirmPasswordState("")
         setupdateRolState("")
+        setError("")
+        setErrorState("")
+        setErrorMessage("")
         toggleModalUpdateRecord(!abierto);
     };
 
@@ -211,7 +204,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
             else{
                 finalDate2 = "" + year + "" + month + "" + date;
             }  
-
+            
             const catRegister = {
                 pvOptionCRUD: "U",
                 piIdCustomer: updateCustomer.value,
@@ -224,7 +217,8 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                 pbStatus: updateStatus,
                 pvFinalEffectiveDate: finalDate2,
                 pvUser: user,
-                pathImage : pathImage
+                pathImage : pathImage,
+                pvIP: ip
             };
         
             fetch(`http://129.159.99.152/develop-api/api/security-users/update-user/`, {
@@ -274,7 +268,8 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                 pbStatus: updateStatus,
                 pvFinalEffectiveDate: finalDate2,
                 pvUser: user,
-                pathImage : pathImage
+                pathImage : pathImage,
+                pvIP: ip
             };
         
             fetch(`http://129.159.99.152/develop-api/api/security-users/update-user-wp/`, {
@@ -295,6 +290,11 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                 else{
                     if(data[0].Code_Type === "Warning")
                     {
+                        setErrorState("has-danger")
+                    }
+                    else if(data[0].Code_Type === "Error")
+                    {
+                        setErrorMessage(data[0].Code_Message_User)
                         setErrorState("has-danger")
                     }
                     else{

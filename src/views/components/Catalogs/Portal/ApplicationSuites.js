@@ -26,7 +26,7 @@ import ModalAddApplicationSuites from "views/components/Modals/catalogs/portal/M
 import { DateTimeOffset } from "mssql";
 
 
-function ApplicationSuites({dataTable, updateAddData}) {
+function ApplicationSuites({dataTable, updateAddData, ip}) {
 
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
@@ -75,6 +75,7 @@ function ApplicationSuites({dataTable, updateAddData}) {
     function getRegistro(key)
     {
         var registro = dataState.find((o) => o.id === key)
+        console.log(registro)
         setRecord(registro) 
     }
 
@@ -146,10 +147,10 @@ function ApplicationSuites({dataTable, updateAddData}) {
     </div>
 
     {/*MODAL PARA AÑADIR REGISTROS*/}
-    <ModalAddApplicationSuites modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData}/>       
+    <ModalAddApplicationSuites modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData} ip = {ip}/>       
 
     {/*MODAL PARA MODIFICAR REGISTRO*/}
-    <ModalUpdateApplicationSuites abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData}/>
+    <ModalUpdateApplicationSuites abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData} ip = {ip}/>
 
     </>
   );

@@ -12,7 +12,7 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalAddVoucherTypes({modalAddRecord, setModalAddRecord, updateAddData}) {
+function ModalAddVoucherTypes({modalAddRecord, setModalAddRecord, updateAddData, ip}) {
         // update form
     const [id, setId] = React.useState("Hola");
     const [shortDescription, setShortDescription] = React.useState("");
@@ -98,6 +98,7 @@ function ModalAddVoucherTypes({modalAddRecord, setModalAddRecord, updateAddData}
             pvLongDesc: longDescription,
             pbStatus: status,
             pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/create-sat`, {

@@ -12,13 +12,13 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalUpdateIncoterm({abierto, toggleModalUpdateRecord, record, updateAddData}) {
+function ModalUpdateIncoterm({abierto, toggleModalUpdateRecord, record, updateAddData, ip}) {
         // update form
     const [id, setId] = React.useState("Hola");
     const [shortDescription, setShortDescription] = React.useState("");
     const [longDescription, setLongDescription] = React.useState("");
     const [status, setStatus] = React.useState(true);
-    
+
     const [shortDescriptionState, setShortDescriptionState] = React.useState("");
     const [longDescriptionState, setLongDescriptionState] = React.useState("");
 
@@ -43,10 +43,6 @@ function ModalUpdateIncoterm({abierto, toggleModalUpdateRecord, record, updateAd
     },[record]);
 
     const handleModalClick = () => {
-        setId("")
-        setShortDescription("")
-        setLongDescription("")
-        setStatus(true)
         setShortDescriptionState("")
         setLongDescriptionState("")
         setError("")
@@ -114,6 +110,7 @@ function ModalUpdateIncoterm({abierto, toggleModalUpdateRecord, record, updateAd
             pvLongDesc: longDescription,
             pbStatus: status,
             pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/update-sat`, {

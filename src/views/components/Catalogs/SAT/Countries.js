@@ -24,7 +24,7 @@ import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalUpdateCountries from "views/components/Modals/catalogs/sat/ModalUpdateCountries";
 import ModalAddCountries from "views/components/Modals/catalogs/sat/ModalAddCountries.js";
 
-function Countries({dataTable, updateAddData}) {
+function Countries({dataTable, updateAddData, ip}) {
 
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
@@ -148,10 +148,10 @@ function Countries({dataTable, updateAddData}) {
     </div>
 
     {/*MODAL PARA AÑADIR REGISTROS*/}
-    <ModalAddCountries modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateTable = {updateTable} setUpdateTable = {setUpdateTable} updateAddData = {updateAddData}/>       
+    <ModalAddCountries modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateTable = {updateTable} setUpdateTable = {setUpdateTable} updateAddData = {updateAddData} ip = {ip}/>       
 
     {/*MODAL PARA MODIFICAR REGISTRO*/}
-    <ModalUpdateCountries abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData}/>
+    <ModalUpdateCountries abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData} ip = {ip}/>
 
     </>
   );

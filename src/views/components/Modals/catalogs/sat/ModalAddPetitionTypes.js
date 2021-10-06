@@ -12,13 +12,13 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalAddPetitionTypes({modalAddRecord, setModalAddRecord, updateAddData}) {
+function ModalAddPetitionTypes({modalAddRecord, setModalAddRecord, updateAddData, ip}) {
         // update form
     const [id, setId] = React.useState("Hola");
     const [shortDescription, setShortDescription] = React.useState("");
     const [longDescription, setLongDescription] = React.useState("");
     const [status, setStatus] = React.useState(true);
-    
+
     const [idState, setIdState] = React.useState("");
     const [shortDescriptionState, setShortDescriptionState] = React.useState("");
     const [longDescriptionState, setLongDescriptionState] = React.useState("");
@@ -26,9 +26,6 @@ function ModalAddPetitionTypes({modalAddRecord, setModalAddRecord, updateAddData
     const [error, setError] = React.useState();
     const [errorState, setErrorState] = React.useState("");
     const [errorMessage, setErrorMessage] = useState("")
-
-    const user = localStorage.getItem("User");
-    const token = localStorage.getItem("Token");
 
     const handleModalClick = () => {
         setId("")
@@ -94,6 +91,7 @@ function ModalAddPetitionTypes({modalAddRecord, setModalAddRecord, updateAddData
             pvLongDesc: longDescription,
             pbStatus: status,
             pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/create-sat`, {

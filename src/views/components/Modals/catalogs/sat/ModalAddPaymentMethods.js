@@ -12,7 +12,7 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalAddPaymentMethods({modalAddRecord, setModalAddRecord, updateAddData}) {
+function ModalAddPaymentMethods({modalAddRecord, setModalAddRecord, updateAddData, ip}) {
         // update form
     const [id, setId] = React.useState("Hola");
     const [shortDescription, setShortDescription] = React.useState("");
@@ -94,6 +94,7 @@ function ModalAddPaymentMethods({modalAddRecord, setModalAddRecord, updateAddDat
             pvLongDesc: longDescription,
             pbStatus: status,
             pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/create-sat`, {
