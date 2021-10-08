@@ -248,7 +248,7 @@ function CustomerApplicationsUsers() {
           <Col md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">Customer Applications Users</CardTitle>
+                <CardTitle tag="h4">Usuarios de la Aplicación</CardTitle>
                 <Form id="RegisterValidation">
                   <FormGroup className={`has-label ${registerUserState}`}>
                       <Label for="exampleSelect">Usuario * </Label>

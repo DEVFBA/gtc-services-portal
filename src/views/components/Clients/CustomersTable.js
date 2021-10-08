@@ -14,7 +14,7 @@ import {
 import { prototype } from "react-datetime";
 import { data } from "jquery";
 
-function CustomersTable({dataTable, dataCountries, updateAddData, pathLogo, ip}){
+function CustomersTable({dataTable, dataCountries, updateAddData, pathLogo, ip, profilePath}){
     const ambiente = "/DEV"
     const history = useHistory();
     const [dataState, setDataState] = useState(
@@ -113,7 +113,7 @@ function CustomersTable({dataTable, dataCountries, updateAddData, pathLogo, ip})
                         <span className="btn-label">
                         <i className="nc-icon nc-simple-add" />
                         </span>
-                        Agregar Registro
+                        Agregar Cliente
                     </Button>
                  
                     <ReactTable
@@ -171,7 +171,7 @@ function CustomersTable({dataTable, dataCountries, updateAddData, pathLogo, ip})
         <ModalAddCustomer modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} record = {record} dataCountries = {dataCountries} updateAddData = {updateAddData} pathLogo = {pathLogo} ip = {ip}/>       
 
         {/*MODAL PARA MODIFICAR REGISTRO*/}
-        <ModalUpdateClient modalUpdateRecord = {modalUpdateRecord} setModalUpdateRecord = {setModalUpdateRecord} record = {record} dataCountries = {dataCountries} updateAddData = {updateAddData} pathLogo = {pathLogo} ip = {ip}/>
+        <ModalUpdateClient modalUpdateRecord = {modalUpdateRecord} setModalUpdateRecord = {setModalUpdateRecord} record = {record} dataCountries = {dataCountries} updateAddData = {updateAddData} pathLogo = {pathLogo} ip = {ip} profilePath = {profilePath}/>
     
         </>
     );

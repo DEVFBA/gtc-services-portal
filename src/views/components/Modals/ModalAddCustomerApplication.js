@@ -187,14 +187,14 @@ function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCus
             <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
                 <span aria-hidden="true">×</span>
             </button>
-            <h5 className="modal-title">Agregar Registro</h5>
+            <h5 className="modal-title">Agregar Aplicación / Servicio</h5>
             </div>
             <ModalBody>
             <Form id="RegisterValidation">
                 <Row className="justify-content-center">
                     <Col className="mt-3" lg="10">
                         <FormGroup className={`has-label ${registerCustomerState}`}>
-                            <Label for="exampleSelect">Customer * </Label>
+                            <Label for="exampleSelect">Cliente * </Label>
                             <Select
                                 name=""
                                 className="react-select"
@@ -212,7 +212,7 @@ function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCus
                             ) : null}
                         </FormGroup>
                         <FormGroup className={`has-label ${registerApplicationState}`}>
-                            <Label for="exampleSelect">Application / Service * </Label>
+                            <Label for="exampleSelect">Aplicación / Servicio * </Label>
                             <Select
                                 name=""
                                 className="react-select"
@@ -283,7 +283,7 @@ function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCus
             <ModalFooter>
                 <div className="center-side">
                 <Button className="buttons" color="secondary" onClick={handleModalClick}>
-                    Close
+                    Cerrar
                 </Button>
                 <Button className="buttons" color="primary" onClick={registerClick}>
                     Guardar cambios

@@ -1,20 +1,5 @@
-/*!
-
-=========================================================
-* Paper Dashboard PRO React - v1.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-pro-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
+import axios from 'axios'
 
 // reactstrap components
 import {
@@ -64,6 +49,17 @@ function Register() {
     const [name, setName] = React.useState("");
 
     const ambiente = "/DEV"
+
+    const [ip, setIP] = React.useState("");
+    const getData = async () => {
+        const res = await axios.get('https://geolocation-db.com/json/')
+        setIP(res.data.IPv4)
+    }
+
+    useEffect(() => {
+        //Descargamos la IP del usuario
+        getData()
+    }, []);
 
     useEffect(() => {
         //Aqui vamos a descargar la lista de general parameters para revisar la vigencia del password
@@ -214,6 +210,7 @@ function Register() {
             pbTempPassword: false,
             pvFinalEffectiveDate: finalDate2,
             pvUser: user,
+            pvIP: ip
         };
 
         fetch(`http://129.159.99.152/develop-api/api/security-users/update-user-pass/`, {
@@ -258,12 +255,12 @@ function Register() {
             <Col className="ml-auto mr-auto" lg="4" md="6">
                 <Card className="card-signup text-center">
                 <CardHeader>
-                    <CardTitle tag="h4">Change Password</CardTitle>
+                    <CardTitle tag="h4">Cambiar Contraseña</CardTitle>
                 </CardHeader>
                 <CardBody>
                     <Form action="" className="form" method="">
                     <FormGroup className={`has-label ${registerPasswordState}`}>
-                        <label>Password *</label>
+                        <label>Contraseña *</label>
                         <Input
                             id="registerPassword"
                             name="password"
@@ -283,7 +280,7 @@ function Register() {
                         ) : null}
                     </FormGroup>
                     <FormGroup className={`has-label ${registerConfirmPasswordState}`}>
-                        <label>Confirm Password *</label>
+                        <label>Confirmar Contraseña *</label>
                         <Input
                             equalto="#registerPassword"
                             id="registerPasswordConfirmation"

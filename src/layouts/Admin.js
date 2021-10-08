@@ -42,9 +42,12 @@ import DashboardCliente from "../views/DashboardClient.js";
 import ClienteConfiguraciones from "../views/pages/ClienteConfiguraciones.js";
 import EditConfiguration from "../views/pages/EditConfiguration.js";
 import CustomerApplications from "../views/pages/CustomerApplications.js";
-import Articulo69 from "../views/pages/Articulo69";
+import Articulo69 from "../views/pages/Articulo69.js";
+import CFDIPDFRequest from "../views/pages/CFDIPDFRequest.js";
 import CustomerApplicationsUsers from "../views/components/Clients/CustomerApplicationsUsers";
+import CFDIPDFRequestDetail from "../views/components/CFDIPDFRequest/CFDIPDFRequestDetail";
 import { string } from "prop-types";
+import routes from "routes.js";
 
 var ps;
 
@@ -79,6 +82,7 @@ function Admin(props) {
   useEffect(() => {
 
     //estos parametros se van a tomar del local storage o del usecontext
+    console.log(role)
     const params = {
       pvOptionCRUD: "R",
       piIdCustomer : customer,
@@ -110,8 +114,10 @@ function Admin(props) {
         {
           if(data[i].Status === true)
           {
+            console.log(data[i])
             if(data[i].Component_Module!=="")
             {
+              console.log(data[i].Module_Desc)
               if(data[i].Component_Module === "DashboardAdmin")
               {
                 routesAux.push(
@@ -340,6 +346,17 @@ function Admin(props) {
                         }
                       )
                     }
+                    else if(data[j].Component_Submodule === "CFDIPDFRequest")
+                    {
+                      views.push(
+                        {
+                          path: data[j].Url,
+                          name: data[j].SubModule_Desc,
+                          component: CFDIPDFRequest,
+                          layout: ambiente + data[j].Layout_SubModule
+                        }
+                      )
+                    }
                   }
                   j++
                 }
@@ -409,7 +426,21 @@ function Admin(props) {
             },
           )
         }
+        else if(params.pvIdRole == "GTCSUPPO")
+        {
+          routesAux.push(
+            {
+              invisible: true,
+              path: "/cfdi-requests/:idCus/:idReq/",
+              name: "CFDI PDF Requests Detail",
+              icon: "nc-icon nc-bank",
+              component: CFDIPDFRequestDetail,
+              layout:  ambiente + "/admin",
+            }
+          )
+        }
         //Ruta para cambiar contraseña
+        console.log(routesAux)
         setDbRoutes(routesAux)
     })
     .catch(function(err) {

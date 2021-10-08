@@ -245,10 +245,7 @@ function Sidebar(props) {
     setCollapseStates(getCollapseStates(props.routes));
   }, []);
 
-  return image === "" ? (
-    <>
-    </>
-    ) : (
+  return (
     <div
       className="sidebar"
       data-color={props.bgColor}
@@ -273,7 +270,7 @@ function Sidebar(props) {
 
       <div className="sidebar-wrapper" ref={sidebar}>
         <div className="user">
-          {image !== null ? (
+          {image !== "" ? (
             <div className="photo">
               <img src={routeProfile + image} alt="Avatar" />
             </div>

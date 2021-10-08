@@ -20,7 +20,7 @@ import {
     Col,
 } from "reactstrap";
 
-function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dataCountries, updateAddData, pathLogo, ip}) {
+function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dataCountries, updateAddData, pathLogo, ip, profilePath}) {
 
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");
@@ -88,6 +88,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
         else{
             setupdateStatus(false);
         }
+        setupdateLogo(record.logo)
     },[record]);
 
     const handleModalClick = () => {
@@ -370,7 +371,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
                         </FormGroup>
                     </Col>
                     <Col sm="4">
-                        <UploadLogo registerLogo = {updateLogo} setregisterLogo={setupdateLogo} registerCountry = {updateCountry} registerRfc = {updateRfc}/>
+                        <UploadLogo registerLogo = {updateLogo} setregisterLogo={setupdateLogo} registerCountry = {updateCountry} registerRfc = {updateRfc} logo = {updateLogo} path = {profilePath}/>
                     </Col>
                     <Col sm="6">
                         <FormGroup>

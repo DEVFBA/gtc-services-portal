@@ -135,7 +135,7 @@ function CustomerApplicationsTable({dataTable, dataApplications, dataCustomers, 
                         <span className="btn-label">
                         <i className="nc-icon nc-simple-add" />
                         </span>
-                        Agregar Registro
+                        Agregar Aplicación
                     </Button>
                  
                     <ReactTable

@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 import { prototype } from "react-datetime";
 
-function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip}){
+function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip, profilePath}){
     const [dataState, setDataState] = useState(
         dataTable.map((prop, key) => {
           var status;
@@ -33,6 +33,7 @@ function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDa
             idCustomer: prop.Id_Customer,
             password: prop.Password,
             finalEffectiveDate: prop.Final_Effective_Date,
+            image: prop.Profile_Pic_Path,
             actions: (
               // ACCIONES A REALIZAR EN CADA REGISTRO
               <div className="actions-center">
@@ -137,7 +138,7 @@ function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDa
         <ModalAddUser modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip}/>       
 
         {/*MODAL PARA MODIFICAR REGISTRO*/}
-        <ModalUpdateUser abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip}/>
+        <ModalUpdateUser abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath}/>
     
         </>
     );

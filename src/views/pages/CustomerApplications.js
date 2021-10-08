@@ -227,7 +227,7 @@ function CustomerApplications() {
           <Col md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">Customer Applications</CardTitle>
+                <CardTitle tag="h4">Aplicaciones Cliente</CardTitle>
               </CardHeader>
               <CardBody>
                 <CustomerApplication />

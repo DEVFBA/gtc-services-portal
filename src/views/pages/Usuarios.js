@@ -26,9 +26,6 @@ import UsersTable from "../components/Users/UsersTable.js";
 
 function Usuarios() {
 
-  //Para actualizar cada que agreguen un campo a la tabla
-  const [updateTable, setUpdateTable] = useState(0);
-
   //Para guardar los datos de los usuarios
   const [dataUsers, setDataUsers] = useState([]);
 
@@ -47,6 +44,8 @@ function Usuarios() {
   const token = localStorage.getItem("Token");
 
   const [ip, setIP] = React.useState("");
+
+  const [profilePath, setProfilePath] = useState("")
 
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
@@ -184,7 +183,9 @@ function Usuarios() {
     })
     .then(function(data) {
         var aux = data.find( o => o.Id_Catalog === 3 )
+        var aux2 = data.find( o => o.Id_Catalog === 9 )
         setValidDays(parseInt(aux.Value,10))
+        setProfilePath(aux2.Value)
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los general parameters" + err);
@@ -222,7 +223,7 @@ function Usuarios() {
 
    //Renderizado condicional
   function Users() {
-      return <UsersTable dataTable = {dataUsers} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip}/>;
+      return <UsersTable dataTable = {dataUsers} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath}/>;
   }
 
   //Para actualizar la tabla al insertar registro

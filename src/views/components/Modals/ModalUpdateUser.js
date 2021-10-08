@@ -23,7 +23,7 @@ import {
     Col,
 } from "reactstrap";
 
-function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip}) {
+function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip, profilePath}) {
         // register form
     const [updateEmail, setupdateEmail] = React.useState("");
     const [updateFullName, setupdateFullName] = React.useState("");
@@ -81,6 +81,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
         else{
             setupdateStatus(false);
         }
+        setupdateImage(record.image)
     },[record]);
 
     // function that verifies if a string has a given length or not
@@ -454,7 +455,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                         </FormGroup>
                     </Col>
                     <Col sm="4">
-                            <UploadUserImage registerImage = {updateImage} setregisterImage={setupdateImage}/>
+                        <UploadUserImage registerImage = {updateImage} setregisterImage={setupdateImage} image = {updateImage} path = {profilePath}/>
                     </Col>
                     <Col sm="6">
                         <FormGroup className={`has-label ${updateCustomerState}`}>
@@ -512,7 +513,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
             <ModalFooter>
                 <div className="center-side">
                 <Button className="buttons" color="secondary" onClick={handleModalClick}>
-                    Close
+                    Cerrar
                 </Button>
                 <Button className="buttons" color="primary" onClick={updateClick}>
                     Guardar cambios

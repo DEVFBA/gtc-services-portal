@@ -188,7 +188,7 @@ function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord
             <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
                 <span aria-hidden="true">×</span>
             </button>
-            <h5 className="modal-title">Update Client</h5>
+            <h5 className="modal-title">Actualizar Aplicación / Servicio</h5>
             </div>
             <ModalBody>
             <Form id="RegisterValidation">
@@ -269,7 +269,7 @@ function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord
             <ModalFooter>
                 <div className="center-side">
                 <Button className="buttons" color="secondary" onClick={handleModalClick}>
-                    Close
+                    Cerrar
                 </Button>
                 <Button className="buttons" color="primary" onClick={updateClick}>
                     Guardar cambios

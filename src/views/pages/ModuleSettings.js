@@ -166,7 +166,7 @@ function ModuleSettings() {
           <Col md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">Catálogo de Aplicaciones</CardTitle>
+                <CardTitle tag="h4">Módulos</CardTitle>
               </CardHeader>
               <CardBody>
                 <Applications />

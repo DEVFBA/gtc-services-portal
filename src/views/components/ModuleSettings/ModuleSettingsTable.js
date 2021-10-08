@@ -104,7 +104,7 @@ function ModuleSettingsTable({dataTable, dataSuites, updateAddData, ip}){
                   <span className="btn-label">
                   <i className="nc-icon nc-simple-add" />
                   </span>
-                  Añadir Aplicación o Servicio
+                  Añadir Módulo
                 </Button>
                 <ReactTable
                   data={dataState}

@@ -3,10 +3,10 @@ import fs from 'fs';
 
 import defaultImage from "assets/img/default-image.png";
 
-function UploadUserImage(props) {
+function AddUserImage(props) {
   const [fileState, setFileState] = React.useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = React.useState(
-    props.image !== "" ? (props.path + props.image) : (defaultImage)
+    props.avatar ? defaultAvatar : defaultImage
   );
 
   const handleImageChange = (e) => {
@@ -61,4 +61,4 @@ function UploadUserImage(props) {
   );
 }
 
-export default UploadUserImage;
+export default AddUserImage;

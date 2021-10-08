@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 
 // core components
-import UploadLogo from "components/CustomUpload/UploadLogo.js";
+import AddLogo from "components/CustomUpload/AddLogo.js";
 
 // reactstrap components
 import {
@@ -39,7 +39,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
     const [registerTelephone2, setregisterTelephone2] = React.useState("");
     const [registerWebPage, setregisterWebPage] = React.useState("");
     const [registerLogo, setregisterLogo] = React.useState("");
-    const [registerStatus, setregisterStatus] = useState(false);
+    const [registerStatus, setregisterStatus] = useState(true);
 
     //Mandar error en caso de que ya exista el Country/TaxId
     const [registerError, setregisterError] = useState("");
@@ -134,7 +134,6 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
     };
 
     function addRegister(){
-       
         const catRegister = {
             pvOptionCRUD: "C",
             pvIdCountry: registerCountry.value,
@@ -359,7 +358,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
                         </FormGroup>
                     </Col>
                     <Col sm="4">
-                        <UploadLogo registerLogo = {registerLogo} setregisterLogo={setregisterLogo} registerCountry = {registerCountry.value} registerRfc = {registerRfc}/>
+                        <AddLogo registerLogo = {registerLogo} setregisterLogo={setregisterLogo} registerCountry = {registerCountry.value} registerRfc = {registerRfc}/>
                     </Col>
                     <Col sm="6">
                         <FormGroup>
@@ -377,6 +376,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
                             <Label check>
                             <Input 
                                 type="checkbox" 
+                                checked = {registerStatus}
                                 onChange={(e) => {
                                     setregisterStatus(e.target.checked)
                                 }}

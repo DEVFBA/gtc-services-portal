@@ -1,12 +1,12 @@
 import React from "react";
 import fs from 'fs';
 
-import defaultImage from "assets/img/default-image.png";
+import defaultImage from "assets/img/default-logo.png";
 
-function UploadUserImage(props) {
+function AddLogo(props) {
   const [fileState, setFileState] = React.useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = React.useState(
-    props.image !== "" ? (props.path + props.image) : (defaultImage)
+    props.avatar ? defaultAvatar : defaultImage
   );
 
   const handleImageChange = (e) => {
@@ -29,7 +29,7 @@ function UploadUserImage(props) {
     reader.onloadend = () => {
       
       setFileState(file);
-      props.setregisterImage(reader.result)
+      props.setregisterLogo(reader.result)
       setImagePreviewUrl(reader.result);
       //console.log(reader.result)
     };
@@ -56,9 +56,9 @@ function UploadUserImage(props) {
         <img src={imagePreviewUrl} className="picture-src" alt="..." />
         <input type="file" onChange={(e) => handleImageChange(e)} />
       </div>
-      <h6 className="description">Elegir Imagen</h6>
+      <h6 className="description">Elegir logo</h6>
     </div>
   );
 }
 
-export default UploadUserImage;
+export default AddLogo;

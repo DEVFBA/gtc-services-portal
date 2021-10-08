@@ -41,6 +41,8 @@ function Clientes() {
 
   const [ip, setIP] = React.useState("");
 
+  const [profilePath, setProfilePath] = useState("")
+
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
     setIP(res.data.IPv4)
@@ -139,6 +141,8 @@ function Clientes() {
     .then(function(data) {
         var aux = data.find( o => o.Id_Catalog === 1 )
         setPathLogo(aux.Value)
+        var aux2 = data.find( o => o.Id_Catalog === 8 )
+        setProfilePath(aux2.Value)
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los general parameters" + err);
@@ -147,7 +151,7 @@ function Clientes() {
 
    //Renderizado condicional
   function Customers() {
-      return <CustomersTable dataTable = {dataCustomers} dataCountries = {dataCountries} updateAddData = {updateAddData} pathLogo = {pathLogo} ip={ip}/>;
+      return <CustomersTable dataTable = {dataCustomers} dataCountries = {dataCountries} updateAddData = {updateAddData} pathLogo = {pathLogo} ip={ip} profilePath = {profilePath}/>;
   }
 
   //Para actualizar la tabla al insertar registro

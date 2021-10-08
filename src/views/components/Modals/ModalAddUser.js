@@ -8,6 +8,7 @@ import Select from "react-select";
 
 // core components
 import UploadUserImage from "components/CustomUpload/UploadUserImage.js";
+import AddUserImage from "components/CustomUpload/AddUserImage.js";
 
 // reactstrap components
 import {
@@ -347,7 +348,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
                         </FormGroup>
                     </Col>
                     <Col sm="4">
-                            <UploadUserImage registerImage = {registerImage} setregisterImage={setregisterImage}/>
+                            <AddUserImage registerImage = {registerImage} setregisterImage={setregisterImage}/>
                     </Col>
                     <Col sm="6">
                         <FormGroup className={`has-label ${registerRolState}`}>
