@@ -21,7 +21,7 @@ import {
 } from "reactstrap";
 import { data } from "jquery";
 
-function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updateAddData, pathLogo, ip}) {
+function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updateAddData, pathLogo, ip, autoCloseAlert}) {
 
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");
@@ -176,11 +176,13 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else if(data[0].Code_Type === "Error")
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else{
                     setErrorState("has-success");
@@ -188,6 +190,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });
@@ -227,7 +230,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
                             ) : null}
                         </FormGroup>
                         <FormGroup className={`has-label ${registerRfcState}`}>
-                        <label>Rfc / Tax Id *</label>
+                            <label>Rfc / Tax Id *</label>
                             <Input
                                 name="rfc"
                                 type="text"

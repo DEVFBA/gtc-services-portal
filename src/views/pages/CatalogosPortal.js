@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
+import ReactBSAlert from "react-bootstrap-sweetalert";
 
 // reactstrap components
 import {
@@ -37,6 +38,8 @@ function CatalogosPortal() {
   //Para guardar los datos del catalogo seleccionado
   const [dataCatalog, setDataCatalog] = useState([]);
   const token = localStorage.getItem("Token");
+
+  const [alert, setAlert] = React.useState(null);
 
   const [ip, setIP] = React.useState("");
   const getData = async () => {
@@ -100,14 +103,13 @@ function CatalogosPortal() {
     const catalog = props.component;
     if(catalog === "ApplicationSuites")
     {
-      return <ApplicationSuites dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <ApplicationSuites dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     return <></>
   }
 
   //Nos servirá para pasarle los datos a la tabla ya descargados
   function updateData(datos){
-    console.log(datos.CRUD_References)
     const params = {
       pvOptionCRUD: "R",
       pSpCatalog : datos.CRUD_References,
@@ -164,6 +166,33 @@ function CatalogosPortal() {
     });
   }
 
+  React.useEffect(() => {
+    return function cleanup() {
+      var id = window.setTimeout(null, 0);
+      while (id--) {
+        window.clearTimeout(id);
+      }
+    };
+  }, []);
+
+  const autoCloseAlert = (mensaje) => {
+    setAlert(
+      <ReactBSAlert
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Mensaje"
+        onConfirm={() => hideAlert()}
+        showConfirm={false}
+      >
+        {mensaje}
+      </ReactBSAlert>
+    );
+    setTimeout(hideAlert, 2000);
+  };
+
+  const hideAlert = () => {
+    setAlert(null);
+  };
+
   return (
     <>
       {/*console.log(props.example)*/}
@@ -186,7 +215,8 @@ function CatalogosPortal() {
                 </FormGroup>
               </CardHeader>
               <CardBody>
-                    <Catalog component = {catalog} />
+                <Catalog component = {catalog} />
+                {alert}
               </CardBody>
             </Card>
           </Col>

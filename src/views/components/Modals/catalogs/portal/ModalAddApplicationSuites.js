@@ -12,7 +12,7 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAddData, ip}) {
+function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAddData, ip, autoCloseAlert}) {
         
     const [shortDescription, setShortDescription] = React.useState("");
     const [longDescription, setLongDescription] = React.useState("");
@@ -103,11 +103,13 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else if(data[0].Code_Type === "Error")
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else{
                     setErrorState("has-success");
@@ -115,6 +117,7 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });

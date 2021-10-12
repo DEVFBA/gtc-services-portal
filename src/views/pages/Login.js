@@ -220,7 +220,7 @@ function Login() {
                 </CardBody>
                 <CardFooter>
                   <div className="btn-login">
-                    <Button type="submit" className="btn-round mb-3" color="warning">
+                    <Button type="submit" className="btn-round mb-3" color="primary">
                       Iniciar Sesión
                     </Button>
                   </div>
@@ -240,7 +240,7 @@ function Login() {
         className="full-page-background"
         style={{
           backgroundImage: `url(${
-            require("assets/img/logo-gtc.jpg").default
+            require("assets/img/fondo4.png").default
           })`,
         }}
       />

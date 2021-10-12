@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
+import ReactBSAlert from "react-bootstrap-sweetalert";
 
 // reactstrap components
 import {
@@ -56,6 +57,9 @@ function CatalogosSAT() {
   const token = localStorage.getItem("Token");
 
   const [ip, setIP] = React.useState("");
+
+  const [alert, setAlert] = React.useState(null);
+
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
     setIP(res.data.IPv4)
@@ -114,58 +118,58 @@ function CatalogosSAT() {
   function Catalog(props) {
     const catalog = props.component;
     if (catalog === "CFDIUses") {
-      return <CFDIUses dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <CFDIUses dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     if (catalog === "Countries") {
-      return <Countries dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <Countries dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     if (catalog === "Currencies") {
-      return <Currencies dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <Currencies dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     if (catalog === "Customs") {
-      return <Customs dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <Customs dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     if (catalog === "CustomsUnits") {
-      return <CustomsUnits dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <CustomsUnits dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     if (catalog === "Incoterm") {
-      return <Incoterm dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <Incoterm dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     if (catalog === "KeyProduct") {
-      return <KeyProduct dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <KeyProduct dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     if (catalog === "KeyUnit") {
-      return <KeyUnit dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <KeyUnit dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     if (catalog === "PaymentMethods") {
-      return <PaymentMethods dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <PaymentMethods dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     if (catalog === "PaymentWays") {
-      return <PaymentWays dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <PaymentWays dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     if (catalog === "PetitionTypes") {
-      return <PetitionTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <PetitionTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     if (catalog === "ReasonsTransfer") {
-      return <ReasonsTransfer dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <ReasonsTransfer dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     if (catalog === "TariffFractions") {
-      return <TariffFractions dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <TariffFractions dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     if (catalog === "Taxes") {
-      return <Taxes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <Taxes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     if (catalog === "TaxRegimes") {
-      return <TaxRegimes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <TaxRegimes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     if (catalog === "TypesOperation") {
-      return <TypesOperation dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <TypesOperation dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     if (catalog === "VoucherTypes") {
-      return <VoucherTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <VoucherTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     if (catalog === "RelationshipTypes") {
-      return <RelationshipTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip}/>;
+      return <RelationshipTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     return <p></p>
   }
@@ -228,6 +232,33 @@ function CatalogosSAT() {
     });
   }
 
+  React.useEffect(() => {
+    return function cleanup() {
+      var id = window.setTimeout(null, 0);
+      while (id--) {
+        window.clearTimeout(id);
+      }
+    };
+  }, []);
+
+  const autoCloseAlert = (mensaje) => {
+    setAlert(
+      <ReactBSAlert
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Mensaje"
+        onConfirm={() => hideAlert()}
+        showConfirm={false}
+      >
+        {mensaje}
+      </ReactBSAlert>
+    );
+    setTimeout(hideAlert, 2000);
+  };
+
+  const hideAlert = () => {
+    setAlert(null);
+  };
+
 
   return (
     <>
@@ -251,6 +282,7 @@ function CatalogosSAT() {
               </CardHeader>
               <CardBody>
                     <Catalog component = {catalog} />
+                    {alert}
               </CardBody>
             </Card>
           </Col>

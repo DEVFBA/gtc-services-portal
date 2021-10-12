@@ -20,7 +20,7 @@ import {
     Col,
 } from "reactstrap";
 
-function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dataCountries, updateAddData, pathLogo, ip, profilePath}) {
+function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dataCountries, updateAddData, pathLogo, ip, profilePath, autoCloseAlert}) {
 
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");
@@ -193,11 +193,13 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else if(data[0].Code_Type === "Error")
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else{
                     setErrorState("has-success");
@@ -205,6 +207,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });

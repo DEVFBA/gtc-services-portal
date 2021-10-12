@@ -12,7 +12,7 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalAddCustoms({modalAddRecord, setModalAddRecord, updateTable, setUpdateTable, updateAddData, ip}) {
+function ModalAddCustoms({modalAddRecord, setModalAddRecord, updateTable, setUpdateTable, updateAddData, ip, autoCloseAlert}) {
         // update form
     const [id, setId] = React.useState("Hola");
     const [shortDescription, setShortDescription] = React.useState("");
@@ -87,7 +87,7 @@ function ModalAddCustoms({modalAddRecord, setModalAddRecord, updateTable, setUpd
     function addRegister(){
         //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
         const catRegister = {
-            pSpCatalog: "spSAT_Cat_CFDI_Uses_CRUD_Records",
+            pSpCatalog: "spSAT_Cat_Customs_CRUD_Records",
             pvOptionCRUD: "C",
             pvIdCatalog: id,
             pvShortDesc: shortDescription,
@@ -117,11 +117,13 @@ function ModalAddCustoms({modalAddRecord, setModalAddRecord, updateTable, setUpd
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 if(data[0].Code_Type === "Warning")
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else{
                     setErrorState("has-success");
@@ -129,6 +131,7 @@ function ModalAddCustoms({modalAddRecord, setModalAddRecord, updateTable, setUpd
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });

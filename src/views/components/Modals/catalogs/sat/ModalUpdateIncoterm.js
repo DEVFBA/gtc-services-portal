@@ -12,7 +12,7 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalUpdateIncoterm({abierto, toggleModalUpdateRecord, record, updateAddData, ip}) {
+function ModalUpdateIncoterm({abierto, toggleModalUpdateRecord, record, updateAddData, ip, autoCloseAlert}) {
         // update form
     const [id, setId] = React.useState("Hola");
     const [shortDescription, setShortDescription] = React.useState("");
@@ -133,11 +133,13 @@ function ModalUpdateIncoterm({abierto, toggleModalUpdateRecord, record, updateAd
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 if(data[0].Code_Type === "Warning")
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else{
                     setErrorState("has-success");
@@ -145,6 +147,7 @@ function ModalUpdateIncoterm({abierto, toggleModalUpdateRecord, record, updateAd
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });

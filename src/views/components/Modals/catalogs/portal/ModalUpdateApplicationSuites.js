@@ -13,7 +13,7 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record, updateAddData, ip}) {
+function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record, updateAddData, ip, autoCloseAlert}) {
         // update form
     const [id, setId] = React.useState("");
     const [shortDescription, setShortDescription] = React.useState("");
@@ -132,11 +132,13 @@ function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record,
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else if(data[0].Code_Type === "Error")
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else{
                     setErrorState("has-success");
@@ -144,6 +146,7 @@ function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record,
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });

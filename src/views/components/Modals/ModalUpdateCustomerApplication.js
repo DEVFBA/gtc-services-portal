@@ -22,7 +22,7 @@ import {
     Col,
 } from "reactstrap";
 
-function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord, record, updateAddData, ip}) {
+function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord, record, updateAddData, ip, autoCloseAlert}) {
     
     const [updateCustomer, setupdateCustomer] = React.useState("");
     const [updateApplication, setupdateApplication] = React.useState("");
@@ -139,7 +139,7 @@ function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord
             pvIP: ip
         };
     
-        fetch(`http://129.159.99.152/develop-api/customer-applications/update-customer-application`, {
+        fetch(`http://129.159.99.152/develop-api/api/customer-applications/update-customer-application`, {
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {
@@ -159,11 +159,13 @@ function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else if(data[0].Code_Type === "Error")
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else{
                     setErrorState("has-success");
@@ -171,6 +173,7 @@ function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });

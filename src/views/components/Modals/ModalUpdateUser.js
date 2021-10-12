@@ -23,7 +23,7 @@ import {
     Col,
 } from "reactstrap";
 
-function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip, profilePath}) {
+function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip, profilePath, autoCloseAlert}) {
         // register form
     const [updateEmail, setupdateEmail] = React.useState("");
     const [updateFullName, setupdateFullName] = React.useState("");
@@ -47,6 +47,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
     const [error, setError] = React.useState();
     const [errorState, setErrorState] = React.useState("");
     const [errorMessage, setErrorMessage] = React.useState("");
+
 
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");
@@ -242,11 +243,13 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                     {
                         setErrorMessage(data[0].Code_Message_User)
                         setErrorState("has-danger")
+                        autoCloseAlert(data[0].Code_Message_User)
                     }
                     else if(data[0].Code_Type === "Error")
                     {
                         setErrorMessage(data[0].Code_Message_User)
                         setErrorState("has-danger")
+                        autoCloseAlert(data[0].Code_Message_User)
                     }
                     else{
                         setErrorState("has-success");
@@ -254,6 +257,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                         updateAddData()
                         //Cerramos el modal
                         handleModalClick()
+                        autoCloseAlert(data[0].Code_Message_User)
                     }
                 }
             });
@@ -291,15 +295,18 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                 else{
                     if(data[0].Code_Type === "Warning")
                     {
+                        autoCloseAlert(data[0].Code_Message_User)
                         setErrorState("has-danger")
                     }
                     else if(data[0].Code_Type === "Error")
                     {
                         setErrorMessage(data[0].Code_Message_User)
                         setErrorState("has-danger")
+                        autoCloseAlert(data[0].Code_Message_User)
                     }
                     else{
                         setErrorState("has-success");
+                        autoCloseAlert(data[0].Code_Message_User)
                         //Para actualizar la tabla en componente principal
                         updateAddData()
                         //Cerramos el modal

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
+import ReactBSAlert from "react-bootstrap-sweetalert";
 
 // reactstrap components
 import {
@@ -46,6 +47,8 @@ function Usuarios() {
   const [ip, setIP] = React.useState("");
 
   const [profilePath, setProfilePath] = useState("")
+
+  const [alert, setAlert] = React.useState(null);
 
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
@@ -221,9 +224,37 @@ function Usuarios() {
     });
   }, []);
 
+  React.useEffect(() => {
+    return function cleanup() {
+      var id = window.setTimeout(null, 0);
+      while (id--) {
+        window.clearTimeout(id);
+      }
+    };
+  }, []);
+
+  const autoCloseAlert = (mensaje) => {
+    console.log("entre al alert")
+    setAlert(
+      <ReactBSAlert
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Mensaje"
+        onConfirm={() => hideAlert()}
+        showConfirm={false}
+      >
+        {mensaje}
+      </ReactBSAlert>
+    );
+    setTimeout(hideAlert, 2000);
+  };
+
+  const hideAlert = () => {
+    setAlert(null);
+  };
+
    //Renderizado condicional
   function Users() {
-      return <UsersTable dataTable = {dataUsers} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath}/>;
+      return <UsersTable dataTable = {dataUsers} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert}/>;
   }
 
   //Para actualizar la tabla al insertar registro
@@ -268,6 +299,7 @@ function Usuarios() {
               </CardHeader>
               <CardBody>
                 <Users />
+                {alert}
               </CardBody>
             </Card>
           </Col>

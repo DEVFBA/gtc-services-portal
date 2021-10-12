@@ -98,7 +98,7 @@ function Sidebar(props) {
       })
       .then(function(data) {
           var aux = data.find( o => o.Id_Catalog === 9)
-          console.log(aux.Value)
+          //console.log(aux.Value)
           setRouteProfile(aux.Value)
       })
       .catch(function(err) {
@@ -127,7 +127,7 @@ function Sidebar(props) {
       .then(function(data) {
           setImage(data[0].Profile_Pic_Path)
           setName(data[0].Name)
-          console.log(data)
+          //console.log(data)
       })
       .catch(function(err) {
           alert("No se pudo consultar la informacion del usuario en sidebar" + err);

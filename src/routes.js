@@ -21,7 +21,6 @@ import Dashboard from "views/Dashboard.js";
 import ExtendedForms from "views/forms/ExtendedForms.js";
 import ExtendedTables from "views/tables/ExtendedTables.js";
 import FullScreenMap from "views/maps/FullScreenMap.js";
-import GoogleMaps from "views/maps/GoogleMaps.js";
 import GridSystem from "views/components/GridSystem.js";
 import Icons from "views/components/Icons.js";
 import LockScreen from "views/pages/LockScreen.js";
@@ -228,13 +227,6 @@ const routes = [
     icon: "nc-icon nc-pin-3",
     state: "mapsCollapse",
     views: [
-      {
-        path: "/google-maps",
-        name: "Google Maps",
-        mini: "GM",
-        component: GoogleMaps,
-        layout: "/admin",
-      },
       {
         path: "/full-screen-map",
         name: "Full Screen Map",

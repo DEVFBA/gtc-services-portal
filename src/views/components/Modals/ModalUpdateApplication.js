@@ -28,7 +28,7 @@ var types = [
     { value: "Server", label: "Server"},
 ]
 
-function ModalUpdateApplication({abierto, toggleModalUpdateRecord, dataSuites, updateAddData, record, ip}) {
+function ModalUpdateApplication({abierto, toggleModalUpdateRecord, dataSuites, updateAddData, record, ip, autoCloseAlert}) {
     const [idAplicacion, setIdAplicacion] = React.useState("");
     const [aplicacion, setAplicacion] = React.useState("");
     const [version, setVersion] = React.useState("");
@@ -199,11 +199,13 @@ function ModalUpdateApplication({abierto, toggleModalUpdateRecord, dataSuites, u
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else if(data[0].Code_Type === "Error")
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else{
                     setErrorState("has-success");
@@ -211,6 +213,7 @@ function ModalUpdateApplication({abierto, toggleModalUpdateRecord, dataSuites, u
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });

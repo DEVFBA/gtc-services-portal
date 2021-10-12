@@ -38,7 +38,7 @@ function CFDIPDFRequest() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://localhost:9000/api/cfdi-pdf-requests/`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/cfdi-pdf-requests/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 

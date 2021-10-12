@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
+import ReactBSAlert from "react-bootstrap-sweetalert";
 
 // reactstrap components
 import {
@@ -51,6 +52,8 @@ function CustomerApplicationsUsers() {
 
   const [ip, setIP] = React.useState("");
 
+  const [alert, setAlert] = React.useState(null);
+
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
     setIP(res.data.IPv4)
@@ -72,7 +75,6 @@ function CustomerApplicationsUsers() {
     var url = new URL(`http://129.159.99.152/develop-api/api/customer-applications-users/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-    console.log(url)
 
     fetch(url, {
         method: "GET",
@@ -224,22 +226,51 @@ function CustomerApplicationsUsers() {
             {
                 setErrorMessage(data[0].Code_Message_User)
                 setErrorState("has-danger")
+                autoCloseAlert(data[0].Code_Message_User)
             }
             else if(data[0].Code_Type === "Error")
             {
                 setErrorMessage(data[0].Code_Message_User)
                 setErrorState("has-danger")
+                autoCloseAlert(data[0].Code_Message_User)
             }
             else{
                 setErrorState("has-success");
                 //Para actualizar la tabla en componente principal
                 updateAddData()
                 //Cerramos el modal
-                handleModalClick()
+                autoCloseAlert(data[0].Code_Message_User)
             }
         }
     });
-  } 
+  }
+  
+  React.useEffect(() => {
+    return function cleanup() {
+      var id = window.setTimeout(null, 0);
+      while (id--) {
+        window.clearTimeout(id);
+      }
+    };
+  }, []);
+
+  const autoCloseAlert = (mensaje) => {
+    setAlert(
+      <ReactBSAlert
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Mensaje"
+        onConfirm={() => hideAlert()}
+        showConfirm={false}
+      >
+        {mensaje}
+      </ReactBSAlert>
+    );
+    setTimeout(hideAlert, 2000);
+  };
+
+  const hideAlert = () => {
+    setAlert(null);
+  };
 
   return (
     <>
@@ -268,11 +299,6 @@ function CustomerApplicationsUsers() {
                           <label className="error">Selecciona un usuario.</label>
                       ) : null}
                   </FormGroup>
-                  <FormGroup className={`has-label ${errorState}`}>
-                      {errorState === "has-danger" ? (
-                              <label className="error">{errorMessage}</label>
-                      ) : null}
-                  </FormGroup>
                   {error}
                 </Form>
                 <Button color="primary" onClick={registerClick}>
@@ -284,6 +310,7 @@ function CustomerApplicationsUsers() {
               </CardHeader>
               <CardBody>
                 <CustomerApplication />
+                {alert}
               </CardBody>
             </Card>
           </Col>

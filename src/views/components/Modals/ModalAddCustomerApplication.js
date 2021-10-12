@@ -23,7 +23,7 @@ import {
 } from "reactstrap";
 import { data } from "jquery";
 
-function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCustomers, dataApplications, updateAddData, ip}) {
+function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCustomers, dataApplications, updateAddData, ip, autoCloseAlert}) {
     
     const [registerCustomer, setregisterCustomer] = React.useState("");
     const [registerApplication, setregisterApplication] = React.useState("");
@@ -133,8 +133,6 @@ function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCus
         else {
             finalDate2 = null
         }
-
-        console.log(registerApplication.value)
         const catRegister = {
             pvOptionCRUD: "C",
             piIdCustomer: registerCustomer.value,
@@ -164,11 +162,15 @@ function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCus
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
+
                 }
                 else if(data[0].Code_Type === "Error")
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
+
                 }
                 else{
                     setErrorState("has-success");
@@ -176,6 +178,7 @@ function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCus
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });

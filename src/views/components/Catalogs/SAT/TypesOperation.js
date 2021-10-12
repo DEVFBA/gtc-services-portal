@@ -24,7 +24,7 @@ import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalUpdateTypesOperation from "views/components/Modals/catalogs/sat/ModalUpdateTypesOperation";
 import ModalAddTypesOperation from "views/components/Modals/catalogs/sat/ModalAddTypesOperation";
 
-function TypesOperation({dataTable, updateAddData, ip}) {
+function TypesOperation({dataTable, updateAddData, ip, autoCloseAlert}) {
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
       var status;
@@ -103,7 +103,7 @@ function TypesOperation({dataTable, updateAddData, ip}) {
         <Row>
           <Col md="12">
             
-                <h4>Suites de Aplicaciones</h4>
+                <h4>Tipos de Operación</h4>
                 <Button color="primary" onClick={toggleModalAddRecord}>
                     <span className="btn-label">
                     <i className="nc-icon nc-simple-add" />
@@ -147,10 +147,10 @@ function TypesOperation({dataTable, updateAddData, ip}) {
     </div>
 
     {/*MODAL PARA AÑADIR REGISTROS*/}
-    <ModalAddTypesOperation modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData} ip = {ip}/>       
+    <ModalAddTypesOperation modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData} ip = {ip} autoCloseAlert={autoCloseAlert}/>       
 
     {/*MODAL PARA MODIFICAR REGISTRO*/}
-    <ModalUpdateTypesOperation abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData} ip = {ip}/>
+    <ModalUpdateTypesOperation abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData} ip = {ip} autoCloseAlert={autoCloseAlert}/>
 
     </>
   );

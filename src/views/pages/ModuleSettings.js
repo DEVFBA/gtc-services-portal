@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
-
+import ReactBSAlert from "react-bootstrap-sweetalert";
 
 // reactstrap components
 import {
@@ -46,6 +46,8 @@ function ModuleSettings() {
 
   const [ip, setIP] = React.useState("");
 
+  const [alert, setAlert] = React.useState(null);
+
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
     setIP(res.data.IPv4)
@@ -77,7 +79,6 @@ function ModuleSettings() {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
-      console.log(data)
       setDataApplications(data)
     })
     .catch(function(err) {
@@ -122,9 +123,36 @@ function ModuleSettings() {
     });
   }, []);
 
+  React.useEffect(() => {
+    return function cleanup() {
+      var id = window.setTimeout(null, 0);
+      while (id--) {
+        window.clearTimeout(id);
+      }
+    };
+  }, []);
+
+  const autoCloseAlert = (mensaje) => {
+    setAlert(
+      <ReactBSAlert
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Mensaje"
+        onConfirm={() => hideAlert()}
+        showConfirm={false}
+      >
+        {mensaje}
+      </ReactBSAlert>
+    );
+    setTimeout(hideAlert, 2000);
+  };
+
+  const hideAlert = () => {
+    setAlert(null);
+  };
+
   //Renderizado condicional
   function Applications() {
-    return <ModuleSettingsTable dataTable = {dataApplications} dataSuites = {options} updateAddData = {updateAddData} ip = {ip}/>;
+    return <ModuleSettingsTable dataTable = {dataApplications} dataSuites = {options} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
   }
 
   function updateAddData(){
@@ -170,6 +198,7 @@ function ModuleSettings() {
               </CardHeader>
               <CardBody>
                 <Applications />
+                {alert}
               </CardBody>
             </Card>
           </Col>

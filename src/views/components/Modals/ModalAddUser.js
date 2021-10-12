@@ -24,7 +24,7 @@ import {
     Row
 } from "reactstrap";
 
-function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip}) {
+function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip, autoCloseAlert}) {
         // register form
     const [registerEmail, setregisterEmail] = React.useState("");
     const [registerFullName, setregisterFullName] = React.useState("");
@@ -216,10 +216,12 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else if(data[0].Code_Type === "Error")
                 {
                     setErrorMessage(data[0].Code_Message_User)
+                    autoCloseAlert(data[0].Code_Message_User)
                     setErrorState("has-danger")
                 }
                 else{
@@ -228,6 +230,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });

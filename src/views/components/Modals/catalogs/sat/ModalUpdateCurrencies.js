@@ -12,7 +12,7 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalUpdateCurrencies({abierto, toggleModalUpdateRecord, record, updateAddData, ip}) {
+function ModalUpdateCurrencies({abierto, toggleModalUpdateRecord, record, updateAddData, ip, autoCloseAlert}) {
         // update form
     const [id, setId] = React.useState("Hola");
     const [shortDescription, setShortDescription] = React.useState("");
@@ -134,11 +134,13 @@ function ModalUpdateCurrencies({abierto, toggleModalUpdateRecord, record, update
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 if(data[0].Code_Type === "Warning")
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else{
                     setErrorState("has-success");
@@ -146,6 +148,7 @@ function ModalUpdateCurrencies({abierto, toggleModalUpdateRecord, record, update
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });

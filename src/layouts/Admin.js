@@ -23,6 +23,7 @@ import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
+import IdleTimer from 'react-idle-timer';
 
 import { Link, useHistory } from "react-router-dom";
 
@@ -46,6 +47,7 @@ import Articulo69 from "../views/pages/Articulo69.js";
 import CFDIPDFRequest from "../views/pages/CFDIPDFRequest.js";
 import CustomerApplicationsUsers from "../views/components/Clients/CustomerApplicationsUsers";
 import CFDIPDFRequestDetail from "../views/components/CFDIPDFRequest/CFDIPDFRequestDetail";
+import Encriptado from "../views/pages/Encriptado";
 import { string } from "prop-types";
 import routes from "routes.js";
 
@@ -71,6 +73,38 @@ function Admin(props) {
 
   const ambiente = "/DEV"
 
+  //Para el cierre de sesión cuando no hay actividad
+  const [timeout, setTimeout] = useState(1800000); //despues de media hora se cierra la sesión
+  const [showModal, setShowModal] = useState(false);
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [isTimedOut, setIsTimedOut] = useState(false);
+  const [idleTimer, setIdleTimer] = useState(false);
+  
+        /*this.onAction = this._onAction.bind(this)
+        this.onActive = this._onActive.bind(this)
+        this.onIdle = this._onIdle.bind(this)
+        this.handleClose = this.handleClose.bind(this)
+        this.handleLogout = this.handleLogout.bind(this)*/
+
+  function _onAction(e) {
+    //console.log('user did something', e)
+    setIsTimedOut(false)
+  }
+  
+  function _onActive(e) {
+    //console.log('user is active', e)
+    setIsTimedOut(false)
+  }
+  
+  function _onIdle(e) {
+    localStorage.setItem("Logged", false);
+    localStorage.removeItem("User");
+    localStorage.removeItem("Id_Role");
+    localStorage.removeItem("Id_Customer");
+    localStorage.removeItem("Token");
+    history.push(ambiente + "/auth/login")
+  }
+
   React.useEffect(() => {
     //Si el usuario no ha iniciado sesión que se le redirija al login
     if(logged !== "true")
@@ -82,7 +116,6 @@ function Admin(props) {
   useEffect(() => {
 
     //estos parametros se van a tomar del local storage o del usecontext
-    console.log(role)
     const params = {
       pvOptionCRUD: "R",
       piIdCustomer : customer,
@@ -105,8 +138,6 @@ function Admin(props) {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
-      console.log(data)
-      
         var routesAux = [];
         //const ambiente = "/QSDEV"
        
@@ -114,10 +145,9 @@ function Admin(props) {
         {
           if(data[i].Status === true)
           {
-            console.log(data[i])
+            //console.log(data[i])
             if(data[i].Component_Module!=="")
             {
-              console.log(data[i].Module_Desc)
               if(data[i].Component_Module === "DashboardAdmin")
               {
                 routesAux.push(
@@ -157,11 +187,10 @@ function Admin(props) {
                 )
               }
             }
-            //El componente es padre pero collapse
             else{
+              //El componente es padre pero collapse
               if(data[i-1].Module_Desc !== data[i].Module_Desc)
               {
-                console.log(data[i-1].Module_Desc)
                 var views = []
                 if(data[i].Component_Submodule === "Usuarios")
                 {
@@ -173,6 +202,17 @@ function Admin(props) {
                       layout: ambiente + data[i].Layout_SubModule
                     }
                   )
+                }
+                else if(data[i].Component_Submodule === "Encriptado")
+                {
+                    views.push(
+                      {
+                        path: data[i].Url,
+                        name: data[i].SubModule_Desc,
+                        component: Encriptado,
+                        layout: ambiente + data[i].Layout_SubModule
+                      }
+                    )
                 }
                 else if(data[i].Component_Submodule === "CatalogosPortal")
                 {
@@ -251,7 +291,7 @@ function Admin(props) {
                     }
                   )
                 }
-                
+
                 var j= i+1;
                 while(j<data.length)
                 {
@@ -265,6 +305,17 @@ function Admin(props) {
                           path: data[j].Url,
                           name: data[j].SubModule_Desc,
                           component: Usuarios,
+                          layout: ambiente + data[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(data[j].Component_Submodule === "Encriptado")
+                    {
+                      views.push(
+                        {
+                          path: data[j].Url,
+                          name: data[j].SubModule_Desc,
+                          component: Encriptado,
                           layout: ambiente + data[j].Layout_SubModule
                         }
                       )
@@ -362,17 +413,20 @@ function Admin(props) {
                 }
 
                 //Ya cuando se terminan de meter a los hijos agregamos la ruta
-                //console.log(data[i].Icon)
                 var iconn = String(data[i].Icon.toString())
-                routesAux.push(
-                  {
-                    collapse: true,
-                    name: data[i].Module_Desc,
-                    icon: iconn,
-                    state: data[i].Module_Desc,
-                    views: views,
-                  }
-                )
+                var ultimo = routesAux.length
+                if(routesAux[ultimo-1].name !== data[i].Module_Desc)
+                {
+                  routesAux.push(
+                    {
+                      collapse: true,
+                      name: data[i].Module_Desc,
+                      icon: iconn,
+                      state: data[i].Module_Desc,
+                      views: views,
+                    }
+                  )
+                }
                 //console.log(routesAux[x])
               }
             }
@@ -440,7 +494,7 @@ function Admin(props) {
           )
         }
         //Ruta para cambiar contraseña
-        console.log(routesAux)
+        //console.log(routesAux)
         setDbRoutes(routesAux)
     })
     .catch(function(err) {
@@ -541,6 +595,16 @@ function Admin(props) {
 
   return (
     <div className="wrapper">
+        <IdleTimer
+            ref={ref => { setIdleTimer(ref) }}
+            element={document}
+            onActive={_onActive}
+            onIdle={_onIdle}
+            onAction={_onAction}
+            debounce={250}
+            timeout={timeout} 
+        />
+        
         <Sidebar
           {...props}
           routes={dbRoutes}
