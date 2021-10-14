@@ -20,7 +20,7 @@ import { Nav, Collapse } from "reactstrap";
 import PerfectScrollbar from "perfect-scrollbar";
 
 import avatar from "assets/img/faces/ayo-ogunseinde-2.jpg";
-import avatarDefault from "assets/img/avatar-default.png";
+import avatarDefault from "assets/img/default-avatar.png";
 import logo from "assets/img/react-logo.png";
 import logogtc from "assets/img/favicon-GTC.png";
 import { NavLink, useHistory } from "react-router-dom";

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
 import ReactBSAlert from "react-bootstrap-sweetalert";
+import Skeleton from '@yisheng90/react-loading';
 
 // reactstrap components
 import {
@@ -107,15 +108,31 @@ function ModuleSettings() {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
+
+      data.sort(function (a, b) {
+        if (a.Short_Desc > b.Short_Desc) {
+          return 1;
+        }
+        if (a.Short_Desc < b.Short_Desc) {
+          return -1;
+        }
+        // a must be equal to b
+        return 0;
+      });
+      
       //Creamos el arreglo de opciones para el select
       var optionsAux = [];
       var i;
       for(i=0; i<data.length; i++)
       {
-        optionsAux.push({
-          value: data[i].Id_Catalog, label: data[i].Short_Desc 
-        })
+        if(data[i].Status === true)
+        {
+          optionsAux.push({
+            value: data[i].Id_Catalog, label: data[i].Short_Desc 
+          })
+        }
       }
+      console.log(optionsAux)
       setOptions(optionsAux)
     })
     .catch(function(err) {
@@ -186,6 +203,22 @@ function ModuleSettings() {
 
   return dataApplications.length === 0 ? (
     <>
+      <div className="content">
+        <Row>
+          <Col md="12">
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4">Módulos</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <Skeleton height={25} />
+                <Skeleton height="25px" />
+                <Skeleton height="3rem" />
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </div>
     </>
   ) : (
     <>

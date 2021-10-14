@@ -22,7 +22,7 @@ import {
 } from "reactstrap";
 import { prototype } from "react-datetime";
 
-function Articulo69Table({dataTable}){
+function Articulo69BTable({dataTable}){
     /*const [dataState, setDataState] = useState(
         dataTable.map((prop, key) => {
           var persona;
@@ -161,4 +161,4 @@ function Articulo69Table({dataTable}){
     );
 }
 
-export default Articulo69Table;
+export default Articulo69BTable;

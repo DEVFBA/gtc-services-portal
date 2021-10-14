@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalAddUser from "views/components/Modals/ModalAddUser.js";
 import ModalUpdateUser from "views/components/Modals/ModalUpdateUser.js";
+import Skeleton from '@yisheng90/react-loading';
 
 import {
   Button,
@@ -12,7 +13,7 @@ import {
 } from "reactstrap";
 import { prototype } from "react-datetime";
 
-function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip, profilePath, autoCloseAlert}){
+function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip, profilePath, autoCloseAlert, setLoaded}){
     const [dataState, setDataState] = useState(
         dataTable.map((prop, key) => {
           var status;
@@ -87,7 +88,25 @@ function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDa
         }
     }
 
-    return (
+    return dataTable.length === 0 ? (
+        <>
+          <div className="content">
+            <Row>
+              <Col md="12">
+                <Button color="primary" onClick={toggleModalAddRecord}>
+                    <span className="btn-label">
+                    <i className="nc-icon nc-simple-add" />
+                    </span>
+                    Añadir Usuario
+                </Button>
+                <Skeleton height={25} />
+                <Skeleton height="25px" />
+                <Skeleton height="3rem" />
+              </Col>
+            </Row>
+          </div>
+        </>
+      ) : (
         <>
           <div className="content">
             <Row>
@@ -132,13 +151,13 @@ function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDa
                     />
                 </Col>
             </Row>
-        </div>
+          </div>
     
         {/*MODAL PARA AÑADIR REGISTROS*/}
-        <ModalAddUser modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} autoCloseAlert = {autoCloseAlert}/>       
+        <ModalAddUser modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} autoCloseAlert = {autoCloseAlert} setLoaded = {setLoaded}/>       
 
         {/*MODAL PARA MODIFICAR REGISTRO*/}
-        <ModalUpdateUser abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert}/>
+        <ModalUpdateUser abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert} setLoaded = {setLoaded}/>
     
         </>
     );

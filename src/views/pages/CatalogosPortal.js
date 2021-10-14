@@ -205,7 +205,10 @@ function CatalogosPortal() {
                 <FormGroup>
                   {/*Al seleccionar un catálogo se hará fetch para actualizar sus configuraciones*/}
                   <Select 
+                    name=""
+                    className="react-select"
                     placeholder = "Selecciona un catálogo para administrar sus configuraciones"
+                    classNamePrefix="react-select"
                     options = {options}
                     onChange={(e) => {
                       setCatalog(e.value);

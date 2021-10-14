@@ -38,7 +38,7 @@ function CFDIPDFRequestTable({dataTable}){
                         size="sm"
                         className="btn-icon btn-link edit"
                         >
-                        <i className="fa fa-edit" />
+                        <i className="nc-icon nc-alert-circle-i" />
                     </Button>
                 </abbr>
               </div>

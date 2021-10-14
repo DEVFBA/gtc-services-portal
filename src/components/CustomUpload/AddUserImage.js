@@ -1,7 +1,7 @@
 import React from "react";
 import fs from 'fs';
 
-import defaultImage from "assets/img/default-image.png";
+import defaultImage from "assets/img/default-avatar.png";
 
 function AddUserImage(props) {
   const [fileState, setFileState] = React.useState(null);

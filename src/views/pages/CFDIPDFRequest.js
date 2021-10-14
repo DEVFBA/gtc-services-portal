@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import Skeleton from '@yisheng90/react-loading';
 // reactstrap components
 import {
   Button,
@@ -85,6 +85,22 @@ function CFDIPDFRequest() {
 
   return dataCFDI.length === 0 ? (
     <>
+      <div className="content">
+        <Row>
+          <Col md="12">
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4">CFDI PDF Request</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <Skeleton height={25} />
+                <Skeleton height="25px" />
+                <Skeleton height="3rem" />
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </div>
     </>
   ) : (
     <>

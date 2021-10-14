@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
 import ReactBSAlert from "react-bootstrap-sweetalert";
+import Skeleton from '@yisheng90/react-loading';
 
 // reactstrap components
 import {
@@ -44,7 +45,7 @@ function Clientes() {
 
   const [profilePath, setProfilePath] = useState("")
   
-  const [alert, setAlert] = React.useState(null);
+  const [message, setMessage] = React.useState(null);
 
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
@@ -114,6 +115,7 @@ function Clientes() {
           value: data[i].Id_Catalog, label: data[i].Short_Desc 
         })
       }
+      console.log(optionsAux)
       setDataCountries(optionsAux)
     })
     .catch(function(err) {
@@ -196,7 +198,7 @@ function Clientes() {
   }, []);
 
   const autoCloseAlert = (mensaje) => {
-    setAlert(
+    setMessage(
       <ReactBSAlert
         style={{ display: "block", marginTop: "-100px" }}
         title="Mensaje"
@@ -210,13 +212,10 @@ function Clientes() {
   };
 
   const hideAlert = () => {
-    setAlert(null);
+    setMessage(null);
   };
 
   return dataCountries.length === 0 ? (
-    <>
-    </>
-  ) : (
     <>
       <div className="content">
         <Row>
@@ -226,8 +225,28 @@ function Clientes() {
                 <CardTitle tag="h4">Clientes</CardTitle>
               </CardHeader>
               <CardBody>
-                <Customers />
-                {alert}
+                <Skeleton height={25} />
+                <Skeleton height="25px" />
+                <Skeleton height="3rem" />
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </div>
+    </>
+  ) : (
+    <>
+      <div className="content">
+        <Row>
+          <Col md="12">
+            
+            <Card >
+              <CardHeader>
+                <CardTitle tag="h4">Clientes</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <Customers/>
+                {message}
               </CardBody>
             </Card>
           </Col>

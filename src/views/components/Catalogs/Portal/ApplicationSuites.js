@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Skeleton from '@yisheng90/react-loading';
 
 // reactstrap components
 import {
@@ -97,7 +98,20 @@ function ApplicationSuites({dataTable, updateAddData, ip, autoCloseAlert}) {
         }
     }
 
-    return (
+    return dataTable.length === 0 ? (
+      <>
+        <div className="content">
+          <Row>
+            <Col md="12">
+              <h4>Suites de Aplicaciones</h4>
+              <Skeleton height={25} />
+              <Skeleton height="25px" />
+              <Skeleton height="3rem" />
+            </Col>
+          </Row>
+        </div>
+      </>
+    ) : (
     <>
       <div className="content">
         <Row>

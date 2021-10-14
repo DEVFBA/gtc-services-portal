@@ -158,7 +158,7 @@ function CustomerApplicationsTable({dataTable, dataApplications, dataCustomers, 
                                 accessor: "licenseDate",
                             },
                             {
-                                Header: "Actions",
+                                Header: "Acciones",
                                 accessor: "actions",
                                 sortable: false,
                                 filterable: false,

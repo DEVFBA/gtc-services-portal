@@ -44,6 +44,7 @@ import ClienteConfiguraciones from "../views/pages/ClienteConfiguraciones.js";
 import EditConfiguration from "../views/pages/EditConfiguration.js";
 import CustomerApplications from "../views/pages/CustomerApplications.js";
 import Articulo69 from "../views/pages/Articulo69.js";
+import ConsultaArt69 from "../views/pages/ConsultaArt69";
 import CFDIPDFRequest from "../views/pages/CFDIPDFRequest.js";
 import CustomerApplicationsUsers from "../views/components/Clients/CustomerApplicationsUsers";
 import CFDIPDFRequestDetail from "../views/components/CFDIPDFRequest/CFDIPDFRequestDetail";
@@ -291,7 +292,6 @@ function Admin(props) {
                     }
                   )
                 }
-
                 var j= i+1;
                 while(j<data.length)
                 {
@@ -404,6 +404,17 @@ function Admin(props) {
                           path: data[j].Url,
                           name: data[j].SubModule_Desc,
                           component: CFDIPDFRequest,
+                          layout: ambiente + data[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(data[j].Component_Submodule === "ConsultaArt69")
+                    {
+                      views.push(
+                        {
+                          path: data[j].Url,
+                          name: data[j].SubModule_Desc,
+                          component: ConsultaArt69,
                           layout: ambiente + data[j].Layout_SubModule
                         }
                       )

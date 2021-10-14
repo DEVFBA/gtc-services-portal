@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
 import ReactBSAlert from "react-bootstrap-sweetalert";
+import Skeleton from '@yisheng90/react-loading';
+import LoadingOverlay from 'react-loading-overlay';
+import styled, { css } from "styled-components";
+import ClipLoader from "react-spinners/ClipLoader";
 
 // reactstrap components
 import {
@@ -49,6 +53,28 @@ function Usuarios() {
   const [profilePath, setProfilePath] = useState("")
 
   const [alert, setAlert] = React.useState(null);
+
+  //Para mostrar spinner al insertar o actualizar datos
+  const [loaded, setLoaded] = useState(true);
+
+  const DarkBackground = styled.div`
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 999; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+
+      ${props =>
+        props.disappear &&
+        css`
+          display: block; /* show */
+        `}
+    ` ;
 
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
@@ -233,6 +259,14 @@ function Usuarios() {
     };
   }, []);
 
+  useEffect(() => {
+    // visible true -> false
+    console.log("entre")
+    /*if (!loaded) {
+      setTimeout(() => setLoaded(true), 5000);
+    }*/
+  }, [loaded]);
+
   const autoCloseAlert = (mensaje) => {
     console.log("entre al alert")
     setAlert(
@@ -254,7 +288,7 @@ function Usuarios() {
 
    //Renderizado condicional
   function Users() {
-      return <UsersTable dataTable = {dataUsers} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert}/>;
+      return <UsersTable dataTable = {dataUsers} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert} loaded = {loaded} setLoaded = {setLoaded}/>;
   }
 
   //Para actualizar la tabla al insertar registro
@@ -278,6 +312,7 @@ function Usuarios() {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
+      //setLoaded(true)
       setDataUsers(data)
     })
     .catch(function(err) {
@@ -287,9 +322,26 @@ function Usuarios() {
 
   return dataUsers.length === 0 ? (
     <>
+      <div className="content">
+        <Row>
+          <Col md="12">
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4">Catálogo de Usuarios</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <Skeleton height={25} />
+                <Skeleton height="25px" />
+                <Skeleton height="3rem" />
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </div>
     </>
   ) : (
     <>
+      
       <div className="content">
         <Row>
           <Col md="12">
@@ -300,6 +352,15 @@ function Usuarios() {
               <CardBody>
                 <Users />
                 {alert}
+                <DarkBackground disappear={!loaded}>
+                <LoadingOverlay
+                  active={true}
+                  // spinner={<BounceLoader />}
+                  spinner={true}
+                >
+                  {/* <p>Some content or children or something.</p> */}
+                </LoadingOverlay>
+                </DarkBackground>
               </CardBody>
             </Card>
           </Col>

@@ -40,6 +40,8 @@ import TaxRegimes from "views/components/Catalogs/SAT/TaxRegimes";
 import TypesOperation from "views/components/Catalogs/SAT/TypesOperation";
 import VoucherTypes from "views/components/Catalogs/SAT/VoucherTypes";
 import RelationshipTypes from "views/components/Catalogs/SAT/RelationshipTypes";
+import Assumptions from "views/components/Catalogs/SAT/Assumptions";
+import EntityTypes from "views/components/Catalogs/SAT/EntityTypes";
 
 function CatalogosSAT() {
   //Para guardar los datos de los catálogos
@@ -92,9 +94,18 @@ function CatalogosSAT() {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
-      //console.log(data)
+      //Creamos el arreglo de opciones para el select en orden alfabetico
+      data.sort(function (a, b) {
+        if (a.Short_Desc > b.Short_Desc) {
+          return 1;
+        }
+        if (a.Short_Desc < b.Short_Desc) {
+          return -1;
+        }
+        // a must be equal to b
+        return 0;
+      });
       
-      //Creamos el arreglo de opciones para el select
       var optionsAux = [];
       var i;
       for(i=0; i<data.length; i++)
@@ -170,6 +181,12 @@ function CatalogosSAT() {
     }
     if (catalog === "RelationshipTypes") {
       return <RelationshipTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+    }
+    if (catalog === "Assumptions") {
+      return <Assumptions dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+    }
+    if (catalog === "EntityTypes") {
+      return <EntityTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     return <p></p>
   }
@@ -271,6 +288,8 @@ function CatalogosSAT() {
                 <FormGroup>
                   {/*Al seleccionar un catálogo se hará fetch para actualizar sus configuraciones*/}
                   <Select 
+                    className="react-select"
+                    classNamePrefix="react-select"
                     placeholder = "Selecciona un catálogo para administrar sus configuraciones"
                     options = {options}
                     onChange={(e) => {

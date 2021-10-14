@@ -23,7 +23,7 @@ import {
     Col,
 } from "reactstrap";
 
-function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip, profilePath, autoCloseAlert}) {
+function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip, profilePath, autoCloseAlert, setLoaded}) {
         // register form
     const [updateEmail, setupdateEmail] = React.useState("");
     const [updateFullName, setupdateFullName] = React.useState("");
@@ -172,6 +172,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
             //haremos el fetch a la base de datos para actualizar el registro
             //El password deberá encriptarse en SHA256
             //console.log(sha256(registerPassword));
+            /*setLoaded(false)*/
             updateRegister()
             //Cerramos el modal
             //handleModalClick()
@@ -256,7 +257,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                         //Para actualizar la tabla en componente principal
                         updateAddData()
                         //Cerramos el modal
-                        handleModalClick()
+                        handleModalClick() 
                         autoCloseAlert(data[0].Code_Message_User)
                     }
                 }

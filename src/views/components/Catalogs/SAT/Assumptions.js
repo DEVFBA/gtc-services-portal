@@ -22,10 +22,11 @@ import Select from "react-select";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js"; 
-import ModalUpdateIncoterm from "views/components/Modals/catalogs/sat/ModalUpdateIncoterm";
-import ModalAddIncoterm from "views/components/Modals/catalogs/sat/ModalAddIncoterm";
+import ModalUpdateAssumptions from "views/components/Modals/catalogs/sat/ModalUpdateAssumptions";
+import ModalAddAssumptions from "views/components/Modals/catalogs/sat/ModalAddAssumptions";
+import { data } from "jquery";
 
-function Incoterm({dataTable, updateAddData, ip, autoCloseAlert}) {
+function Assumptions({dataTable, updateAddData, ip, autoCloseAlert}) {
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
       var status;
@@ -40,6 +41,7 @@ function Incoterm({dataTable, updateAddData, ip, autoCloseAlert}) {
           idR: prop.Id_Catalog,
           shortDescription: prop.Short_Desc,
           longDescription: prop.Long_Desc,
+          firstRow: prop.First_Row,
           status: status,
           actions: (
           // ACCIONES A REALIZAR EN CADA REGISTRO
@@ -66,9 +68,6 @@ function Incoterm({dataTable, updateAddData, ip, autoCloseAlert}) {
 
     const [modalAddRecord, setModalAddRecord] = useState(false);
     const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
-    
-    //Para actualizar cada que agreguen un campo a la tabla
-    const [updateTable, setUpdateTable] = useState(0);
 
     //Para saber que registro se va a editar
     const [record, setRecord] = useState({});
@@ -102,7 +101,7 @@ function Incoterm({dataTable, updateAddData, ip, autoCloseAlert}) {
         <div className="content">
           <Row>
             <Col md="12">
-              <h4>Incoterm</h4>
+              <h4>Supuestos Artículo 69</h4>
               <Skeleton height={25} />
               <Skeleton height="25px" />
               <Skeleton height="3rem" />
@@ -117,7 +116,7 @@ function Incoterm({dataTable, updateAddData, ip, autoCloseAlert}) {
         <Row>
           <Col md="12">
             
-                <h4>Incoterm</h4>
+                <h4>Supuestos Artículo 69</h4>
                 <Button color="primary" onClick={toggleModalAddRecord}>
                     <span className="btn-label">
                     <i className="nc-icon nc-simple-add" />
@@ -141,6 +140,10 @@ function Incoterm({dataTable, updateAddData, ip, autoCloseAlert}) {
                       accessor: "longDescription",
                     },
                     {
+                        Header: "Primer Renglón",
+                        accessor: "firstRow",
+                      },
+                    {
                       Header: "Estatus",
                       accessor: "status",
                     },
@@ -158,16 +161,16 @@ function Incoterm({dataTable, updateAddData, ip, autoCloseAlert}) {
                 />
           </Col>
         </Row>
-    </div>
+      </div>
 
-    {/*MODAL PARA AÑADIR REGISTROS*/}
-    <ModalAddIncoterm modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData} ip = {ip} autoCloseAlert={autoCloseAlert}/>       
+      {/*MODAL PARA AÑADIR REGISTROS*/}
+      <ModalAddAssumptions modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData} ip = {ip} autoCloseAlert={autoCloseAlert}/>       
 
-    {/*MODAL PARA MODIFICAR REGISTRO*/}
-    <ModalUpdateIncoterm abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData} ip = {ip} autoCloseAlert={autoCloseAlert}/>
+      {/*MODAL PARA MODIFICAR REGISTRO*/}
+      <ModalUpdateAssumptions abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData} ip = {ip} autoCloseAlert={autoCloseAlert}/>
 
     </>
   );
 }
 
-export default Incoterm;
+export default Assumptions;
