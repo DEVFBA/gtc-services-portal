@@ -171,12 +171,6 @@ function Articulo69() {
         }
           //console.log(JSON.stringify(hojas[0].data))
 
-        const ws = XLSX.utils.aoa_to_sheet(hojas);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "SheetJS");
-        /* generate XLSX file and send to client */
-        XLSX.writeFile(wb, "sheetjs.csv");
-        console.log(wb)
         //console.log(hojas[0].data)
         //setDataArticulo69(hojas[0].data)
         /*const csvFromArrayOfObjects = convertArrayToCSV(hojas[0].data);
