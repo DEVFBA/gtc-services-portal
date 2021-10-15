@@ -29,10 +29,10 @@ import Articulo69Table from "../components/Articulo69/Articulo69Table";
 
 //Sustituir por datos de la base
 const options =[
-  {value: "Exigibles", label: "Exigibles"},
-  {value: "Firmes", label: "Firmes"},
-  {value: "NoLocalizados", label: "No localizados"},
-  {value: "RetornoInversiones", label: "Retorno Inversiones"}
+  {value: "EXIGI", label: "Exigibles"},
+  {value: "RETOR", label: "Firmes"},
+  {value: "FIRME", label: "No localizados"},
+  {value: "NOLOC", label: "Retorno Inversiones"}
 ]
 
 function Articulo69() {
@@ -54,6 +54,7 @@ function Articulo69() {
   const [excelState69B, setExcelState69B] = useState("")
 
   const user = localStorage.getItem("User");
+  const customer = localStorage.getItem("Id_Customer");
   const token = localStorage.getItem("Token");
 
   const [ip, setIP] = React.useState("");
@@ -171,28 +172,11 @@ function Articulo69() {
         }
           //console.log(JSON.stringify(hojas[0].data))
 
-        const ws = XLSX.utils.aoa_to_sheet(hojas);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "SheetJS");
-        /* generate XLSX file and send to client */
-        XLSX.writeFile(wb, "sheetjs.csv");
-        console.log(wb)
+        
         //console.log(hojas[0].data)
         //setDataArticulo69(hojas[0].data)
-        /*const csvFromArrayOfObjects = convertArrayToCSV(hojas[0].data);
-        let reader = new FileReader();
-        let file = csvFromArrayOfObjects;
-        console.log("hasta aqui pase")
-        reader.onloadend = () => { 
-          console.log("hasta aqui pase2")
-          //setFileState(file);
-          //setFileUpload(reader.result)
-          //sendData69B(reader.result)
-          console.log(reader.result)
-        };
-        if (file) {
-          reader.readAsDataURL(file);
-        }*/
+        const csvFromArrayOfObjects = convertArrayToCSV(hojas[0].data);
+        sendData69B(csvFromArrayOfObjects)
       };
     }
     else{
@@ -205,6 +189,7 @@ function Articulo69() {
   function uploadFile69(){
     if(excel69 !== null && supuestoState === "has-success")
     {
+      console.log(excel69)
       let reader = new FileReader();
       let file = excel69;
 
@@ -236,7 +221,7 @@ function Articulo69() {
 
       reader.onloadend = () => { 
         setFileState(file);
-        setFileUpload(reader.result)
+        //setFileUpload(reader.result)
         sendData69B(reader.result)
       };
       if (file) {
@@ -252,11 +237,13 @@ function Articulo69() {
 
   function sendData69(file){
     //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
+    console.log(user)
     const catRegister = {
       pvOptionCRUD: "C",
       pvFile: file,
       pvFilesPath: filesPath,
-      pvSupuesto: supuesto.value,
+      pvIdAssumption: supuesto.value,
+      piIdCustomer: customer,
       pvUser: user,
       pvIP: ip
     };
@@ -283,14 +270,13 @@ function Articulo69() {
   function sendData69B(file){
     //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
     const catRegister = {
-      pvOptionCRUD: "C",
       pvFile: file,
       pvFilesPath: filesPath,
       pvUser: user,
       pvIP: ip
     };
 
-    fetch(`http://129.159.99.152/develop-api/api/article-69/create-article-69-B/`, {
+    fetch(`http://localhost:9000/api/article-69/create-article-69-B/`, {
         method: "POST",
         body: JSON.stringify(catRegister),
         headers: {
