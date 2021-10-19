@@ -291,6 +291,7 @@ function Articulo69() {
     //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
     const catRegister = {
       pvFile: file,
+      piIdCustomer: customer,
       pvFilesPath: filesPath,
       pvUser: user,
       pvIP: ip
@@ -310,8 +311,24 @@ function Articulo69() {
             console.log("Hubo un error al procesar tu solicitud")
         }
         else{
-            console.log(data)
-        }
+          if(data[0].Code_Type === "Warning")
+          {
+              /*setErrorMessage(data[0].Code_Message_User)
+              setErrorState("has-danger")*/
+              autoCloseAlert(data[0].Code_Message_User)
+          }
+          else if(data[0].Code_Type === "Error")
+          {
+              //setErrorMessage(data[0].Code_Message_User)
+              autoCloseAlert(data[0].Code_Message_User)
+              //setErrorState("has-danger")
+          }
+          else{
+              //setErrorState("has-success");
+              //Para actualizar la tabla en componente principal
+              autoCloseAlert(data[0].Code_Message_User)
+          }
+      }
     });
   }
 
