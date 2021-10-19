@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
 import { convertArrayToCSV } from 'convert-array-to-csv'
+import ReactBSAlert from "react-bootstrap-sweetalert";
 
 //Convertir excel a json
 import * as XLSX from 'xlsx'
@@ -61,6 +62,8 @@ function Articulo69() {
 
   const [supuesto, setSupuesto] = useState("")
   const [supuestoState, setSupuestoState] = useState("")
+
+  const [alert, setAlert] = React.useState(null);
 
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
@@ -247,7 +250,7 @@ function Articulo69() {
       pvIP: ip
     };
 
-    fetch(`http://localhost:9000/api/article-69/create-article-69/`, {
+    fetch(`http://129.159.99.152/develop-api/api/article-69/create-article-69/`, {
         method: "POST",
         body: JSON.stringify(catRegister),
         headers: {
@@ -257,12 +260,30 @@ function Articulo69() {
     })
     .then((response) => response.json())
     .then((data) => {
-        if (data.errors) {
-            console.log("Hubo un error al procesar tu solicitud")
-        }
-        else{
-            console.log(data)
-        }
+      if (data.errors) {
+        setError(
+            <p>Hubo un error al realizar tu solicitud</p>
+        );
+      }
+      else{
+          if(data[0].Code_Type === "Warning")
+          {
+              /*setErrorMessage(data[0].Code_Message_User)
+              setErrorState("has-danger")*/
+              autoCloseAlert(data[0].Code_Message_User)
+          }
+          else if(data[0].Code_Type === "Error")
+          {
+              //setErrorMessage(data[0].Code_Message_User)
+              autoCloseAlert(data[0].Code_Message_User)
+              //setErrorState("has-danger")
+          }
+          else{
+              //setErrorState("has-success");
+              //Para actualizar la tabla en componente principal
+              autoCloseAlert(data[0].Code_Message_User)
+          }
+      }
     });
   }
 
@@ -275,7 +296,7 @@ function Articulo69() {
       pvIP: ip
     };
 
-    fetch(`http://localhost:9000/api/article-69/create-article-69-B/`, {
+    fetch(`http://129.159.99.152/develop-api/api/article-69/create-article-69-B/`, {
         method: "POST",
         body: JSON.stringify(catRegister),
         headers: {
@@ -293,6 +314,25 @@ function Articulo69() {
         }
     });
   }
+
+  const autoCloseAlert = (mensaje) => {
+    console.log("entre al alert")
+    setAlert(
+      <ReactBSAlert
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Mensaje"
+        onConfirm={() => hideAlert()}
+        showConfirm={false}
+      >
+        {mensaje}
+      </ReactBSAlert>
+    );
+    setTimeout(hideAlert, 2000);
+  };
+
+  const hideAlert = () => {
+    setAlert(null);
+  };
 
   return (
     <>
@@ -386,6 +426,7 @@ function Articulo69() {
                     </Col>
                   </Row>
                 </Form>
+                {alert}
               </CardBody>
             </Card>
           </Col>

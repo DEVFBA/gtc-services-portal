@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import MD5 from "crypto-js/md5";
+import axios from 'axios'
 
 // reactstrap components
 import {
@@ -47,10 +48,42 @@ function RegularForms() {
   const convertClick = () => {
     if(isValidated()===true)
     {
-        setCadenaString(MD5(cadena).toString())
+        //setCadenaString(MD5(cadena).toString())
+        convertirCadena(cadena)
         //haremos el fetch a la base de datos para agregar el registro
     }
   };
+
+  const convertirCadena= async (cadena) => {
+    console.log(cadena)
+    const cadenaC = {
+      text: cadena,
+    };
+
+    console.log(cadenaC)
+
+    fetch(`http://localhost:9000/api/encrypt/create`, {
+        method: "POST",
+        body: JSON.stringify(cadenaC),
+        headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
+        }
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.errors) {
+        setError(
+            <p>Hubo un error al realizar tu solicitud</p>
+        );
+      }
+      else{
+          setCadenaString(data)
+      }
+    });
+  }
 
   return (
     <>
