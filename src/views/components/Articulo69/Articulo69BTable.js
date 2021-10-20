@@ -2,18 +2,9 @@ import React, { useState, useEffect } from "react";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
+import Skeleton from '@yisheng90/react-loading';
 
-const dataTable2 = [
-    ["APP1", "Tiger Nixon", "System Architect", "Edinburgh", 1, 0],
-    ["APP2", "Garrett Winters", "Accountant", "Tokyo", 0, 1],
-    ["APP3", "Ashton Cox", "Junior Technical Author", "San Francisco", 1, 0],
-    ["APP4", "Cedric Kelly", "Senior Javascript Developer", "Edinburgh", 1, 0],
-    ["APP5", "Airi Satou", "Accountant", "Tokyo", 0, 1],
-    ["APP6", "Brielle Williamson", "Integration Specialist", "New York", 1, 0],
-    ["APP7", "Herrod Chandler", "Sales Assistant", "San Francisco", 1, 0],
-    ["APP8", "Rhona Davidson", "Integration Specialist", "Tokyo", 0, 0],
-    ["APP9", "Colleen Hurst", "Javascript Developer", "San Francisco", 0, 0],
-];
+import ModalReadArticle69B from "views/components/Modals/ModalReadArticle69B.js";
 
 import {
   Button,
@@ -21,74 +12,56 @@ import {
   Col,
 } from "reactstrap";
 import { prototype } from "react-datetime";
+import { PropagateLoader } from "react-spinners";
 
 function Articulo69BTable({dataTable}){
-    /*const [dataState, setDataState] = useState(
-        dataTable.map((prop, key) => {
-          var persona;
-          if(prop["TIPO PERSONA"] === "M"){
-              persona = "Moral"
-          }
-          else{
-              persona = "Física"
-          }
-          return {
-            id: key,
-            rfc: prop['RFC'],
-            razonSocial: prop['RAZÓN SOCIAL'],
-            tipoPersona: persona,
-            supuesto: prop["SUPUESTO"],
-            fecha: prop["FECHAS DE PRIMERA PUBLICACION"],
-            entidadFederativa: prop["ENTIDAD FEDERATIVA"],
-          };
-        })
-    );*/
-
     const [dataState, setDataState] = React.useState(
-        dataTable2.map((prop, key) => {
-          var habilitado;
-          if(prop[4] === 1 )
-          {
-            habilitado = "Habilitado"
-          }
-          else{
-            habilitado = "Inhabilitado"
-          }
+        dataTable.map((prop, key) => {
           return {
             id: key,
-            rfc: prop[0],
-            razonSocial: prop[1],
-            tipoPersona: prop[2],
-            supuesto: prop[3],
-            fecha: habilitado,
-            entidadFederativa: prop[5],
+            rfc: prop.RFC,
+            contribuyente: prop.Contribuyente,
+            situacionContribuyente: prop.Situacion_Contribuyente,
+            fechaPresuncionSAT: prop.SAT_Num_Fecha_Presuncion,
+            publicacionPresuntosSAT: prop.SAT_Publicacion_Presuntos,
+            fechaOficioSAT: prop.DOF_Num_Fecha_Presuncion,
+            pubDOFP: prop.DOF_Publicacion_Presuntos,
+            numFechaDesvirtuados: prop.SAT_Num_Fecha_Desvirtuados,
+            pubSATDesvirtuados: prop.SAT_Publicacion_Desvirtuados,
+            numFechaDesvirtuadosDOF: prop.DOF_Num_Fecha_Desvrituados,
+            pDOFDesvirtuados: prop.DOF_Publicacion_Desvirtuados,
+            numFechaDefinitivos: prop.SAT_Num_Fecha_Definitivos,
+            pubDefinitivos: prop.SAT_Publicacion_Definitivos,
+            numFechaDefinitivosDOF: prop.DOF_Num_Fecha_Definitivos,
+            pDOFDefinitivos: prop.DOF_Publicacion_Definitivos,
+            numFechaSentencia: prop.SAT_Num_Fecha_Sentencia_Fav,
+            pSentencia: prop.SAT_Publicacion_Sentencia_Fav,
+            numFechaSentenciaDOF: prop.DOF_Num_Fecha_Sentencia_Fav,
+            pSentenciaDOF: prop.DOF_Publicacion_Sentencia_Fav,
             actions: (
               // ACCIONES A REALIZAR EN CADA REGISTRO
               <div className="actions-center">
                 {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-                {prop[4] === 1 ? (
+                <abbr title="Ver detalle">
                   <Button
-                  onClick={() => {
-                    let obj = dataState.find((o) => o.id === key);
-                    history.push(`/admin/edit-configuration/${obj.idAplicacion}/`);
-                  }}
-                  color="warning"
-                  size="sm"
-                  className="btn-icon btn-link edit"
-                >
-                  <i className="fa fa-edit" />
-                </Button>
-                ) : null}
-                
+                    onClick={() => {
+                      getRegistro(key);
+                      toggleModalUpdateRecord()
+                    }}
+                    color="warning"
+                    size="sm"
+                    className="btn-icon btn-link edit"
+                  >
+                    <i className="nc-icon nc-alert-circle-i" />
+                  </Button>
+                </abbr>
               </div>
             ),
           };
         })
     );
 
-    const [modalAddRecord, setModalAddRecord] = useState(false);
     const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
-
     //Para saber que usuario se va a editar
     const [record, setRecord] = useState({});
 
@@ -98,25 +71,28 @@ function Articulo69BTable({dataTable}){
         setRecord(registro) 
     }
 
-    function toggleModalAddRecord(){
-        if(modalAddRecord == false){
-        setModalAddRecord(true);
-        }
-        else{
-        setModalAddRecord(false);
-        }
-    }
-
     function toggleModalUpdateRecord(){
-        if(modalUpdateRecord == false){
+      if(modalUpdateRecord == false){
         setModalUpdateRecord(true);
-        }
-        else{
+      }
+      else{
         setModalUpdateRecord(false);
-        }
-    }
+      }
+  }
 
-    return (
+    return dataTable.length === 0 ? (
+      <>
+        <div className="content">
+          <Row>
+            <Col md="12">
+              <Skeleton height={25} />
+              <Skeleton height="25px" />
+              <Skeleton height="3rem" />
+            </Col>
+          </Row>
+        </div>
+      </>
+    ) : (
         <>
           <div className="content">
             <Row>
@@ -129,25 +105,19 @@ function Articulo69BTable({dataTable}){
                                 accessor: "rfc",
                             },
                             {
-                                Header: "Razón social",
-                                accessor: "razonSocial",
+                                Header: "Contribuyente",
+                                accessor: "contribuyente",
                             },
                             {
-                                Header: "Tipo de persona",
-                                accessor: "tipoPersona",
+                                Header: "Situación Contribuyente",
+                                accessor: "situacionContribuyente",
                             },
                             {
-                                Header: "Supuesto",
-                                accessor: "supuesto",
-                            },
-                            {
-                                Header: "Fecha",
-                                accessor: "fecha",
-                            },
-                            {
-                                Header: "Estado",
-                                accessor: "entidadFederativa",
-                            },
+                              Header: "Acciones",
+                              accessor: "actions",
+                              sortable: false,
+                              filterable: false,
+                             },
                         ]}
                         /*
                             You can choose between primary-pagination, info-pagination, success-pagination, warning-pagination, danger-pagination or none - which will make the pagination buttons gray
@@ -156,6 +126,8 @@ function Articulo69BTable({dataTable}){
                     />
                 </Col>
             </Row>
+            {/*MODAL PARA MODIFICAR REGISTRO*/}
+            <ModalReadArticle69B abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} />
         </div>
         </>
     );

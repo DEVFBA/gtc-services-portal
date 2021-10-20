@@ -2,9 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios'
 import { convertArrayToCSV } from 'convert-array-to-csv'
 import ReactBSAlert from "react-bootstrap-sweetalert";
-
-//Convertir excel a json
-import * as XLSX from 'xlsx'
 import Select from "react-select";
 
 // reactstrap components
@@ -64,6 +61,7 @@ function Articulo69() {
   const [supuestoState, setSupuestoState] = useState("")
 
   const [alert, setAlert] = React.useState(null);
+  const [assumptions, setAssumptions] = useState([])
 
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
@@ -73,6 +71,38 @@ function Articulo69() {
   useEffect(() => {
       //Descargamos la IP del usuario
       getData()
+  }, []);
+
+  useEffect(() => {
+    //Aqui vamos a descargar los assumptions para el select
+
+    var url = new URL(`http://localhost:9000/api/assumptions/`)
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+        //Creamos el arreglo de roles para el select
+        var optionsAux = [];
+        var i;
+        for(i=0; i<data.length; i++)
+        {
+          optionsAux.push({
+            value: data[i].Id_Catalog, label: data[i].Short_Desc 
+          })
+        }
+        setAssumptions(optionsAux)
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de los general parameters" + err);
+    });
   }, []);
 
   useEffect(() => {
@@ -103,90 +133,6 @@ function Articulo69() {
         alert("No se pudo consultar la informacion de los general parameters" + err);
     });
   }, []);
-
-
-  //Renderizado condicional
-  function Articulo69TableData() {
-    return <Articulo69Table dataTable = {dataArticulo69} filesPath = {filesPath}/>;
-  }
-
-  function uploadExcel()
-  {
-    if(excel69 !== null)
-    {
-      console.log(excel69)
-      let fileReader = new FileReader();
-      fileReader.readAsArrayBuffer(excel69);
-      fileReader.onload = (event) => {
-        let data = new Uint8Array(event.target.result);
-
-        var config = {
-          type: 'array',
-          cellDates: true,
-          WTF: false,
-          cellStyles: true,
-          dateNF : 'dd/mm/yy',
-          cellINF: true
-        }
-        let workbook = XLSX.read(data, config);
-        var hojas =[];
-        workbook.SheetNames.forEach(function(sheetName) {
-          // Here is your object
-          var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
-          hojas.push({
-            data: XL_row_object,
-            sheetName
-          })
-        })
-        console.log(hojas)
-        
-        var date;
-        var month;
-        var year;
-        var fecha = "";
-        for(var i=0; i< hojas[0].data.length; i++)
-        {
-          date = hojas[0].data[i]["FECHAS DE PRIMERA PUBLICACION"].getDate()
-          month = hojas[0].data[i]["FECHAS DE PRIMERA PUBLICACION"].getMonth()
-          year = hojas[0].data[i]["FECHAS DE PRIMERA PUBLICACION"].getFullYear()
-
-          if(month < 10 && date < 10)
-          {
-            fecha = "0" + date + "/0" + (month+1) + "/" + year;  
-          }
-          else if(date < 10)
-          {
-            fecha = "0" + date + "/" + (month+1) + "/" + year;
-          }
-          else if(month < 10) 
-          {  
-            fecha = "" + date + "/0" + (month+1) + "/" + year;
-          }
-          else{
-            fecha = "" + date + "/" + (month+1) + "/" + year;
-          }
-          hojas[0].data[i]["FECHAS DE PRIMERA PUBLICACION"] = fecha
-
-          //Reemplazar comas y comillas
-          var rS1 = hojas[0].data[i]["RAZÓN SOCIAL"]
-          var rS2 = rS1.replace(/,/g, '');
-          var rS3 = rS2.replace(/"/g, '');
-          hojas[0].data[i]["RAZÓN SOCIAL"] = rS3
-        }
-          //console.log(JSON.stringify(hojas[0].data))
-
-        //console.log(hojas[0].data)
-        //setDataArticulo69(hojas[0].data)
-        const csvFromArrayOfObjects = convertArrayToCSV(hojas[0].data);
-        sendData69B(csvFromArrayOfObjects)
-      };
-    }
-    else{
-      if (excelState69 !== "has-success") {
-        setExcelState69("has-danger");
-      }
-    }
-  }
 
   function uploadFile69(){
     if(excel69 !== null && supuestoState === "has-success")
@@ -376,7 +322,7 @@ function Articulo69() {
                           setSupuesto(value);
                           setSupuestoState("has-success");
                         }}
-                        options={options}
+                        options={assumptions}
                       />
                       {supuestoState === "has-danger" ? (
                           <label className="error">

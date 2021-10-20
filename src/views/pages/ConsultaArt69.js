@@ -57,30 +57,50 @@ function ConsultaArt69() {
 
   //Nos servirá para pasarle los datos a la tabla ya descargados
   function updateData(datos){
-    const params = {
-      pvOptionCRUD: "R",
-      pSpCatalog : datos.CRUD_References,
-    };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/cat-catalogs/catalog`);
-    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+    if(datos.value === "Articulo69")
+    {
+      var url = new URL(`http://129.159.99.152/develop-api/api/article-69/69`);
+  
+      fetch(url, {
+          method: "GET",
+          headers: {
+              "access-token": token,
+              "Content-Type": "application/json",
+          }
+      })
+      .then(function(response) {
+          return response.ok ? response.json() : Promise.reject();
+      })
+      .then(function(data) {
+        console.log(data)
+        setDataCatalog(data)
+      })
+      .catch(function(err) {
+          alert("No se pudo consultar la informacion del artículo 69" + err);
+      });
+    }
+    else{
+      var url = new URL(`http://129.159.99.152/develop-api/api/article-69/69-B`);
 
-    fetch(url, {
-        method: "GET",
-        headers: {
-            "access-token": token,
-            "Content-Type": "application/json",
-        }
-    })
-    .then(function(response) {
-        return response.ok ? response.json() : Promise.reject();
-    })
-    .then(function(data) {
-      setDataCatalog(data)
-    })
-    .catch(function(err) {
-        alert("No se pudo consultar la informacion de los catálogos" + err);
-    });
+      fetch(url, {
+          method: "GET",
+          headers: {
+              "access-token": token,
+              "Content-Type": "application/json",
+          }
+      })
+      .then(function(response) {
+          return response.ok ? response.json() : Promise.reject();
+      })
+      .then(function(data) {
+        console.log(data)
+        setDataCatalog(data)
+      })
+      .catch(function(err) {
+          alert("No se pudo consultar la informacion del artículo 69" + err);
+      });
+    }
   }
 
   return (
@@ -102,7 +122,7 @@ function ConsultaArt69() {
                     value={catalog}
                     onChange={(value) => {
                       setCatalog(value);
-                      //updateData(dataTable.find(o => o.Component === e.value))
+                      updateData(value)
                     }}
                     options = {options}
                   />

@@ -21,7 +21,7 @@ import {
 // core components
 import Articulo69BTable from "./Articulo69BTable";
 
-function ConsultaArt69BComponent(dataTable) {
+function ConsultaArt69BComponent({dataTable}) {
 
   useEffect(() => {
     //Aqui vamos a descargar la lista de registros de la base de datos por primera vez
@@ -37,14 +37,8 @@ function ConsultaArt69BComponent(dataTable) {
       <div className="content">
         <Row>
           <Col md="12">
-            <Card>
-              <CardHeader>
-                <CardTitle tag="h4">Artículo 69-B</CardTitle>
-              </CardHeader>
-              <CardBody>
+                <h4 tag="h4">Artículo 69-B</h4>
                 <Articulo69BTableData />
-              </CardBody>
-            </Card>
           </Col>
         </Row>
       </div>

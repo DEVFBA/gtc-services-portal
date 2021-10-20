@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-
-//Convertir excel a json
-import * as XLSX from 'xlsx'
+import Skeleton from '@yisheng90/react-loading';
 
 // reactstrap components
 import {
@@ -24,14 +22,7 @@ import {
 // core components
 import Articulo69Table from "./Articulo69Table";
 
-function ConsultaArt69Component(dataTable) {
-
-  //Para guardar el archivo
-  const [excel, setExcel] = useState(null);
-  const [JsonData, setJsonData]=useState([]);
-
-  const [excelState69, setExcelState69] = useState("")
-  const [excelState69B, setExcelState69B] = useState("")
+function ConsultaArt69Component({dataTable}) {
 
   useEffect(() => {
     //Aqui vamos a descargar la lista de registros de la base de datos por primera vez
@@ -42,19 +33,26 @@ function ConsultaArt69Component(dataTable) {
     return <Articulo69Table dataTable = {dataTable}/>;
   }
 
-  return (
+  return dataTable.length === 0 ? (
+      <>
+        <div className="content">
+          <Row>
+            <Col md="12">
+                  <h4 tag="h4">Artículo 69</h4>
+                  <Skeleton height={25} />
+                  <Skeleton height="25px" />
+                  <Skeleton height="3rem" />
+            </Col>
+          </Row>
+        </div>
+      </>
+    ) : (
     <>
       <div className="content">
         <Row>
           <Col md="12">
-            <Card>
-              <CardHeader>
-                <CardTitle tag="h4">Artículo 69</CardTitle>
-              </CardHeader>
-              <CardBody>
+                <h4 tag="h4">Artículo 69</h4>
                 <Articulo69TableData />
-              </CardBody>
-            </Card>
           </Col>
         </Row>
       </div>

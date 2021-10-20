@@ -259,14 +259,6 @@ function Usuarios() {
     };
   }, []);
 
-  useEffect(() => {
-    // visible true -> false
-    console.log("entre")
-    /*if (!loaded) {
-      setTimeout(() => setLoaded(true), 5000);
-    }*/
-  }, [loaded]);
-
   const autoCloseAlert = (mensaje) => {
     console.log("entre al alert")
     setAlert(
