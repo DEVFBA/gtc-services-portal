@@ -208,15 +208,6 @@ function Login() {
                     />
                   </InputGroup>
                   <br />
-                  {/*<FormGroup>
-                    <FormGroup check>
-                      <Label check>
-                        <Input defaultChecked defaultValue="" type="checkbox" />
-                        <span className="form-check-sign" />
-                        Subscribe to newsletter
-                      </Label>
-                    </FormGroup>
-                  </FormGroup> */}
                 </CardBody>
                 <CardFooter>
                   <div className="btn-login">

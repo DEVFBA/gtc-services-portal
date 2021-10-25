@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
-import { convertArrayToCSV } from 'convert-array-to-csv'
 import ReactBSAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
+import LoadingOverlay from 'react-loading-overlay';
+import styled from 'styled-components'
 
 // reactstrap components
 import {
@@ -62,6 +63,19 @@ function Articulo69() {
 
   const [alert, setAlert] = React.useState(null);
   const [assumptions, setAssumptions] = useState([])
+  const [isActive, setIsActive] = useState(false)
+
+  const StyledLoader = styled(LoadingOverlay)`
+    width: 250px;
+    height: 400px;
+    overflow: scroll;
+    .MyLoader_overlay {
+      background: rgba(255, 0, 0, 0.5);
+    }
+    &.MyLoader_wrapper--active {
+      overflow: hidden;
+    }
+  `
 
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
@@ -76,7 +90,7 @@ function Articulo69() {
   useEffect(() => {
     //Aqui vamos a descargar los assumptions para el select
 
-    var url = new URL(`http://localhost:9000/api/assumptions/`)
+    var url = new URL(`http://129.159.99.152/develop-api/api/assumptions/`)
 
     fetch(url, {
         method: "GET",
@@ -144,7 +158,7 @@ function Articulo69() {
       reader.onloadend = () => { 
         setFileState(file);
         setFileUpload(reader.result)
-        console.log(reader.result)
+        setIsActive(true)
         sendData69(reader.result)
       };
       if (file) {
@@ -170,6 +184,7 @@ function Articulo69() {
       reader.onloadend = () => { 
         setFileState(file);
         //setFileUpload(reader.result)
+        setIsActive(true)
         sendData69B(reader.result)
       };
       if (file) {
@@ -212,6 +227,7 @@ function Articulo69() {
         );
       }
       else{
+          setIsActive(false)
           if(data[0].Code_Type === "Warning")
           {
               /*setErrorMessage(data[0].Code_Message_User)
@@ -257,6 +273,8 @@ function Articulo69() {
             console.log("Hubo un error al procesar tu solicitud")
         }
         else{
+          setIsActive(false)
+          location.reload()
           if(data[0].Code_Type === "Warning")
           {
               /*setErrorMessage(data[0].Code_Message_User)
@@ -394,6 +412,18 @@ function Articulo69() {
             </Card>
           </Col>
         </Row>
+        <LoadingOverlay
+          active={isActive}
+          spinner
+          text='Loading your content...'
+          styles={{
+            overlay: (base) => ({
+              ...base,
+              background: 'rgba(255, 0, 0, 0.5)'
+            })
+          }}
+          >
+        </LoadingOverlay>     
       </div>
     </>
   );
