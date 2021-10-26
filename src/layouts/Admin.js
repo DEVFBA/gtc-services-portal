@@ -48,6 +48,7 @@ import ConsultaArt69 from "../views/pages/ConsultaArt69";
 import CFDIPDFRequest from "../views/pages/CFDIPDFRequest.js";
 import CustomerApplicationsUsers from "../views/components/Clients/CustomerApplicationsUsers";
 import CFDIPDFRequestDetail from "../views/components/CFDIPDFRequest/CFDIPDFRequestDetail";
+import SupportApplicationsSettings from "../views/components/SupportClients/SupportApplicationsSettings";
 import Encriptado from "../views/pages/Encriptado";
 import { string } from "prop-types";
 import routes from "routes.js";
@@ -500,6 +501,16 @@ function Admin(props) {
               name: "CFDI PDF Requests Detail",
               icon: "nc-icon nc-bank",
               component: CFDIPDFRequestDetail,
+              layout:  ambiente + "/admin",
+            }
+          )
+          routesAux.push(
+            {
+              invisible: true,
+              path: "/application-settings/:idCus/:idApp/",
+              name: "Applications Settings",
+              icon: "nc-icon nc-bank",
+              component: SupportApplicationsSettings,
               layout:  ambiente + "/admin",
             }
           )

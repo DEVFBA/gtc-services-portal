@@ -12,35 +12,43 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalUpdateSupport({abierto, toggleModalUpdateRecord}) {
-        // register form
-    const [registerEmail, setregisterEmail] = React.useState("");
-    const [registerFullName, setregisterFullName] = React.useState("");
-    const [registerPassword, setregisterPassword] = React.useState("");
-    const [registerRol, setregisterRol] = React.useState("");
-    const [registerConfirmPassword, setregisterConfirmPassword] = React.useState(
-        ""
-    );
-    const [registerEmailState, setregisterEmailState] = React.useState("");
-    const [registerFullNameState, setregisterFullNameState] = React.useState("");
-    const [registerPasswordState, setregisterPasswordState] = React.useState("");
-    const [
-        registerConfirmPasswordState,
-        setregisterConfirmPasswordState,
-    ] = React.useState("");
+function ModalUpdateSupport({abierto, toggleModalUpdateRecord, record, updateAddData, ip, autoCloseAlert}) {
+    const [idCustomer, setIdCustomer] = React.useState("");
+    const [idApplication, setIdApplication] = React.useState("");
+    const [settingsName, setSettingsName] = React.useState("");
+    const [settingsKey, setSettingsKey] = React.useState("");
+    const [settingsValue, setSettingsValue] = React.useState("");
+    const [use, setUse] = React.useState("");
+    const [tooltip, setTooltip] = React.useState("");
+   
+    const [settingsValueState, setSettingsValueState] = React.useState("");
+
+    const [error, setError] = React.useState("");
+    const [errorMessage, setErrorMessage] = React.useState("");
+    const [errorState, setErrorState] = React.useState("");
+
+    const user = localStorage.getItem("User");
+    const token = localStorage.getItem("Token");
+
+    useEffect(() => {
+      console.log(record)
+      setIdCustomer(record.idCustomer);
+      setIdApplication(record.idApplication)
+      setSettingsName(record.settingsName)
+      setSettingsValue(record.settingsValue)
+      setSettingsKey(record.settingsKey)
+      setUse(record.use)
+      setTooltip(record.tooltip)
+    },[record]);
 
     const handleModalClick = () => {
+        setErrorState("")
+        setError("")
+        setSettingsValueState("")
+        setErrorMessage("")
         toggleModalUpdateRecord(!abierto);
     };
 
-        // function that returns true if value is email, false otherwise
-    const verifyEmail = (value) => {
-        var emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (emailRex.test(value)) {
-        return true;
-        }
-        return false;
-    };
     // function that verifies if a string has a given length or not
     const verifyLength = (value, length) => {
         if (value.length >= length) {
@@ -48,109 +56,88 @@ function ModalUpdateSupport({abierto, toggleModalUpdateRecord}) {
         }
         return false;
     };
-    // function that verifies if two strings are equal
-    const compare = (string1, string2) => {
-        if (string1 === string2) {
-        return true;
-        }
-        return false;
-    };
-    // function that verifies if value contains only numbers
-    const verifyNumber = (value) => {
-        var numberRex = new RegExp("^[0-9]+$");
-        if (numberRex.test(value)) {
-        return true;
-        }
-        return false;
-    };
-    // verifies if value is a valid URL
-    const verifyUrl = (value) => {
-        try {
-        new URL(value);
-        return true;
-        } catch (_) {
-        return false;
-        }
-    };
 
-    const registerClick = () => {
-        //Función para Agregar Registro
-        if (registerEmailState === "") {
-        setregisterEmailState("has-danger");
-        }
-        if (registerFullNameState === "") {
-        setregisterFullNameState("has-danger");
-        }
-        if (registerPasswordState === "" || registerConfirmPasswordState === "") {
-        setregisterPasswordState("has-danger");
-        setregisterConfirmPasswordState("has-danger");
-        }
+    //Funcion para validar que no se queden en blanco los inputs en caso de que haga cambios
+    const verifyInputs = () =>{
+      var settingsvalue = document.getElementById("settingsvalue").value
+
+      if (!verifyLength(settingsvalue, 1)) {
+          setSettingsValueState("has-danger");
+      } else {
+        setSettingsValueState("has-success");
+      }
+      setSettingsValue(settingsvalue);
+    }
+
+    const isValidated = () => {
+
+      verifyInputs()
+      if (settingsValueState !== "has-danger") 
+      {
+        return true;
+      }
+      else{
+        return false;
+      }
     };
 
     const updateClick = () => {
-        //Función para editar registro
-        if (registerEmailState === "") {
-        setregisterEmailState("has-danger");
-        }
-        if (registerFullNameState === "") {
-        setregisterFullNameState("has-danger");
-        }
-        if (registerPasswordState === "" || registerConfirmPasswordState === "") {
-        setregisterPasswordState("has-danger");
-        setregisterConfirmPasswordState("has-danger");
-        }
+      if(isValidated()===true)
+      {
+          updateRegister()
+      }
     };
 
-    const loginClick = () => {
-        if (loginFullNameState === "") {
-        setloginFullNameState("has-danger");
-        }
-        if (loginEmailState === "") {
-        setloginEmailState("has-danger");
-        }
-        if (loginPasswordState === "") {
-        setloginPasswordState("has-danger");
-        }
-    };
-
-    const typeClick = () => {
-        if (requiredState === "") {
-        setrequiredState("has-danger");
-        }
-        if (emailState === "") {
-        setemailState("has-danger");
-        }
-        if (numberState === "") {
-        setnumberState("has-danger");
-        }
-        if (urlState === "") {
-        seturlState("has-danger");
-        }
-        if (sourceState === "" || destinationState === "") {
-        setsourceState("has-danger");
-        setdestinationState("has-danger");
-        }
-    };
-
-    const rangeClick = () => {
-        if (minLengthState === "") {
-        setminLengthState("has-danger");
-        }
-        if (maxLengthState === "") {
-        setmaxLengthState("has-danger");
-        }
-        if (rangeState === "") {
-        setrangeState("has-danger");
-        }
-        if (minState === "") {
-        setminState("has-danger");
-        }
-        if (maxState === "") {
-        setmaxState("has-danger");
-        }
-    };
-
-
+    function updateRegister(){
+      const catRegister = {
+          pvOptionCRUD: "U",
+          piIdCustomer: idCustomer,
+          piIdApplication: idApplication,
+          pvSettingsKey: settingsKey,
+          pvSettingsValue: settingsValue,
+          pvUser: user,
+          pvIP: ip
+      };
+      
+      fetch(`http://129.159.99.152/develop-api/api/applications-settings/update-settings/`, {
+          method: "PUT",
+          body: JSON.stringify(catRegister),
+          headers: {
+              "access-token": token,
+              "Content-Type": "application/json"
+          }
+      })
+      .then((response) => response.json())
+      .then((data) => {
+          if (data.errors) {
+              setError(
+                  <p>Hubo un error al realizar tu solicitud</p>
+              );
+          }
+          else{
+              if(data[0].Code_Type === "Warning")
+              {
+                  setErrorMessage(data[0].Code_Message_User)
+                  setErrorState("has-danger")
+                  autoCloseAlert(data[0].Code_Message_User)
+              }
+              else if(data[0].Code_Type === "Error")
+              {
+                  setErrorMessage(data[0].Code_Message_User)
+                  setErrorState("has-danger")
+                  autoCloseAlert(data[0].Code_Message_User)
+              }
+              else{
+                  setErrorState("has-success");
+                  //Para actualizar la tabla en componente principal
+                  updateAddData()
+                  //Cerramos el modal
+                  handleModalClick() 
+                  autoCloseAlert(data[0].Code_Message_User)
+              }
+          }
+      });
+    }
     
     return (
         <Modal isOpen={abierto} toggle={handleModalClick} size="lg">
@@ -162,56 +149,51 @@ function ModalUpdateSupport({abierto, toggleModalUpdateRecord}) {
         </div>
         <ModalBody>
         <Form id="RegisterValidation">
-            <FormGroup className={`has-label ${registerEmailState}`}>
-              <label>Id</label>
-              <Input
-                name="id"
-                type="text"
-                valuee="Hola" 
-                readOnly
-              />
-            </FormGroup>
-            <FormGroup className={`has-label ${registerFullNameState}`}>
-                <label>Descripción corta *</label>
+            <FormGroup>
+                <label>Nombre de la Configuración</label>
                 <Input
-                  name="fullname"
+                  name="idApp"
                   type="text"
-                  onChange={(e) => {
-                    if (!verifyLength(e.target.value, 1)) {
-                      setregisterFullNameState("has-danger");
-                    } else {
-                      setregisterFullNameState("has-success");
-                    }
-                    setregisterFullName(e.target.value);
-                  }}
+                  value={settingsName} 
+                  readOnly
                 />
-                {registerFullNameState === "has-danger" ? (
-                  <label className="error">Este campo es requerido.</label>
-                ) : null}
             </FormGroup>
-            <FormGroup className={`has-label ${registerPasswordState}`}>
-              <label>Descripción larga *</label>
+            <FormGroup className={`has-label ${settingsValueState}`}>
+              <label>Valor de la Configuración *</label>
               <Input
-                id="registerPassword"
-                name="desc-larga"
+                id="settingsvalue"
+                name="settingsvalue"
                 type="text"
+                value={settingsValue}
                 autoComplete="off"
                 onChange={(e) => {
                   if (!verifyLength(e.target.value, 1)) {
-                    setregisterPasswordState("has-danger");
+                    setSettingsValueState("has-danger");
                   } else {
-                    setregisterPasswordState("has-success");
+                    setSettingsValueState("has-success");
                   }
-                  setregisterPassword(e.target.value);
+                  setSettingsValue(e.target.value);
                 }}
               />
-              {registerPasswordState === "has-danger" ? (
+              {settingsValueState === "has-danger" ? (
                 <label className="error">Este campo es requerido.</label>
               ) : null}
             </FormGroup>
-            <FormGroup check>
-              <Input type="checkbox" name="check" id="exampleCheck" checked/>
-              <Label for="exampleCheck" check>Habilitado *</Label>
+            <FormGroup>
+                <label>Tooltip</label>
+                <Input
+                  name="tooltip"
+                  type="text"
+                  value={tooltip} 
+                  readOnly
+                />
+            </FormGroup>
+            <FormGroup className={`has-label ${errorState}`}>
+              {errorState === "has-danger" ? (
+                  <label className="error">
+                      {errorMessage}
+                  </label>
+              ) : null}
             </FormGroup>
             <div className="category form-category">
               * Campos requeridos
@@ -221,9 +203,9 @@ function ModalUpdateSupport({abierto, toggleModalUpdateRecord}) {
         <ModalFooter>
           <div className="center-side">
             <Button color="secondary" onClick={handleModalClick}>
-                Close
+                Cerrar
             </Button>
-            <Button color="primary">
+            <Button color="primary" onClick={updateClick}>
                 Guardar cambios
             </Button>
           </div>
