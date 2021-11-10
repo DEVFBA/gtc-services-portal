@@ -79,8 +79,6 @@ function Login() {
   function onSubmitForm(event) {
     event.preventDefault();
 
-    const credentials = { email, password };
-
     const catRegister = {
       pvIdUser: email,
       pvPassword: password

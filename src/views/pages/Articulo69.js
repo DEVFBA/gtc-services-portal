@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios'
 import ReactBSAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
-import LoadingOverlay from 'react-loading-overlay';
-import styled from 'styled-components'
+import Cargando from "assets/img/loading_icon.gif";
 
 // reactstrap components
 import {
@@ -62,20 +61,10 @@ function Articulo69() {
   const [supuestoState, setSupuestoState] = useState("")
 
   const [alert, setAlert] = React.useState(null);
-  const [assumptions, setAssumptions] = useState([])
-  const [isActive, setIsActive] = useState(false)
+  const [assumptions, setAssumptions] = useState([]);
 
-  const StyledLoader = styled(LoadingOverlay)`
-    width: 250px;
-    height: 400px;
-    overflow: scroll;
-    .MyLoader_overlay {
-      background: rgba(255, 0, 0, 0.5);
-    }
-    &.MyLoader_wrapper--active {
-      overflow: hidden;
-    }
-  `
+  //Para el alert de cargando archivo
+  const [alert2, setAlert2] = React.useState(null);
 
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
@@ -158,7 +147,7 @@ function Articulo69() {
       reader.onloadend = () => { 
         setFileState(file);
         setFileUpload(reader.result)
-        setIsActive(true)
+        autoCloseAlert2("Cargando archivo...")
         sendData69(reader.result)
       };
       if (file) {
@@ -183,8 +172,7 @@ function Articulo69() {
 
       reader.onloadend = () => { 
         setFileState(file);
-        //setFileUpload(reader.result)
-        setIsActive(true)
+        autoCloseAlert2("Cargando archivo...")
         sendData69B(reader.result)
       };
       if (file) {
@@ -227,7 +215,7 @@ function Articulo69() {
         );
       }
       else{
-          setIsActive(false)
+          hideAlert2()
           if(data[0].Code_Type === "Warning")
           {
               /*setErrorMessage(data[0].Code_Message_User)
@@ -273,7 +261,7 @@ function Articulo69() {
             console.log("Hubo un error al procesar tu solicitud")
         }
         else{
-          setIsActive(false)
+          hideAlert2()
           location.reload()
           if(data[0].Code_Type === "Warning")
           {
@@ -315,6 +303,36 @@ function Articulo69() {
     setAlert(null);
   };
 
+  const autoCloseAlert2 = (mensaje) => {
+    setAlert2(
+      <ReactBSAlert
+        style={{ display: "block", marginTop: "-100px" }}
+        title=""
+        onConfirm={() => hideAlert()}
+        showConfirm={false}
+      >
+        <Row>
+          <Col sm="4">
+          </Col>
+          <Col sm="4">
+            <img 
+              src = {Cargando} 
+              style ={{ width: "50px", height: "50px" }}
+            />
+          </Col>
+          <Col sm="4">
+          </Col>
+        </Row>
+        &nbsp;
+        {mensaje}
+      </ReactBSAlert>
+    );
+  };
+
+  const hideAlert2 = () => {
+    setAlert2(null);
+  };
+
   return (
     <>
       <div className="content">
@@ -354,7 +372,6 @@ function Articulo69() {
                           type="file" id="fileUpload" 
                           accept=".xls, .xlsx, .csv" 
                           onChange={(e) => {
-                            console.log(e.target.files[0])
                             setExcel69(e.target.files[0]);
                             setExcelState69("has-success")
                           }}/>
@@ -408,22 +425,11 @@ function Articulo69() {
                   </Row>
                 </Form>
                 {alert}
+                {alert2}
               </CardBody>
             </Card>
           </Col>
-        </Row>
-        <LoadingOverlay
-          active={isActive}
-          spinner
-          text='Loading your content...'
-          styles={{
-            overlay: (base) => ({
-              ...base,
-              background: 'rgba(255, 0, 0, 0.5)'
-            })
-          }}
-          >
-        </LoadingOverlay>     
+        </Row> 
       </div>
     </>
   );

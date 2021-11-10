@@ -1,19 +1,3 @@
-/*!
-
-=========================================================
-* Paper Dashboard PRO React - v1.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-pro-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React, { useState, useEffect } from "react";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
@@ -82,12 +66,6 @@ function Admin(props) {
   const [isTimedOut, setIsTimedOut] = useState(false);
   const [idleTimer, setIdleTimer] = useState(false);
   
-        /*this.onAction = this._onAction.bind(this)
-        this.onActive = this._onActive.bind(this)
-        this.onIdle = this._onIdle.bind(this)
-        this.handleClose = this.handleClose.bind(this)
-        this.handleLogout = this.handleLogout.bind(this)*/
-
   function _onAction(e) {
     //console.log('user did something', e)
     setIsTimedOut(false)
@@ -142,385 +120,396 @@ function Admin(props) {
     .then(function(data) {
         var routesAux = [];
         //const ambiente = "/QSDEV"
-       
-        for(var i=0; i<data.length; i++)
+
+        if(data.mensaje === 'Token inválida')
         {
-          if(data[i].Status === true)
+          localStorage.setItem("Logged", false);
+          localStorage.removeItem("User");
+          localStorage.removeItem("Id_Role");
+          localStorage.removeItem("Id_Customer");
+          localStorage.removeItem("Token");
+          history.push(ambiente + "/auth/login")
+        }
+        else{
+          for(var i=0; i<data.length; i++)
           {
-            //console.log(data[i])
-            if(data[i].Component_Module!=="")
+            if(data[i].Status === true)
             {
-              if(data[i].Component_Module === "DashboardAdmin")
+              //console.log(data[i])
+              if(data[i].Component_Module!=="")
               {
-                routesAux.push(
-                  {
-                    collapse: false,
-                    path: data[i].Url,
-                    name: data[i].Module_Desc,
-                    icon: String(data[i].Icon),
-                    component: DashboardAdmin,
-                    layout: ambiente + data[i].Layout_Module
-                  }
-                )
-              }
-              else if(data[i].Component_Module === "DashboardSoporte")
-              {
-                routesAux.push(
-                  {
-                    collapse: false,
-                    path: data[i].Url,
-                    name: data[i].Module_Desc,
-                    icon: String(data[i].Icon),
-                    component: DashboardSoporte,
-                    layout: ambiente + data[i].Layout_Module
-                  }
-                )
-              }
-              else{
-                routesAux.push(
-                  {
-                    collapse: false,
-                    path: data[i].Url,
-                    name: data[i].Module_Desc,
-                    icon: String(data[i].Icon),
-                    component: DashboardCliente,
-                    layout: ambiente + data[i].Layout_Module
-                  }
-                )
-              }
-            }
-            else{
-              //El componente es padre pero collapse
-              if(data[i-1].Module_Desc !== data[i].Module_Desc)
-              {
-                var views = []
-                if(data[i].Component_Submodule === "Usuarios")
+                if(data[i].Component_Module === "DashboardAdmin")
                 {
-                  views.push(
+                  routesAux.push(
                     {
+                      collapse: false,
                       path: data[i].Url,
-                      name: data[i].SubModule_Desc,
-                      component: Usuarios,
-                      layout: ambiente + data[i].Layout_SubModule
+                      name: data[i].Module_Desc,
+                      icon: String(data[i].Icon),
+                      component: DashboardAdmin,
+                      layout: ambiente + data[i].Layout_Module
                     }
                   )
                 }
-                else if(data[i].Component_Submodule === "Encriptado")
+                else if(data[i].Component_Module === "DashboardSoporte")
                 {
+                  routesAux.push(
+                    {
+                      collapse: false,
+                      path: data[i].Url,
+                      name: data[i].Module_Desc,
+                      icon: String(data[i].Icon),
+                      component: DashboardSoporte,
+                      layout: ambiente + data[i].Layout_Module
+                    }
+                  )
+                }
+                else{
+                  routesAux.push(
+                    {
+                      collapse: false,
+                      path: data[i].Url,
+                      name: data[i].Module_Desc,
+                      icon: String(data[i].Icon),
+                      component: DashboardCliente,
+                      layout: ambiente + data[i].Layout_Module
+                    }
+                  )
+                }
+              }
+              else{
+                //El componente es padre pero collapse
+                if(data[i-1].Module_Desc !== data[i].Module_Desc)
+                {
+                  var views = []
+                  if(data[i].Component_Submodule === "Usuarios")
+                  {
                     views.push(
                       {
                         path: data[i].Url,
                         name: data[i].SubModule_Desc,
-                        component: Encriptado,
+                        component: Usuarios,
                         layout: ambiente + data[i].Layout_SubModule
                       }
                     )
-                }
-                else if(data[i].Component_Submodule === "CatalogosPortal")
-                {
-                  views.push(
-                    {
-                      path: data[i].Url,
-                      name: data[i].SubModule_Desc,
-                      component: CatalogosPortal,
-                      layout: ambiente + data[i].Layout_SubModule
-                    }
-                  )
-                }
-                else if(data[i].Component_Submodule === "CatalogosSAT")
-                {
-                  views.push(
-                    {
-                      path: data[i].Url,
-                      name: data[i].SubModule_Desc,
-                      component: CatalogosSAT,
-                      layout: ambiente + data[i].Layout_SubModule
-                    }
-                  )
-                }
-                else if(data[i].Component_Submodule === "Clientes")
-                {
-                  views.push(
-                    {
-                      path: data[i].Url,
-                      name: data[i].SubModule_Desc,
-                      component: Clientes,
-                      layout: ambiente + data[i].Layout_SubModule
-                    }
-                  )
-                }
-                else if(data[i].Component_Submodule === "SupportClients")
-                {
-                  views.push(
-                    {
-                      path: data[i].Url,
-                      name: data[i].SubModule_Desc,
-                      component: SupportClients,
-                      layout: ambiente + data[i].Layout_SubModule
-                    }
-                  )
-                }
-                else if(data[i].Component_Submodule === "ModuleSettings")
-                {
-                  views.push(
-                    {
-                      path: data[i].Url,
-                      name: data[i].SubModule_Desc,
-                      component: ModuleSettings,
-                      layout: ambiente + data[i].Layout_SubModule
-                    }
-                  )
-                }
-                else if(data[i].Component_Submodule === "ClienteConfiguraciones")
-                {
-                  views.push(
-                    {
-                      path: data[i].Url,
-                      name: data[i].SubModule_Desc,
-                      component: ClienteConfiguraciones,
-                      layout: ambiente + data[i].Layout_SubModule
-                    }
-                  )
-                }
-                else if(data[i].Component_Submodule === "Articulo69")
-                {
-                  views.push(
-                    {
-                      path: data[i].Url,
-                      name: data[i].SubModule_Desc,
-                      component: Articulo69,
-                      layout: ambiente + data[i].Layout_SubModule
-                    }
-                  )
-                }
-                var j= i+1;
-                while(j<data.length)
-                {
-                  //Este ciclo se utiliza para meter a los demás hijos (cuando un padre tiene más de 1 hijo)
-                  if(data[i].Id_Module === data[j].Id_Module && data[j].Status === true)
-                  {
-                    if(data[j].Component_Submodule === "Usuarios")
-                    {
-                      views.push(
-                        {
-                          path: data[j].Url,
-                          name: data[j].SubModule_Desc,
-                          component: Usuarios,
-                          layout: ambiente + data[j].Layout_SubModule
-                        }
-                      )
-                    }
-                    else if(data[j].Component_Submodule === "Encriptado")
-                    {
-                      views.push(
-                        {
-                          path: data[j].Url,
-                          name: data[j].SubModule_Desc,
-                          component: Encriptado,
-                          layout: ambiente + data[j].Layout_SubModule
-                        }
-                      )
-                    }
-                    else if(data[j].Component_Submodule === "CatalogosPortal")
-                    {
-                      views.push(
-                        {
-                          path: data[j].Url,
-                          name: data[j].SubModule_Desc,
-                          component: CatalogosPortal,
-                          layout: ambiente + data[j].Layout_SubModule
-                        }
-                      )
-                    }
-                    else if(data[j].Component_Submodule === "CatalogosSAT")
-                    {
-                      views.push(
-                        {
-                          path: data[j].Url,
-                          name: data[j].SubModule_Desc,
-                          component: CatalogosSAT,
-                          layout: ambiente + data[j].Layout_SubModule
-                        }
-                      )
-                    }
-                    else if(data[j].Component_Submodule === "Clientes")
-                    {
-                      views.push(
-                        {
-                          path: data[j].Url,
-                          name: data[j].SubModule_Desc,
-                          component: Clientes,
-                          layout: ambiente + data[j].Layout_SubModule
-                        }
-                      )
-                    }
-                    else if(data[j].Component_Submodule === "SupportClients")
-                    {
-                      views.push(
-                        {
-                          path: data[j].Url,
-                          name: data[j].SubModule_Desc,
-                          component: SupportClients,
-                          layout: ambiente + data[j].Layout_SubModule
-                        }
-                      )
-                    }
-                    else if(data[j].Component_Submodule === "ModuleSettings")
-                    {
-                      views.push(
-                        {
-                          path: data[j].Url,
-                          name: data[j].SubModule_Desc,
-                          component: ModuleSettings,
-                          layout: ambiente + data[j].Layout_SubModule
-                        }
-                      )
-                    }
-                    else if(data[j].Component_Submodule === "ClienteConfiguraciones")
-                    {
-                      views.push(
-                        {
-                          path: data[j].Url,
-                          name: data[j].SubModule_Desc,
-                          component: ClienteConfiguraciones,
-                          layout: ambiente + data[j].Layout_SubModule
-                        }
-                      )
-                    }
-                    else if(data[j].Component_Submodule === "CustomerApplications")
-                    {
-                      views.push(
-                        {
-                          path: data[j].Url,
-                          name: data[j].SubModule_Desc,
-                          component: CustomerApplications,
-                          layout: ambiente + data[j].Layout_SubModule
-                        }
-                      )
-                    }
-                    else if(data[j].Component_Submodule === "CFDIPDFRequest")
-                    {
-                      views.push(
-                        {
-                          path: data[j].Url,
-                          name: data[j].SubModule_Desc,
-                          component: CFDIPDFRequest,
-                          layout: ambiente + data[j].Layout_SubModule
-                        }
-                      )
-                    }
-                    else if(data[j].Component_Submodule === "ConsultaArt69")
-                    {
-                      views.push(
-                        {
-                          path: data[j].Url,
-                          name: data[j].SubModule_Desc,
-                          component: ConsultaArt69,
-                          layout: ambiente + data[j].Layout_SubModule
-                        }
-                      )
-                    }
                   }
-                  j++
-                }
-
-                //Ya cuando se terminan de meter a los hijos agregamos la ruta
-                var iconn = String(data[i].Icon.toString())
-                var ultimo = routesAux.length
-                if(routesAux[ultimo-1].name !== data[i].Module_Desc)
-                {
-                  routesAux.push(
+                  else if(data[i].Component_Submodule === "Encriptado")
+                  {
+                      views.push(
+                        {
+                          path: data[i].Url,
+                          name: data[i].SubModule_Desc,
+                          component: Encriptado,
+                          layout: ambiente + data[i].Layout_SubModule
+                        }
+                      )
+                  }
+                  else if(data[i].Component_Submodule === "CatalogosPortal")
+                  {
+                    views.push(
+                      {
+                        path: data[i].Url,
+                        name: data[i].SubModule_Desc,
+                        component: CatalogosPortal,
+                        layout: ambiente + data[i].Layout_SubModule
+                      }
+                    )
+                  }
+                  else if(data[i].Component_Submodule === "CatalogosSAT")
+                  {
+                    views.push(
+                      {
+                        path: data[i].Url,
+                        name: data[i].SubModule_Desc,
+                        component: CatalogosSAT,
+                        layout: ambiente + data[i].Layout_SubModule
+                      }
+                    )
+                  }
+                  else if(data[i].Component_Submodule === "Clientes")
+                  {
+                    views.push(
+                      {
+                        path: data[i].Url,
+                        name: data[i].SubModule_Desc,
+                        component: Clientes,
+                        layout: ambiente + data[i].Layout_SubModule
+                      }
+                    )
+                  }
+                  else if(data[i].Component_Submodule === "SupportClients")
+                  {
+                    views.push(
+                      {
+                        path: data[i].Url,
+                        name: data[i].SubModule_Desc,
+                        component: SupportClients,
+                        layout: ambiente + data[i].Layout_SubModule
+                      }
+                    )
+                  }
+                  else if(data[i].Component_Submodule === "ModuleSettings")
+                  {
+                    views.push(
+                      {
+                        path: data[i].Url,
+                        name: data[i].SubModule_Desc,
+                        component: ModuleSettings,
+                        layout: ambiente + data[i].Layout_SubModule
+                      }
+                    )
+                  }
+                  else if(data[i].Component_Submodule === "ClienteConfiguraciones")
+                  {
+                    views.push(
+                      {
+                        path: data[i].Url,
+                        name: data[i].SubModule_Desc,
+                        component: ClienteConfiguraciones,
+                        layout: ambiente + data[i].Layout_SubModule
+                      }
+                    )
+                  }
+                  else if(data[i].Component_Submodule === "Articulo69")
+                  {
+                    views.push(
+                      {
+                        path: data[i].Url,
+                        name: data[i].SubModule_Desc,
+                        component: Articulo69,
+                        layout: ambiente + data[i].Layout_SubModule
+                      }
+                    )
+                  }
+                  var j= i+1;
+                  while(j<data.length)
+                  {
+                    //Este ciclo se utiliza para meter a los demás hijos (cuando un padre tiene más de 1 hijo)
+                    if(data[i].Id_Module === data[j].Id_Module && data[j].Status === true)
                     {
-                      collapse: true,
-                      name: data[i].Module_Desc,
-                      icon: iconn,
-                      state: data[i].Module_Desc,
-                      views: views,
+                      if(data[j].Component_Submodule === "Usuarios")
+                      {
+                        views.push(
+                          {
+                            path: data[j].Url,
+                            name: data[j].SubModule_Desc,
+                            component: Usuarios,
+                            layout: ambiente + data[j].Layout_SubModule
+                          }
+                        )
+                      }
+                      else if(data[j].Component_Submodule === "Encriptado")
+                      {
+                        views.push(
+                          {
+                            path: data[j].Url,
+                            name: data[j].SubModule_Desc,
+                            component: Encriptado,
+                            layout: ambiente + data[j].Layout_SubModule
+                          }
+                        )
+                      }
+                      else if(data[j].Component_Submodule === "CatalogosPortal")
+                      {
+                        views.push(
+                          {
+                            path: data[j].Url,
+                            name: data[j].SubModule_Desc,
+                            component: CatalogosPortal,
+                            layout: ambiente + data[j].Layout_SubModule
+                          }
+                        )
+                      }
+                      else if(data[j].Component_Submodule === "CatalogosSAT")
+                      {
+                        views.push(
+                          {
+                            path: data[j].Url,
+                            name: data[j].SubModule_Desc,
+                            component: CatalogosSAT,
+                            layout: ambiente + data[j].Layout_SubModule
+                          }
+                        )
+                      }
+                      else if(data[j].Component_Submodule === "Clientes")
+                      {
+                        views.push(
+                          {
+                            path: data[j].Url,
+                            name: data[j].SubModule_Desc,
+                            component: Clientes,
+                            layout: ambiente + data[j].Layout_SubModule
+                          }
+                        )
+                      }
+                      else if(data[j].Component_Submodule === "SupportClients")
+                      {
+                        views.push(
+                          {
+                            path: data[j].Url,
+                            name: data[j].SubModule_Desc,
+                            component: SupportClients,
+                            layout: ambiente + data[j].Layout_SubModule
+                          }
+                        )
+                      }
+                      else if(data[j].Component_Submodule === "ModuleSettings")
+                      {
+                        views.push(
+                          {
+                            path: data[j].Url,
+                            name: data[j].SubModule_Desc,
+                            component: ModuleSettings,
+                            layout: ambiente + data[j].Layout_SubModule
+                          }
+                        )
+                      }
+                      else if(data[j].Component_Submodule === "ClienteConfiguraciones")
+                      {
+                        views.push(
+                          {
+                            path: data[j].Url,
+                            name: data[j].SubModule_Desc,
+                            component: ClienteConfiguraciones,
+                            layout: ambiente + data[j].Layout_SubModule
+                          }
+                        )
+                      }
+                      else if(data[j].Component_Submodule === "CustomerApplications")
+                      {
+                        views.push(
+                          {
+                            path: data[j].Url,
+                            name: data[j].SubModule_Desc,
+                            component: CustomerApplications,
+                            layout: ambiente + data[j].Layout_SubModule
+                          }
+                        )
+                      }
+                      else if(data[j].Component_Submodule === "CFDIPDFRequest")
+                      {
+                        views.push(
+                          {
+                            path: data[j].Url,
+                            name: data[j].SubModule_Desc,
+                            component: CFDIPDFRequest,
+                            layout: ambiente + data[j].Layout_SubModule
+                          }
+                        )
+                      }
+                      else if(data[j].Component_Submodule === "ConsultaArt69")
+                      {
+                        views.push(
+                          {
+                            path: data[j].Url,
+                            name: data[j].SubModule_Desc,
+                            component: ConsultaArt69,
+                            layout: ambiente + data[j].Layout_SubModule
+                          }
+                        )
+                      }
                     }
-                  )
+                    j++
+                  }
+
+                  //Ya cuando se terminan de meter a los hijos agregamos la ruta
+                  var iconn = String(data[i].Icon.toString())
+                  var ultimo = routesAux.length
+                  if(routesAux[ultimo-1].name !== data[i].Module_Desc)
+                  {
+                    routesAux.push(
+                      {
+                        collapse: true,
+                        name: data[i].Module_Desc,
+                        icon: iconn,
+                        state: data[i].Module_Desc,
+                        views: views,
+                      }
+                    )
+                  }
+                  //console.log(routesAux[x])
                 }
-                //console.log(routesAux[x])
               }
             }
           }
-        }
-        //Agregar rutas solo para roles en específico
-        if(params.pvIdRole == "GTCADMIN")
-        {
-          routesAux.push(
-            {
-              invisible: true,
-              path: "/add-application",
-              name: "Add Application",
-              icon: "nc-icon nc-bank",
-              component: AddApplication,
-              layout: ambiente + "/admin",
-            }
-          )
-          routesAux.push(
-            {
-              invisible: true,
-              path: "/edit-application/:idApp/",
-              name: "Edit Application",
-              icon: "nc-icon nc-bank",
-              component: EditApplication,
-              layout:  ambiente + "/admin",
-            }
-          )
+          //Agregar rutas solo para roles en específico
+          if(params.pvIdRole == "GTCADMIN")
+          {
+            routesAux.push(
+              {
+                invisible: true,
+                path: "/add-application",
+                name: "Add Application",
+                icon: "nc-icon nc-bank",
+                component: AddApplication,
+                layout: ambiente + "/admin",
+              }
+            )
+            routesAux.push(
+              {
+                invisible: true,
+                path: "/edit-application/:idApp/",
+                name: "Edit Application",
+                icon: "nc-icon nc-bank",
+                component: EditApplication,
+                layout:  ambiente + "/admin",
+              }
+            )
 
-          routesAux.push(
-            {
-              invisible: true,
-              path: "/customer-application-users/:idCus/:idApp/",
-              name: "Customer Application Users",
-              icon: "nc-icon nc-bank",
-              component: CustomerApplicationsUsers,
-              layout:  ambiente + "/admin",
-            }
-          )
+            routesAux.push(
+              {
+                invisible: true,
+                path: "/customer-application-users/:idCus/:idApp/",
+                name: "Customer Application Users",
+                icon: "nc-icon nc-bank",
+                component: CustomerApplicationsUsers,
+                layout:  ambiente + "/admin",
+              }
+            )
+          }
+          else if(params.pvIdRole == "CUSAPPLI")
+          {
+            routesAux.push(
+              {
+                invisible: true,
+                path: "/edit-configuration/:idApp/",
+                name: "Edit Configuration",
+                icon: "nc-icon nc-bank",
+                component: EditConfiguration,
+                layout: ambiente + "/admin",
+              },
+            )
+          }
+          else if(params.pvIdRole == "GTCSUPPO")
+          {
+            routesAux.push(
+              {
+                invisible: true,
+                path: "/cfdi-requests/:idCus/:idReq/",
+                name: "CFDI PDF Requests Detail",
+                icon: "nc-icon nc-bank",
+                component: CFDIPDFRequestDetail,
+                layout:  ambiente + "/admin",
+              }
+            )
+            routesAux.push(
+              {
+                invisible: true,
+                path: "/application-settings/:idCus/:idApp/",
+                name: "Applications Settings",
+                icon: "nc-icon nc-bank",
+                component: SupportApplicationsSettings,
+                layout:  ambiente + "/admin",
+              }
+            )
+          }
+          //Ruta para cambiar contraseña
+          //console.log(routesAux)
+          setDbRoutes(routesAux)
         }
-        else if(params.pvIdRole == "CUSAPPLI")
-        {
-          routesAux.push(
-            {
-              invisible: true,
-              path: "/edit-configuration/:idApp/",
-              name: "Edit Configuration",
-              icon: "nc-icon nc-bank",
-              component: EditConfiguration,
-              layout: ambiente + "/admin",
-            },
-          )
-        }
-        else if(params.pvIdRole == "GTCSUPPO")
-        {
-          routesAux.push(
-            {
-              invisible: true,
-              path: "/cfdi-requests/:idCus/:idReq/",
-              name: "CFDI PDF Requests Detail",
-              icon: "nc-icon nc-bank",
-              component: CFDIPDFRequestDetail,
-              layout:  ambiente + "/admin",
-            }
-          )
-          routesAux.push(
-            {
-              invisible: true,
-              path: "/application-settings/:idCus/:idApp/",
-              name: "Applications Settings",
-              icon: "nc-icon nc-bank",
-              component: SupportApplicationsSettings,
-              layout:  ambiente + "/admin",
-            }
-          )
-        }
-        //Ruta para cambiar contraseña
-        //console.log(routesAux)
-        setDbRoutes(routesAux)
     })
     .catch(function(err) {
-        alert("No se pudo consultar la informacion de las rutas" + err);
+        console.log(err)
     });
   }, []);
 
@@ -553,7 +542,7 @@ function Admin(props) {
           }
       })
       .catch(function(err) {
-          alert("No se pudo consultar la informacion del usuario" + err);
+          console.log(err)
       });
     }
   },[]);
