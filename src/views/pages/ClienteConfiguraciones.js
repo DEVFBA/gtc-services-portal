@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import axios from 'axios'
+import ReactBSAlert from "react-bootstrap-sweetalert";
+import Skeleton from '@yisheng90/react-loading';
+
+// core components
+import ClienteConfiguracionesTable from "../components/ClienteConfiguraciones/ClienteConfiguracionesTable";
 
 // reactstrap components
 import {
@@ -15,133 +20,138 @@ import {
   ModalFooter
 } from "reactstrap";
 
-// core components
-import ReactTable from "components/ReactTable/ReactTable.js";
 
-const dataTable = [
-  ["APP1", "Tiger Nixon", "System Architect", "Edinburgh", 1],
-  ["APP2", "Garrett Winters", "Accountant", "Tokyo", 0],
-  ["APP3", "Ashton Cox", "Junior Technical Author", "San Francisco", 1],
-  ["APP4", "Cedric Kelly", "Senior Javascript Developer", "Edinburgh", 1],
-  ["APP5", "Airi Satou", "Accountant", "Tokyo", 0],
-  ["APP6", "Brielle Williamson", "Integration Specialist", "New York", 1],
-  ["APP7", "Herrod Chandler", "Sales Assistant", "San Francisco", 1],
-  ["APP8", "Rhona Davidson", "Integration Specialist", "Tokyo", 0],
-  ["APP9", "Colleen Hurst", "Javascript Developer", "San Francisco", 0],
-];
+
 
 function ClienteConfiguraciones() {
-  const history = useHistory();
-  const [dataState, setDataState] = React.useState(
-    dataTable.map((prop, key) => {
-      var habilitado;
-      if(prop[4] === 1 )
-      {
-        habilitado = "Habilitado"
-      }
-      else{
-        habilitado = "Inhabilitado"
-      }
-      return {
-        id: key,
-        idAplicacion: prop[0],
-        aplicacion: prop[1],
-        suite: prop[2],
-        fechaVigencia: prop[3],
-        estatus: habilitado,
-        actions: (
-          // ACCIONES A REALIZAR EN CADA REGISTRO
-          <div className="actions-center">
-            {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-            {prop[4] === 1 ? (
-              <Button
-              onClick={() => {
-                let obj = dataState.find((o) => o.id === key);
-                history.push(`/admin/edit-configuration/${obj.idAplicacion}/`);
-              }}
-              color="warning"
-              size="sm"
-              className="btn-icon btn-link edit"
-            >
-              <i className="fa fa-edit" />
-            </Button>
-            ) : null}
-            
-          </div>
-        ),
-      };
-    })
-  );
+  const token = localStorage.getItem("Token"); 
+  const customer = localStorage.getItem("Id_Customer")
+  
+  //Para guardar los datos de las aplicaciones por cliente
+  const [dataApplications, setDataApplications] = useState([])
 
-  const [modalReadRecord, setModalReadRecord] = useState(false);
-  const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
+  const [ip, setIP] = React.useState("");
+  
+  const [alert, setAlert] = React.useState(null);
+
+  const getData = async () => {
+    const res = await axios.get('https://geolocation-db.com/json/')
+    setIP(res.data.IPv4)
+  }
 
   useEffect(() => {
-    //Se descargan la lista de aplicaciones que el cliente tenga contratadas
-
-    //los datos se van a guardar en dataState
+      //Descargamos la IP del usuario
+      getData()
   }, []);
 
-  function toggleModalReadRecord(){
-    if(modalReadRecord == false){
-      setModalReadRecord(true);
-    }
-    else{
-      setModalReadRecord(false);
-    }
+  useEffect(() => {
+    var url = new URL(`http://129.159.99.152/develop-api/api/customer-applications/${customer}/`);
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+      //Creamos el arreglo de opciones para el select
+      console.log(data)
+      setDataApplications(data)
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de los clientes" + err);
+    });
+  }, []);
+
+  //Renderizado condicional
+  function ClienteConfiguracion() {
+    return <ClienteConfiguracionesTable dataTable = {dataApplications} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
   }
 
-  function toggleModalUpdateRecord(){
-    if(modalUpdateRecord == false){
-      setModalUpdateRecord(true);
-    }
-    else{
-      setModalUpdateRecord(false);
-    }
+  //Para actualizar la tabla al insertar registro
+  function updateAddData(){
+    var url = new URL(`http://129.159.99.152/develop-api/api/customer-applications/${customer}/`);
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+      setDataApplications(data)
+    })
+    .catch(function(err) {
+        console.log(err)
+    });
   }
 
-  return (
+  React.useEffect(() => {
+    return function cleanup() {
+      var id = window.setTimeout(null, 0);
+      while (id--) {
+        window.clearTimeout(id);
+      }
+    };
+  }, []);
+
+  const autoCloseAlert = (mensaje) => {
+    setAlert(
+      <ReactBSAlert
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Mensaje"
+        onConfirm={() => hideAlert()}
+        showConfirm={false}
+      >
+        {mensaje}
+      </ReactBSAlert>
+    );
+    setTimeout(hideAlert, 2000);
+  };
+
+  const hideAlert = () => {
+    setAlert(null);
+  };
+
+  return dataApplications.length === 0 ? (
     <>
-      {/*console.log(props.example)*/}
       <div className="content">
         <Row>
           <Col md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">Client Settings</CardTitle>
+                <CardTitle tag="h4">Cliente Configuraciones</CardTitle>
               </CardHeader>
               <CardBody>
-                <ReactTable
-                  data={dataState}
-                  columns={[
-                    {
-                      Header: "Aplicación",
-                      accessor: "aplicacion",
-                    },
-                    {
-                      Header: "Suite",
-                      accessor: "suite",
-                    },
-                    {
-                      Header: "Fecha Vigencia",
-                      accessor: "fechaVigencia",
-                    },
-                    {
-                      Header: "Estatus",
-                      accessor: "estatus",
-                    },
-                    {
-                      Header: "Actions",
-                      accessor: "actions",
-                      sortable: false,
-                      filterable: false,
-                    },
-                  ]}
-                  /*
-                      You can choose between primary-pagination, info-pagination, success-pagination, warning-pagination, danger-pagination or none - which will make the pagination buttons gray
-                    */
-                  className="-striped -highlight primary-pagination"
-                />
+                <Skeleton height={25} />
+                <Skeleton height="25px" />
+                <Skeleton height="3rem" />
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </div>
+    </>
+  ) : (
+    <>
+      <div className="content">
+        <Row>
+          <Col md="12">
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4">Cliente Configuraciones</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <ClienteConfiguracion />
+                {alert}
               </CardBody>
             </Card>
           </Col>

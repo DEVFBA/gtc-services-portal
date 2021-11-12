@@ -326,7 +326,7 @@ function Register() {
             className="full-page-background"
             style={{
             backgroundImage: `url(${
-                require("assets/img/logo-gtc.jpg").default
+                require("assets/img/fondo4.png").default
             })`,
             }}
         />

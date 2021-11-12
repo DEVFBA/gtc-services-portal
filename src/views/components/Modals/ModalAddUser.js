@@ -227,7 +227,6 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
                 else{
                     setErrorState("has-success");
                     //Para actualizar la tabla en componente principal
-                    setIsActive(false)
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()

@@ -136,30 +136,42 @@ function Login() {
     })
     .then(function(data) {
         console.log(data)
-        localStorage.setItem("User", data[0].User);
-        localStorage.setItem("Id_Customer", data[0].Id_Customer)
-        localStorage.setItem("Id_Role", data[0].Id_Role)
-        localStorage.setItem("Token", token)
-        localStorage.setItem("Logged", true)
-        //Comparar fechas
-        var f1 = new Date();
-        var f2 = new Date(data[0].Final_Effective_Date)
-        if(data[0].Temporal_Password===true)
+        if(data.length > 1)
         {
-          history.push(ambiente + "/auth/edit-password");
+          localStorage.setItem("User", data[0].User);
+          localStorage.setItem("Id_Role", data[0].Id_Role)
+          localStorage.setItem("Token", token)
+          localStorage.setItem("Logged", true)
+          history.push(ambiente + "/auth/choose-customer");
         }
-        else if (data[0].Final_Effective_Date === "NULL")
+        else
         {
-          console.log("entre al NULL")
-          history.push(ambiente + "/auth/edit-password");      
+          localStorage.setItem("User", data[0].User);
+          localStorage.setItem("Id_Customer", data[0].Id_Customer)
+          localStorage.setItem("Id_Role", data[0].Id_Role)
+          localStorage.setItem("Token", token)
+          localStorage.setItem("Logged", true)
+          //Comparar fechas
+          var f1 = new Date();
+          var f2 = new Date(data[0].Final_Effective_Date)
+          if(data[0].Temporal_Password===true)
+          {
+            history.push(ambiente + "/auth/edit-password");
+          }
+          else if (data[0].Final_Effective_Date === "NULL")
+          {
+            console.log("entre al NULL")
+            history.push(ambiente + "/auth/edit-password");      
+          }
+          else if(f2 < f1)
+          {
+            history.push(ambiente + "/auth/edit-password");
+          }
+          else{
+            history.push(ambiente + "/admin/dashboard");
+          }
         }
-        else if(f2 < f1)
-        {
-          history.push(ambiente + "/auth/edit-password");
-        }
-        else{
-          history.push(ambiente + "/admin/dashboard");
-        }
+        
         
     })
     .catch(function(err) {

@@ -28,6 +28,7 @@ import Login from "views/pages/Login.js";
 import EditPassword from "views/pages/ChangePassword";
 import Register from "views/pages/Register.js";
 import LockScreen from "views/pages/LockScreen.js";
+import ChooseCustomer from "../views/pages/ChooseCustomer";
 
 var ps;
 
@@ -77,6 +78,16 @@ function Pages() {
         name: "Lock Screen",
         icon: "nc-icon nc-bank",
         component: LockScreen,
+        layout: ambiente + "/auth",
+      },
+    )
+    routesAux.push(
+      {
+        invisible: true,
+        path: "/choose-customer/",
+        name: "Choose Customer",
+        icon: "nc-icon nc-bank",
+        component: ChooseCustomer,
         layout: ambiente + "/auth",
       },
     )

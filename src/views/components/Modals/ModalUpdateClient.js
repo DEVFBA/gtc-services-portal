@@ -149,8 +149,6 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
     }
 
     function updateRegister(){
-
-        console.log(updateCountry.value)
         const catRegister = {
             pvOptionCRUD: "U",
             piIdCustomer: updateIdCustomer,

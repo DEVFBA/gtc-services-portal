@@ -102,7 +102,7 @@ function Sidebar(props) {
           setRouteProfile(aux.Value)
       })
       .catch(function(err) {
-          alert("No se pudo consultar la informacion de la Profile_Picture" + err);
+         console.log(err)
       });
     }
   }, []);
@@ -130,7 +130,7 @@ function Sidebar(props) {
           //console.log(data)
       })
       .catch(function(err) {
-          alert("No se pudo consultar la informacion del usuario en sidebar" + err);
+        console.log(err)
       });
     }  
   },[]);

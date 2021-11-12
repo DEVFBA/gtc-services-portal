@@ -182,6 +182,12 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
     function updateRegister(){
         var finalDate2=""
 
+        console.log(updateCustomer.value)
+            console.log(updateEmail)
+            console.log(updateRol.value)
+            console.log(updateFullName)
+            console.log(updateStatus)
+
         //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
         if(updateChangePassword === true)
         {
