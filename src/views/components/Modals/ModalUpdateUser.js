@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-//Importar módulo para encriptar contraseña
-import { sha256, sha224 } from 'js-sha256';
-
 //React plugin used to create DropdownMenu for selecting items
 import Select from "react-select";
 
@@ -36,6 +33,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
     const [updateStatus, setupdateStatus] = useState();
     const [updateConfirmPassword, setupdateConfirmPassword] = React.useState("");
     const [updateFinalEffectiveDate, setupdateFinalEffectiveDate] = useState();
+    const [changeImage, setChangeImage] = useState(false)
 
     const [updateEmailState, setupdateEmailState] = React.useState("");
     const [updateFullNameState, setupdateFullNameState] = React.useState("");
@@ -65,6 +63,8 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
     };
 
     useEffect(() => {
+        console.log("ENTRE AL MODAL")
+        console.log(record.image)
         setupdateEmail(record.email);
         setupdateFullName(record.name)
         setupdateRol({
@@ -227,7 +227,8 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                 pvFinalEffectiveDate: finalDate2,
                 pvUser: user,
                 pathImage : pathImage,
-                pvIP: ip
+                pvIP: ip,
+                pvChangeImage : changeImage
             };
         
             fetch(`http://129.159.99.152/develop-api/api/security-users/update-user/`, {
@@ -281,7 +282,8 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                 pvFinalEffectiveDate: finalDate2,
                 pvUser: user,
                 pathImage : pathImage,
-                pvIP: ip
+                pvIP: ip,
+                pvChangeImage : changeImage
             };
         
             fetch(`http://129.159.99.152/develop-api/api/security-users/update-user-wp/`, {
@@ -469,7 +471,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                         </FormGroup>
                     </Col>
                     <Col sm="4">
-                        <UploadUserImage registerImage = {updateImage} setregisterImage={setupdateImage} image = {updateImage} path = {profilePath}/>
+                        <UploadUserImage registerImage = {updateImage} setregisterImage={setupdateImage} image = {updateImage} path = {profilePath} setChangeImage = {setChangeImage}/>
                     </Col>
                     <Col sm="6">
                         <FormGroup className={`has-label ${updateCustomerState}`}>

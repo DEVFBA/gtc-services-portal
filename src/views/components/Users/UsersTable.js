@@ -11,9 +11,8 @@ import {
   Row,
   Col,
 } from "reactstrap";
-import { prototype } from "react-datetime";
 
-function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip, profilePath, autoCloseAlert, setLoaded}){
+function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip, profilePath, autoCloseAlert}){
     const [dataState, setDataState] = useState(
         dataTable.map((prop, key) => {
           var status;
@@ -88,6 +87,10 @@ function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDa
         }
     }
 
+    useEffect(() => {
+      console.log("ENTREEEEE")
+    },[record]);
+
     return dataTable.length === 0 ? (
         <>
           <div className="content">
@@ -154,10 +157,10 @@ function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDa
           </div>
     
         {/*MODAL PARA AÑADIR REGISTROS*/}
-        <ModalAddUser modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} autoCloseAlert = {autoCloseAlert} setLoaded = {setLoaded}/>       
+        <ModalAddUser modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} autoCloseAlert = {autoCloseAlert} />       
 
         {/*MODAL PARA MODIFICAR REGISTRO*/}
-        <ModalUpdateUser abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert} setLoaded = {setLoaded}/>
+        <ModalUpdateUser abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert}/>
     
         </>
     );

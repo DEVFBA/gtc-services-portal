@@ -126,7 +126,7 @@ function ModalUpdateAssumptions({abierto, toggleModalUpdateRecord, record, updat
             pvIP: ip
         };
     
-        fetch(`http://localhost:9000/api/cat-catalogs/update-sat-assumptions`, {
+        fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/update-sat-assumptions`, {
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {

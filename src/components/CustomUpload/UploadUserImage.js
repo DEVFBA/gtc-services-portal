@@ -30,6 +30,7 @@ function UploadUserImage(props) {
       
       setFileState(file);
       props.setregisterImage(reader.result)
+      props.setChangeImage(true)
       setImagePreviewUrl(reader.result);
       //console.log(reader.result)
     };

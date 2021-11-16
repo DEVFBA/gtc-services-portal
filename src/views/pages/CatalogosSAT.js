@@ -73,6 +73,7 @@ function CatalogosSAT() {
   }, []);
 
   useEffect(() => {
+    console.log("HOLA ENTRE")
     //Aqui vamos a descargar la lista de catalogos de la base de datos por primera vez
     const params = {
       pvOptionCRUD: "R",
@@ -221,7 +222,10 @@ function CatalogosSAT() {
 
   //Para actualizar la tabla al insertar registro
   function updateAddData(){
+    
     var datos = dataTable.find(o => o.Component === catalog)
+    console.log(datos)
+    console.log("entre")
    
     const params = {
       pvOptionCRUD: "R",

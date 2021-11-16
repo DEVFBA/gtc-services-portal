@@ -54,28 +54,6 @@ function Usuarios() {
 
   const [alert, setAlert] = React.useState(null);
 
-  //Para mostrar spinner al insertar o actualizar datos
-  const [loaded, setLoaded] = useState(true);
-
-  const DarkBackground = styled.div`
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 999; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0, 0, 0); /* Fallback color */
-    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-
-      ${props =>
-        props.disappear &&
-        css`
-          display: block; /* show */
-        `}
-    ` ;
-
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
     setIP(res.data.IPv4)
@@ -280,7 +258,7 @@ function Usuarios() {
 
    //Renderizado condicional
   function Users() {
-      return <UsersTable dataTable = {dataUsers} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert} loaded = {loaded} setLoaded = {setLoaded}/>;
+      return <UsersTable dataTable = {dataUsers} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert}/>;
   }
 
   //Para actualizar la tabla al insertar registro
@@ -344,15 +322,6 @@ function Usuarios() {
               <CardBody>
                 <Users />
                 {alert}
-                <DarkBackground disappear={!loaded}>
-                <LoadingOverlay
-                  active={true}
-                  // spinner={<BounceLoader />}
-                  spinner={true}
-                >
-                  {/* <p>Some content or children or something.</p> */}
-                </LoadingOverlay>
-                </DarkBackground>
               </CardBody>
             </Card>
           </Col>

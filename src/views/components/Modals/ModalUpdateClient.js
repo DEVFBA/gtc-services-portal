@@ -41,6 +41,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
     const [updateWebPage, setupdateWebPage] = React.useState("");
     const [updateLogo, setupdateLogo] = React.useState("");
     const [updateStatus, setupdateStatus] = useState(false);
+    const [changeImage, setChangeImage] = useState(false)
 
     //Mandar error en caso de que ya exista el Country/TaxId
     const [updateError, setregisterError] = useState("");
@@ -168,7 +169,8 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
             pbStatus : updateStatus,
             pvUser : user,
             pathLogo : pathLogo,
-            pvIP : ip
+            pvIP : ip,
+            pvChangeImage : changeImage
         };
     
         fetch(`http://129.159.99.152/develop-api/api/customers/update-customer/`, {
@@ -372,7 +374,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
                         </FormGroup>
                     </Col>
                     <Col sm="4">
-                        <UploadLogo registerLogo = {updateLogo} setregisterLogo={setupdateLogo} registerCountry = {updateCountry} registerRfc = {updateRfc} logo = {updateLogo} path = {profilePath}/>
+                        <UploadLogo registerLogo = {updateLogo} setregisterLogo={setupdateLogo} registerCountry = {updateCountry} registerRfc = {updateRfc} logo = {updateLogo} path = {profilePath} setChangeImage = {setChangeImage}/>
                     </Col>
                     <Col sm="6">
                         <FormGroup>

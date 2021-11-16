@@ -62,14 +62,11 @@ function RegularForms() {
 
     console.log(cadenaC)
 
-    fetch(`http://localhost:9000/api/encrypt/create`, {
+    fetch(`http://129.159.99.152/develop-api/api/encrypt/create`, {
         method: "POST",
         body: JSON.stringify(cadenaC),
         headers: {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-            "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
         }
     })
     .then((response) => response.json())
