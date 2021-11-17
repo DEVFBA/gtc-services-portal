@@ -29,9 +29,6 @@ const options =[
 ]
 
 function ConsultaArt69() {
-  //Para guardar los datos de los catálogos
-  const [dataTable, setDataTable] = useState([]);
-
   //Guardar catalogo seleccionado para descargar su lista de opciones
   const [catalog, setCatalog] = React.useState("");
 
@@ -46,7 +43,7 @@ function ConsultaArt69() {
     const catalog = props.component;
     if(catalog.value === "Articulo69")
     {
-      return <ConsultaArt69Component dataTable = {dataCatalog}/>;
+      return <ConsultaArt69Component dataOptions = {dataCatalog}/>;
     }
     if(catalog.value === "Articulo69B")
     {
@@ -60,8 +57,8 @@ function ConsultaArt69() {
 
     if(datos.value === "Articulo69")
     {
-      var url = new URL(`http://129.159.99.152/develop-api/api/article-69/69`);
-  
+      var url = new URL(`http://129.159.99.152/develop-api/api/assumptions/`)
+
       fetch(url, {
           method: "GET",
           headers: {
@@ -73,11 +70,20 @@ function ConsultaArt69() {
           return response.ok ? response.json() : Promise.reject();
       })
       .then(function(data) {
-        console.log(data)
-        setDataCatalog(data)
+          //Creamos el arreglo de roles para el select
+          var optionsAux = [];
+          var i;
+          for(i=0; i<data.length; i++)
+          {
+            optionsAux.push({
+              value: data[i].Id_Catalog, label: data[i].Short_Desc 
+            })
+          }
+          console.log(optionsAux)
+          setDataCatalog(optionsAux)
       })
       .catch(function(err) {
-          alert("No se pudo consultar la informacion del artículo 69" + err);
+          alert("No se pudo consultar la informacion de los assumptions" + err);
       });
     }
     else{
@@ -122,6 +128,7 @@ function ConsultaArt69() {
                     value={catalog}
                     onChange={(value) => {
                       setCatalog(value);
+                      setDataCatalog([])
                       updateData(value)
                     }}
                     options = {options}

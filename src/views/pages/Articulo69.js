@@ -262,7 +262,7 @@ function Articulo69() {
         }
         else{
           hideAlert2()
-          location.reload()
+          //location.reload()
           if(data[0].Code_Type === "Warning")
           {
               /*setErrorMessage(data[0].Code_Message_User)
