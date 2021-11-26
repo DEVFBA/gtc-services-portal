@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Skeleton from '@yisheng90/react-loading';
 
 // reactstrap components
 import {
@@ -43,7 +44,27 @@ function ConsultaArt69() {
     const catalog = props.component;
     if(catalog.value === "Articulo69")
     {
-      return <ConsultaArt69Component dataOptions = {dataCatalog}/>;
+      if(dataCatalog.length === 0)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else {
+        if(dataCatalog.length === 0)
+        {
+            return  <div>
+                        <Skeleton height={25} />
+                        <Skeleton height="25px" />
+                        <Skeleton height="3rem" />
+                    </div>
+        }
+        else {
+          return <ConsultaArt69Component dataOptions = {dataCatalog}/>;
+        }
+      }
     }
     if(catalog.value === "Articulo69B")
     {

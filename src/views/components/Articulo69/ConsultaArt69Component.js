@@ -37,12 +37,21 @@ function ConsultaArt69Component({dataOptions}) {
 
   //Renderizado condicional
   function Articulo69TableData() {
-    return <Articulo69Table dataTable = {dataTable}/>;
+    if(dataTable.length === 0)
+    {
+        return  <div>
+                    <Skeleton height={25} />
+                    <Skeleton height="25px" />
+                    <Skeleton height="3rem" />
+                </div>
+    }
+    else {
+      return <Articulo69Table dataTable = {dataTable}/>;
+    }
   }
 
   function updateData(datos){      
-    
-    console.log(mensaje)
+    setDataTable([])
     const params = {
       pvIdAssumption: datos.value
     }; 
@@ -100,7 +109,7 @@ function ConsultaArt69Component({dataOptions}) {
           </FormGroup>
           <Row>
             <Col md="12">
-              <h4 tag="h4">Artículo 69-B</h4>
+              <h4 tag="h4">Artículo 69</h4>
               {mensaje !== "" ? (
                   <>
                     <h5 tag ="h5"> {mensaje} </h5>
@@ -138,7 +147,7 @@ function ConsultaArt69Component({dataOptions}) {
         </FormGroup>
         <Row>
           <Col md="12">
-            <h4 tag="h4">Artículo 69-B</h4>
+            <h4 tag="h4">Artículo 69</h4>
             <Articulo69TableData />
           </Col>
         </Row>

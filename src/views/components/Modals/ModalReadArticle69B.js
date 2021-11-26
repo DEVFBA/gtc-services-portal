@@ -90,7 +90,7 @@ function ModalReadArticle69B({abierto, toggleModalUpdateRecord, record}) {
                             <Input
                                 name="rfc"
                                 type="text"
-                                value = {record.publicacionPresuntosSAT}
+                                value = {record.fechaPresuncionSAT}
                                 readOnly
                             />
                         </FormGroup>
@@ -99,7 +99,7 @@ function ModalReadArticle69B({abierto, toggleModalUpdateRecord, record}) {
                             <Input
                                 name="rfc"
                                 type="text"
-                                value = {record.fechaPresuncionSAT}
+                                value = {record.publicacionPresuntosSAT}
                                 readOnly
                             />
                         </FormGroup>
@@ -117,7 +117,7 @@ function ModalReadArticle69B({abierto, toggleModalUpdateRecord, record}) {
                             <Input
                                 name="rfc"
                                 type="text"
-                                value = {record.numFechaDesvirtuados}
+                                value = {record.pubDOFP}
                                 readOnly
                             />
                         </FormGroup>
