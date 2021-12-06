@@ -94,6 +94,7 @@ const routes = [
     component: EditApplication,
     layout: "/admin",
   },
+  ]
 ];
 
 export default routes;

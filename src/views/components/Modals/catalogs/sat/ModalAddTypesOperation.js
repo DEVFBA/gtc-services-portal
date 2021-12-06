@@ -12,9 +12,9 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalAddTypesOperation({modalAddRecord, setModalAddRecord, updateAddData}) {
+function ModalAddTypesOperation({modalAddRecord, setModalAddRecord, updateAddData, ip, autoCloseAlert}) {
         // update form
-    const [id, setId] = React.useState("Hola");
+    const [id, setId] = React.useState("");
     const [shortDescription, setShortDescription] = React.useState("");
     const [longDescription, setLongDescription] = React.useState("");
     const [status, setStatus] = React.useState(true);
@@ -84,13 +84,14 @@ function ModalAddTypesOperation({modalAddRecord, setModalAddRecord, updateAddDat
     function addRegister(){
         //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
         const catRegister = {
-            pSpCatalog: "spSAT_Cat_CFDI_Uses_CRUD_Records",
+            pSpCatalog: "spSAT_Cat_Operation_Types_CRUD_Records",
             pvOptionCRUD: "C",
             pvIdCatalog: id,
             pvShortDesc: shortDescription,
             pvLongDesc: longDescription,
             pbStatus: status,
             pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/create-sat`, {
@@ -113,11 +114,13 @@ function ModalAddTypesOperation({modalAddRecord, setModalAddRecord, updateAddDat
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 if(data[0].Code_Type === "Warning")
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else{
                     setErrorState("has-success");
@@ -125,6 +128,7 @@ function ModalAddTypesOperation({modalAddRecord, setModalAddRecord, updateAddDat
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });
@@ -136,7 +140,7 @@ function ModalAddTypesOperation({modalAddRecord, setModalAddRecord, updateAddDat
         <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
             <span aria-hidden="true">×</span>
         </button>
-        <h5 className="modal-title">Add Record</h5>
+        <h5 className="modal-title">Agregar Registro</h5>
         </div>
         <ModalBody>
         <Form id="RegisterValidation">
@@ -156,7 +160,7 @@ function ModalAddTypesOperation({modalAddRecord, setModalAddRecord, updateAddDat
                     }}
                 />
                 {idState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
+                    <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
             <FormGroup className={`has-label ${shortDescriptionState}`}>
@@ -175,7 +179,7 @@ function ModalAddTypesOperation({modalAddRecord, setModalAddRecord, updateAddDat
                     }}
                 />
                 {shortDescriptionState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
+                    <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
             <FormGroup className={`has-label ${longDescriptionState}`}>
@@ -194,7 +198,7 @@ function ModalAddTypesOperation({modalAddRecord, setModalAddRecord, updateAddDat
                     }}
                 />
                 {longDescriptionState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
+                    <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
             <FormGroup check>
@@ -213,7 +217,7 @@ function ModalAddTypesOperation({modalAddRecord, setModalAddRecord, updateAddDat
                     </Label>
             </FormGroup>
             <div className="category form-category">
-                * Required fields
+                * Campos requeridos
             </div>
             <FormGroup className={`has-label ${errorState}`}>
                 {errorState === "has-danger" ? (
@@ -226,10 +230,10 @@ function ModalAddTypesOperation({modalAddRecord, setModalAddRecord, updateAddDat
         <ModalFooter>
           <div className="center-side">
             <Button color="secondary" onClick={handleModalClick}>
-                Close
+                Cerrar
             </Button>
             <Button color="primary" onClick={registerClick}>
-                Save changes
+                Guardar cambios
             </Button>
           </div>
         </ModalFooter>

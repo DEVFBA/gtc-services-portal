@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Skeleton from '@yisheng90/react-loading';
 
 // reactstrap components
 import {
@@ -24,7 +25,7 @@ import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalUpdateKeyProduct from "views/components/Modals/catalogs/sat/ModalUpdateKeyProduct";
 import ModalAddKeyProduct from "views/components/Modals/catalogs/sat/ModalAddKeyProduct";
 
-function KeyProduct({dataTable, updateAddData}) {
+function KeyProduct({dataTable, updateAddData, ip, autoCloseAlert}) {
   
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
@@ -45,17 +46,19 @@ function KeyProduct({dataTable, updateAddData}) {
           // ACCIONES A REALIZAR EN CADA REGISTRO
           <div className="actions-center">
               {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-              <Button
-              onClick={() => {
-                  getRegistro(key);
-                  toggleModalUpdateRecord()
-              }}
-              color="warning"
-              size="sm"
-              className="btn-icon btn-link edit"
-              >
-              <i className="fa fa-edit" />
-              </Button>
+              <abbr title="Editar">
+                <Button
+                onClick={() => {
+                    getRegistro(key);
+                    toggleModalUpdateRecord()
+                }}
+                color="warning"
+                size="sm"
+                className="btn-icon btn-link edit"
+                >
+                <i className="fa fa-edit" />
+                </Button>
+              </abbr>
           </div>
           ),
       };
@@ -95,7 +98,20 @@ function KeyProduct({dataTable, updateAddData}) {
         }
     }
 
-    return (
+  return dataTable.length === 0 ? (
+    <>
+      <div className="content">
+        <Row>
+          <Col md="12">
+            <h4>Clave Producto Servicio</h4>
+            <Skeleton height={25} />
+            <Skeleton height="25px" />
+            <Skeleton height="3rem" />
+          </Col>
+        </Row>
+      </div>
+    </>
+  ) : (
     <>
       {/*console.log(props.example)*/}
       <div className="content">
@@ -107,7 +123,7 @@ function KeyProduct({dataTable, updateAddData}) {
                     <span className="btn-label">
                     <i className="nc-icon nc-simple-add" />
                     </span>
-                    Add new record
+                    Agregar Nuevo Registro
                 </Button>
              
                 <ReactTable
@@ -130,7 +146,7 @@ function KeyProduct({dataTable, updateAddData}) {
                       accessor: "status",
                     },
                     {
-                      Header: "Actions",
+                      Header: "Acciones",
                       accessor: "actions",
                       sortable: false,
                       filterable: false,
@@ -143,13 +159,13 @@ function KeyProduct({dataTable, updateAddData}) {
                 />
           </Col>
         </Row>
-    </div>
+      </div>
 
-    {/*MODAL PARA AÑADIR REGISTROS*/}
-    <ModalAddKeyProduct modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData}/>       
+      {/*MODAL PARA AÑADIR REGISTROS*/}
+      <ModalAddKeyProduct modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData} ip = {ip} autoCloseAlert={autoCloseAlert}/>       
 
-    {/*MODAL PARA MODIFICAR REGISTRO*/}
-    <ModalUpdateKeyProduct abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData}/>
+      {/*MODAL PARA MODIFICAR REGISTRO*/}
+      <ModalUpdateKeyProduct abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData} ip = {ip} autoCloseAlert={autoCloseAlert}/>
 
     </>
   );

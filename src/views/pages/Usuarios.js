@@ -1,4 +1,10 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios'
+import ReactBSAlert from "react-bootstrap-sweetalert";
+import Skeleton from '@yisheng90/react-loading';
+import LoadingOverlay from 'react-loading-overlay';
+import styled, { css } from "styled-components";
+import ClipLoader from "react-spinners/ClipLoader";
 
 // reactstrap components
 import {
@@ -25,9 +31,6 @@ import UsersTable from "../components/Users/UsersTable.js";
 
 function Usuarios() {
 
-  //Para actualizar cada que agreguen un campo a la tabla
-  const [updateTable, setUpdateTable] = useState(0);
-
   //Para guardar los datos de los usuarios
   const [dataUsers, setDataUsers] = useState([]);
 
@@ -44,6 +47,22 @@ function Usuarios() {
   const [pathImage, setPathImage] = useState([]);
 
   const token = localStorage.getItem("Token");
+
+  const [ip, setIP] = React.useState("");
+
+  const [profilePath, setProfilePath] = useState("")
+
+  const [alert, setAlert] = React.useState(null);
+
+  const getData = async () => {
+    const res = await axios.get('https://geolocation-db.com/json/')
+    setIP(res.data.IPv4)
+  }
+
+  useEffect(() => {
+      //Descargamos la IP del usuario
+      getData()
+  }, []);
 
   useEffect(() => {
     //Aqui vamos a descargar la lista de usuarios de la base de datos por primera vez
@@ -171,7 +190,9 @@ function Usuarios() {
     })
     .then(function(data) {
         var aux = data.find( o => o.Id_Catalog === 3 )
+        var aux2 = data.find( o => o.Id_Catalog === 9 )
         setValidDays(parseInt(aux.Value,10))
+        setProfilePath(aux2.Value)
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los general parameters" + err);
@@ -207,14 +228,41 @@ function Usuarios() {
     });
   }, []);
 
+  React.useEffect(() => {
+    return function cleanup() {
+      var id = window.setTimeout(null, 0);
+      while (id--) {
+        window.clearTimeout(id);
+      }
+    };
+  }, []);
+
+  const autoCloseAlert = (mensaje) => {
+    console.log("entre al alert")
+    setAlert(
+      <ReactBSAlert
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Mensaje"
+        onConfirm={() => hideAlert()}
+        showConfirm={false}
+      >
+        {mensaje}
+      </ReactBSAlert>
+    );
+    setTimeout(hideAlert, 2000);
+  };
+
+  const hideAlert = () => {
+    setAlert(null);
+  };
+
    //Renderizado condicional
   function Users() {
-      return <UsersTable dataTable = {dataUsers} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage}/>;
+      return <UsersTable dataTable = {dataUsers} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert}/>;
   }
 
   //Para actualizar la tabla al insertar registro
   function updateAddData(){
-    console.log("Entre al final")
     const params = {
       pvOptionCRUD: "R"
     };
@@ -234,7 +282,7 @@ function Usuarios() {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
-      console.log("Entre al final")
+      //setLoaded(true)
       setDataUsers(data)
     })
     .catch(function(err) {
@@ -244,9 +292,26 @@ function Usuarios() {
 
   return dataUsers.length === 0 ? (
     <>
+      <div className="content">
+        <Row>
+          <Col md="12">
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4">Catálogo de Usuarios</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <Skeleton height={25} />
+                <Skeleton height="25px" />
+                <Skeleton height="3rem" />
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </div>
     </>
   ) : (
     <>
+      
       <div className="content">
         <Row>
           <Col md="12">
@@ -256,6 +321,7 @@ function Usuarios() {
               </CardHeader>
               <CardBody>
                 <Users />
+                {alert}
               </CardBody>
             </Card>
           </Col>

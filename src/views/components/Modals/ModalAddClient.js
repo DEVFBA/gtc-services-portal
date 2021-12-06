@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 
 // core components
-import UploadLogo from "components/CustomUpload/UploadLogo.js";
+import AddLogo from "components/CustomUpload/AddLogo.js";
 
 // reactstrap components
 import {
@@ -21,7 +21,7 @@ import {
 } from "reactstrap";
 import { data } from "jquery";
 
-function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updateAddData, pathLogo}) {
+function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updateAddData, pathLogo, ip, autoCloseAlert}) {
 
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");
@@ -39,7 +39,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
     const [registerTelephone2, setregisterTelephone2] = React.useState("");
     const [registerWebPage, setregisterWebPage] = React.useState("");
     const [registerLogo, setregisterLogo] = React.useState("");
-    const [registerStatus, setregisterStatus] = useState(false);
+    const [registerStatus, setregisterStatus] = useState(true);
 
     //Mandar error en caso de que ya exista el Country/TaxId
     const [registerError, setregisterError] = useState("");
@@ -79,7 +79,9 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
         setregisterWebPage("")
         setregisterLogo("")
         setregisterStatus(false)
-        
+        setError("")
+        setErrorState("")
+        setErrorMessage("")
         setModalAddRecord(!modalAddRecord);
     };
 
@@ -132,7 +134,6 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
     };
 
     function addRegister(){
-       
         const catRegister = {
             pvOptionCRUD: "C",
             pvIdCountry: registerCountry.value,
@@ -150,14 +151,14 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
             pvLogo : registerLogo,
             pbStatus : registerStatus,
             pvUser : user,
-            pathLogo : pathLogo
+            pathLogo : pathLogo,
+            pvIP : ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/customers/create-customer/`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {
-                'Access-Control-Allow-Origin': 'http://localhost:3000',
                 "access-token": token,
                 "Content-Type": "application/json",
                 Accept: "application/json",
@@ -175,11 +176,13 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else if(data[0].Code_Type === "Error")
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else{
                     setErrorState("has-success");
@@ -187,6 +190,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });
@@ -198,7 +202,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
             <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
                 <span aria-hidden="true">×</span>
             </button>
-            <h5 className="modal-title">Agregar nuevo registro</h5>
+            <h5 className="modal-title">Agregar Registro</h5>
             </div>
             <ModalBody>
             <Form id="RegisterValidation">
@@ -226,7 +230,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
                             ) : null}
                         </FormGroup>
                         <FormGroup className={`has-label ${registerRfcState}`}>
-                        <label>Rfc / Tax Id *</label>
+                            <label>Rfc / Tax Id *</label>
                             <Input
                                 name="rfc"
                                 type="text"
@@ -357,7 +361,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
                         </FormGroup>
                     </Col>
                     <Col sm="4">
-                        <UploadLogo registerLogo = {registerLogo} setregisterLogo={setregisterLogo} registerCountry = {registerCountry.value} registerRfc = {registerRfc}/>
+                        <AddLogo registerLogo = {registerLogo} setregisterLogo={setregisterLogo} registerCountry = {registerCountry.value} registerRfc = {registerRfc}/>
                     </Col>
                     <Col sm="6">
                         <FormGroup>
@@ -375,6 +379,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
                             <Label check>
                             <Input 
                                 type="checkbox" 
+                                checked = {registerStatus}
                                 onChange={(e) => {
                                     setregisterStatus(e.target.checked)
                                 }}

@@ -1,20 +1,5 @@
-/*!
-
-=========================================================
-* Paper Dashboard PRO React - v1.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-pro-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
+import axios from 'axios'
 
 // reactstrap components
 import {
@@ -56,13 +41,25 @@ function Register() {
     //Para guardar los días transcurridos
     const [validDays, setValidDays] = React.useState();
 
+    const Logged = localStorage.getItem("Logged");
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");
     const role = localStorage.getItem("Id_Role");
-    const customer = localStorage.getItem("Id_Customer");
-    const name = localStorage.getItem("Name");
+    const [customer, setCustomer] = React.useState("");
+    const [name, setName] = React.useState("");
 
     const ambiente = "/DEV"
+
+    const [ip, setIP] = React.useState("");
+    const getData = async () => {
+        const res = await axios.get('https://geolocation-db.com/json/')
+        setIP(res.data.IPv4)
+    }
+
+    useEffect(() => {
+        //Descargamos la IP del usuario
+        getData()
+    }, []);
 
     useEffect(() => {
         //Aqui vamos a descargar la lista de general parameters para revisar la vigencia del password
@@ -92,6 +89,31 @@ function Register() {
             alert("No se pudo consultar la informacion de los general parameters" + err);
         });
     }, []);
+
+    useEffect(() => {
+        //Si el usuario no está loggeado no se va a descargar la imagen
+        if(Logged === "true")
+        {
+          var url = new URL(`http://129.159.99.152/develop-api/api/security-users/${user}`);
+          fetch(url, {
+            method: "GET",
+            headers: {
+                "access-token": token,
+                "Content-Type": "application/json",
+            }
+          })
+          .then(function(response) {
+              return response.ok ? response.json() : Promise.reject();
+          })
+          .then(function(data) {
+              setCustomer(data[0].Id_Customer)
+              setName(data[0].Name)
+          })
+          .catch(function(err) {
+              alert("No se pudo consultar la informacion del usuario" + err);
+          });
+        }  
+    },[]);
 
     React.useEffect(() => {
         document.body.classList.toggle("register-page");
@@ -160,8 +182,22 @@ function Register() {
         var month = finalDate.getMonth() + 1
         var year = finalDate.getFullYear()
 
-        var finalDate2 = "" + year + "" + month + "" + date;
-        console.log(finalDate2)
+        var finalDate2 = "" 
+        if(month < 10 && date < 10)
+        {
+            finalDate2 = "" + year + "0" + month + "0" + date;  
+        }
+        else if(date < 10)
+        {
+            finalDate2 = "" + year + "" + month + "0" + date;
+        }
+        else if(month < 10) 
+        {  
+            finalDate2 = "" + year + "0" + month + "" + date;
+        }
+        else{
+            finalDate2 = "" + year + "" + month + "" + date;
+        }  
         
         //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
         const catRegister = {
@@ -174,6 +210,7 @@ function Register() {
             pbTempPassword: false,
             pvFinalEffectiveDate: finalDate2,
             pvUser: user,
+            pvIP: ip
         };
 
         fetch(`http://129.159.99.152/develop-api/api/security-users/update-user-pass/`, {
@@ -218,12 +255,12 @@ function Register() {
             <Col className="ml-auto mr-auto" lg="4" md="6">
                 <Card className="card-signup text-center">
                 <CardHeader>
-                    <CardTitle tag="h4">Change Password</CardTitle>
+                    <CardTitle tag="h4">Cambiar Contraseña</CardTitle>
                 </CardHeader>
                 <CardBody>
                     <Form action="" className="form" method="">
                     <FormGroup className={`has-label ${registerPasswordState}`}>
-                        <label>Password *</label>
+                        <label>Contraseña *</label>
                         <Input
                             id="registerPassword"
                             name="password"
@@ -243,7 +280,7 @@ function Register() {
                         ) : null}
                     </FormGroup>
                     <FormGroup className={`has-label ${registerConfirmPasswordState}`}>
-                        <label>Confirm Password *</label>
+                        <label>Confirmar Contraseña *</label>
                         <Input
                             equalto="#registerPassword"
                             id="registerPasswordConfirmation"
@@ -289,7 +326,7 @@ function Register() {
             className="full-page-background"
             style={{
             backgroundImage: `url(${
-                require("assets/img/logo-gtc.jpg").default
+                require("assets/img/fondo4.png").default
             })`,
             }}
         />

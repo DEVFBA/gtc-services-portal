@@ -72,3 +72,12 @@
         padding-left: 65px;
     }
 }
+
+/*Para spinner al agregar o actualizar*/
+._loading_overlay_content {
+    top: 50%;
+    left: 50%;
+    position: fixed;
+  }
+  
+  

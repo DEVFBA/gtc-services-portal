@@ -144,7 +144,7 @@ function AddConfiguration ({dataState, setDataState, updateTable, setAddRegister
               }}
             />
             {configuracionState === "has-danger" ? (
-              <label className="error">This field is required.</label>
+              <label className="error">Este campo es requerido.</label>
             ) : null}
           </FormGroup>
         </Col>
@@ -222,7 +222,7 @@ function AddConfiguration ({dataState, setDataState, updateTable, setAddRegister
               }}
             />
             {tooltipState === "has-danger" ? (
-              <label className="error">This field is required.</label>
+              <label className="error">Este campo es requerido.</label>
             ) : null}
           </FormGroup>
         </Col>

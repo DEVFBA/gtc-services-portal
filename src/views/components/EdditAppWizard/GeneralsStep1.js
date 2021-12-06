@@ -32,8 +32,10 @@ import {
 import Select from "react-select";
 
 const GeneralsStep1 = React.forwardRef((props, ref) => {
+  const [idApp, setIdApp] = React.useState("");
+  const [appName, setAppName] = React.useState("");
   const [version, setVersion] = React.useState("");
-  const [suite, setSuite] = React.useState("");
+  const [suite, setSuite] = React.useState({});
   const [descripcionApp, setDescripcionApp] = React.useState("");
   const [descripcionTec, setDescripcionTec] = React.useState("");
 
@@ -48,35 +50,91 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
   const [descripciontecFocus, setdescripciontecFocus] = React.useState("");
 
   //Guardar todos los catálogos para el select
-  //const [catalogs, setCatalogs] = React.useState([]);
-  const catalogs =[
-    { value: "Afghanistan", label: " Afghanistan " },
-    { value: "Albania", label: " Albania " },
-    { value: "Algeria", label: " Algeria " },
-    { value: "American Samoa", label: " American Samoa " },
-    { value: "Andorra", label: " Andorra " },
-    { value: "Angola", label: " Angola " },
-    { value: "Anguilla", label: " Anguilla " },
-    { value: "Antarctica", label: " Antarctica " },
-  ]
+  const [options, setOptions] = useState([]);
+
+  const token = localStorage.getItem("Token");
 
   useEffect(() => {
-    //Descargar la información de la app que se va a modificar mediante el idApp
-  },[]);
+  
+    var url = new URL(`http://129.159.99.152/develop-api/api/cat-applications/${props.prop1}/`);
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+      console.log(data)
+      setIdApp(data[0].Id_Catalog)
+      setAppName(data[0].Short_Desc)
+      setDescripcionApp(data[0].Long_Desc)
+      setDescripcionTec(data[0].Technical_Description)
+      setVersion(data[0].Version)
+      setSuite(
+        {
+          value: data[0].Id_Suite, label: data[0].Suite_Desc
+        }
+      )
+      //setDataApplications(data)
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de la aplicación" + err);
+    });
+  }, []);
+
+  useEffect(() => {
+
+    const params = {
+      pvOptionCRUD: "R",
+      pSpCatalog : "spCat_Suites_CRUD_Records",
+    };
+  
+    var url = new URL(`http://129.159.99.152/develop-api/api/cat-catalogs/catalog`);
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+      //Creamos el arreglo de opciones para el select
+      var optionsAux = [];
+      var i;
+      for(i=0; i<data.length; i++)
+      {
+        optionsAux.push({
+          value: data[i].Component, label: data[i].Short_Desc 
+        })
+      }
+      setOptions(optionsAux)
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de las suites" + err);
+    });
+  }, []);
   
   React.useImperativeHandle(ref, () => ({
     isValidated: () => {
       return isValidated();
     },
     state: {
+      idApp,
+      appName,
       version,
       suite,
       descripcionApp,
-      descripcionTec,
-      versionState,
-      suiteState,
-      descripcionappState,
-      descripciontecState,
+      descripcionTec
     },
   }));
 
@@ -88,27 +146,43 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
     return false;
   };
 
+  //Funcion para validar que no se queden en blanco los inputs en caso de que haga cambios
+  const verifyInputs = () =>{
+    var version = document.getElementById("version").value
+    if (!verifyLength(version, 1)) {
+        setVersionState("has-danger");
+    } else {
+        setVersionState("has-success");
+    }
+    setVersion(version);
+
+    var descripcionApp = document.getElementById("descripcionApp").value
+    if (!verifyLength(descripcionApp, 1)) {
+        setdescripcionappState("has-danger");
+    } else {
+        setdescripcionappState("has-success");
+    }
+    setDescripcionApp(descripcionApp);
+
+    var descripcionTec = document.getElementById("descripcionApp").value
+    if (!verifyLength(descripcionTec, 1)) {
+        setdescripciontecState("has-danger");
+    } else {
+        setdescripciontecState("has-success");
+    }
+    setdescripciontecState(descripcionTec);
+  } 
+
   const isValidated = () => {
+    verifyInputs()
     if (
-      versionState === "has-success" &&
-      suiteState === "has-success" &&
-      descripcionappState === "has-success" &&
-      descripciontecState === "has-success"
+        versionState !== "has-danger" &&
+        suiteState !== "has-danger" &&
+        descripcionappState !== "has-danger" &&
+        descripciontecState !== "has-danger"
     ) {
       return true;
     } else {
-      if (versionState !== "has-success") {
-        setVersionState("has-danger");
-      }
-      if (suiteState !== "has-success") {
-        setsuiteState("has-danger");
-      }
-      if (descripcionappState !== "has-success") {
-        setdescripcionappState("has-danger");
-      }
-      if (descripciontecState !== "has-success") {
-        setdescripciontecState("has-danger");
-      }
       return false;
     }
   };
@@ -122,9 +196,10 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
       <Row className="justify-content-center">
         <Col className="mt-3" lg="10">
           <FormGroup>
+          <label>Id Aplicación</label>
             <Input
               name="idAplicacion"
-              placeholder={props.prop1}
+              value = {idApp}
               type="text"
               readOnly
             />
@@ -132,9 +207,10 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
         </Col>
         <Col className="mt-3" lg="10">
           <FormGroup>
+            <label>Nombre de la aplicación</label>
             <Input
               name="aplicacion"
-              placeholder="Nombre de la aplicación"
+              value={appName}
               type="text"
               readOnly
             />
@@ -148,9 +224,11 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
             onFocus={(e) => setVersionFocus(true)}
             onBlur={(e) => setVersionFocus(false)}
           >
+            <label>Versión *</label>
             <Input
+              id="version"
               name="version"
-              placeholder="Versión (required)"
+              value={version}
               type="text"
               onChange={(e) => {
                 if (!verifyLength(e.target.value, 1)) {
@@ -163,7 +241,7 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
               
             />
             {versionState === "has-danger" ? (
-              <label className="error">This field is required.</label>
+              <label className="error">Este campo es requerido.</label>
             ) : null}
           </FormGroup>
         </Col>
@@ -174,23 +252,19 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
             onFocus={(e) => setsuiteFocus(true)}
             onBlur={(e) => setsuiteFocus(false)}
           >
+            <label>Suite *</label>
             <Select
                 name="suite" 
                 placeholder="Suite (required)"
-                options = {catalogs}
-                onChange={(e) => {
-                  if(e.value === null)
-                  {
-                      setsuiteState("has-danger");
-                  } else {
-                      setsuiteState("has-success");
-                  }
-                  setSuite(e.value);
-                  console.log(e.value)
+                options = {options}
+                value = {suite}
+                onChange={(value) => {
+                  setSuite(value)
+                  setsuiteState("has-success");
                 }}
             />
             {suiteState === "has-danger" ? (
-              <label className="error">This field is required.</label>
+              <label className="error">Este campo es requerido.</label>
             ) : null}
           </FormGroup>
         </Col>
@@ -202,9 +276,11 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
             onFocus={(e) => setdescripcionappFocus(true)}
             onBlur={(e) => setdescripcionappFocus(false)}
           >
+            <label>Descripción de la aplicación *</label>
             <Input
+              id = "descripcionApp"
               name="descripcionApp"
-              placeholder="Descripción de la aplicación (required)"
+              value= {descripcionApp}
               type="text"
               onChange={(e) => {
                 if (!verifyLength(e.target.value, 1)) {
@@ -217,7 +293,7 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
               
             />
             {descripcionappState === "has-danger" ? (
-              <label className="error">This field is required.</label>
+              <label className="error">Este campo es requerido</label>
             ) : null}
           </FormGroup>
         </Col>
@@ -229,9 +305,11 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
             onFocus={(e) => setdescripciontecFocus(true)}
             onBlur={(e) => setdescripciontecFocus(false)}
           >
+            <label>Descripción técnica de la aplicación *</label>
             <Input
+              id = "descripcionTec"
               name="descripcionTec"
-              placeholder="Descripción técnica de la aplicación (required)"
+              value = {descripcionTec}
               type="text"
               onChange={(e) => {
                 if (!verifyLength(e.target.value, 1)) {
@@ -243,9 +321,12 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
               }}
             />
             {descripciontecState === "has-danger" ? (
-              <label className="error">This field is required.</label>
+              <label className="error">Este campo es requerido</label>
             ) : null}
           </FormGroup>
+          <div className="category form-category">
+              * Campos requeridos
+          </div>
         </Col>
       </Row>
     </>

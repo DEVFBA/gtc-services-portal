@@ -596,7 +596,7 @@ demo = {
     });
   },
 
-  initGoogleMaps: function () {
+  /*initGoogleMaps: function () {
     var myLatlng = new google.maps.LatLng(40.748817, -73.985428);
     var mapOptions = {
       zoom: 13,
@@ -939,7 +939,7 @@ demo = {
     });
 
     marker.setMap(map);
-  },
+  },*/
 
   showNotification: function (from, align) {
     color = Math.floor(Math.random() * 4 + 1);

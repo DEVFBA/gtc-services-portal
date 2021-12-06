@@ -4,15 +4,15 @@ import React, { useState, useEffect } from "react";
 import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalAddUser from "views/components/Modals/ModalAddUser.js";
 import ModalUpdateUser from "views/components/Modals/ModalUpdateUser.js";
+import Skeleton from '@yisheng90/react-loading';
 
 import {
   Button,
   Row,
   Col,
 } from "reactstrap";
-import { prototype } from "react-datetime";
 
-function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDays, pathImage}){
+function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip, profilePath, autoCloseAlert}){
     const [dataState, setDataState] = useState(
         dataTable.map((prop, key) => {
           var status;
@@ -33,21 +33,24 @@ function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDa
             idCustomer: prop.Id_Customer,
             password: prop.Password,
             finalEffectiveDate: prop.Final_Effective_Date,
+            image: prop.Profile_Pic_Path,
             actions: (
               // ACCIONES A REALIZAR EN CADA REGISTRO
               <div className="actions-center">
                 {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-                <Button
-                  onClick={() => {
-                    getRegistro(key);
-                    toggleModalUpdateRecord()
-                  }}
-                  color="warning"
-                  size="sm"
-                  className="btn-icon btn-link edit"
-                >
-                  <i className="fa fa-edit" />
-                </Button>
+                <abbr title="Editar">
+                  <Button
+                    onClick={() => {
+                      getRegistro(key);
+                      toggleModalUpdateRecord()
+                    }}
+                    color="warning"
+                    size="sm"
+                    className="btn-icon btn-link edit"
+                  >
+                    <i className="fa fa-edit" />
+                  </Button>
+                </abbr>
               </div>
             ),
           };
@@ -84,7 +87,29 @@ function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDa
         }
     }
 
-    return (
+    useEffect(() => {
+      console.log("ENTREEEEE")
+    },[record]);
+
+    return dataTable.length === 0 ? (
+        <>
+          <div className="content">
+            <Row>
+              <Col md="12">
+                <Button color="primary" onClick={toggleModalAddRecord}>
+                    <span className="btn-label">
+                    <i className="nc-icon nc-simple-add" />
+                    </span>
+                    Añadir Usuario
+                </Button>
+                <Skeleton height={25} />
+                <Skeleton height="25px" />
+                <Skeleton height="3rem" />
+              </Col>
+            </Row>
+          </div>
+        </>
+      ) : (
         <>
           <div className="content">
             <Row>
@@ -129,13 +154,13 @@ function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDa
                     />
                 </Col>
             </Row>
-        </div>
+          </div>
     
         {/*MODAL PARA AÑADIR REGISTROS*/}
-        <ModalAddUser modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage}/>       
+        <ModalAddUser modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} autoCloseAlert = {autoCloseAlert} />       
 
         {/*MODAL PARA MODIFICAR REGISTRO*/}
-        <ModalUpdateUser abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage}/>
+        <ModalUpdateUser abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert}/>
     
         </>
     );

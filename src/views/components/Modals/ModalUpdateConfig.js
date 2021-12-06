@@ -15,7 +15,7 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalUpdateConfig({abierto, toggleModalUpdateRecord, record, setRecord}) {
+function ModalUpdateConfig({abierto, toggleModalUpdateRecord, record}) {
     const [configuracion, setConfiguracion] = useState("");
     const [requerida, setRequerida] = React.useState("");
     const [editable, setEditable] = React.useState("");
@@ -35,10 +35,30 @@ function ModalUpdateConfig({abierto, toggleModalUpdateRecord, record, setRecord}
     const [tooltipFocus, settooltipFocus] = React.useState("");
 
     useEffect(() => {
-        console.log(record)
-
-       
-      }, [record]);
+        setConfiguracion(record.configuracion)
+        setTooltip(record.tooltip)
+        if(record.requerida === "Requerida")
+        {
+            setRequerida(true);
+        }
+        else{
+            setRequerida(false);
+        }
+        if(record.editable === "Editable")
+        {
+            setEditable(true);
+        }
+        else{
+            setEditable(false);
+        }
+        if(record.visible === "Visible")
+        {
+            setVisible(true);
+        }
+        else{
+            setVisible(false);
+        }
+    },[record]);
 
     //Funcion para cerrar modal
     const handleModalClick = () => {
@@ -53,24 +73,32 @@ function ModalUpdateConfig({abierto, toggleModalUpdateRecord, record, setRecord}
         return false;
     };
 
-    const isValidated = () => {
-        //Solo se valida el único campo que es obligatorio.
-        if (
-            tooltipState === "has-success"
-        ) {
-        return true;
-        } else {
-        if (tooltipState !== "has-success") {
+    //Funcion para validar que no se queden en blanco los inputs en caso de que haga cambios
+    const verifyInputs = () =>{
+        var tooltip = document.getElementById("tooltip").value
+
+        if (!verifyLength(tooltip, 1)) {
             settooltipState("has-danger");
+        } else {
+            settooltipState("has-success");
         }
-        return false;
+        setTooltip(tooltip);  
+    }
+
+    const isValidated = () => {
+        verifyInputs()
+        if (
+            tooltipState !== "has-danger"
+        ) {
+            return true;
+        } else {
+            return false;
         }
     };
     
     const handleClick = () => {
         if(isValidated() === true){
             //setConfiguracion(record.configuracion)
-            console.log(aux)
             var register = [
                 configuracion,
                 requerida, 
@@ -91,16 +119,17 @@ function ModalUpdateConfig({abierto, toggleModalUpdateRecord, record, setRecord}
         <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
             <span aria-hidden="true">×</span>
         </button>
-        <h5 className="modal-title">Edit Configuration {record.configuracion}</h5>
+        <h5 className="modal-title">Editar Configuración</h5>
         </div>
         <ModalBody>
             <Row className="justify-content-center">
             <Col className="mt-3" lg="10">
             {/*No podra ser modificable - solo lectura*/}
             <FormGroup>
+                <Label for="exampleSelect">Configuración</Label>
                 <Input
                 name="configuracion"
-                placeholder={configuracion}
+                value={configuracion}
                 type="text"
                 readOnly
                 />
@@ -112,6 +141,7 @@ function ModalUpdateConfig({abierto, toggleModalUpdateRecord, record, setRecord}
                 <Input 
                 name="requerida"
                 type="checkbox" 
+                checked = {requerida} 
                 onChange={(e) => {
                     setRequerida(e.target.checked)
                 }}
@@ -127,11 +157,12 @@ function ModalUpdateConfig({abierto, toggleModalUpdateRecord, record, setRecord}
             <FormGroup check>
                 <Label check>
                 <Input 
-                name="editable"
-                type="checkbox" 
-                onChange={(e) => {
-                    setEditable(e.target.checked)
-                }}
+                    name="editable"
+                    checked = {editable} 
+                    type="checkbox" 
+                    onChange={(e) => {
+                        setEditable(e.target.checked)
+                    }}
                 />{' '}
                 Editable
                 <span className="form-check-sign">
@@ -146,6 +177,7 @@ function ModalUpdateConfig({abierto, toggleModalUpdateRecord, record, setRecord}
                 <Input 
                     name="visible"
                     type="checkbox" 
+                    checked = {visible} 
                     onChange={(e) => {
                     setVisible(e.target.checked)
                     }}
@@ -165,21 +197,23 @@ function ModalUpdateConfig({abierto, toggleModalUpdateRecord, record, setRecord}
                 onFocus={(e) => settooltipFocus(true)}
                 onBlur={(e) => settooltipFocus(false)}
             >
+                <Label for="exampleSelect">Tooltip *</Label>
                 <Input
-                name="tooltip"
-                placeholder="Tooltip (required)"
-                type="text"
-                onChange={(e) => {
-                    if (!verifyLength(e.target.value, 1)) {
-                    settooltipState("has-danger");
-                    } else {
-                    settooltipState("has-success");
-                    }
-                    setTooltip(e.target.value);
-                }}
+                    id="tooltip"
+                    name="tooltip"
+                    value={tooltip}
+                    type="text"
+                    onChange={(e) => {
+                        if (!verifyLength(e.target.value, 1)) {
+                        settooltipState("has-danger");
+                        } else {
+                        settooltipState("has-success");
+                        }
+                        setTooltip(e.target.value);
+                    }}
                 />
                 {tooltipState === "has-danger" ? (
-                <label className="error">This field is required.</label>
+                <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
             </Col>
@@ -191,7 +225,7 @@ function ModalUpdateConfig({abierto, toggleModalUpdateRecord, record, setRecord}
                 Close
             </Button>
             <Button color="primary" onClick={handleClick}>
-                Save changes
+                Guardar cambios
             </Button>
           </div>
         </ModalFooter>

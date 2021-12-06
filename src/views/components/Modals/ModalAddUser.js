@@ -8,6 +8,7 @@ import Select from "react-select";
 
 // core components
 import UploadUserImage from "components/CustomUpload/UploadUserImage.js";
+import AddUserImage from "components/CustomUpload/AddUserImage.js";
 
 // reactstrap components
 import {
@@ -23,7 +24,7 @@ import {
     Row
 } from "reactstrap";
 
-function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustomers, updateAddData, validDays}) {
+function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip, autoCloseAlert}) {
         // register form
     const [registerEmail, setregisterEmail] = React.useState("");
     const [registerFullName, setregisterFullName] = React.useState("");
@@ -160,8 +161,23 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
         var date = finalDate.getDate();
         var month = finalDate.getMonth() + 1
         var year = finalDate.getFullYear()
+        var finalDate2 = ""
 
-        var finalDate2 = "" + year + "" + month + "" + date;
+        if(month < 10 && date < 10)
+        {
+            finalDate2 = "" + year + "0" + month + "0" + date;  
+        }
+        else if(date < 10)
+        {
+            finalDate2 = "" + year + "" + month + "0" + date;
+        }
+        else if(month < 10) 
+        {  
+            finalDate2 = "" + year + "0" + month + "" + date;
+        }
+        else{
+            finalDate2 = "" + year + "" + month + "" + date;
+        }
         
         //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
         const catRegister = {
@@ -176,7 +192,8 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
             pvProfilePicPath: registerImage,
             pbStatus: registerStatus,
             pvUser: user,
-            pathImage : pathImage
+            pathImage : pathImage,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/security-users/create-user/`, {
@@ -199,10 +216,12 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else if(data[0].Code_Type === "Error")
                 {
                     setErrorMessage(data[0].Code_Message_User)
+                    autoCloseAlert(data[0].Code_Message_User)
                     setErrorState("has-danger")
                 }
                 else{
@@ -211,6 +230,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });
@@ -252,41 +272,41 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
                         <FormGroup className={`has-label ${registerFullNameState}`}>
                             <label>Nombre Usuario *</label>
                             <Input
-                            name="fullname"
-                            type="text"
-                            autoComplete="off"
-                            onChange={(e) => {
-                                if (!verifyLength(e.target.value, 1)) {
-                                setregisterFullNameState("has-danger");
-                                } else {
-                                setregisterFullNameState("has-success");
-                                }
-                                setregisterFullName(e.target.value);
-                            }}
+                                name="fullname"
+                                type="text"
+                                autoComplete="off"
+                                onChange={(e) => {
+                                    if (!verifyLength(e.target.value, 1)) {
+                                    setregisterFullNameState("has-danger");
+                                    } else {
+                                    setregisterFullNameState("has-success");
+                                    }
+                                    setregisterFullName(e.target.value);
+                                }}
                             />
                             {registerFullNameState === "has-danger" ? (
                             <label className="error">Este campo es requerido.</label>
                             ) : null}
                         </FormGroup>
                         <FormGroup className={`has-label ${registerPasswordState}`}>
-                        <label>Password *</label>
-                        <Input
-                            id="registerPassword"
-                            name="password"
-                            type="password"
-                            autoComplete="off"
-                            onChange={(e) => {
-                            if (!verifyPassword(e.target.value)) {
-                                setregisterPasswordState("has-danger");
-                            } else {
-                                setregisterPasswordState("has-success");
-                            }
-                            setregisterPassword(e.target.value);
-                            }}
-                        />
-                        {registerPasswordState === "has-danger" ? (
-                            <label className="error">La contraseña debe tener una longitud mínima de 10 caracteres, al menos un número, una letra mayúscula y minúscula, y un caracter especial.</label>
-                        ) : null}
+                            <label>Password *</label>
+                            <Input
+                                id="registerPassword"
+                                name="password"
+                                type="password"
+                                autoComplete="off"
+                                onChange={(e) => {
+                                if (!verifyPassword(e.target.value)) {
+                                    setregisterPasswordState("has-danger");
+                                } else {
+                                    setregisterPasswordState("has-success");
+                                }
+                                setregisterPassword(e.target.value);
+                                }}
+                            />
+                            {registerPasswordState === "has-danger" ? (
+                                <label className="error">La contraseña debe tener una longitud mínima de 10 caracteres, al menos un número, una letra mayúscula y minúscula, y un caracter especial.</label>
+                            ) : null}
                         </FormGroup>
                         <FormGroup className={`has-label ${registerConfirmPasswordState}`}>
                             <label>Confirmar Password *</label>
@@ -331,7 +351,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
                         </FormGroup>
                     </Col>
                     <Col sm="4">
-                            <UploadUserImage registerImage = {registerImage} setregisterImage={setregisterImage}/>
+                            <AddUserImage registerImage = {registerImage} setregisterImage={setregisterImage}/>
                     </Col>
                     <Col sm="6">
                         <FormGroup className={`has-label ${registerRolState}`}>

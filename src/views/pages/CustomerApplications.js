@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios'
+import ReactBSAlert from "react-bootstrap-sweetalert";
+import Skeleton from '@yisheng90/react-loading';
 
 // reactstrap components
 import {
@@ -22,15 +25,6 @@ import {
 // core components
 import CustomerApplicationsTable from "../components/Clients/CustomerApplicationsTable.js";
 
-const dataTable = [
-  ["Tiger Nixon", "System Architect", "Edinburgh", "61","Tiger Nixon", "System Architect", "Edinburgh", 1],
-  ["Garrett Winters", "Accountant", "Tokyo", "63","Tiger Nixon", "System Architect", "Edinburgh", "61"],
-  ["Ashton Cox", "Junior Technical Author", "San Francisco", "66","Tiger Nixon", "System Architect", "Edinburgh", 0],
-  ["Cedric Kelly", "Senior Javascript Developer", "Edinburgh", "22","Tiger Nixon", "System Architect", "Edinburgh", 1],
-  ["Airi Satou", "Accountant", "Tokyo", "33","Tiger Nixon", "System Architect", "Edinburgh", 1],
-  ["Brielle Williamson", "Integration Specialist", "New York", "61","Tiger Nixon", "System Architect", "Edinburgh", 0],
-];
-
 function CustomerApplications() {
 
   //Para guardar los datos de los usuarios
@@ -43,6 +37,20 @@ function CustomerApplications() {
   const [dataCustomers, setDataCustomers] = useState([]);
 
   const token = localStorage.getItem("Token");
+
+  const [ip, setIP] = React.useState("");
+  
+  const [alert, setAlert] = React.useState(null);
+
+  const getData = async () => {
+    const res = await axios.get('https://geolocation-db.com/json/')
+    setIP(res.data.IPv4)
+  }
+
+  useEffect(() => {
+      //Descargamos la IP del usuario
+      getData()
+  }, []);
 
   useEffect(() => {
     //Aqui vamos a descargar la lista de Customer Applications de la base de datos por primera vez
@@ -110,9 +118,12 @@ function CustomerApplications() {
         var i;
         for(i=0; i<data.length; i++)
         {
-          optionsAux.push({
-            value: data[i].Id_Catalog, label: data[i].Short_Desc 
-          })
+          if(data[i].Status === true)
+          {
+            optionsAux.push({
+              value: data[i].Id_Catalog, label: data[i].Short_Desc 
+            })
+          }
         }
         setDataApplications(optionsAux)
     })
@@ -159,9 +170,13 @@ function CustomerApplications() {
         var i;
         for(i=0; i<data.length; i++)
         {
-          optionsAux.push({
-            value: data[i].Id_Customer, label: data[i].Name
-          })
+          //console.log(data[i])
+          if(data[i].Status === true)
+          {
+            optionsAux.push({
+              value: data[i].Id_Customer, label: data[i].Name
+            })
+          }
         }
         setDataCustomers(optionsAux)
     })
@@ -172,7 +187,7 @@ function CustomerApplications() {
 
    //Renderizado condicional
   function CustomerApplication() {
-      return <CustomerApplicationsTable dataTable = {dataCustomersApplications} dataApplications = {dataApplications} dataCustomers = {dataCustomers} updateAddData = {updateAddData}/>;
+      return <CustomerApplicationsTable dataTable = {dataCustomersApplications} dataApplications = {dataApplications} dataCustomers = {dataCustomers} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
   }
 
   //Para actualizar la tabla al insertar registro
@@ -204,8 +219,51 @@ function CustomerApplications() {
     });
   }
 
-  return dataTable.length === 0 ? (
+  React.useEffect(() => {
+    return function cleanup() {
+      var id = window.setTimeout(null, 0);
+      while (id--) {
+        window.clearTimeout(id);
+      }
+    };
+  }, []);
+
+  const autoCloseAlert = (mensaje) => {
+    setAlert(
+      <ReactBSAlert
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Mensaje"
+        onConfirm={() => hideAlert()}
+        showConfirm={false}
+      >
+        {mensaje}
+      </ReactBSAlert>
+    );
+    setTimeout(hideAlert, 2000);
+  };
+
+  const hideAlert = () => {
+    setAlert(null);
+  };
+
+  return dataCustomersApplications.length === 0 ? (
     <>
+      <div className="content">
+        <Row>
+          <Col md="12">
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4">Aplicaciones Cliente</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <Skeleton height={25} />
+                <Skeleton height="25px" />
+                <Skeleton height="3rem" />
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </div>
     </>
   ) : (
     <>
@@ -214,10 +272,11 @@ function CustomerApplications() {
           <Col md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">Customer Applications</CardTitle>
+                <CardTitle tag="h4">Aplicaciones Cliente</CardTitle>
               </CardHeader>
               <CardBody>
                 <CustomerApplication />
+                {alert}
               </CardBody>
             </Card>
           </Col>

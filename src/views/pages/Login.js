@@ -17,10 +17,8 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useState, useEffect} from "react";
-
-import { useContext } from "react";
-import { UserContext } from "../../UserContext";
-
+import ReactBSAlert from "react-bootstrap-sweetalert";
+import Cargando from "assets/img/loading_icon.gif";
 
 // reactstrap components
 import {
@@ -49,8 +47,43 @@ function Login() {
 
   const [errorState, setErrorState] = React.useState("");
   const [error, setError] = React.useState();
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   const ambiente = "/DEV"
+
+  //Para el alert de cargando login
+  const [alert2, setAlert2] = React.useState(null);
+
+  const autoCloseAlert2 = (mensaje) => {
+    console.log("entre al alert")
+    setAlert2(
+      <ReactBSAlert
+        style={{ display: "block", marginTop: "-100px" }}
+        title=""
+        onConfirm={() => hideAlert()}
+        showConfirm={false}
+      >
+        <Row>
+          <Col sm="4">
+          </Col>
+          <Col sm="4">
+            <img 
+              src = {Cargando} 
+              style ={{ width: "50px", height: "50px" }}
+            />
+          </Col>
+          <Col sm="4">
+          </Col>
+        </Row>
+        &nbsp;
+        {mensaje}
+      </ReactBSAlert>
+    );
+  };
+
+  const hideAlert2 = () => {
+    setAlert2(null);
+  };
 
   useEffect(() => {
     //Si el usuario ya ha iniciado sesión que se le redirija al dashboard
@@ -78,9 +111,7 @@ function Login() {
 
   function onSubmitForm(event) {
     event.preventDefault();
-
-    const credentials = { email, password };
-
+    autoCloseAlert2("Iniciando Sesión...")
     const catRegister = {
       pvIdUser: email,
       pvPassword: password
@@ -103,7 +134,9 @@ function Login() {
         else{
             if(data[0].Code_Type === "Error")
             {
+                hideAlert2()
                 setErrorState("has-danger")
+                setErrorMessage(data[0].Code_Message_User)
             }
             else{
                 setErrorState("has-success");
@@ -123,6 +156,7 @@ function Login() {
   }
 
   function getUser(email, token){
+    console.log(email)
 
     var url = new URL(`http://129.159.99.152/develop-api/api/security-users/${email}`);
     fetch(url, {
@@ -136,38 +170,52 @@ function Login() {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
+        console.log(data)
+        hideAlert2()
+        if(data.length > 1)
+        {
+          localStorage.setItem("User", data[0].User);
+          localStorage.setItem("Id_Role", data[0].Id_Role)
+          localStorage.setItem("Token", token)
+          localStorage.setItem("Logged", true)
+          history.push(ambiente + "/auth/choose-customer");
+        }
+        else
+        {
+          localStorage.setItem("User", data[0].User);
+          localStorage.setItem("Id_Customer", data[0].Id_Customer)
+          localStorage.setItem("Id_Role", data[0].Id_Role)
+          localStorage.setItem("Token", token)
+          localStorage.setItem("Logged", true)
+          //Comparar fechas
+          var f1 = new Date();
+          var f2 = new Date(data[0].Final_Effective_Date)
+          if(data[0].Temporal_Password===true)
+          {
+            history.push(ambiente + "/auth/edit-password");
+          }
+          else if (data[0].Final_Effective_Date === "NULL")
+          {
+            console.log("entre al NULL")
+            history.push(ambiente + "/auth/edit-password");      
+          }
+          else if(f2 < f1)
+          {
+            history.push(ambiente + "/auth/edit-password");
+          }
+          else{
+            history.push(ambiente + "/admin/dashboard");
+          }
+        }
         
-        localStorage.setItem("User", data[0].User);
-        localStorage.setItem("Id_Customer", data[0].Id_Customer)
-        localStorage.setItem("Id_Role", data[0].Id_Role)
-        localStorage.setItem("Name", data[0].Name)
-        localStorage.setItem("Token", token)
-        localStorage.setItem("Logged", true)
-        //Comparar fechas
-        var f1 = new Date();
-        var f2 = new Date(data[0].Final_Effective_Date)
-        if(data[0].Temporal_Password===true)
-        {
-          history.push(ambiente + "/auth/edit-password");
-        }
-        else if (data[0].Final_Effective_Date === "NULL")
-        {
-          console.log("entre al NULL")
-          history.push(ambiente + "/auth/edit-password");      
-        }
-        else if(f2 < f1)
-        {
-          history.push(ambiente + "/auth/edit-password");
-        }
-        else{
-          history.push(ambiente + "/admin/dashboard");
-        }
         
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion del usuario" + err);
     });
   }
+
+  
 
   return (
     <div className="login-page">
@@ -208,26 +256,17 @@ function Login() {
                     />
                   </InputGroup>
                   <br />
-                  {/*<FormGroup>
-                    <FormGroup check>
-                      <Label check>
-                        <Input defaultChecked defaultValue="" type="checkbox" />
-                        <span className="form-check-sign" />
-                        Subscribe to newsletter
-                      </Label>
-                    </FormGroup>
-                  </FormGroup> */}
                 </CardBody>
                 <CardFooter>
                   <div className="btn-login">
-                    <Button type="submit" className="btn-round mb-3" color="warning">
+                    <Button type="submit" className="btn-round mb-3" color="primary">
                       Iniciar Sesión
                     </Button>
                   </div>
                   {error}
                   <FormGroup className={`has-label ${errorState}`}>
                     {errorState === "has-danger" ? (
-                            <label className="error">The user does not have access, please validate</label>
+                            <label className="error">{errorMessage}</label>
                     ) : null}
                   </FormGroup>
                 </CardFooter>
@@ -235,12 +274,13 @@ function Login() {
             </Form>
           </Col>
         </Row>
+        {alert2}
       </Container>
       <div
         className="full-page-background"
         style={{
           backgroundImage: `url(${
-            require("assets/img/logo-gtc.jpg").default
+            require("assets/img/fondo4.png").default
           })`,
         }}
       />

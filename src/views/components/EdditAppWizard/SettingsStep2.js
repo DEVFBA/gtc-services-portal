@@ -25,6 +25,10 @@ import {
   Row,
   Label,
   Col,
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
   FormGroup,
 } from "reactstrap";
 
@@ -32,6 +36,7 @@ import {
 import Select from "react-select";
 import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalUpdateConfig from "../Modals/ModalUpdateConfig.js";
+import EditConfigurationTable from "../ModuleSettings/EditConfigurationTable.js";
 
 
 const datos = [
@@ -44,171 +49,66 @@ const datos = [
 
   const SettingsStep2 = React.forwardRef((props, ref) => {
 
-    const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
+  const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
 
-    //Para saber que configuracion se va a editar
-    const [record, setRecord] = useState({});
+  const [dataAppConfigs, setDataAppConfigs] = useState([]);
 
-    const [dataTable, setDataTable] = useState([]);
-    const [dataState, setDataState] = useState(
-      datos.map((prop, key) => {
-          var requerida;
-          var editable;
-          var visible;
-          if(prop[1] === 1){
-              requerida = "Requerida"
-          }
-          else{
-              requerida = "No Requerida"
-          }
-          if(prop[2] === 1){
-              editable = "Editable"
-          }
-          else{
-              editable = "No Editable"
-          }
-          if(prop[3] === 1){
-              visible = "Visible"
-          }
-          else{
-              visible = "No Visible"
-          }
-          return {
-            id: key,
-            configuracion: prop[0],
-            requerida: requerida,
-            editable: editable,
-            visible: visible,
-            tooltip: prop[4],
-            actions: (
-              // ACCIONES A REALIZAR EN CADA REGISTRO
-              <div className="actions-center">
-                {/* use this button to remove the data row */}
-              <Button
-                  onClick={() => {
-                      let obj = dataState.find((o) => o.id === key);
-                      getRegistro(key)
-                      toggleModalUpdateRecord();
-                      /*alert(
-                      "You've clicked EDIT button on \n{ \nName: " +
-                          obj.name +
-                          ", \nposition: " +
-                          obj.position +
-                          ", \noffice: " +
-                          obj.office +
-                          ", \nage: " +
-                          obj.age +
-                          "\n}."
-                      );*/
-                  }}
-                  color="warning"
-                  size="sm"
-                  className="btn-icon btn-link edit"
-                  >
-                <i className="fa fa-edit" />
-              </Button>{" "}
-              </div>
-            ),
-          };
-      })
-  )
+  const token = localStorage.getItem("Token");
 
-  //Si el usuario no ha agredado configuraciones no se le permitirá guardar la aplicación o servicio
-  const [dataTableState, setDataTableState] = React.useState("");
-  const [dataTableFocus, setDataTableFocus] = React.useState("");
+  useEffect(() => {
+    console.log(props.prop1)
+    var url = new URL(`http://129.159.99.152/develop-api/api/applications-settings/${props.prop1}/`);
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+      console.log(data)
+      setDataAppConfigs(data);
+      //setDataApplications(data)
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de la configuraciones applicacion" + err);
+    });
+  }, []);
+
   
   React.useImperativeHandle(ref, () => ({
     isValidated: () => {
       return isValidated();
     },
     state: {
-      dataTable,
+      dataAppConfigs,
     },
   }));
 
-  function getRegistro(key)
-  {
-    var registro = dataState.find((o) => o.id === key)
-    setRecord(registro) 
-    //setModalOpen(modalOpen+1)
+ //Renderizado condicional
+ function ApplicationConfigs() {
+  return <EditConfigurationTable dataTable = {dataAppConfigs}/>;
   }
 
-  const isValidated = () => {
-    if(dataTable.length > 0)
-    {
-      setDataTableState("has-success");
-      return true;
-    }
-    else{
-      setDataTableState("has-danger");
-      return false;
-    }
-  };
-
-  function toggleModalUpdateRecord(){
-    if(modalUpdateRecord == false){
-      setModalUpdateRecord(true);
-    }
-    else{
-      setModalUpdateRecord(false);
-    }
-  }
-
-  return (
+  return dataAppConfigs.length === 0 ? (
     <>
-      <h5 className="info-text">
-        Editar configuraciones
-      </h5>
-      <Row className="justify-content-center">
-        <Col className="mt-1" lg="12">
-            <FormGroup
-              className={classnames(dataTableState, {
-                "input-group-focus": dataTableFocus,
-              })}
-              onFocus={(e) => setDataTableFocus(true)}
-              onBlur={(e) => setDataTableFocus(false)}
-            >
-            {dataTableState === "has-danger" ? (
-              <label className="error">Es necesario agregar al menos una configuración a la aplicación.</label>
-            ) : null}
-            </FormGroup>
-            <ReactTable
-              data={dataState}
-              columns={[
-                {
-                  Header: "Configuración",
-                  accessor: "configuracion",
-                },
-                {
-                  Header: "Requerida",
-                  accessor: "requerida",
-                },
-                {
-                  Header: "Editable",
-                  accessor: "editable",
-                },
-                {
-                  Header: "Visible",
-                  accessor: "visible",
-                },
-                {
-                  Header: "Actions",
-                  accessor: "actions",
-                  sortable: false,
-                  filterable: false,
-                },
-              ]}
-              /*
-                  You can choose between primary-pagination, info-pagination, success-pagination, warning-pagination, danger-pagination or none - which will make the pagination buttons gray
-                */
-              className="-striped -highlight primary-pagination"
-          />
-        </Col>
-      </Row>
-
-      {/*MODAL PARA MODIFICAR REGISTRO*/}
-      {/*Se le tiene que pasar como parametro la información de la configuración*/}
-      <ModalUpdateConfig abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} setRecord = {setRecord}/>
+    </>
+  ) : (
+    <>
+      <div className="content">
+        <h5 className="info-text">
+          Editar Configuraciones
+        </h5>
+        <Row>
+          <Col md="12">
+                <ApplicationConfigs />
+          </Col>
+        </Row>
+      </div>
     </>
   );
 });

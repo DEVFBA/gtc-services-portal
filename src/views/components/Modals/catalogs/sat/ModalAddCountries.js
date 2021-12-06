@@ -12,7 +12,7 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalAddCountries({modalAddRecord, setModalAddRecord, updateAddData}) {
+function ModalAddCountries({modalAddRecord, setModalAddRecord, updateAddData, ip, autoCloseAlert}) {
         // update form
     const [id, setId] = React.useState("");
     const [shortDescription, setShortDescription] = React.useState("");
@@ -28,6 +28,7 @@ function ModalAddCountries({modalAddRecord, setModalAddRecord, updateAddData}) {
     const [errorMessage, setErrorMessage] = useState("")
 
     const user = localStorage.getItem("User");
+    const token = localStorage.getItem("Token");
 
     const handleModalClick = () => {
         setId("")
@@ -93,12 +94,14 @@ function ModalAddCountries({modalAddRecord, setModalAddRecord, updateAddData}) {
             pvLongDesc: longDescription,
             pbStatus: status,
             pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/create-sat`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {
+                "access-token": token,
                 "Content-Type": "application/json"
             }
         })
@@ -114,11 +117,13 @@ function ModalAddCountries({modalAddRecord, setModalAddRecord, updateAddData}) {
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 if(data[0].Code_Type === "Warning")
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else{
                     setErrorState("has-success");
@@ -126,6 +131,7 @@ function ModalAddCountries({modalAddRecord, setModalAddRecord, updateAddData}) {
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });
@@ -137,7 +143,7 @@ function ModalAddCountries({modalAddRecord, setModalAddRecord, updateAddData}) {
         <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
             <span aria-hidden="true">×</span>
         </button>
-        <h5 className="modal-title">Add Record</h5>
+        <h5 className="modal-title">Agregar Registro</h5>
         </div>
         <ModalBody>
         <Form id="RegisterValidation">
@@ -157,7 +163,7 @@ function ModalAddCountries({modalAddRecord, setModalAddRecord, updateAddData}) {
                     }}
                 />
                 {idState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
+                    <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
             <FormGroup className={`has-label ${shortDescriptionState}`}>
@@ -176,7 +182,7 @@ function ModalAddCountries({modalAddRecord, setModalAddRecord, updateAddData}) {
                     }}
                 />
                 {shortDescriptionState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
+                    <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
             <FormGroup className={`has-label ${longDescriptionState}`}>
@@ -195,7 +201,7 @@ function ModalAddCountries({modalAddRecord, setModalAddRecord, updateAddData}) {
                     }}
                 />
                 {longDescriptionState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
+                    <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
             <FormGroup check>
@@ -214,7 +220,7 @@ function ModalAddCountries({modalAddRecord, setModalAddRecord, updateAddData}) {
                     </Label>
             </FormGroup>
             <div className="category form-category">
-                * Required fields
+                * Campos requeridos
             </div>
             <FormGroup className={`has-label ${errorState}`}>
                 {errorState === "has-danger" ? (
@@ -227,10 +233,10 @@ function ModalAddCountries({modalAddRecord, setModalAddRecord, updateAddData}) {
         <ModalFooter>
           <div className="center-side">
             <Button color="secondary" onClick={handleModalClick}>
-                Close
+                Cerrar
             </Button>
             <Button color="primary" onClick={registerClick}>
-                Save changes
+                Guardar cambios
             </Button>
           </div>
         </ModalFooter>

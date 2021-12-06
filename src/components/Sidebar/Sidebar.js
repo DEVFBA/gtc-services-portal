@@ -14,15 +14,16 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { Nav, Collapse } from "reactstrap";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
 
 import avatar from "assets/img/faces/ayo-ogunseinde-2.jpg";
+import avatarDefault from "assets/img/default-avatar.png";
 import logo from "assets/img/react-logo.png";
 import logogtc from "assets/img/favicon-GTC.png";
+import { NavLink, useHistory } from "react-router-dom";
 
 // reactstrap components
 import {
@@ -47,9 +48,14 @@ var ps;
 function Sidebar(props) {
   const [openAvatar, setOpenAvatar] = React.useState(false);
   const [collapseStates, setCollapseStates] = React.useState({});
+  const [image, setImage] = React.useState("");
+  const [name, setName] = React.useState("");
   const sidebar = React.useRef();
-  const name = localStorage.getItem("Name");
+  const Logged = localStorage.getItem("Logged");
+  const [routeProfile, setRouteProfile] = React.useState("");
   const ambiente = "/DEV"
+  
+  const history = useHistory();
   // this creates the intial state of this component based on the collapse routes
   // that it gets through props.routes
   const getCollapseStates = (routes) => {
@@ -66,6 +72,68 @@ function Sidebar(props) {
     });
     return initialState;
   };
+
+  useEffect(() => {
+    if(Logged === "true")
+    {
+      const token = localStorage.getItem("Token");
+      //Aqui vamos a descargar la lista de general parameters para revisar la vigencia del password
+      const params = {
+        pvOptionCRUD: "R"
+      };
+  
+      var url = new URL(`http://129.159.99.152/develop-api/api/general-parameters/`);
+  
+      Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+  
+      fetch(url, {
+          method: "GET",
+          headers: {
+              "access-token": token,
+              "Content-Type": "application/json",
+          }
+      })
+      .then(function(response) {
+          return response.ok ? response.json() : Promise.reject();
+      })
+      .then(function(data) {
+          var aux = data.find( o => o.Id_Catalog === 9)
+          //console.log(aux.Value)
+          setRouteProfile(aux.Value)
+      })
+      .catch(function(err) {
+         console.log(err)
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    //Si el usuario no está loggeado no se va a descargar la imagen
+    if(Logged === "true")
+    {
+      var user = localStorage.getItem("User");
+      const token = localStorage.getItem("Token");
+      var url = new URL(`http://129.159.99.152/develop-api/api/security-users/${user}`);
+      fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
+        }
+      })
+      .then(function(response) {
+          return response.ok ? response.json() : Promise.reject();
+      })
+      .then(function(data) {
+          setImage(data[0].Profile_Pic_Path)
+          setName(data[0].Name)
+          //console.log(data)
+      })
+      .catch(function(err) {
+        console.log(err)
+      });
+    }  
+  },[]);
 
   // this verifies if any of the collapses should be default opened on a rerender of this component
   // for example, on the refresh of the page,
@@ -202,9 +270,17 @@ function Sidebar(props) {
 
       <div className="sidebar-wrapper" ref={sidebar}>
         <div className="user">
-          <div className="photo">
-            <img src={avatar} alt="Avatar" />
-          </div>
+          {image !== "" ? (
+            <div className="photo">
+              <img src={routeProfile + image} alt="Avatar" />
+            </div>
+          ) : (
+            <div className="photo">
+              <img src={avatarDefault} alt="Avatar" />
+            </div>
+          )
+          }
+          
           <div className="info">
             <a
               href="#"
@@ -218,32 +294,6 @@ function Sidebar(props) {
                 {/*<b className="caret" />*/}
               </span>
             </a>
-            {/*<Collapse isOpen={openAvatar}>
-              <ul className="nav">
-                <li>
-                  <NavLink to= {ambiente + "/admin/user-profile"} activeClassName="">
-                    <span className="sidebar-mini-icon">MP</span>
-                    <span className="sidebar-normal">Mi Perfil</span>
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to= {ambiente + "/admin/user-profile"} activeClassName="">
-                    <span className="sidebar-mini-icon">EP</span>
-                    <span className="sidebar-normal">Editar Perfil</span>
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to= {ambiente + "/admin/user-profile"} activeClassName="">
-                    <span className="sidebar-mini-icon">C</span>
-                    <span className="sidebar-normal">Configuración</span>
-                  </NavLink>
-                  <NavLink to= {ambiente + "/auth/login"} activeClassName="">
-                    <span className="sidebar-mini-icon">CS</span>
-                    <span className="sidebar-normal">Cerrar Sesión</span>
-                  </NavLink>
-                </li>
-              </ul>
-            </Collapse>*/}
           </div>
         </div>
         <Nav>{createLinks(props.routes)}</Nav>

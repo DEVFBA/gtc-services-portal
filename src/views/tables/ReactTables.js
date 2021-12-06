@@ -218,7 +218,7 @@ function ReactTables(props) {
                   <span className="btn-label">
                     <i className="nc-icon nc-simple-add" />
                   </span>
-                  Add new record
+                  Agregar Registro
                 </Button>
               </CardHeader>
               <CardBody>
@@ -265,7 +265,7 @@ function ReactTables(props) {
         <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={toggleModalAddRecord}>
             <span aria-hidden="true">×</span>
         </button>
-        <h5 className="modal-title">Add new record</h5>
+        <h5 className="modal-title">Agregar Registro</h5>
         </div>
         <ModalBody>
             <p>Woohoo, you're reading this text in a modal!</p>
@@ -275,7 +275,7 @@ function ReactTables(props) {
                 Close
             </Button>
             <Button color="primary">
-                Save changes
+                Guardar cambios
             </Button>
         </ModalFooter>
       </Modal>
@@ -296,7 +296,7 @@ function ReactTables(props) {
                 Close
             </Button>
             <Button color="primary">
-                Save changes
+                Guardar cambios
             </Button>
         </ModalFooter>
       </Modal>
@@ -307,7 +307,7 @@ function ReactTables(props) {
         <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={toggleModalUpdateRecord}>
             <span aria-hidden="true">×</span>
         </button>
-        <h5 className="modal-title">Edit Record</h5>
+        <h5 className="modal-title">Editar Registro</h5>
         </div>
         <ModalBody>
             <p>Woohoo, you're reading this text in a modal!</p>
@@ -317,7 +317,7 @@ function ReactTables(props) {
                 Close
             </Button>
             <Button color="primary">
-                Save changes
+                Guardar cambios
             </Button>
         </ModalFooter>
       </Modal>

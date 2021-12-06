@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Skeleton from '@yisheng90/react-loading';
 
 // reactstrap components
 import {
@@ -24,7 +25,7 @@ import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalUpdatePetitionTypes from "views/components/Modals/catalogs/sat/ModalUpdatePetitionTypes";
 import ModalAddPetitionTypes from "views/components/Modals/catalogs/sat/ModalAddPetitionTypes";
 
-function PetitionTypes({dataTable, updateAddData}) {
+function PetitionTypes({dataTable, updateAddData, ip, autoCloseAlert}) {
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
       var status;
@@ -44,6 +45,7 @@ function PetitionTypes({dataTable, updateAddData}) {
           // ACCIONES A REALIZAR EN CADA REGISTRO
           <div className="actions-center">
               {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
+              <abbr title="Editar">
               <Button
               onClick={() => {
                   getRegistro(key);
@@ -55,6 +57,7 @@ function PetitionTypes({dataTable, updateAddData}) {
               >
               <i className="fa fa-edit" />
               </Button>
+              </abbr>
           </div>
           ),
       };
@@ -94,7 +97,20 @@ function PetitionTypes({dataTable, updateAddData}) {
         }
     }
 
-    return (
+    return dataTable.length === 0 ? (
+      <>
+        <div className="content">
+          <Row>
+            <Col md="12">
+              <h4>Tipos de Pedimento</h4>
+              <Skeleton height={25} />
+              <Skeleton height="25px" />
+              <Skeleton height="3rem" />
+            </Col>
+          </Row>
+        </div>
+      </>
+    ) : (
     <>
       {/*console.log(props.example)*/}
       <div className="content">
@@ -106,7 +122,7 @@ function PetitionTypes({dataTable, updateAddData}) {
                     <span className="btn-label">
                     <i className="nc-icon nc-simple-add" />
                     </span>
-                    Add new record
+                    Agregar Nuevo Registro
                 </Button>
              
                 <ReactTable
@@ -129,7 +145,7 @@ function PetitionTypes({dataTable, updateAddData}) {
                       accessor: "status",
                     },
                     {
-                      Header: "Actions",
+                      Header: "Acciones",
                       accessor: "actions",
                       sortable: false,
                       filterable: false,
@@ -145,10 +161,10 @@ function PetitionTypes({dataTable, updateAddData}) {
     </div>
 
     {/*MODAL PARA AÑADIR REGISTROS*/}
-    <ModalAddPetitionTypes modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData}/>       
+    <ModalAddPetitionTypes modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData} ip = {ip} autoCloseAlert={autoCloseAlert}/>       
 
     {/*MODAL PARA MODIFICAR REGISTRO*/}
-    <ModalUpdatePetitionTypes abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData}/>
+    <ModalUpdatePetitionTypes abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData} ip = {ip} autoCloseAlert={autoCloseAlert}/>
 
     </>
   );

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Skeleton from '@yisheng90/react-loading';
 
 // reactstrap components
 import {
@@ -24,7 +25,7 @@ import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalUpdateCustoms from "views/components/Modals/catalogs/sat/ModalUpdateCustoms";
 import ModalAddCustoms from "views/components/Modals/catalogs/sat/ModalAddCustoms";
 
-function Customs({dataTable, updateAddData}) {
+function Customs({dataTable, updateAddData, ip, autoCloseAlert}) {
 
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
@@ -45,17 +46,19 @@ function Customs({dataTable, updateAddData}) {
           // ACCIONES A REALIZAR EN CADA REGISTRO
           <div className="actions-center">
               {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-              <Button
-              onClick={() => {
-                  getRegistro(key);
-                  toggleModalUpdateRecord()
-              }}
-              color="warning"
-              size="sm"
-              className="btn-icon btn-link edit"
-              >
-              <i className="fa fa-edit" />
-              </Button>
+              <abbr title="Editar">
+                <Button
+                onClick={() => {
+                    getRegistro(key);
+                    toggleModalUpdateRecord()
+                }}
+                color="warning"
+                size="sm"
+                className="btn-icon btn-link edit"
+                >
+                <i className="fa fa-edit" />
+                </Button>
+              </abbr>
           </div>
           ),
       };
@@ -95,7 +98,20 @@ function Customs({dataTable, updateAddData}) {
         }
     }
 
-    return (
+    return dataTable.length === 0 ? (
+      <>
+        <div className="content">
+          <Row>
+            <Col md="12">
+              <h4>Aduanas</h4>
+              <Skeleton height={25} />
+              <Skeleton height="25px" />
+              <Skeleton height="3rem" />
+            </Col>
+          </Row>
+        </div>
+      </>
+    ) : (
     <>
       {/*console.log(props.example)*/}
       <div className="content">
@@ -107,7 +123,7 @@ function Customs({dataTable, updateAddData}) {
                     <span className="btn-label">
                     <i className="nc-icon nc-simple-add" />
                     </span>
-                    Add new record
+                    Agregar Nuevo Registro
                 </Button>
              
                 <ReactTable
@@ -130,7 +146,7 @@ function Customs({dataTable, updateAddData}) {
                       accessor: "status",
                     },
                     {
-                      Header: "Actions",
+                      Header: "Acciones",
                       accessor: "actions",
                       sortable: false,
                       filterable: false,
@@ -146,10 +162,10 @@ function Customs({dataTable, updateAddData}) {
     </div>
 
     {/*MODAL PARA AÑADIR REGISTROS*/}
-    <ModalAddCustoms modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData}/>       
+    <ModalAddCustoms modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData} ip = {ip} autoCloseAlert={autoCloseAlert}/>       
 
     {/*MODAL PARA MODIFICAR REGISTRO*/}
-    <ModalUpdateCustoms abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData}/>
+    <ModalUpdateCustoms abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData} ip = {ip} autoCloseAlert={autoCloseAlert}/>
 
     </>
   );

@@ -23,7 +23,7 @@ import {
 } from "reactstrap";
 import { data } from "jquery";
 
-function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCustomers, dataApplications, updateAddData}) {
+function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCustomers, dataApplications, updateAddData, ip, autoCloseAlert}) {
     
     const [registerCustomer, setregisterCustomer] = React.useState("");
     const [registerApplication, setregisterApplication] = React.useState("");
@@ -133,17 +133,16 @@ function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCus
         else {
             finalDate2 = null
         }
-
-        console.log(registerApplication.value)
         const catRegister = {
             pvOptionCRUD: "C",
             piIdCustomer: registerCustomer.value,
             piIdApplication: registerApplication.value,
             pvFinalEffectiveDate: finalDate2,
-            pvUser: user
+            pvUser: user,
+            pvIP: ip
         };
     
-        fetch(`http://localhost:8091/api/customer-applications/create-customer-application`, {
+        fetch(`http://129.159.99.152/develop-api/api/customer-applications/create-customer-application`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {
@@ -163,11 +162,15 @@ function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCus
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
+
                 }
                 else if(data[0].Code_Type === "Error")
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
+
                 }
                 else{
                     setErrorState("has-success");
@@ -175,6 +178,7 @@ function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCus
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });
@@ -186,14 +190,14 @@ function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCus
             <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
                 <span aria-hidden="true">×</span>
             </button>
-            <h5 className="modal-title">Add new record</h5>
+            <h5 className="modal-title">Agregar Aplicación / Servicio</h5>
             </div>
             <ModalBody>
             <Form id="RegisterValidation">
                 <Row className="justify-content-center">
                     <Col className="mt-3" lg="10">
                         <FormGroup className={`has-label ${registerCustomerState}`}>
-                            <Label for="exampleSelect">Customer * </Label>
+                            <Label for="exampleSelect">Cliente * </Label>
                             <Select
                                 name=""
                                 className="react-select"
@@ -211,7 +215,7 @@ function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCus
                             ) : null}
                         </FormGroup>
                         <FormGroup className={`has-label ${registerApplicationState}`}>
-                            <Label for="exampleSelect">Application / Service * </Label>
+                            <Label for="exampleSelect">Aplicación / Servicio * </Label>
                             <Select
                                 name=""
                                 className="react-select"
@@ -257,14 +261,14 @@ function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCus
                                         }}
                                     />
                                     {registerValidDateState === "has-danger" ? (
-                                        <label className="error">This field is required.</label>
+                                        <label className="error">Este campo es requerido.</label>
                                     ) : null}
                                 </FormGroup>    
                             </>
                             ) : null}
                         </FormGroup>
                         <div className="category form-category">
-                        * Required fields
+                        * Campos requeridos
                         </div>
                     </Col>  
                     <Col className="mt-3" lg="10">
@@ -282,10 +286,10 @@ function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCus
             <ModalFooter>
                 <div className="center-side">
                 <Button className="buttons" color="secondary" onClick={handleModalClick}>
-                    Close
+                    Cerrar
                 </Button>
                 <Button className="buttons" color="primary" onClick={registerClick}>
-                    Save changes
+                    Guardar cambios
                 </Button>
                 </div>
             </ModalFooter>

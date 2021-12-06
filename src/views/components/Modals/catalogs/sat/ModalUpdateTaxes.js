@@ -12,7 +12,7 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalUpdateTaxes({abierto, toggleModalUpdateRecord, record, updateAddData}) {
+function ModalUpdateTaxes({abierto, toggleModalUpdateRecord, record, updateAddData, ip, autoCloseAlert}) {
         // update form
     const [id, setId] = React.useState("Hola");
     const [shortDescription, setShortDescription] = React.useState("");
@@ -43,10 +43,6 @@ function ModalUpdateTaxes({abierto, toggleModalUpdateRecord, record, updateAddDa
     },[record]);
 
     const handleModalClick = () => {
-        setId("")
-        setShortDescription("")
-        setLongDescription("")
-        setStatus(true)
         setShortDescriptionState("")
         setLongDescriptionState("")
         setError("")
@@ -114,6 +110,7 @@ function ModalUpdateTaxes({abierto, toggleModalUpdateRecord, record, updateAddDa
             pvLongDesc: longDescription,
             pbStatus: status,
             pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/update-sat`, {
@@ -136,11 +133,13 @@ function ModalUpdateTaxes({abierto, toggleModalUpdateRecord, record, updateAddDa
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 if(data[0].Code_Type === "Warning")
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else{
                     setErrorState("has-success");
@@ -148,6 +147,7 @@ function ModalUpdateTaxes({abierto, toggleModalUpdateRecord, record, updateAddDa
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });
@@ -159,7 +159,7 @@ function ModalUpdateTaxes({abierto, toggleModalUpdateRecord, record, updateAddDa
         <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
             <span aria-hidden="true">×</span>
         </button>
-        <h5 className="modal-title">Edit Record</h5>
+        <h5 className="modal-title">Editar Registro</h5>
         </div>
         <ModalBody>
         <Form id="RegisterValidation">
@@ -190,7 +190,7 @@ function ModalUpdateTaxes({abierto, toggleModalUpdateRecord, record, updateAddDa
                   }}
                 />
                 {shortDescriptionState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
+                    <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
             <FormGroup className={`has-label ${longDescriptionState}`}>
@@ -211,7 +211,7 @@ function ModalUpdateTaxes({abierto, toggleModalUpdateRecord, record, updateAddDa
                     }}
                 />
                 {longDescriptionState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
+                    <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
             <FormGroup check>
@@ -240,10 +240,10 @@ function ModalUpdateTaxes({abierto, toggleModalUpdateRecord, record, updateAddDa
         <ModalFooter>
           <div className="center-side">
             <Button color="secondary" onClick={handleModalClick}>
-                Close
+                Cerrar
             </Button>
             <Button color="primary" onClick={updateClick}>
-                Save changes
+                Guardar cambios
             </Button>
           </div>
         </ModalFooter>

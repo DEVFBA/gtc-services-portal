@@ -6,7 +6,7 @@ import defaultImage from "assets/img/default-logo.png";
 function UploadLogo(props) {
   const [fileState, setFileState] = React.useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = React.useState(
-    props.avatar ? defaultAvatar : defaultImage
+    props.logo !== "" ? (props.path + props.logo) : (defaultImage)
   );
 
   const handleImageChange = (e) => {
@@ -30,6 +30,7 @@ function UploadLogo(props) {
       
       setFileState(file);
       props.setregisterLogo(reader.result)
+      props.setChangeImage(true)
       setImagePreviewUrl(reader.result);
       //console.log(reader.result)
     };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Skeleton from '@yisheng90/react-loading';
 
 // reactstrap components
 import {
@@ -24,7 +25,7 @@ import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalUpdateTariffFractions from "views/components/Modals/catalogs/sat/ModalUpdateTariffFractions";
 import ModalAddTariffFractions from "views/components/Modals/catalogs/sat/ModalAddTariffFractions";
 
-function TariffFractions({dataTable, updateAddData}) {
+function TariffFractions({dataTable, updateAddData, ip, autoCloseAlert}) {
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
       var status;
@@ -44,17 +45,19 @@ function TariffFractions({dataTable, updateAddData}) {
           // ACCIONES A REALIZAR EN CADA REGISTRO
           <div className="actions-center">
               {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-              <Button
-              onClick={() => {
-                  getRegistro(key);
-                  toggleModalUpdateRecord()
-              }}
-              color="warning"
-              size="sm"
-              className="btn-icon btn-link edit"
-              >
-              <i className="fa fa-edit" />
-              </Button>
+              <abbr title="Editar">
+                <Button
+                onClick={() => {
+                    getRegistro(key);
+                    toggleModalUpdateRecord()
+                }}
+                color="warning"
+                size="sm"
+                className="btn-icon btn-link edit"
+                >
+                <i className="fa fa-edit" />
+                </Button>
+              </abbr>
           </div>
           ),
       };
@@ -94,7 +97,20 @@ function TariffFractions({dataTable, updateAddData}) {
         }
     }
 
-    return (
+    return dataTable.length === 0 ? (
+      <>
+        <div className="content">
+          <Row>
+            <Col md="12">
+              <h4>Fracciones Arancelarias</h4>
+              <Skeleton height={25} />
+              <Skeleton height="25px" />
+              <Skeleton height="3rem" />
+            </Col>
+          </Row>
+        </div>
+      </>
+    ) : (
     <>
       {/*console.log(props.example)*/}
       <div className="content">
@@ -106,7 +122,7 @@ function TariffFractions({dataTable, updateAddData}) {
                     <span className="btn-label">
                     <i className="nc-icon nc-simple-add" />
                     </span>
-                    Add new record
+                    Agregar Nuevo Registro
                 </Button>
              
                 <ReactTable
@@ -129,7 +145,7 @@ function TariffFractions({dataTable, updateAddData}) {
                       accessor: "status",
                     },
                     {
-                      Header: "Actions",
+                      Header: "Acciones",
                       accessor: "actions",
                       sortable: false,
                       filterable: false,
@@ -145,10 +161,10 @@ function TariffFractions({dataTable, updateAddData}) {
     </div>
 
     {/*MODAL PARA AÑADIR REGISTROS*/}
-    <ModalAddTariffFractions modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData}/>       
+    <ModalAddTariffFractions modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData} ip = {ip} autoCloseAlert={autoCloseAlert}/>       
 
     {/*MODAL PARA MODIFICAR REGISTRO*/}
-    <ModalUpdateTariffFractions abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData}/>
+    <ModalUpdateTariffFractions abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData} ip = {ip} autoCloseAlert={autoCloseAlert}/>
 
     </>
   );

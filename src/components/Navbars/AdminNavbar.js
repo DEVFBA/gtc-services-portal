@@ -90,7 +90,6 @@ function AdminNavbar(props) {
     localStorage.removeItem("Id_Role");
     localStorage.removeItem("Id_Customer");
     localStorage.removeItem("Token");
-    localStorage.removeItem("Name");
     history.push(ambiente+"/auth/login");
   }
   

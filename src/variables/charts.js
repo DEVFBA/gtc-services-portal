@@ -188,16 +188,16 @@ const chartExample3 = {
     gradientFill.addColorStop(1, hexToRGB("#2CA8FF", 0.4));
     return {
       labels: [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
       ],
       datasets: [
         {

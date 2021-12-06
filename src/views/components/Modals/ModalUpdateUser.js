@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-//Importar módulo para encriptar contraseña
-import { sha256, sha224 } from 'js-sha256';
-
 //React plugin used to create DropdownMenu for selecting items
 import Select from "react-select";
 
@@ -23,7 +20,7 @@ import {
     Col,
 } from "reactstrap";
 
-function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, dataCustomers, updateAddData, validDays, pathImage}) {
+function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip, profilePath, autoCloseAlert, setLoaded}) {
         // register form
     const [updateEmail, setupdateEmail] = React.useState("");
     const [updateFullName, setupdateFullName] = React.useState("");
@@ -36,6 +33,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
     const [updateStatus, setupdateStatus] = useState();
     const [updateConfirmPassword, setupdateConfirmPassword] = React.useState("");
     const [updateFinalEffectiveDate, setupdateFinalEffectiveDate] = useState();
+    const [changeImage, setChangeImage] = useState(false)
 
     const [updateEmailState, setupdateEmailState] = React.useState("");
     const [updateFullNameState, setupdateFullNameState] = React.useState("");
@@ -48,14 +46,25 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
     const [errorState, setErrorState] = React.useState("");
     const [errorMessage, setErrorMessage] = React.useState("");
 
+
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");
 
     const handleModalClick = () => {
-      toggleModalUpdateRecord(!abierto);
+        setErrorMessage("") 
+        setupdateFullNameState("")
+        setupdatePasswordState("")
+        setupdateConfirmPasswordState("")
+        setupdateRolState("")
+        setError("")
+        setErrorState("")
+        setErrorMessage("")
+        toggleModalUpdateRecord(!abierto);
     };
 
     useEffect(() => {
+        console.log("ENTRE AL MODAL")
+        console.log(record.image)
         setupdateEmail(record.email);
         setupdateFullName(record.name)
         setupdateRol({
@@ -73,6 +82,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
         else{
             setupdateStatus(false);
         }
+        setupdateImage(record.image)
     },[record]);
 
     // function that verifies if a string has a given length or not
@@ -162,6 +172,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
             //haremos el fetch a la base de datos para actualizar el registro
             //El password deberá encriptarse en SHA256
             //console.log(sha256(registerPassword));
+            /*setLoaded(false)*/
             updateRegister()
             //Cerramos el modal
             //handleModalClick()
@@ -169,13 +180,13 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
     };
 
     function updateRegister(){
-        console.log(updateEmail)
-        console.log(updateFullName)
-        console.log(updatePassword)
-        console.log(updateRol.value)
-        console.log(updateStatus)
-        console.log(updateTemporal)
+        var finalDate2=""
+
         console.log(updateCustomer.value)
+            console.log(updateEmail)
+            console.log(updateRol.value)
+            console.log(updateFullName)
+            console.log(updateStatus)
 
         //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
         if(updateChangePassword === true)
@@ -186,8 +197,23 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
             var month = finalDate.getMonth() + 1
             var year = finalDate.getFullYear()
 
-            var finalDate2 = "" + year + "" + month + "" + date;
-
+            
+            if(month < 10 && date < 10)
+            {
+                finalDate2 = "" + year + "0" + month + "0" + date;  
+            }
+            else if(date < 10)
+            {
+                finalDate2 = "" + year + "" + month + "0" + date;
+            }
+            else if(month < 10) 
+            {  
+                finalDate2 = "" + year + "0" + month + "" + date;
+            }
+            else{
+                finalDate2 = "" + year + "" + month + "" + date;
+            }  
+            
             const catRegister = {
                 pvOptionCRUD: "U",
                 piIdCustomer: updateCustomer.value,
@@ -200,7 +226,9 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                 pbStatus: updateStatus,
                 pvFinalEffectiveDate: finalDate2,
                 pvUser: user,
-                pathImage : pathImage
+                pathImage : pathImage,
+                pvIP: ip,
+                pvChangeImage : changeImage
             };
         
             fetch(`http://129.159.99.152/develop-api/api/security-users/update-user/`, {
@@ -223,18 +251,21 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                     {
                         setErrorMessage(data[0].Code_Message_User)
                         setErrorState("has-danger")
+                        autoCloseAlert(data[0].Code_Message_User)
                     }
                     else if(data[0].Code_Type === "Error")
                     {
                         setErrorMessage(data[0].Code_Message_User)
                         setErrorState("has-danger")
+                        autoCloseAlert(data[0].Code_Message_User)
                     }
                     else{
                         setErrorState("has-success");
                         //Para actualizar la tabla en componente principal
                         updateAddData()
                         //Cerramos el modal
-                        handleModalClick()
+                        handleModalClick() 
+                        autoCloseAlert(data[0].Code_Message_User)
                     }
                 }
             });
@@ -245,9 +276,14 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                 piIdCustomer: updateCustomer.value,
                 pvIdUser: updateEmail,
                 pvIdRole: updateRol.value,
+                pvProfilePicPath: updateImage,
                 pvName: updateFullName,
                 pbStatus: updateStatus,
+                pvFinalEffectiveDate: finalDate2,
                 pvUser: user,
+                pathImage : pathImage,
+                pvIP: ip,
+                pvChangeImage : changeImage
             };
         
             fetch(`http://129.159.99.152/develop-api/api/security-users/update-user-wp/`, {
@@ -268,10 +304,18 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                 else{
                     if(data[0].Code_Type === "Warning")
                     {
+                        autoCloseAlert(data[0].Code_Message_User)
                         setErrorState("has-danger")
+                    }
+                    else if(data[0].Code_Type === "Error")
+                    {
+                        setErrorMessage(data[0].Code_Message_User)
+                        setErrorState("has-danger")
+                        autoCloseAlert(data[0].Code_Message_User)
                     }
                     else{
                         setErrorState("has-success");
+                        autoCloseAlert(data[0].Code_Message_User)
                         //Para actualizar la tabla en componente principal
                         updateAddData()
                         //Cerramos el modal
@@ -306,7 +350,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                             <Input
                                 name="email"
                                 type="email"
-                                placeholder = {updateEmail}
+                                value = {updateEmail}
                                 readOnly
                             />
                         </FormGroup>
@@ -327,7 +371,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                             }}
                             />
                             {updateFullNameState === "has-danger" ? (
-                            <label className="error">This field is required.</label>
+                            <label className="error">Este campo es requerido.</label>
                             ) : null}
                         </FormGroup>
                         <FormGroup check>
@@ -427,7 +471,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                         </FormGroup>
                     </Col>
                     <Col sm="4">
-                            <UploadUserImage registerImage = {updateImage} setregisterImage={setupdateImage}/>
+                        <UploadUserImage registerImage = {updateImage} setregisterImage={setupdateImage} image = {updateImage} path = {profilePath} setChangeImage = {setChangeImage}/>
                     </Col>
                     <Col sm="6">
                         <FormGroup className={`has-label ${updateCustomerState}`}>
@@ -485,10 +529,10 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
             <ModalFooter>
                 <div className="center-side">
                 <Button className="buttons" color="secondary" onClick={handleModalClick}>
-                    Close
+                    Cerrar
                 </Button>
                 <Button className="buttons" color="primary" onClick={updateClick}>
-                    Save changes
+                    Guardar cambios
                 </Button>
                 </div>
             </ModalFooter>

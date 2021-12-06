@@ -20,7 +20,7 @@ import {
     Col,
 } from "reactstrap";
 
-function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dataCountries, updateAddData, pathLogo}) {
+function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dataCountries, updateAddData, pathLogo, ip, profilePath, autoCloseAlert}) {
 
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");
@@ -41,6 +41,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
     const [updateWebPage, setupdateWebPage] = React.useState("");
     const [updateLogo, setupdateLogo] = React.useState("");
     const [updateStatus, setupdateStatus] = useState(false);
+    const [changeImage, setChangeImage] = useState(false)
 
     //Mandar error en caso de que ya exista el Country/TaxId
     const [updateError, setregisterError] = useState("");
@@ -88,24 +89,12 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
         else{
             setupdateStatus(false);
         }
+        setupdateLogo(record.logo)
     },[record]);
 
     const handleModalClick = () => {
-        setupdateFullName("")
-        setupdateRfc("")
-        setupdateStreet("")
-        setupdateNoExterior("")
-        setupdateNoInterior("")
-        setupdateCountry("")
-        setupdateCity("")
-        setupdateZipCode("")
-        setupdateContact("")
-        setupdateTelephone1("")
-        setupdateTelephone2("")
-        setupdateWebPage("")
-        setupdateLogo("")
-        setupdateStatus(false)
-
+        setupdateFullNameState("")
+        setupdateRfcState("")
         setModalUpdateRecord(!modalUpdateRecord);
     };
 
@@ -161,8 +150,6 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
     }
 
     function updateRegister(){
-
-        console.log(updateCountry.value)
         const catRegister = {
             pvOptionCRUD: "U",
             piIdCustomer: updateIdCustomer,
@@ -181,7 +168,9 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
             pvLogo : updateLogo,
             pbStatus : updateStatus,
             pvUser : user,
-            pathLogo : pathLogo
+            pathLogo : pathLogo,
+            pvIP : ip,
+            pvChangeImage : changeImage
         };
     
         fetch(`http://129.159.99.152/develop-api/api/customers/update-customer/`, {
@@ -204,11 +193,13 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else if(data[0].Code_Type === "Error")
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else{
                     setErrorState("has-success");
@@ -216,6 +207,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });
@@ -382,7 +374,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
                         </FormGroup>
                     </Col>
                     <Col sm="4">
-                        <UploadLogo registerLogo = {updateLogo} setregisterLogo={setupdateLogo} registerCountry = {updateCountry} registerRfc = {updateRfc}/>
+                        <UploadLogo registerLogo = {updateLogo} setregisterLogo={setupdateLogo} registerCountry = {updateCountry} registerRfc = {updateRfc} logo = {updateLogo} path = {profilePath} setChangeImage = {setChangeImage}/>
                     </Col>
                     <Col sm="6">
                         <FormGroup>

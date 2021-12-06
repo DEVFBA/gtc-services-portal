@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios'
+import ReactBSAlert from "react-bootstrap-sweetalert";
 
 // reactstrap components
 import {
@@ -36,6 +38,19 @@ function CatalogosPortal() {
   //Para guardar los datos del catalogo seleccionado
   const [dataCatalog, setDataCatalog] = useState([]);
   const token = localStorage.getItem("Token");
+
+  const [alert, setAlert] = React.useState(null);
+
+  const [ip, setIP] = React.useState("");
+  const getData = async () => {
+    const res = await axios.get('https://geolocation-db.com/json/')
+    setIP(res.data.IPv4)
+  }
+
+  useEffect(() => {
+      //Descargamos la IP del usuario
+      getData()
+  }, []);
 
   useEffect(() => {
     //Aqui vamos a descargar la lista de catalogos de la base de datos por primera vez
@@ -88,7 +103,7 @@ function CatalogosPortal() {
     const catalog = props.component;
     if(catalog === "ApplicationSuites")
     {
-      return <ApplicationSuites dataTable = {dataCatalog} updateAddData = {updateAddData}/>;
+      return <ApplicationSuites dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
     return <></>
   }
@@ -151,6 +166,33 @@ function CatalogosPortal() {
     });
   }
 
+  React.useEffect(() => {
+    return function cleanup() {
+      var id = window.setTimeout(null, 0);
+      while (id--) {
+        window.clearTimeout(id);
+      }
+    };
+  }, []);
+
+  const autoCloseAlert = (mensaje) => {
+    setAlert(
+      <ReactBSAlert
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Mensaje"
+        onConfirm={() => hideAlert()}
+        showConfirm={false}
+      >
+        {mensaje}
+      </ReactBSAlert>
+    );
+    setTimeout(hideAlert, 2000);
+  };
+
+  const hideAlert = () => {
+    setAlert(null);
+  };
+
   return (
     <>
       {/*console.log(props.example)*/}
@@ -159,11 +201,14 @@ function CatalogosPortal() {
           <Col md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">Portal Catalog</CardTitle>
+                <CardTitle tag="h4">Catálogos Portal</CardTitle>
                 <FormGroup>
                   {/*Al seleccionar un catálogo se hará fetch para actualizar sus configuraciones*/}
                   <Select 
+                    name=""
+                    className="react-select"
                     placeholder = "Selecciona un catálogo para administrar sus configuraciones"
+                    classNamePrefix="react-select"
                     options = {options}
                     onChange={(e) => {
                       setCatalog(e.value);
@@ -173,7 +218,8 @@ function CatalogosPortal() {
                 </FormGroup>
               </CardHeader>
               <CardBody>
-                    <Catalog component = {catalog} />
+                <Catalog component = {catalog} />
+                {alert}
               </CardBody>
             </Card>
           </Col>

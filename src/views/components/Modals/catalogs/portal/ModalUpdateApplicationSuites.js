@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios'
 
 // reactstrap components
 import {
@@ -12,7 +13,7 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record, updateAddData}) {
+function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record, updateAddData, ip, autoCloseAlert}) {
         // update form
     const [id, setId] = React.useState("");
     const [shortDescription, setShortDescription] = React.useState("");
@@ -24,6 +25,7 @@ function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record,
 
     const [error, setError] = React.useState();
     const [errorState, setErrorState] = React.useState("");
+    const [errorMessage, setErrorMessage] = React.useState("");
 
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");
@@ -42,6 +44,9 @@ function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record,
     },[record]);
 
     const handleModalClick = () => {
+        setError("")
+        setErrorState("")
+        setErrorMessage("")
         toggleModalUpdateRecord(!abierto);
     };
 
@@ -104,6 +109,7 @@ function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record,
             pvLongDesc: longDescription,
             pbStatus: status,
             pvUser: user,
+            pvIP: ip
         };
     
         fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/update-portal`, {
@@ -124,7 +130,15 @@ function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record,
             else{
                 if(data[0].Code_Type === "Warning")
                 {
+                    setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
+                }
+                else if(data[0].Code_Type === "Error")
+                {
+                    setErrorMessage(data[0].Code_Message_User)
+                    setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else{
                     setErrorState("has-success");
@@ -132,6 +146,7 @@ function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record,
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });
@@ -143,7 +158,7 @@ function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record,
         <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
             <span aria-hidden="true">×</span>
         </button>
-        <h5 className="modal-title">Edit Record</h5>
+        <h5 className="modal-title">Editar Suite</h5>
         </div>
         <ModalBody>
         <Form id="RegisterValidation">
@@ -173,7 +188,7 @@ function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record,
                   }}
                 />
                 {shortDescriptionState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
+                    <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
             <FormGroup className={`has-label ${longDescriptionState}`}>
@@ -194,7 +209,7 @@ function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record,
                     }}
                 />
                 {longDescriptionState === "has-danger" ? (
-                    <label className="error">This field is required.</label>
+                    <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
             <FormGroup check>
@@ -214,7 +229,9 @@ function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record,
             </FormGroup>
             <FormGroup className={`has-label ${errorState}`}>
                 {errorState === "has-danger" ? (
-                        <label className="error">An error has occurred. Try again.</label>
+                        <label className="error">
+                            {errorMessage}
+                        </label>
                 ) : null}
             </FormGroup>
           </Form>
@@ -223,10 +240,10 @@ function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record,
         <ModalFooter>
           <div className="center-side">
             <Button color="secondary" onClick={handleModalClick}>
-                Close
+                Cerrar
             </Button>
             <Button color="primary" onClick={updateClick}>
-                Save changes
+                Guardar Cambios
             </Button>
           </div>
         </ModalFooter>

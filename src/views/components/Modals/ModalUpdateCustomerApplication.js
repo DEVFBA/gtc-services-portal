@@ -22,7 +22,7 @@ import {
     Col,
 } from "reactstrap";
 
-function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord, record, updateAddData}) {
+function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord, record, updateAddData, ip, autoCloseAlert}) {
     
     const [updateCustomer, setupdateCustomer] = React.useState("");
     const [updateApplication, setupdateApplication] = React.useState("");
@@ -135,10 +135,11 @@ function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord
             piIdCustomer: updateCustomer,
             piIdApplication: updateApplication.value,
             pvFinalEffectiveDate: finalDate2,
-            pvUser: user
+            pvUser: user,
+            pvIP: ip
         };
     
-        fetch(`http://localhost:8091/api/customer-applications/update-customer-application`, {
+        fetch(`http://129.159.99.152/develop-api/api/customer-applications/update-customer-application`, {
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {
@@ -158,11 +159,13 @@ function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else if(data[0].Code_Type === "Error")
                 {
                     setErrorMessage(data[0].Code_Message_User)
                     setErrorState("has-danger")
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
                 else{
                     setErrorState("has-success");
@@ -170,6 +173,7 @@ function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord
                     updateAddData()
                     //Cerramos el modal
                     handleModalClick()
+                    autoCloseAlert(data[0].Code_Message_User)
                 }
             }
         });
@@ -187,7 +191,7 @@ function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord
             <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
                 <span aria-hidden="true">×</span>
             </button>
-            <h5 className="modal-title">Update Client</h5>
+            <h5 className="modal-title">Actualizar Aplicación / Servicio</h5>
             </div>
             <ModalBody>
             <Form id="RegisterValidation">
@@ -242,14 +246,14 @@ function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord
                                         }}
                                     />
                                     {updateValidDateState === "has-danger" ? (
-                                        <label className="error">This field is required.</label>
+                                        <label className="error">Este campo es requerido.</label>
                                     ) : null}
                                 </FormGroup>    
                             </>
                             ) : null}
                         </FormGroup>
                         <div className="category form-category">
-                        * Required fields
+                        * Campos requeridos
                         </div>
                     </Col>  
                     <Col className="mt-3" lg="10">
@@ -268,10 +272,10 @@ function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord
             <ModalFooter>
                 <div className="center-side">
                 <Button className="buttons" color="secondary" onClick={handleModalClick}>
-                    Close
+                    Cerrar
                 </Button>
                 <Button className="buttons" color="primary" onClick={updateClick}>
-                    Save changes
+                    Guardar cambios
                 </Button>
                 </div>
             </ModalFooter>

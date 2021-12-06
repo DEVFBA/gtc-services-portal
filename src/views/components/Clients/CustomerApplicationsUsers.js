@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios'
+import ReactBSAlert from "react-bootstrap-sweetalert";
 
 // reactstrap components
 import {
@@ -48,6 +50,20 @@ function CustomerApplicationsUsers() {
   const [errorState, setErrorState] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
 
+  const [ip, setIP] = React.useState("");
+
+  const [alert, setAlert] = React.useState(null);
+
+  const getData = async () => {
+    const res = await axios.get('https://geolocation-db.com/json/')
+    setIP(res.data.IPv4)
+  }
+
+  useEffect(() => {
+      //Descargamos la IP del usuario
+      getData()
+  }, []);
+
   useEffect(() => {
     //Aqui vamos a descargar la lista de usuarios de la base de datos por primera vez
     const params = {
@@ -56,10 +72,9 @@ function CustomerApplicationsUsers() {
       pIdApplication: idApp
     };
 
-    var url = new URL(`http://localhost:8091/api/customer-applications-users/`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/customer-applications-users/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-    console.log(url)
 
     fetch(url, {
         method: "GET",
@@ -87,7 +102,7 @@ function CustomerApplicationsUsers() {
       piIdCustomer: idCus
     };
 
-    var url = new URL(`http://localhost:8091/api/security-users/get-users-customer-role-service/`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/security-users/get-users-customer-role-service/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -132,7 +147,7 @@ function CustomerApplicationsUsers() {
       pIdApplication: idApp
     };
 
-    var url = new URL(`http://localhost:8091/api/customer-applications-users/`);
+    var url = new URL(`http://129.159.99.152/develop-api/api/customer-applications-users/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
     console.log(url)
@@ -188,9 +203,10 @@ function CustomerApplicationsUsers() {
         pIdApplication: idApp,
         pvIdUser: registerUser.value,
         pvUser: user,
+        pvIP: ip
     };
 
-    fetch(`http://localhost:8091/api/customer-applications-users/create-customer-application-user`, {
+    fetch(`http://129.159.99.152/develop-api/api/customer-applications-users/create-customer-application-user`, {
         method: "POST",
         body: JSON.stringify(catRegister),
         headers: {
@@ -210,22 +226,51 @@ function CustomerApplicationsUsers() {
             {
                 setErrorMessage(data[0].Code_Message_User)
                 setErrorState("has-danger")
+                autoCloseAlert(data[0].Code_Message_User)
             }
             else if(data[0].Code_Type === "Error")
             {
                 setErrorMessage(data[0].Code_Message_User)
                 setErrorState("has-danger")
+                autoCloseAlert(data[0].Code_Message_User)
             }
             else{
                 setErrorState("has-success");
                 //Para actualizar la tabla en componente principal
                 updateAddData()
                 //Cerramos el modal
-                handleModalClick()
+                autoCloseAlert(data[0].Code_Message_User)
             }
         }
     });
-  } 
+  }
+  
+  React.useEffect(() => {
+    return function cleanup() {
+      var id = window.setTimeout(null, 0);
+      while (id--) {
+        window.clearTimeout(id);
+      }
+    };
+  }, []);
+
+  const autoCloseAlert = (mensaje) => {
+    setAlert(
+      <ReactBSAlert
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Mensaje"
+        onConfirm={() => hideAlert()}
+        showConfirm={false}
+      >
+        {mensaje}
+      </ReactBSAlert>
+    );
+    setTimeout(hideAlert, 2000);
+  };
+
+  const hideAlert = () => {
+    setAlert(null);
+  };
 
   return (
     <>
@@ -234,7 +279,7 @@ function CustomerApplicationsUsers() {
           <Col md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">Customer Applications Users</CardTitle>
+                <CardTitle tag="h4">Usuarios de la Aplicación</CardTitle>
                 <Form id="RegisterValidation">
                   <FormGroup className={`has-label ${registerUserState}`}>
                       <Label for="exampleSelect">Usuario * </Label>
@@ -254,11 +299,6 @@ function CustomerApplicationsUsers() {
                           <label className="error">Selecciona un usuario.</label>
                       ) : null}
                   </FormGroup>
-                  <FormGroup className={`has-label ${errorState}`}>
-                      {errorState === "has-danger" ? (
-                              <label className="error">{errorMessage}</label>
-                      ) : null}
-                  </FormGroup>
                   {error}
                 </Form>
                 <Button color="primary" onClick={registerClick}>
@@ -270,6 +310,7 @@ function CustomerApplicationsUsers() {
               </CardHeader>
               <CardBody>
                 <CustomerApplication />
+                {alert}
               </CardBody>
             </Card>
           </Col>
