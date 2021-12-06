@@ -42,6 +42,10 @@ import VoucherTypes from "views/components/Catalogs/SAT/VoucherTypes";
 import RelationshipTypes from "views/components/Catalogs/SAT/RelationshipTypes";
 import Assumptions from "views/components/Catalogs/SAT/Assumptions";
 import EntityTypes from "views/components/Catalogs/SAT/EntityTypes";
+import Localities from "views/components/Catalogs/SAT/Localities";
+import Municipalities from "views/components/Catalogs/SAT/Municipalities";
+import States from "views/components/Catalogs/SAT/States";
+import ZipCodes from "views/components/Catalogs/SAT/ZipCodes";
 
 function CatalogosSAT() {
   //Para guardar los datos de los catálogos
@@ -189,11 +193,24 @@ function CatalogosSAT() {
     if (catalog === "EntityTypes") {
       return <EntityTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
     }
+    if (catalog === "Locations") {
+      return <Localities dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+    }
+    if (catalog === "Municipalities") {
+      return <Municipalities dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+    }
+    if (catalog === "States") {
+      return <States dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+    }
+    if (catalog === "ZipCodes") {
+      return <ZipCodes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+    }
     return <p></p>
   }
 
   //Nos servirá para pasarle los datos a la tabla ya descargados
   function updateData(datos){
+    console.log(datos)
     const params = {
       pvOptionCRUD: "R",
       pSpCatalog : datos.CRUD_References,
@@ -213,6 +230,7 @@ function CatalogosSAT() {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
+      console.log(data)
       setDataCatalog(data)
     })
     .catch(function(err) {

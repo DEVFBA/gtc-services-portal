@@ -17,10 +17,8 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useState, useEffect} from "react";
-
-import { useContext } from "react";
-import { UserContext } from "../../UserContext";
-
+import ReactBSAlert from "react-bootstrap-sweetalert";
+import Cargando from "assets/img/loading_icon.gif";
 
 // reactstrap components
 import {
@@ -49,8 +47,43 @@ function Login() {
 
   const [errorState, setErrorState] = React.useState("");
   const [error, setError] = React.useState();
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   const ambiente = "/DEV"
+
+  //Para el alert de cargando login
+  const [alert2, setAlert2] = React.useState(null);
+
+  const autoCloseAlert2 = (mensaje) => {
+    console.log("entre al alert")
+    setAlert2(
+      <ReactBSAlert
+        style={{ display: "block", marginTop: "-100px" }}
+        title=""
+        onConfirm={() => hideAlert()}
+        showConfirm={false}
+      >
+        <Row>
+          <Col sm="4">
+          </Col>
+          <Col sm="4">
+            <img 
+              src = {Cargando} 
+              style ={{ width: "50px", height: "50px" }}
+            />
+          </Col>
+          <Col sm="4">
+          </Col>
+        </Row>
+        &nbsp;
+        {mensaje}
+      </ReactBSAlert>
+    );
+  };
+
+  const hideAlert2 = () => {
+    setAlert2(null);
+  };
 
   useEffect(() => {
     //Si el usuario ya ha iniciado sesión que se le redirija al dashboard
@@ -78,7 +111,7 @@ function Login() {
 
   function onSubmitForm(event) {
     event.preventDefault();
-
+    autoCloseAlert2("Iniciando Sesión...")
     const catRegister = {
       pvIdUser: email,
       pvPassword: password
@@ -101,7 +134,9 @@ function Login() {
         else{
             if(data[0].Code_Type === "Error")
             {
+                hideAlert2()
                 setErrorState("has-danger")
+                setErrorMessage(data[0].Code_Message_User)
             }
             else{
                 setErrorState("has-success");
@@ -136,6 +171,7 @@ function Login() {
     })
     .then(function(data) {
         console.log(data)
+        hideAlert2()
         if(data.length > 1)
         {
           localStorage.setItem("User", data[0].User);
@@ -178,6 +214,8 @@ function Login() {
         alert("No se pudo consultar la informacion del usuario" + err);
     });
   }
+
+  
 
   return (
     <div className="login-page">
@@ -228,7 +266,7 @@ function Login() {
                   {error}
                   <FormGroup className={`has-label ${errorState}`}>
                     {errorState === "has-danger" ? (
-                            <label className="error">The user does not have access, please validate</label>
+                            <label className="error">{errorMessage}</label>
                     ) : null}
                   </FormGroup>
                 </CardFooter>
@@ -236,6 +274,7 @@ function Login() {
             </Form>
           </Col>
         </Row>
+        {alert2}
       </Container>
       <div
         className="full-page-background"

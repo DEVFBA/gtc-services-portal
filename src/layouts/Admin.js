@@ -479,6 +479,17 @@ function Admin(props) {
                 layout: ambiente + "/admin",
               },
             )
+
+            routesAux.push(
+              {
+                invisible: true,
+                path: "/application-settings/:idCus/:idApp/",
+                name: "Applications Settings",
+                icon: "nc-icon nc-bank",
+                component: SupportApplicationsSettings,
+                layout:  ambiente + "/admin",
+              }
+            )
           }
           else if(params.pvIdRole == "GTCSUPPO")
           {

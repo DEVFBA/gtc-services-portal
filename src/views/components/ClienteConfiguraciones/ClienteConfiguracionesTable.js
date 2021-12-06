@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
@@ -12,6 +13,7 @@ import {
 } from "reactstrap";
 
 function ClienteConfiguracionesTable({dataTable, dataApplications, dataCustomers, updateAddData, ip, autoCloseAlert}){
+    const history = useHistory();
     const [dataState, setDataState] = useState(
         dataTable.map((prop, key) => {
           var licDate;
@@ -54,8 +56,10 @@ function ClienteConfiguracionesTable({dataTable, dataApplications, dataCustomers
                 {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
                 <Button
                   onClick={() => {
-                    getRegistro(key);
-                    toggleModalUpdateRecord()
+                    /*getRegistro(key);
+                    toggleModalUpdateRecord()*/
+                    let obj = dataState.find((o) => o.id === key);
+                    history.push(ambiente + `/admin/application-settings/${obj.idCus}/${obj.idApp}/`);
                   }}
                   color="warning"
                   size="sm"
@@ -68,6 +72,8 @@ function ClienteConfiguracionesTable({dataTable, dataApplications, dataCustomers
           };
         })
       );
+
+    const ambiente = "/DEV"
 
     const [modalAddRecord, setModalAddRecord] = useState(false);
     const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
