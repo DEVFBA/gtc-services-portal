@@ -54,7 +54,7 @@ function Admin(props) {
   const logged = localStorage.getItem("Logged");
   const role = localStorage.getItem("Id_Role");
   const customer = localStorage.getItem("Id_Customer");
-  const user = localStorage.getItem("User");
+  const user = localStorage.getItem("User"); 
   const token = localStorage.getItem("Token");
 
   const ambiente = process.env.REACT_APP_ENVIRONMENT
