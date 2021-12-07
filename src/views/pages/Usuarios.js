@@ -70,7 +70,7 @@ function Usuarios() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/security-users/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}security-users/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -98,7 +98,7 @@ function Usuarios() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/security-roles/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}security-roles/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -136,7 +136,7 @@ function Usuarios() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/customers/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}customers/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -174,7 +174,7 @@ function Usuarios() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/general-parameters/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}general-parameters/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -205,7 +205,7 @@ function Usuarios() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/general-parameters/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}general-parameters/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -267,7 +267,7 @@ function Usuarios() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/security-users/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}security-users/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 

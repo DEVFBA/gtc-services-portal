@@ -83,7 +83,7 @@ function ModalAddApplicationSuites({modalAddRecord, setModalAddRecord, updateAdd
             pvIP: ip
         };
     
-        fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/create-portal`, {
+        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/create-portal`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {

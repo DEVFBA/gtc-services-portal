@@ -62,7 +62,7 @@ function RegularForms() {
 
     console.log(cadenaC)
 
-    fetch(`http://129.159.99.152/develop-api/api/encrypt/create`, {
+    fetch(`${process.env.REACT_APP_API_URI}encrypt/create`, {
         method: "POST",
         body: JSON.stringify(cadenaC),
         headers: {

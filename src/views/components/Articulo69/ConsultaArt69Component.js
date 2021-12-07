@@ -56,7 +56,7 @@ function ConsultaArt69Component({dataOptions}) {
       pvIdAssumption: datos.value
     }; 
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/article-69/69/`)
+    var url = new URL(`${process.env.REACT_APP_API_URI}article-69/69/`)
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 

@@ -61,7 +61,7 @@ function SupportApplicationsSettings() {
       piIdApplication: idApp
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/applications-settings/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}applications-settings/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -109,7 +109,7 @@ function SupportApplicationsSettings() {
       piIdApplication: idApp
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/applications-settings/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}applications-settings/`);
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
     fetch(url, {

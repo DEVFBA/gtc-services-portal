@@ -78,7 +78,7 @@ function ConsultaArt69() {
 
     if(datos.value === "Articulo69")
     {
-      var url = new URL(`http://129.159.99.152/develop-api/api/assumptions/`)
+      var url = new URL(`${process.env.REACT_APP_API_URI}assumptions/`)
 
       fetch(url, {
           method: "GET",
@@ -108,7 +108,7 @@ function ConsultaArt69() {
       });
     }
     else{
-      var url = new URL(`http://129.159.99.152/develop-api/api/article-69/69-B`);
+      var url = new URL(`${process.env.REACT_APP_API_URI}article-69/69-B`);
 
       fetch(url, {
           method: "GET",

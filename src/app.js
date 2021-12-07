@@ -7,14 +7,18 @@ import AuthLayout from "layouts/Auth.js";
 import AdminLayout from "layouts/Admin.js";
 
 function App() {
-    const [user, setUser] = useState([]);
+    const ambiente = process.env.REACT_APP_ENVIRONMENT
+    console.log(ambiente)
+    const auth = ambiente + "/auth"
+    const admin = ambiente + "/admin"
+    const login = ambiente + "/auth/login"
     return(
         <>
             <BrowserRouter>
                 <Switch>
-                <Route path="/DEV/auth" render={(props) => <AuthLayout {...props} />} />
-                <Route path="/DEV/admin" render={(props) => <AdminLayout {...props} />} />
-                <Redirect to="/DEV/auth/login" />
+                <Route path = {auth} render={(props) => <AuthLayout {...props} />} />
+                <Route path = {admin} render={(props) => <AdminLayout {...props} />} />
+                <Redirect to = {login} />
                 </Switch>
             </BrowserRouter>
         </>

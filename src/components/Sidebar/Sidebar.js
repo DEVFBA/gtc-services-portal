@@ -53,7 +53,7 @@ function Sidebar(props) {
   const sidebar = React.useRef();
   const Logged = localStorage.getItem("Logged");
   const [routeProfile, setRouteProfile] = React.useState("");
-  const ambiente = "/DEV"
+  const ambiente = process.env.REACT_APP_ENVIRONMENT
   
   const history = useHistory();
   // this creates the intial state of this component based on the collapse routes
@@ -82,7 +82,7 @@ function Sidebar(props) {
         pvOptionCRUD: "R"
       };
   
-      var url = new URL(`http://129.159.99.152/develop-api/api/general-parameters/`);
+      var url = new URL(`${process.env.REACT_APP_API_URI}general-parameters/`);
   
       Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
   
@@ -113,7 +113,7 @@ function Sidebar(props) {
     {
       var user = localStorage.getItem("User");
       const token = localStorage.getItem("Token");
-      var url = new URL(`http://129.159.99.152/develop-api/api/security-users/${user}`);
+      var url = new URL(`${process.env.REACT_APP_API_URI}security-users/${user}`);
       fetch(url, {
         method: "GET",
         headers: {

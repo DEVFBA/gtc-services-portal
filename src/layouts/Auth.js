@@ -35,7 +35,7 @@ var ps;
 function Pages() {
   //GUARDAR EL ESTADO PARA LAS RUTAS
   const [dbRoutes, setDbRoutes] = useState([]);
-  const ambiente = "/DEV"
+  const ambiente = process.env.REACT_APP_ENVIRONMENT
   useEffect(() => {
     var routesAux = [];
     //Agregando las rutas del auth

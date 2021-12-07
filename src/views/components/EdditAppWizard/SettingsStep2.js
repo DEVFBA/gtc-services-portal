@@ -57,7 +57,7 @@ const datos = [
 
   useEffect(() => {
     console.log(props.prop1)
-    var url = new URL(`http://129.159.99.152/develop-api/api/applications-settings/${props.prop1}/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}applications-settings/${props.prop1}/`);
 
     fetch(url, {
         method: "GET",

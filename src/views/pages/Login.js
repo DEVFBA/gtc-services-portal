@@ -49,7 +49,7 @@ function Login() {
   const [error, setError] = React.useState();
   const [errorMessage, setErrorMessage] = React.useState("");
 
-  const ambiente = "/DEV"
+  const ambiente = process.env.REACT_APP_ENVIRONMENT
 
   //Para el alert de cargando login
   const [alert2, setAlert2] = React.useState(null);
@@ -117,7 +117,7 @@ function Login() {
       pvPassword: password
     };
 
-    fetch(`http://129.159.99.152/develop-api/api/security-users/login/`, {
+    fetch(`${process.env.REACT_APP_API_URI}security-users/login/`, {
         method: "POST",
         body: JSON.stringify(catRegister),
         headers: {
@@ -158,7 +158,7 @@ function Login() {
   function getUser(email, token){
     console.log(email)
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/security-users/${email}`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}security-users/${email}`);
     fetch(url, {
       method: "GET",
       headers: {

@@ -14,7 +14,7 @@ import {
 import { prototype } from "react-datetime";
 
 function CustomerApplicationsTable({dataTable, dataApplications, dataCustomers, updateAddData, ip, autoCloseAlert}){
-    const ambiente = "/DEV"
+    const ambiente = process.env.REACT_APP_ENVIRONMENT
     const history = useHistory();
     const [dataState, setDataState] = useState(
         dataTable.map((prop, key) => {

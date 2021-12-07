@@ -58,7 +58,7 @@ function CustomerApplications() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/customer-applications/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}customer-applications/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -86,7 +86,7 @@ function CustomerApplications() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/cat-applications/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}cat-applications/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -138,7 +138,7 @@ function CustomerApplications() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/customers/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}customers/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -197,7 +197,7 @@ function CustomerApplications() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/customer-applications/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}customer-applications/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 

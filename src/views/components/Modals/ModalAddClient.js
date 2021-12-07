@@ -155,7 +155,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
             pvIP : ip
         };
     
-        fetch(`http://129.159.99.152/develop-api/api/customers/create-customer/`, {
+        fetch(`${process.env.REACT_APP_API_URI}customers/create-customer/`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {

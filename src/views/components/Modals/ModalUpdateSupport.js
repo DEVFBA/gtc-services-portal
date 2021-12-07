@@ -99,7 +99,7 @@ function ModalUpdateSupport({abierto, toggleModalUpdateRecord, record, updateAdd
           pvIP: ip
       };
       
-      fetch(`http://129.159.99.152/develop-api/api/applications-settings/update-settings/`, {
+      fetch(`${process.env.REACT_APP_API_URI}applications-settings/update-settings/`, {
           method: "PUT",
           body: JSON.stringify(catRegister),
           headers: {

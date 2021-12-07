@@ -73,7 +73,7 @@ function ClienteConfiguracionesTable({dataTable, dataApplications, dataCustomers
         })
       );
 
-    const ambiente = "/DEV"
+    const ambiente = process.env.REACT_APP_ENVIRONMENT
 
     const [modalAddRecord, setModalAddRecord] = useState(false);
     const [modalUpdateRecord, setModalUpdateRecord] = useState(false);

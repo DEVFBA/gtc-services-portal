@@ -173,7 +173,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
             pvChangeImage : changeImage
         };
     
-        fetch(`http://129.159.99.152/develop-api/api/customers/update-customer/`, {
+        fetch(`${process.env.REACT_APP_API_URI}customers/update-customer/`, {
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {

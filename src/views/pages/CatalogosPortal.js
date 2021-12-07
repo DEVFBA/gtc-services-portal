@@ -59,7 +59,7 @@ function CatalogosPortal() {
       piIdCatalogType : 1,
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/cat-catalogs/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}cat-catalogs/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
     //console.log(url)
@@ -115,7 +115,7 @@ function CatalogosPortal() {
       pSpCatalog : datos.CRUD_References,
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/cat-catalogs/catalog`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}cat-catalogs/catalog`);
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
     fetch(url, {
@@ -145,7 +145,7 @@ function CatalogosPortal() {
       pSpCatalog : datos.CRUD_References,
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/cat-catalogs/catalog`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}cat-catalogs/catalog`);
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
     fetch(url, {

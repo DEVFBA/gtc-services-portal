@@ -138,7 +138,7 @@ function ModalAddApplication({abierto, toggleModalAddRecord, dataSuites, updateA
             pvIP: ip
         };
     
-        fetch(`http://129.159.99.152/develop-api/api/cat-applications/create-application/`, {
+        fetch(`${process.env.REACT_APP_API_URI}cat-applications/create-application/`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {

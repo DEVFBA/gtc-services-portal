@@ -15,7 +15,7 @@ import { prototype } from "react-datetime";
 import { data } from "jquery";
 
 function CustomersTable({dataTable, dataCountries, updateAddData, pathLogo, ip, profilePath, autoCloseAlert}){
-    const ambiente = "/DEV"
+    const ambiente = process.env.REACT_APP_ENVIRONMENT
     const history = useHistory();
     const [dataState, setDataState] = useState(
         dataTable.map((prop, key) => {

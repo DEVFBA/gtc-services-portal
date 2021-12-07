@@ -112,7 +112,7 @@ function ModalUpdateApplicationSuites({abierto, toggleModalUpdateRecord, record,
             pvIP: ip
         };
     
-        fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/update-portal`, {
+        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/update-portal`, {
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {

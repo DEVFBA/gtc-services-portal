@@ -44,7 +44,7 @@ function SupportClients() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/customers/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}customers/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
     //console.log(url)
@@ -98,7 +98,7 @@ function SupportClients() {
       piIdCustomer: datos
     };*/
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/customer-applications/${datos}/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}customer-applications/${datos}/`);
 
     //Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
     //console.log(url)

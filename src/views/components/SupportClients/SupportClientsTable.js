@@ -14,7 +14,7 @@ import {
 
 function SupportClientsTable({dataTable}){
 
-    const ambiente = "/DEV"
+    const ambiente = process.env.REACT_APP_ENVIRONMENT
     const history = useHistory();
 
     const [dataState, setDataState] = useState(

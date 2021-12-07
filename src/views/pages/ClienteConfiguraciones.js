@@ -45,7 +45,7 @@ function ClienteConfiguraciones() {
   }, []);
 
   useEffect(() => {
-    var url = new URL(`http://129.159.99.152/develop-api/api/customer-applications/${customer}/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}customer-applications/${customer}/`);
 
     fetch(url, {
         method: "GET",
@@ -74,7 +74,7 @@ function ClienteConfiguraciones() {
 
   //Para actualizar la tabla al insertar registro
   function updateAddData(){
-    var url = new URL(`http://129.159.99.152/develop-api/api/customer-applications/${customer}/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}customer-applications/${customer}/`);
 
     fetch(url, {
         method: "GET",

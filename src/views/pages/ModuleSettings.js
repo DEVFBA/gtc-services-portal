@@ -65,7 +65,7 @@ function ModuleSettings() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/cat-applications/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}cat-applications/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -94,7 +94,7 @@ function ModuleSettings() {
       pSpCatalog : "spCat_Suites_CRUD_Records",
     };
   
-    var url = new URL(`http://129.159.99.152/develop-api/api/cat-catalogs/catalog`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}cat-catalogs/catalog`);
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
     fetch(url, {
@@ -178,7 +178,7 @@ function ModuleSettings() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/cat-applications/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}cat-applications/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 

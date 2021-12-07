@@ -139,7 +139,7 @@ function ModalUpdateCustomerApplication({modalUpdateRecord, setModalUpdateRecord
             pvIP: ip
         };
     
-        fetch(`http://129.159.99.152/develop-api/api/customer-applications/update-customer-application`, {
+        fetch(`${process.env.REACT_APP_API_URI}customer-applications/update-customer-application`, {
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {

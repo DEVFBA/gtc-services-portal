@@ -47,10 +47,10 @@ function ChooseCustomer() {
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");
 
-    const ambiente = "/DEV"
+    const ambiente = process.env.REACT_APP_ENVIRONMENT
 
     useEffect(() => {
-        var url = new URL(`http://129.159.99.152/develop-api/api/security-users/${user}`);
+        var url = new URL(`${process.env.REACT_APP_API_URI}security-users/${user}`);
         fetch(url, {
         method: "GET",
         headers: {

@@ -79,7 +79,7 @@ function Articulo69() {
   useEffect(() => {
     //Aqui vamos a descargar los assumptions para el select
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/assumptions/`)
+    var url = new URL(`${process.env.REACT_APP_API_URI}assumptions/`)
 
     fetch(url, {
         method: "GET",
@@ -114,7 +114,7 @@ function Articulo69() {
       pvOptionCRUD: "R"
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/general-parameters/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}general-parameters/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -199,7 +199,7 @@ function Articulo69() {
       pvIP: ip
     };
 
-    fetch(`http://129.159.99.152/develop-api/api/article-69/create-article-69/`, {
+    fetch(`${process.env.REACT_APP_API_URI}article-69/create-article-69/`, {
         method: "POST",
         body: JSON.stringify(catRegister),
         headers: {
@@ -247,7 +247,7 @@ function Articulo69() {
       pvIP: ip
     };
 
-    fetch(`http://129.159.99.152/develop-api/api/article-69/create-article-69-B/`, {
+    fetch(`${process.env.REACT_APP_API_URI}article-69/create-article-69-B/`, {
         method: "POST",
         body: JSON.stringify(catRegister),
         headers: {

@@ -113,7 +113,7 @@ function ModalUpdateIncoterm({abierto, toggleModalUpdateRecord, record, updateAd
             pvIP: ip
         };
     
-        fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/update-sat`, {
+        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/update-sat`, {
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {

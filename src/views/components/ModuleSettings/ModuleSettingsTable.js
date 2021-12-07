@@ -18,7 +18,7 @@ import { prototype } from "react-datetime";
 
 function ModuleSettingsTable({dataTable, dataSuites, updateAddData, ip, autoCloseAlert}){
 
-    const ambiente = "/DEV"
+    const ambiente = process.env.REACT_APP_ENVIRONMENT
     const history = useHistory();
 
     //Guardar el estado de la tabla

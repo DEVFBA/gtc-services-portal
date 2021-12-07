@@ -41,7 +41,7 @@ function CFDIPDFRequestDetail() {
       pvRequestCustomer: idReq
     };
 
-    var url = new URL(`http://129.159.99.152/develop-api/api/cfdi-pdf-requests/customer-cfdi-pdf/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}cfdi-pdf-requests/customer-cfdi-pdf/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 

@@ -57,7 +57,9 @@ function Admin(props) {
   const user = localStorage.getItem("User");
   const token = localStorage.getItem("Token");
 
-  const ambiente = "/DEV"
+  const ambiente = process.env.REACT_APP_ENVIRONMENT
+  const ambiente2 = process.env.REACT_APP_ENVIRONMENT
+  console.log(ambiente2)
 
   //Para el cierre de sesión cuando no hay actividad
   const [timeout, setTimeout] = useState(1800000); //despues de media hora se cierra la sesión
@@ -94,15 +96,15 @@ function Admin(props) {
   }, []);
   
   useEffect(() => {
-
     //estos parametros se van a tomar del local storage o del usecontext
     const params = {
       pvOptionCRUD: "R",
       piIdCustomer : customer,
 	    pvIdRole : role
     };
-
-    var url = new URL(`http://129.159.99.152/develop-api/api/routes/`);
+    
+    var url = new URL(`${process.env.REACT_APP_API_URI}routes/`);
+ 
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
     //console.log(url)
@@ -528,7 +530,7 @@ function Admin(props) {
 
     if(logged === "true")
     {
-      var url = new URL(`http://129.159.99.152/develop-api/api/security-users/${user}`);
+      var url = new URL(`${process.env.REACT_APP_API_URI}security-users/${user}`);
       fetch(url, {
         method: "GET",
         headers: {

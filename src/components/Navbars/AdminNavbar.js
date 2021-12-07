@@ -44,7 +44,7 @@ function AdminNavbar(props) {
   const [color, setColor] = React.useState("navbar-transparent");
   const location = useLocation();
   const history = useHistory();
-  const ambiente = "/DEV"
+  const ambiente = process.env.REACT_APP_ENVIRONMENT
 
   React.useEffect(() => {
     window.addEventListener("resize", updateColor);

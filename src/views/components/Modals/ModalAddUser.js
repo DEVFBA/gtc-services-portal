@@ -196,7 +196,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
             pvIP: ip
         };
     
-        fetch(`http://129.159.99.152/develop-api/api/security-users/create-user/`, {
+        fetch(`${process.env.REACT_APP_API_URI}security-users/create-user/`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {

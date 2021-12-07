@@ -56,7 +56,7 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
 
   useEffect(() => {
   
-    var url = new URL(`http://129.159.99.152/develop-api/api/cat-applications/${props.prop1}/`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}cat-applications/${props.prop1}/`);
 
     fetch(url, {
         method: "GET",
@@ -94,7 +94,7 @@ const GeneralsStep1 = React.forwardRef((props, ref) => {
       pSpCatalog : "spCat_Suites_CRUD_Records",
     };
   
-    var url = new URL(`http://129.159.99.152/develop-api/api/cat-catalogs/catalog`);
+    var url = new URL(`${process.env.REACT_APP_API_URI}cat-catalogs/catalog`);
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
     fetch(url, {

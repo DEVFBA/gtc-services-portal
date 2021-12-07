@@ -106,7 +106,7 @@ function ModalAddAssumptions({modalAddRecord, setModalAddRecord, updateAddData, 
             pvIP: ip
         };
     
-        fetch(`http://129.159.99.152/develop-api/api/cat-catalogs/create-sat-assumptions`, {
+        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/create-sat-assumptions`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {
