@@ -25,15 +25,7 @@ import {
 
 // core components
 import ModuleSettingsTable from "../components/ModuleSettings/ModuleSettingsTable.js";
-
-const datos = [
-  ["APP1", "System Architect", "Edinburgh", "61"],
-  ["APP2", "Accountant", "Tokyo", "63"],
-  ["APP3", "Junior Technical Author", "San Francisco", "66"],
-  ["APP4", "Senior Javascript Developer", "Edinburgh", "22"],
-  ["APP5", "Accountant", "Tokyo", "33"],
-  ["APP6", "Integration Specialist", "New York", "61"],
-];
+import ModalAddApplication from "views/components/Modals/ModalAddApplication.js";
 
 function ModuleSettings() {
 
@@ -48,6 +40,8 @@ function ModuleSettings() {
   const [ip, setIP] = React.useState("");
 
   const [alert, setAlert] = React.useState(null);
+
+  const [dataFind, setDataFind] = useState(true)
 
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
@@ -80,6 +74,7 @@ function ModuleSettings() {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
+      setDataFind(false)
       setDataApplications(data)
     })
     .catch(function(err) {
@@ -173,6 +168,7 @@ function ModuleSettings() {
   }
 
   function updateAddData(){
+    setDataFind(true)
     //Aqui vamos a descargar la lista de usuarios de la base de datos por primera vez
     const params = {
       pvOptionCRUD: "R"
@@ -193,7 +189,7 @@ function ModuleSettings() {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
-      console.log(data)
+      setDataFind(false)
       setDataApplications(data)
     })
     .catch(function(err) {
@@ -201,7 +197,18 @@ function ModuleSettings() {
     });
   }
 
-  return dataApplications.length === 0 ? (
+  const [modalAddRecord, setModalAddRecord] = useState(false);
+
+  function toggleModalAddRecord(){
+    if(modalAddRecord == false){
+      setModalAddRecord(true);
+    }
+    else{
+      setModalAddRecord(false);
+    }
+  }
+
+  return dataFind === true ? (
     <>
       <div className="content">
         <Row>
@@ -209,6 +216,12 @@ function ModuleSettings() {
             <Card>
               <CardHeader>
                 <CardTitle tag="h4">Módulos</CardTitle>
+                <Button color="primary" onClick={toggleModalAddRecord}>
+                  <span className="btn-label">
+                  <i className="nc-icon nc-simple-add" />
+                  </span>
+                  Añadir Módulo
+                </Button>
               </CardHeader>
               <CardBody>
                 <Skeleton height={25} />
@@ -218,6 +231,8 @@ function ModuleSettings() {
             </Card>
           </Col>
         </Row>
+        {/*MODAL PARA CREAR REGISTRO*/}
+        <ModalAddApplication abierto = {modalAddRecord} toggleModalAddRecord = {toggleModalAddRecord} dataSuites = {options} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>
       </div>
     </>
   ) : (
@@ -228,14 +243,28 @@ function ModuleSettings() {
             <Card>
               <CardHeader>
                 <CardTitle tag="h4">Módulos</CardTitle>
+                <Button color="primary" onClick={toggleModalAddRecord}>
+                  <span className="btn-label">
+                  <i className="nc-icon nc-simple-add" />
+                  </span>
+                  Añadir Módulo
+                </Button>
               </CardHeader>
               <CardBody>
-                <Applications />
                 {alert}
+                {dataApplications.length === 0 ? (
+                  <div className ="no-data">
+                    <h3>No hay datos</h3>
+                  </div>
+                ): 
+                  <Applications />
+                }
               </CardBody>
             </Card>
           </Col>
         </Row>
+        {/*MODAL PARA CREAR REGISTRO*/}
+        <ModalAddApplication abierto = {modalAddRecord} toggleModalAddRecord = {toggleModalAddRecord} dataSuites = {options} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>
       </div>
     </>
   );

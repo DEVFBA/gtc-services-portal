@@ -3,7 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
-import ModalAddCustomer from "views/components/Modals/ModalAddClient.js";
+
 import ModalUpdateClient from "views/components/Modals/ModalUpdateClient.js";
 
 import {
@@ -65,7 +65,7 @@ function CustomersTable({dataTable, dataCountries, updateAddData, pathLogo, ip, 
         })
       );
 
-    const [modalAddRecord, setModalAddRecord] = useState(false);
+   
     const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
 
     //Para saber que registro se va a editar
@@ -86,15 +86,6 @@ function CustomersTable({dataTable, dataCountries, updateAddData, pathLogo, ip, 
         setRecordUsers(registro) 
     }
 
-    function toggleModalAddRecord(){
-        if(modalAddRecord == false){
-        setModalAddRecord(true);
-        }
-        else{
-        setModalAddRecord(false);
-        }
-    }
-
     function toggleModalUpdateRecord(){
         if(modalUpdateRecord == false){
         setModalUpdateRecord(true);
@@ -109,13 +100,6 @@ function CustomersTable({dataTable, dataCountries, updateAddData, pathLogo, ip, 
           <div className="content">
             <Row>
               <Col md="12">
-                    <Button color="primary" onClick={toggleModalAddRecord}>
-                        <span className="btn-label">
-                        <i className="nc-icon nc-simple-add" />
-                        </span>
-                        Agregar Cliente
-                    </Button>
-                 
                     <ReactTable
                         data={dataState}
                         columns={[
@@ -167,9 +151,6 @@ function CustomersTable({dataTable, dataCountries, updateAddData, pathLogo, ip, 
             </Row>
         </div>
     
-        {/*MODAL PARA AÑADIR REGISTROS*/}
-        <ModalAddCustomer modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} record = {record} dataCountries = {dataCountries} updateAddData = {updateAddData} pathLogo = {pathLogo} ip = {ip} autoCloseAlert = {autoCloseAlert}/>       
-
         {/*MODAL PARA MODIFICAR REGISTRO*/}
         <ModalUpdateClient modalUpdateRecord = {modalUpdateRecord} setModalUpdateRecord = {setModalUpdateRecord} record = {record} dataCountries = {dataCountries} updateAddData = {updateAddData} pathLogo = {pathLogo} ip = {ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert}/>
     

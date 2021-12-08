@@ -59,7 +59,6 @@ function Admin(props) {
 
   const ambiente = process.env.REACT_APP_ENVIRONMENT
   const ambiente2 = process.env.REACT_APP_ENVIRONMENT
-  console.log(ambiente2)
 
   //Para el cierre de sesión cuando no hay actividad
   const [timeout, setTimeout] = useState(1800000); //despues de media hora se cierra la sesión
@@ -79,6 +78,7 @@ function Admin(props) {
   }
   
   function _onIdle(e) {
+    console.log("ENTRE AL ON IDLE")
     localStorage.setItem("Logged", false);
     localStorage.removeItem("User");
     localStorage.removeItem("Id_Role");
@@ -91,6 +91,7 @@ function Admin(props) {
     //Si el usuario no ha iniciado sesión que se le redirija al login
     if(logged !== "true")
     {
+      console.log("EL LOGGED ES DIFERENTE DE TRUE")
       history.push(ambiente + "/auth/login");
     }
   }, []);
@@ -125,6 +126,7 @@ function Admin(props) {
 
         if(data.mensaje === 'Token inválida')
         {
+          console.log("ENTRE Al TOKEN INVALIDA")
           localStorage.setItem("Logged", false);
           localStorage.removeItem("User");
           localStorage.removeItem("Id_Role");
@@ -190,7 +192,7 @@ function Admin(props) {
                       {
                         path: data[i].Url,
                         name: data[i].SubModule_Desc,
-                        component: Usuarios,
+                        component: "Usuarios",
                         layout: ambiente + data[i].Layout_SubModule
                       }
                     )
@@ -295,7 +297,7 @@ function Admin(props) {
                           {
                             path: data[j].Url,
                             name: data[j].SubModule_Desc,
-                            component: Usuarios,
+                            component: "Usuarios",
                             layout: ambiente + data[j].Layout_SubModule
                           }
                         )
@@ -526,39 +528,44 @@ function Admin(props) {
     });
   }, []);
 
-  useEffect(() => {
-
-    if(logged === "true")
-    {
-      var url = new URL(`${process.env.REACT_APP_API_URI}security-users/${user}`);
-      fetch(url, {
-        method: "GET",
-        headers: {
-            "access-token": token,
-            "Content-Type": "application/json",
-        }
-      })
-      .then(function(response) {
-          return response.ok ? response.json() : Promise.reject();
-      })
-      .then(function(data) {
-          if(data[0].Temporal_Password===true)
-          {
-            localStorage.setItem("Logged", false);
-            localStorage.removeItem("User");
-            localStorage.removeItem("Id_Role");
-            localStorage.removeItem("Id_Customer");
-            localStorage.removeItem("Token");
-            localStorage.removeItem("Name");
-            localStorage.removeItem("P_Picture");
-            history.push(ambiente + "/auth/login");
+  /*useEffect(() => {
+    const temporal = setTimeout(() => {
+      if(logged === "true")
+      {
+        var url = new URL(`${process.env.REACT_APP_API_URI}security-users/${user}`);
+        fetch(url, {
+          method: "GET",
+          headers: {
+              "access-token": token,
+              "Content-Type": "application/json",
           }
-      })
-      .catch(function(err) {
-          console.log(err)
-      });
-    }
-  },[]);
+        })
+        .then(function(response) {
+            return response.ok ? response.json() : Promise.reject();
+        })
+        .then(function(data) {
+            if(data[0].Temporal_Password===true)
+            {
+              console.log("ENTRE AL TEMPORAL PASSWORD")
+              localStorage.setItem("Logged", false);
+              localStorage.removeItem("User");
+              localStorage.removeItem("Id_Role");
+              localStorage.removeItem("Id_Customer");
+              localStorage.removeItem("Token");
+              localStorage.removeItem("Name");
+              localStorage.removeItem("P_Picture");
+              history.push(ambiente + "/auth/login");
+            }
+            console.log("LA DATA AL VALIDAR EL TEMPORAL PASSWORD")
+            console.log(data)
+        })
+        .catch(function(err) {
+            console.log(err)
+        });
+      }
+    }, 2000);
+    return () => clearTimeout(temporal);
+  },[]);*/
 
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
@@ -587,6 +594,17 @@ function Admin(props) {
         return getRoutes(prop.views)
       }
       if (prop.layout === ambiente + "/admin") {
+        if(prop.component === "Usuarios")
+        {
+          return (
+            <Route
+              path={prop.layout + prop.path}
+              key={key}
+            >
+              <Usuarios changeImageP = {changeImageP} setChangeImageP = {setChangeImageP}/>
+            </Route>
+          )
+        }
         return (
           <Route
             path={prop.layout + prop.path}
@@ -617,6 +635,9 @@ function Admin(props) {
     document.body.classList.toggle("sidebar-mini");
   };
 
+  //Para resetear la imagen del usuario si la cambia
+  const [changeImageP, setChangeImageP] = useState(false)
+
   return (
     <div className="wrapper">
         <IdleTimer
@@ -634,6 +655,7 @@ function Admin(props) {
           routes={dbRoutes}
           bgColor={backgroundColor}
           activeColor={activeColor}
+          changeImageP = {changeImageP}
         />
         {/*side*/}
         <div className="main-panel" ref={mainPanel}>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 
 import ReactTable from "components/ReactTable/ReactTable.js";
-import ModalAddApplication from "views/components/Modals/ModalAddApplication.js";
 import ModalUpdateApplication from "views/components/Modals/ModalUpdateApplication.js";
 
 import {
@@ -17,9 +16,6 @@ import {
 import { prototype } from "react-datetime";
 
 function ModuleSettingsTable({dataTable, dataSuites, updateAddData, ip, autoCloseAlert}){
-
-    const ambiente = process.env.REACT_APP_ENVIRONMENT
-    const history = useHistory();
 
     //Guardar el estado de la tabla
     const [dataState, setDataState] = useState(
@@ -64,7 +60,7 @@ function ModuleSettingsTable({dataTable, dataSuites, updateAddData, ip, autoClos
     );
 
     //Banderas para abrir modals
-    const [modalAddRecord, setModalAddRecord] = useState(false);
+    
     const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
 
     //Para obtener el registro que se va a editar
@@ -76,15 +72,7 @@ function ModuleSettingsTable({dataTable, dataSuites, updateAddData, ip, autoClos
         setRecord(registro) 
     }
 
-    function toggleModalAddRecord(){
-        if(modalAddRecord == false){
-        setModalAddRecord(true);
-        }
-        else{
-        setModalAddRecord(false);
-        }
-    }
-
+    
     function toggleModalUpdateRecord(){
         if(modalUpdateRecord == false){
         setModalUpdateRecord(true);
@@ -97,15 +85,9 @@ function ModuleSettingsTable({dataTable, dataSuites, updateAddData, ip, autoClos
     return (
         <>
           {/*console.log(props.example)*/}
-          <div className="content">
+          
             <Row>
               <Col md="12">
-                <Button color="primary" onClick={toggleModalAddRecord}>
-                  <span className="btn-label">
-                  <i className="nc-icon nc-simple-add" />
-                  </span>
-                  Añadir Módulo
-                </Button>
                 <ReactTable
                   data={dataState}
                   columns={[
@@ -139,11 +121,8 @@ function ModuleSettingsTable({dataTable, dataSuites, updateAddData, ip, autoClos
                 />
               </Col>
             </Row>
-          </div>
+          
     
-          {/*MODAL PARA CREAR REGISTRO*/}
-          <ModalAddApplication abierto = {modalAddRecord} toggleModalAddRecord = {toggleModalAddRecord} dataSuites = {dataSuites} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>
-
           {/*MODAL PARA MODIFICAR REGISTRO*/}
           <ModalUpdateApplication abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} dataSuites = {dataSuites} updateAddData = {updateAddData} record = {record} ip = {ip} autoCloseAlert = {autoCloseAlert}/>
         </> 

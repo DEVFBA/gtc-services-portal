@@ -220,17 +220,20 @@ function Articulo69() {
           {
               /*setErrorMessage(data[0].Code_Message_User)
               setErrorState("has-danger")*/
+              resetFileInput()
               autoCloseAlert(data[0].Code_Message_User)
           }
           else if(data[0].Code_Type === "Error")
           {
               //setErrorMessage(data[0].Code_Message_User)
+              resetFileInput()
               autoCloseAlert(data[0].Code_Message_User)
               //setErrorState("has-danger")
           }
           else{
               //setErrorState("has-success");
               //Para actualizar la tabla en componente principal
+              resetFileInput()
               autoCloseAlert(data[0].Code_Message_User)
           }
       }
@@ -267,16 +270,19 @@ function Articulo69() {
           {
               /*setErrorMessage(data[0].Code_Message_User)
               setErrorState("has-danger")*/
+              resetFileInput()
               autoCloseAlert(data[0].Code_Message_User)
           }
           else if(data[0].Code_Type === "Error")
           {
               //setErrorMessage(data[0].Code_Message_User)
+              resetFileInput()
               autoCloseAlert(data[0].Code_Message_User)
               //setErrorState("has-danger")
           }
           else{
               //setErrorState("has-success");
+              resetFileInput()
               //Para actualizar la tabla en componente principal
               autoCloseAlert(data[0].Code_Message_User)
           }
@@ -333,6 +339,16 @@ function Articulo69() {
     setAlert2(null);
   };
 
+  //Para resetear el input file al enviar el archivo
+  const [theInputKey, setTheInputKey] = useState("")
+  const [theInputKey2, setTheInputKey2] = useState("")
+
+  function resetFileInput() {
+    let randomString = Math.random().toString(36);
+    setTheInputKey(randomString)
+    setTheInputKey2(randomString)
+  }
+
   return (
     <>
       <div className="content">
@@ -370,6 +386,7 @@ function Articulo69() {
                         <Input 
                           className="form-control" 
                           type="file" id="fileUpload" 
+                          key={theInputKey || '' }
                           accept=".xls, .xlsx, .csv" 
                           onChange={(e) => {
                             setExcel69(e.target.files[0]);
@@ -406,6 +423,7 @@ function Articulo69() {
                           className="form-control" 
                           type="file" id="fileUpload" 
                           accept=".xls, .xlsx, .csv" 
+                          key={theInputKey2 || '' }
                           onChange={(e) => {
                             setExcel69B(e.target.files[0]);
                             setExcelState69B("has-success")

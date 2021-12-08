@@ -174,7 +174,7 @@ function Register() {
         return fecha;
     }
 
-    function updateRegister(){
+    async function updateRegister(){
 
         var d = new Date();
         var finalDate = sumarDias(d, validDays);
@@ -213,7 +213,7 @@ function Register() {
             pvIP: ip
         };
 
-        fetch(`${process.env.REACT_APP_API_URI}security-users/update-user-pass/`, {
+        await fetch(`${process.env.REACT_APP_API_URI}security-users/update-user-pass/`, {
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {
@@ -241,7 +241,7 @@ function Register() {
                 }
                 else{
                     setErrorState("has-success");
-                   
+                    localStorage.setItem("Logged", true)
                     history.push(ambiente + "/admin/dashboard");
                 }
             }

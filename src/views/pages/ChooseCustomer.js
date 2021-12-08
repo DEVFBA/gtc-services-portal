@@ -120,7 +120,7 @@ function ChooseCustomer() {
                 <CardBody>
                     <Form action="" className="form" method="">
                     <FormGroup className={`has-label ${customerState}`}>
-                            <Label for="exampleSelect">Rol * </Label>
+                            <Label for="exampleSelect">Cliente * </Label>
                             <Select
                                 name=""
                                 placeholder="Selecciona un cliente"

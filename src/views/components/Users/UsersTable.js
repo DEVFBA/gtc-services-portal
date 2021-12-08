@@ -12,7 +12,7 @@ import {
   Col,
 } from "reactstrap";
 
-function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip, profilePath, autoCloseAlert}){
+function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip, profilePath, autoCloseAlert, changeImageP, setChangeImageP}){
     const [dataState, setDataState] = useState(
         dataTable.map((prop, key) => {
           var status;
@@ -57,7 +57,6 @@ function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDa
         })
       );
 
-    const [modalAddRecord, setModalAddRecord] = useState(false);
     const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
 
     //Para saber que usuario se va a editar
@@ -67,15 +66,6 @@ function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDa
     {
         var registro = dataState.find((o) => o.id === key)
         setRecord(registro) 
-    }
-
-    function toggleModalAddRecord(){
-        if(modalAddRecord == false){
-        setModalAddRecord(true);
-        }
-        else{
-        setModalAddRecord(false);
-        }
     }
 
     function toggleModalUpdateRecord(){
@@ -91,36 +81,11 @@ function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDa
       console.log("ENTREEEEE")
     },[record]);
 
-    return dataTable.length === 0 ? (
+    return (
         <>
           <div className="content">
             <Row>
-              <Col md="12">
-                <Button color="primary" onClick={toggleModalAddRecord}>
-                    <span className="btn-label">
-                    <i className="nc-icon nc-simple-add" />
-                    </span>
-                    Añadir Usuario
-                </Button>
-                <Skeleton height={25} />
-                <Skeleton height="25px" />
-                <Skeleton height="3rem" />
-              </Col>
-            </Row>
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="content">
-            <Row>
-              <Col md="12">
-                    <Button color="primary" onClick={toggleModalAddRecord}>
-                        <span className="btn-label">
-                        <i className="nc-icon nc-simple-add" />
-                        </span>
-                        Añadir Usuario
-                    </Button>
-                 
+              <Col md="12">   
                     <ReactTable
                         data={dataState}
                         columns={[
@@ -156,12 +121,8 @@ function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDa
             </Row>
           </div>
     
-        {/*MODAL PARA AÑADIR REGISTROS*/}
-        <ModalAddUser modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} autoCloseAlert = {autoCloseAlert} />       
-
         {/*MODAL PARA MODIFICAR REGISTRO*/}
-        <ModalUpdateUser abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert}/>
-    
+        <ModalUpdateUser abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert} changeImageP = {changeImageP} setChangeImageP = {setChangeImageP}/>
         </>
     );
 }

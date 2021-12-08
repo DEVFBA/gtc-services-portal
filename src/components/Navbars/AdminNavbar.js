@@ -85,6 +85,7 @@ function AdminNavbar(props) {
   function logout() {
     //setUser(null);
     //Borramos del localstorage la bandera de logged
+    console.log("ENTRE AL LOGOUT")
     localStorage.setItem("Logged", false);
     localStorage.removeItem("User");
     localStorage.removeItem("Id_Role");

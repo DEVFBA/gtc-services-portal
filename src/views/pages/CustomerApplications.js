@@ -24,6 +24,7 @@ import {
 
 // core components
 import CustomerApplicationsTable from "../components/Clients/CustomerApplicationsTable.js";
+import ModalAddCustomerApplication from "views/components/Modals/ModalAddCustomerApplication.js";
 
 function CustomerApplications() {
 
@@ -41,6 +42,8 @@ function CustomerApplications() {
   const [ip, setIP] = React.useState("");
   
   const [alert, setAlert] = React.useState(null);
+
+  const [dataFind, setDataFind] = useState(true)
 
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
@@ -74,6 +77,7 @@ function CustomerApplications() {
     })
     .then(function(data) {
       setDataCustomersApplications(data)
+      setDataFind(false)
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los Customer Applications" + err);
@@ -192,6 +196,7 @@ function CustomerApplications() {
 
   //Para actualizar la tabla al insertar registro
   function updateAddData(){
+    setDataFind(true)
     //Aqui vamos a descargar la lista de Customer Applications de la base de datos por primera vez
     const params = {
       pvOptionCRUD: "R"
@@ -212,6 +217,7 @@ function CustomerApplications() {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
+      setDataFind(false)
       setDataCustomersApplications(data)
     })
     .catch(function(err) {
@@ -246,7 +252,18 @@ function CustomerApplications() {
     setAlert(null);
   };
 
-  return dataCustomersApplications.length === 0 ? (
+  const [modalAddRecord, setModalAddRecord] = useState(false);
+
+  function toggleModalAddRecord(){
+    if(modalAddRecord == false){
+      setModalAddRecord(true);
+    }
+    else{
+      setModalAddRecord(false);
+    }
+  }
+
+  return dataFind === true ? (
     <>
       <div className="content">
         <Row>
@@ -254,6 +271,12 @@ function CustomerApplications() {
             <Card>
               <CardHeader>
                 <CardTitle tag="h4">Aplicaciones Cliente</CardTitle>
+                <Button color="primary" onClick={toggleModalAddRecord}>
+                  <span className="btn-label">
+                  <i className="nc-icon nc-simple-add" />
+                  </span>
+                  Agregar Aplicación
+                </Button>
               </CardHeader>
               <CardBody>
                 <Skeleton height={25} />
@@ -263,6 +286,8 @@ function CustomerApplications() {
             </Card>
           </Col>
         </Row>
+        {/*MODAL PARA AÑADIR REGISTROS*/}
+        <ModalAddCustomerApplication modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataApplications = {dataApplications} dataCustomers = {dataCustomers} updateAddData = {updateAddData} ip={ip} autoCloseAlert = {autoCloseAlert}/>       
       </div>
     </>
   ) : (
@@ -273,14 +298,28 @@ function CustomerApplications() {
             <Card>
               <CardHeader>
                 <CardTitle tag="h4">Aplicaciones Cliente</CardTitle>
+                <Button color="primary" onClick={toggleModalAddRecord}>
+                  <span className="btn-label">
+                  <i className="nc-icon nc-simple-add" />
+                  </span>
+                  Agregar Aplicación
+                </Button>
               </CardHeader>
               <CardBody>
-                <CustomerApplication />
                 {alert}
+                {dataCustomersApplications.length === 0 ? (
+                  <div className ="no-data">
+                    <h3>No hay datos</h3>
+                  </div>
+                ): 
+                  <CustomerApplication />
+                }
               </CardBody>
             </Card>
           </Col>
         </Row>
+        {/*MODAL PARA AÑADIR REGISTROS*/}
+        <ModalAddCustomerApplication modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataApplications = {dataApplications} dataCustomers = {dataCustomers} updateAddData = {updateAddData} ip={ip} autoCloseAlert = {autoCloseAlert}/>       
       </div>
     </>
   );

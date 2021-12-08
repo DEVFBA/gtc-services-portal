@@ -28,8 +28,9 @@ import { createTypePredicateNodeWithModifier } from "typescript";
 
 // core components
 import UsersTable from "../components/Users/UsersTable.js";
+import ModalAddUser from "views/components/Modals/ModalAddUser.js";
 
-function Usuarios() {
+function Usuarios({changeImageP, setChangeImageP}) {
 
   //Para guardar los datos de los usuarios
   const [dataUsers, setDataUsers] = useState([]);
@@ -53,6 +54,8 @@ function Usuarios() {
   const [profilePath, setProfilePath] = useState("")
 
   const [alert, setAlert] = React.useState(null);
+
+  const [dataFind, setDataFind] = useState(true)
 
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
@@ -86,6 +89,7 @@ function Usuarios() {
     })
     .then(function(data) {
       setDataUsers(data)
+      setDataFind(false)
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los roles" + err);
@@ -258,11 +262,12 @@ function Usuarios() {
 
    //Renderizado condicional
   function Users() {
-      return <UsersTable dataTable = {dataUsers} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert}/>;
+      return <UsersTable dataTable = {dataUsers} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert} changeImageP = {changeImageP} setChangeImageP = {setChangeImageP}/>;
   }
 
   //Para actualizar la tabla al insertar registro
   function updateAddData(){
+    setDataFind(true)
     const params = {
       pvOptionCRUD: "R"
     };
@@ -282,15 +287,26 @@ function Usuarios() {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
-      //setLoaded(true)
       setDataUsers(data)
+      setDataFind(false)
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los usuarios" + err);
     });
   }
 
-  return dataUsers.length === 0 ? (
+  const [modalAddRecord, setModalAddRecord] = useState(false);
+
+  function toggleModalAddRecord(){
+    if(modalAddRecord == false){
+    setModalAddRecord(true);
+    }
+    else{
+    setModalAddRecord(false);
+    }
+  }
+
+  return dataFind === true ? (
     <>
       <div className="content">
         <Row>
@@ -298,6 +314,12 @@ function Usuarios() {
             <Card>
               <CardHeader>
                 <CardTitle tag="h4">Catálogo de Usuarios</CardTitle>
+                <Button color="primary" onClick={toggleModalAddRecord}>
+                  <span className="btn-label">
+                  <i className="nc-icon nc-simple-add" />
+                  </span>
+                  Añadir Usuario 
+                </Button>
               </CardHeader>
               <CardBody>
                 <Skeleton height={25} />
@@ -308,24 +330,39 @@ function Usuarios() {
           </Col>
         </Row>
       </div>
+      {/*MODAL PARA AÑADIR REGISTROS*/}
+      <ModalAddUser modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} autoCloseAlert = {autoCloseAlert} /> 
     </>
   ) : (
     <>
-      
       <div className="content">
         <Row>
           <Col md="12">
             <Card>
               <CardHeader>
                 <CardTitle tag="h4">Catálogo de Usuarios</CardTitle>
+                <Button color="primary" onClick={toggleModalAddRecord}>
+                  <span className="btn-label">
+                  <i className="nc-icon nc-simple-add" />
+                  </span>
+                  Añadir Usuario 
+                </Button>
               </CardHeader>
               <CardBody>
-                <Users />
                 {alert}
+                {dataUsers.length === 0 ? (
+                  <div className ="no-data">
+                    <h3>No hay datos</h3>
+                  </div>
+                ): 
+                  <Users />
+                }
               </CardBody>
             </Card>
           </Col>
         </Row>
+        {/*MODAL PARA AÑADIR REGISTROS*/}
+        <ModalAddUser modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} autoCloseAlert = {autoCloseAlert} /> 
       </div>
     </>
   );

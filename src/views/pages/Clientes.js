@@ -26,6 +26,7 @@ import Select from "react-select";
 
 // core components
 import CustomersTable from "../components/Clients/CustomersTable.js";
+import ModalAddCustomer from "views/components/Modals/ModalAddClient.js";
 
 function Clientes() {
 
@@ -46,6 +47,10 @@ function Clientes() {
   const [profilePath, setProfilePath] = useState("")
   
   const [message, setMessage] = React.useState(null);
+
+  const [dataFind, setDataFind] = useState(true)
+
+  const [modalAddRecord, setModalAddRecord] = useState(false);
 
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
@@ -79,6 +84,7 @@ function Clientes() {
     })
     .then(function(data) {
       setDataCustomers(data)
+      setDataFind(false)
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los customers" + err);
@@ -161,6 +167,7 @@ function Clientes() {
 
   //Para actualizar la tabla al insertar registro
   function updateAddData(){
+    setDataFind(true)
     //Aqui vamos a descargar la lista de usuarios de la base de datos por primera vez
     const params = {
       pvOptionCRUD: "R",
@@ -182,6 +189,7 @@ function Clientes() {
     })
     .then(function(data) {
       setDataCustomers(data)
+      setDataFind(false)
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los customers" + err);
@@ -215,7 +223,16 @@ function Clientes() {
     setMessage(null);
   };
 
-  return dataCountries.length === 0 ? (
+  function toggleModalAddRecord(){
+    if(modalAddRecord == false){
+    setModalAddRecord(true);
+    }
+    else{
+    setModalAddRecord(false);
+    }
+  }
+
+  return dataFind === true ? (
     <>
       <div className="content">
         <Row>
@@ -223,6 +240,12 @@ function Clientes() {
             <Card>
               <CardHeader>
                 <CardTitle tag="h4">Clientes</CardTitle>
+                <Button color="primary" onClick={toggleModalAddRecord}>
+                  <span className="btn-label">
+                  <i className="nc-icon nc-simple-add" />
+                  </span>
+                  Agregar Cliente
+                </Button>
               </CardHeader>
               <CardBody>
                 <Skeleton height={25} />
@@ -232,6 +255,8 @@ function Clientes() {
             </Card>
           </Col>
         </Row>
+         {/*MODAL PARA AÑADIR REGISTROS*/}
+         <ModalAddCustomer modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataCountries = {dataCountries} updateAddData = {updateAddData} pathLogo = {pathLogo} ip = {ip} autoCloseAlert = {autoCloseAlert}/>       
       </div>
     </>
   ) : (
@@ -239,18 +264,31 @@ function Clientes() {
       <div className="content">
         <Row>
           <Col md="12">
-            
             <Card >
               <CardHeader>
                 <CardTitle tag="h4">Clientes</CardTitle>
+                <Button color="primary" onClick={toggleModalAddRecord}>
+                  <span className="btn-label">
+                  <i className="nc-icon nc-simple-add" />
+                  </span>
+                  Agregar Cliente
+                </Button>
               </CardHeader>
               <CardBody>
-                <Customers/>
                 {message}
+                {dataCustomers.length === 0 ? (
+                  <div className ="no-data">
+                    <h3>No hay datos</h3>
+                  </div>
+                ): 
+                  <Customers/>
+                }
               </CardBody>
             </Card>
           </Col>
         </Row>
+         {/*MODAL PARA AÑADIR REGISTROS*/}
+         <ModalAddCustomer modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataCountries = {dataCountries} updateAddData = {updateAddData} pathLogo = {pathLogo} ip = {ip} autoCloseAlert = {autoCloseAlert}/>       
       </div>
     </>
   );

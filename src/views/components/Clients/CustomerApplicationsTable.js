@@ -3,7 +3,6 @@ import { Link, useHistory } from "react-router-dom";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
-import ModalAddCustomerApplication from "views/components/Modals/ModalAddCustomerApplication.js";
 import ModalUpdateCustomerApplication from "views/components/Modals/ModalUpdateCustomerApplication.js";
 
 import {
@@ -87,7 +86,6 @@ function CustomerApplicationsTable({dataTable, dataApplications, dataCustomers, 
         })
       );
 
-    const [modalAddRecord, setModalAddRecord] = useState(false);
     const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
 
     //Para saber que registro se va a editar
@@ -108,15 +106,6 @@ function CustomerApplicationsTable({dataTable, dataApplications, dataCustomers, 
         setRecordUsers(registro) 
     }
 
-    function toggleModalAddRecord(){
-        if(modalAddRecord == false){
-        setModalAddRecord(true);
-        }
-        else{
-        setModalAddRecord(false);
-        }
-    }
-
     function toggleModalUpdateRecord(){
         if(modalUpdateRecord == false){
         setModalUpdateRecord(true);
@@ -131,13 +120,6 @@ function CustomerApplicationsTable({dataTable, dataApplications, dataCustomers, 
           <div className="content">
             <Row>
               <Col md="12">
-                    <Button color="primary" onClick={toggleModalAddRecord}>
-                        <span className="btn-label">
-                        <i className="nc-icon nc-simple-add" />
-                        </span>
-                        Agregar Aplicación
-                    </Button>
-                 
                     <ReactTable
                         data={dataState}
                         columns={[
@@ -173,12 +155,8 @@ function CustomerApplicationsTable({dataTable, dataApplications, dataCustomers, 
             </Row>
         </div>
     
-        {/*MODAL PARA AÑADIR REGISTROS*/}
-        <ModalAddCustomerApplication modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} record = {record} dataApplications = {dataApplications} dataCustomers = {dataCustomers} updateAddData = {updateAddData} ip={ip} autoCloseAlert = {autoCloseAlert}/>       
-
         {/*MODAL PARA MODIFICAR REGISTRO*/}
         <ModalUpdateCustomerApplication modalUpdateRecord = {modalUpdateRecord} setModalUpdateRecord = {setModalUpdateRecord} record = {record} dataApplications = {dataApplications} updateAddData = {updateAddData} ip={ip} autoCloseAlert = {autoCloseAlert}/>
-    
         </>
     );
 }

@@ -133,7 +133,7 @@ function Sidebar(props) {
         console.log(err)
       });
     }  
-  },[]);
+  },[props.changeImageP]);
 
   // this verifies if any of the collapses should be default opened on a rerender of this component
   // for example, on the refresh of the page,

@@ -182,28 +182,39 @@ function Login() {
         }
         else
         {
-          localStorage.setItem("User", data[0].User);
-          localStorage.setItem("Id_Customer", data[0].Id_Customer)
-          localStorage.setItem("Id_Role", data[0].Id_Role)
-          localStorage.setItem("Token", token)
-          localStorage.setItem("Logged", true)
           //Comparar fechas
           var f1 = new Date();
           var f2 = new Date(data[0].Final_Effective_Date)
           if(data[0].Temporal_Password===true)
           {
+            localStorage.setItem("User", data[0].User);
+            localStorage.setItem("Id_Customer", data[0].Id_Customer)
+            localStorage.setItem("Id_Role", data[0].Id_Role)
+            localStorage.setItem("Token", token)
             history.push(ambiente + "/auth/edit-password");
           }
           else if (data[0].Final_Effective_Date === "NULL")
           {
-            console.log("entre al NULL")
+            localStorage.setItem("User", data[0].User);
+            localStorage.setItem("Id_Customer", data[0].Id_Customer)
+            localStorage.setItem("Id_Role", data[0].Id_Role)
+            localStorage.setItem("Token", token)
             history.push(ambiente + "/auth/edit-password");      
           }
           else if(f2 < f1)
           {
+            localStorage.setItem("User", data[0].User);
+            localStorage.setItem("Id_Customer", data[0].Id_Customer)
+            localStorage.setItem("Id_Role", data[0].Id_Role)
+            localStorage.setItem("Token", token)
             history.push(ambiente + "/auth/edit-password");
           }
           else{
+            localStorage.setItem("User", data[0].User);
+            localStorage.setItem("Id_Customer", data[0].Id_Customer)
+            localStorage.setItem("Id_Role", data[0].Id_Role)
+            localStorage.setItem("Token", token)
+            localStorage.setItem("Logged", true)
             history.push(ambiente + "/admin/dashboard");
           }
         }

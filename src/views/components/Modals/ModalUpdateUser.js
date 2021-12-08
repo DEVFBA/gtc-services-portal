@@ -20,7 +20,7 @@ import {
     Col,
 } from "reactstrap";
 
-function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip, profilePath, autoCloseAlert, setLoaded}) {
+function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, dataCustomers, updateAddData, validDays, pathImage, ip, profilePath, autoCloseAlert, changeImageP, setChangeImageP}) {
         // register form
     const [updateEmail, setupdateEmail] = React.useState("");
     const [updateFullName, setupdateFullName] = React.useState("");
@@ -260,6 +260,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                         autoCloseAlert(data[0].Code_Message_User)
                     }
                     else{
+                        setChangeImageP(!changeImageP)
                         setErrorState("has-success");
                         //Para actualizar la tabla en componente principal
                         updateAddData()
@@ -314,6 +315,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                         autoCloseAlert(data[0].Code_Message_User)
                     }
                     else{
+                        setChangeImageP(!changeImageP)
                         setErrorState("has-success");
                         autoCloseAlert(data[0].Code_Message_User)
                         //Para actualizar la tabla en componente principal
