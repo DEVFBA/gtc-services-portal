@@ -4,21 +4,9 @@ import Skeleton from '@yisheng90/react-loading';
 // reactstrap components
 import {
   Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Row,
   Col,
-  Modal, 
-  ModalBody, 
-  ModalFooter,
-  FormGroup,
-  Label,
-  Input,
 } from "reactstrap";
-
-import Select from "react-select";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js"; 
@@ -26,39 +14,64 @@ import ModalUpdateKeyProduct from "views/components/Modals/catalogs/sat/ModalUpd
 import ModalAddKeyProduct from "views/components/Modals/catalogs/sat/ModalAddKeyProduct";
 
 function KeyProduct({dataTable, updateAddData, ip, autoCloseAlert}) {
-  
+  const role = localStorage.getItem("Id_Role");
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
-      var status;
+      var status, vattransfer, iepstransfer;
       if(prop.Status === true){
           status = "Habilitado"
       }
       else{
           status = "No Habilitado"
       }
+
+      if(prop.VAT_Transfer === 0){
+        vattransfer = "No Incluir"
+      }
+      else if(prop.VAT_Transfer === 1){
+        vattransfer = "Incluir"
+      }
+      else if(prop.VAT_Transfer === 2){
+        vattransfer = "Opcional"
+      }
+
+      if(prop.IEPS_Transfer === 0){
+        iepstransfer = "No Incluir"
+      }
+      else if(prop.IEPS_Transfer === 1){
+        iepstransfer = "Incluir"
+      }
+      else if(prop.IEPS_Transfer === 2){
+        iepstransfer = "Opcional"
+      }
+
       return {
           id: key,
           idR: prop.Id_Catalog,
           shortDescription: prop.Short_Desc,
           longDescription: prop.Long_Desc,
+          vatTransfer: vattransfer,
+          iepsTransfer: iepstransfer,
           status: status,
           actions: (
           // ACCIONES A REALIZAR EN CADA REGISTRO
           <div className="actions-center">
               {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-              <abbr title="Editar">
-                <Button
-                onClick={() => {
-                    getRegistro(key);
-                    toggleModalUpdateRecord()
-                }}
-                color="warning"
-                size="sm"
-                className="btn-icon btn-link edit"
-                >
-                <i className="fa fa-edit" />
-                </Button>
-              </abbr>
+              {role === "GTCADMIN" || role === "GTCSUPPO" ? (
+                <abbr title="Editar">
+                  <Button
+                  onClick={() => {
+                      getRegistro(key);
+                      toggleModalUpdateRecord()
+                  }}
+                  color="warning"
+                  size="sm"
+                  className="btn-icon btn-link edit"
+                  >
+                  <i className="fa fa-edit" />
+                  </Button>
+                </abbr>
+              ):null}
           </div>
           ),
       };
@@ -98,20 +111,7 @@ function KeyProduct({dataTable, updateAddData, ip, autoCloseAlert}) {
         }
     }
 
-  return dataTable.length === 0 ? (
-    <>
-      <div className="content">
-        <Row>
-          <Col md="12">
-            <h4>Clave Producto Servicio</h4>
-            <Skeleton height={25} />
-            <Skeleton height="25px" />
-            <Skeleton height="3rem" />
-          </Col>
-        </Row>
-      </div>
-    </>
-  ) : (
+  return (
     <>
       {/*console.log(props.example)*/}
       <div className="content">
@@ -119,12 +119,14 @@ function KeyProduct({dataTable, updateAddData, ip, autoCloseAlert}) {
           <Col md="12">
             
                 <h4>Clave Producto Servicio</h4>
-                <Button color="primary" onClick={toggleModalAddRecord}>
+                {role === "GTCADMIN" || role === "GTCSUPPO" ? (
+                  <Button color="primary" onClick={toggleModalAddRecord}>
                     <span className="btn-label">
                     <i className="nc-icon nc-simple-add" />
                     </span>
                     Agregar Nuevo Registro
-                </Button>
+                  </Button>
+                ): null}
              
                 <ReactTable
                   data={dataState}
@@ -140,6 +142,14 @@ function KeyProduct({dataTable, updateAddData, ip, autoCloseAlert}) {
                     {
                       Header: "Desc. Larga",
                       accessor: "longDescription",
+                    },
+                    {
+                      Header: "Incluir IVA Traslado’ ",
+                      accessor: "vatTransfer",
+                    },
+                    {
+                      Header: "Incluir IEPS Traslado",
+                      accessor: "iepsTransfer",
                     },
                     {
                       Header: "Estatus",

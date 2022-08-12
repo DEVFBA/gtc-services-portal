@@ -21,7 +21,6 @@ import {
     Row,
     Col,
 } from "reactstrap";
-import { data } from "jquery";
 
 function ModalAddCustomerApplication({modalAddRecord, setModalAddRecord, dataCustomers, dataApplications, updateAddData, ip, autoCloseAlert}) {
     

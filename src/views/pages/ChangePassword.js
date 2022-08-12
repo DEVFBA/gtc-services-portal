@@ -62,6 +62,15 @@ function Register() {
     }, []);
 
     useEffect(() => {
+        //Si el usuario ya ha iniciado sesión que se le redirija al dashboard
+        //Por el momento se usará la bandera logged
+        if(Logged==="true")
+        {
+          history.push(ambiente + "/admin/dashboard");
+        }
+      }, []);
+
+    useEffect(() => {
         //Aqui vamos a descargar la lista de general parameters para revisar la vigencia del password
         const params = {
           pvOptionCRUD: "R"
@@ -92,27 +101,24 @@ function Register() {
 
     useEffect(() => {
         //Si el usuario no está loggeado no se va a descargar la imagen
-        if(Logged === "true")
-        {
-          var url = new URL(`${process.env.REACT_APP_API_URI}security-users/${user}`);
-          fetch(url, {
-            method: "GET",
-            headers: {
-                "access-token": token,
-                "Content-Type": "application/json",
-            }
-          })
-          .then(function(response) {
-              return response.ok ? response.json() : Promise.reject();
-          })
-          .then(function(data) {
-              setCustomer(data[0].Id_Customer)
-              setName(data[0].Name)
-          })
-          .catch(function(err) {
-              alert("No se pudo consultar la informacion del usuario" + err);
-          });
-        }  
+        var url = new URL(`${process.env.REACT_APP_API_URI}security-users/${user}`);
+        fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
+        }
+        })
+        .then(function(response) {
+            return response.ok ? response.json() : Promise.reject();
+        })
+        .then(function(data) {
+            setCustomer(data[0].Id_Customer)
+            setName(data[0].Name)
+        })
+        .catch(function(err) {
+            alert("No se pudo consultar la informacion del usuario" + err);
+        });
     },[]);
 
     React.useEffect(() => {
@@ -174,7 +180,7 @@ function Register() {
         return fecha;
     }
 
-    async function updateRegister(){
+    function updateRegister(){
 
         var d = new Date();
         var finalDate = sumarDias(d, validDays);
@@ -198,7 +204,7 @@ function Register() {
         else{
             finalDate2 = "" + year + "" + month + "" + date;
         }  
-        
+
         //EL USUARIO HAY QUE CAMBIARLO POR EL QUE SE HAYA LOGGEADO
         const catRegister = {
             pvOptionCRUD: "U",
@@ -213,7 +219,7 @@ function Register() {
             pvIP: ip
         };
 
-        await fetch(`${process.env.REACT_APP_API_URI}security-users/update-user-pass/`, {
+        fetch(`${process.env.REACT_APP_API_URI}security-users/update-user-pass/`, {
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {

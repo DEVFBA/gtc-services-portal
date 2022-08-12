@@ -214,6 +214,7 @@ function ModalUpdatePaymentMethods({abierto, toggleModalUpdateRecord, record, up
                     <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
+            <label>Estatus</label>
             <FormGroup check>
                     <Label check>
                     <Input 

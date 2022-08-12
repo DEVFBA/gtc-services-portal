@@ -26,7 +26,7 @@ import ModalUpdateCurrencies from "views/components/Modals/catalogs/sat/ModalUpd
 import ModalAddCurrencies from "views/components/Modals/catalogs/sat/ModalAddCurrencies";
 
 function Currencies({dataTable, updateAddData, ip, autoCloseAlert}) {
-  
+  const role = localStorage.getItem("Id_Role");
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
       var status;
@@ -41,24 +41,28 @@ function Currencies({dataTable, updateAddData, ip, autoCloseAlert}) {
           idR: prop.Id_Catalog,
           shortDescription: prop.Short_Desc,
           longDescription: prop.Long_Desc,
+          decimals: prop.Decimals,
+          variationPercentage: prop.Variation_Percentage,
           status: status,
           actions: (
           // ACCIONES A REALIZAR EN CADA REGISTRO
           <div className="actions-center">
               {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-              <abbr title="Editar">
-                <Button
-                onClick={() => {
-                    getRegistro(key);
-                    toggleModalUpdateRecord()
-                }}
-                color="warning"
-                size="sm"
-                className="btn-icon btn-link edit"
-                >
-                <i className="fa fa-edit" />
-                </Button>
-              </abbr>
+              {role === "GTCADMIN" || role === "GTCSUPPO" ? (
+                <abbr title="Editar">
+                  <Button
+                  onClick={() => {
+                      getRegistro(key);
+                      toggleModalUpdateRecord()
+                  }}
+                  color="warning"
+                  size="sm"
+                  className="btn-icon btn-link edit"
+                  >
+                  <i className="fa fa-edit" />
+                  </Button>
+                </abbr>
+               ):null}
           </div>
           ),
       };
@@ -95,20 +99,7 @@ function Currencies({dataTable, updateAddData, ip, autoCloseAlert}) {
         }
     }
 
-    return dataTable.length === 0 ? (
-      <>
-        <div className="content">
-          <Row>
-            <Col md="12">
-              <h4>Monedas</h4>
-              <Skeleton height={25} />
-              <Skeleton height="25px" />
-              <Skeleton height="3rem" />
-            </Col>
-          </Row>
-        </div>
-      </>
-    ) : (
+    return(
     <>
       {/*console.log(props.example)*/}
       <div className="content">
@@ -116,12 +107,14 @@ function Currencies({dataTable, updateAddData, ip, autoCloseAlert}) {
           <Col md="12">
             
                 <h4>Monedas</h4>
-                <Button color="primary" onClick={toggleModalAddRecord}>
+                {role === "GTCADMIN" || role === "GTCSUPPO" ? (
+                  <Button color="primary" onClick={toggleModalAddRecord}>
                     <span className="btn-label">
                     <i className="nc-icon nc-simple-add" />
                     </span>
                     Agregar Nuevo Registro
-                </Button>
+                  </Button>
+                ): null}
              
                 <ReactTable
                   data={dataState}
@@ -137,6 +130,14 @@ function Currencies({dataTable, updateAddData, ip, autoCloseAlert}) {
                     {
                       Header: "Desc. Larga",
                       accessor: "longDescription",
+                    },
+                    {
+                      Header: "Decimales",
+                      accessor: "decimals",
+                    },
+                    {
+                      Header: "Variación",
+                      accessor: "variationPercentage",
                     },
                     {
                       Header: "Estatus",

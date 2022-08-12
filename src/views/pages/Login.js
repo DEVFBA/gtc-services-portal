@@ -55,7 +55,6 @@ function Login() {
   const [alert2, setAlert2] = React.useState(null);
 
   const autoCloseAlert2 = (mensaje) => {
-    console.log("entre al alert")
     setAlert2(
       <ReactBSAlert
         style={{ display: "block", marginTop: "-100px" }}
@@ -141,22 +140,16 @@ function Login() {
             else{
                 setErrorState("has-success");
                 //Obtenemos la información del usuario y la guardamos en el useContext
-                getUser(email, data[1].token)
+                //Se utiliza el timeout para que el login no sea tan rapido
+                setTimeout(function(){
+                  getUser(email, data[1].token)
+                },3000);
             }
         }
     });
-
-    //Aquí se hará el fetch a la API 
-    //Por el momento se va a guardar en el local storage una bandera para simular el token
-    
-
-    //Vamos a tener 3 tipos de usuario, dependiendo cual sea se les van a mostrar cosas diferentes en la aplicación
-    //Por el momento guardaremos el tipo de usuario en el localstorage, pero eso se tiene que saber en la aplicación de usuario que va "abrazar" todo el sitio una vez que se haya loggeado
-    
   }
 
   function getUser(email, token){
-    console.log(email)
 
     var url = new URL(`${process.env.REACT_APP_API_URI}security-users/${email}`);
     fetch(url, {
@@ -170,7 +163,6 @@ function Login() {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
-        console.log(data)
         hideAlert2()
         if(data.length > 1)
         {
@@ -248,9 +240,9 @@ function Login() {
                       </InputGroupText>
                     </InputGroupAddon>
                     <Input
-                      type = "email"
+                      type = "text"
                       name = "email"
-                      placeholder="Email"
+                      placeholder="User"
                       onChange={onChangeEmail} />
                   </InputGroup>
                   <InputGroup>

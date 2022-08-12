@@ -17,6 +17,8 @@ function ModalAddTaxes({modalAddRecord, setModalAddRecord, updateAddData, ip, au
     const [id, setId] = React.useState("Hola");
     const [shortDescription, setShortDescription] = React.useState("");
     const [longDescription, setLongDescription] = React.useState("");
+    const [withholding, setWithholding] = React.useState(false);
+    const [transfer, setTransfer] = React.useState(false);
     const [status, setStatus] = React.useState(true);
     
     const [idState, setIdState] = React.useState("");
@@ -31,16 +33,18 @@ function ModalAddTaxes({modalAddRecord, setModalAddRecord, updateAddData, ip, au
     const token = localStorage.getItem("Token");
 
     const handleModalClick = () => {
-        setId("")
-        setShortDescription("")
-        setLongDescription("")
-        setStatus(true)
-        setIdState("")
-        setShortDescriptionState("")
-        setLongDescriptionState("")
-        setError("")
-        setErrorState("")
-        setErrorMessage("")
+        setId("");
+        setShortDescription("");
+        setLongDescription("");
+        setWithholding(false);
+        setTransfer(false);
+        setStatus(true);
+        setIdState("");
+        setShortDescriptionState("");
+        setLongDescriptionState("");
+        setError("");
+        setErrorState("");
+        setErrorMessage("");
         setModalAddRecord(!modalAddRecord);
     };
 
@@ -92,12 +96,14 @@ function ModalAddTaxes({modalAddRecord, setModalAddRecord, updateAddData, ip, au
             pvIdCatalog: id,
             pvShortDesc: shortDescription,
             pvLongDesc: longDescription,
+            pbWithholding: withholding,
+            pbTransfer: transfer,
             pbStatus: status,
             pvUser: user,
             pvIP: ip
         };
     
-        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/create-sat`, {
+        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/create-sat-taxes`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {
@@ -204,6 +210,37 @@ function ModalAddTaxes({modalAddRecord, setModalAddRecord, updateAddData, ip, au
                     <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
+            <FormGroup check>
+                    <Label check>
+                        <Input 
+                            type="checkbox" 
+                            checked = {withholding}
+                            onChange={(e) => {
+                                setWithholding(e.target.checked)
+                            }}
+                        />{' '}
+                        Retención
+                        <span className="form-check-sign">
+                            <span className="check"></span>
+                        </span>
+                    </Label>
+            </FormGroup>
+            <FormGroup check>
+                    <Label check>
+                        <Input 
+                            type="checkbox" 
+                            checked = {transfer}
+                            onChange={(e) => {
+                                setTransfer(e.target.checked)
+                            }}
+                        />{' '}
+                        Traslado
+                        <span className="form-check-sign">
+                            <span className="check"></span>
+                        </span>
+                    </Label>
+            </FormGroup>
+            <label>Estatus</label>
             <FormGroup check>
                     <Label check>
                     <Input 

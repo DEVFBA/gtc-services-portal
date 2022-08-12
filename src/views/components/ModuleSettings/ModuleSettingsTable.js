@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
 
 import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalUpdateApplication from "views/components/Modals/ModalUpdateApplication.js";
@@ -13,7 +12,6 @@ import {
   CardTitle,
   CardBody
 } from "reactstrap";
-import { prototype } from "react-datetime";
 
 function ModuleSettingsTable({dataTable, dataSuites, updateAddData, ip, autoCloseAlert}){
 

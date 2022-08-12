@@ -77,10 +77,6 @@ function UsersTable({dataTable, dataRoles, dataCustomers, updateAddData, validDa
         }
     }
 
-    useEffect(() => {
-      console.log("ENTREEEEE")
-    },[record]);
-
     return (
         <>
           <div className="content">

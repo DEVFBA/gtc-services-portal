@@ -12,35 +12,41 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalAddTariffFractions({modalAddRecord, setModalAddRecord, updateAddData, ip, autoCloseAlert}) {
-        // update form
-    const [id, setId] = React.useState("Hola");
-    const [shortDescription, setShortDescription] = React.useState("");
-    const [longDescription, setLongDescription] = React.useState("");
-    const [status, setStatus] = React.useState(true);
-    
-    const [idState, setIdState] = React.useState("");
-    const [shortDescriptionState, setShortDescriptionState] = React.useState("");
-    const [longDescriptionState, setLongDescriptionState] = React.useState("");
+import Select from "react-select";
 
-    const [error, setError] = React.useState();
-    const [errorState, setErrorState] = React.useState("");
+function ModalAddTariffFractions({modalAddRecord, setModalAddRecord, updateAddData, ip, autoCloseAlert, dataCustomUoMs}) {
+        // update form
+    const [id, setId] = useState("Hola");
+    const [shortDescription, setShortDescription] = useState("");
+    const [longDescription, setLongDescription] = useState("");
+    const [customUoMs, setCustomUoMs] = useState("");
+    const [status, setStatus] = useState(true);
+    
+    const [idState, setIdState] = useState("");
+    const [shortDescriptionState, setShortDescriptionState] = useState("");
+    const [longDescriptionState, setLongDescriptionState] = useState("");
+    const [customUoMsState, setCustomUoMsState] = useState("");
+
+    const [error, setError] = useState();
+    const [errorState, setErrorState] = useState("");
     const [errorMessage, setErrorMessage] = useState("")
 
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");
 
     const handleModalClick = () => {
-        setId("")
-        setShortDescription("")
-        setLongDescription("")
-        setStatus(true)
-        setIdState("")
-        setShortDescriptionState("")
-        setLongDescriptionState("")
-        setError("")
-        setErrorState("")
-        setErrorMessage("")
+        setId("");
+        setShortDescription("");
+        setLongDescription("");
+        setCustomUoMs("");
+        setStatus(true);
+        setIdState("");
+        setShortDescriptionState("");
+        setLongDescriptionState("");
+        setCustomUoMsState("");
+        setError("");
+        setErrorState("");
+        setErrorMessage("");
         setModalAddRecord(!modalAddRecord);
     };
 
@@ -56,7 +62,8 @@ function ModalAddTariffFractions({modalAddRecord, setModalAddRecord, updateAddDa
         if (
             idState === "has-success" &&
             shortDescriptionState === "has-success" &&
-            longDescriptionState === "has-success"
+            longDescriptionState === "has-success" &&
+            customUoMsState === "has-success"
         ) {
           return true;
         } else {
@@ -68,6 +75,9 @@ function ModalAddTariffFractions({modalAddRecord, setModalAddRecord, updateAddDa
             }
             if (longDescriptionState !== "has-success") {
                 setLongDescriptionState("has-danger");
+            }
+            if (customUoMsState !== "has-success") {
+                setCustomUoMsState("has-danger");
             }
             return false;
         }
@@ -92,12 +102,15 @@ function ModalAddTariffFractions({modalAddRecord, setModalAddRecord, updateAddDa
             pvIdCatalog: id,
             pvShortDesc: shortDescription,
             pvLongDesc: longDescription,
+            pvIdCustomUoMs : customUoMs,
             pbStatus: status,
             pvUser: user,
             pvIP: ip
         };
+
+        console.log(catRegister);
     
-        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/create-sat`, {
+        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/create-sat-tariff-fractions`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {
@@ -204,6 +217,24 @@ function ModalAddTariffFractions({modalAddRecord, setModalAddRecord, updateAddDa
                     <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
+            <FormGroup className={`has-label ${customUoMsState}`}>
+                  {/*Al seleccionar un catálogo se hará fetch para actualizar sus configuraciones*/}
+                  <label>Unidad Aduana *</label>
+                  <Select 
+                    className="react-select"
+                    classNamePrefix="react-select"
+                    placeholder = "Selecciona una unidad aduana"
+                    options = {dataCustomUoMs}
+                    onChange={(e) => {
+                      setCustomUoMs(e.value);
+                      setCustomUoMsState("has-success");
+                    }}
+                  />
+                  {customUoMsState === "has-danger" ? (
+                    <label className="error">Este campo es requerido.</label>
+                ) : null}
+            </FormGroup>
+            <label>Estatus</label>
             <FormGroup check>
                     <Label check>
                     <Input 

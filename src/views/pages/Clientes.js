@@ -6,26 +6,16 @@ import Skeleton from '@yisheng90/react-loading';
 // reactstrap components
 import {
   Button,
-  Modal, 
-  ModalBody, 
-  ModalFooter,
-  FormGroup,
-  Form,
-  Input,
-  Label,
   Row,
   Col,
   Card,
   CardBody,
   CardHeader,
-  CardFooter,
   CardTitle
 } from "reactstrap";
 
-import Select from "react-select";
-
 // core components
-import CustomersTable from "../components/Clients/CustomersTable.js";
+import CustomersTable from "../components/Customers/CustomersTable.js";
 import ModalAddCustomer from "views/components/Modals/ModalAddClient.js";
 
 function Clientes() {
@@ -39,7 +29,10 @@ function Clientes() {
   //Para guardar el path de las imágenes
   const [pathLogo, setPathLogo] = useState();
 
+  const [dataTaxRegimes, setDataTaxRegimes] = useState();
+
   const token = localStorage.getItem("Token");
+
   const user = localStorage.getItem("User");
 
   const [ip, setIP] = React.useState("");
@@ -51,6 +44,10 @@ function Clientes() {
   const [dataFind, setDataFind] = useState(true)
 
   const [modalAddRecord, setModalAddRecord] = useState(false);
+
+  //Manejo de errores
+  const [dataError, setDataError] = useState(false);
+  const [dataErrorMessage, setDataErrorMessage] = useState(false);
 
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
@@ -83,16 +80,18 @@ function Clientes() {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
-      setDataCustomers(data)
-      setDataFind(false)
+      setDataCustomers(data);
+      getDataCountries();
     })
     .catch(function(err) {
-        alert("No se pudo consultar la informacion de los customers" + err);
+      setDataError(true);
+      setDataErrorMessage(" del catálogo de Clientes ");
     });
   }, []);
 
 
-  useEffect(() => {
+  function getDataCountries()
+  {
     const params = {
       pvOptionCRUD: "R",
       pSpCatalog : "spSAT_Cat_Countries_CRUD_Records",
@@ -118,18 +117,20 @@ function Clientes() {
       for(i=0; i<data.length; i++)
       {
         optionsAux.push({
-          value: data[i].Id_Catalog, label: data[i].Short_Desc 
+          value: data[i].Id_Catalog, label: data[i].Id_Catalog + " - " + data[i].Short_Desc 
         })
       }
-      console.log(optionsAux)
-      setDataCountries(optionsAux)
+      setDataCountries(optionsAux);
+      getDataGeneralParameters();
     })
     .catch(function(err) {
-        alert("No se pudo consultar la informacion de los catálogos" + err);
+      setDataError(true);
+      setDataErrorMessage(" del catálogo de Países ");
     });
-  }, []);
+  }
 
-  useEffect(() => {
+  function getDataGeneralParameters()
+  {
     //Aqui vamos a descargar la lista de general parameters para revisar el path de los logos
     const params = {
       pvOptionCRUD: "R"
@@ -140,29 +141,80 @@ function Clientes() {
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
     fetch(url, {
-        method: "GET",
-        headers: {
-            "access-token": token,
-            "Content-Type": "application/json",
-        }
+      method: "GET",
+      headers: {
+          "access-token": token,
+          "Content-Type": "application/json",
+      }
     })
     .then(function(response) {
-        return response.ok ? response.json() : Promise.reject();
+      return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
-        var aux = data.find( o => o.Id_Catalog === 1 )
-        setPathLogo(aux.Value)
-        var aux2 = data.find( o => o.Id_Catalog === 8 )
-        setProfilePath(aux2.Value)
+      var aux = data.find( o => o.Id_Catalog === 1 );
+      setPathLogo(aux.Value);
+      var aux2 = data.find( o => o.Id_Catalog === 8 );
+      setProfilePath(aux2.Value);
+      getDataTaxRegimes();
     })
     .catch(function(err) {
-        alert("No se pudo consultar la informacion de los general parameters" + err);
+      setDataError(true);
+      setDataErrorMessage(" del catálogo de Parámetros Generales. ")
     });
-  }, []);
+  }
+
+  function getDataTaxRegimes()
+  {
+      const params = {
+          pvOptionCRUD: "R",
+          pSpCatalog : "spSAT_Cat_Tax_Regimens_CRUD_Records",
+      };
+    
+      var url = new URL(`${process.env.REACT_APP_API_URI}cat-catalogs/catalog`);
+      Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+  
+      fetch(url, {
+          method: "GET",
+          headers: {
+              "access-token": token,
+              "Content-Type": "application/json",
+          }
+      })
+      .then(function(response) {
+          return response.ok ? response.json() : Promise.reject();
+      })
+      .then(function(data) {
+          data.sort(function (a, b) {
+              if (a.Short_Desc > b.Short_Desc) {
+                  return 1;
+              }
+              if (a.Short_Desc < b.Short_Desc) {
+                  return -1;
+              }
+              // a must be equal to b
+              return 0;
+          });
+          
+          var optionsAux = [];
+          var i;
+          for(i=0; i<data.length; i++)
+          {
+              optionsAux.push({
+                  value: data[i].Id_Catalog, label: data[i].Id_Catalog + " - " + data[i].Short_Desc 
+              })
+          }
+          setDataTaxRegimes(optionsAux)
+          setDataFind(false)
+      })
+      .catch(function(err) {
+        setDataError(true);
+        setDataErrorMessage(" del catálogo de Regímenes Fiscales. ")
+      });
+  }
 
    //Renderizado condicional
   function Customers() {
-      return <CustomersTable dataTable = {dataCustomers} dataCountries = {dataCountries} updateAddData = {updateAddData} pathLogo = {pathLogo} ip={ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert}/>;
+      return <CustomersTable dataTable = {dataCustomers} dataCountries = {dataCountries} updateAddData = {updateAddData} pathLogo = {pathLogo} ip={ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert} dataTaxRegimes = {dataTaxRegimes}/>;
   }
 
   //Para actualizar la tabla al insertar registro
@@ -256,7 +308,7 @@ function Clientes() {
           </Col>
         </Row>
          {/*MODAL PARA AÑADIR REGISTROS*/}
-         <ModalAddCustomer modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataCountries = {dataCountries} updateAddData = {updateAddData} pathLogo = {pathLogo} ip = {ip} autoCloseAlert = {autoCloseAlert}/>       
+         <ModalAddCustomer modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataCountries = {dataCountries} updateAddData = {updateAddData} pathLogo = {pathLogo} ip = {ip} autoCloseAlert = {autoCloseAlert} dataTaxRegimes = {dataTaxRegimes}/>       
       </div>
     </>
   ) : (
@@ -288,7 +340,7 @@ function Clientes() {
           </Col>
         </Row>
          {/*MODAL PARA AÑADIR REGISTROS*/}
-         <ModalAddCustomer modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataCountries = {dataCountries} updateAddData = {updateAddData} pathLogo = {pathLogo} ip = {ip} autoCloseAlert = {autoCloseAlert}/>       
+         <ModalAddCustomer modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} dataCountries = {dataCountries} updateAddData = {updateAddData} pathLogo = {pathLogo} ip = {ip} autoCloseAlert = {autoCloseAlert} dataTaxRegimes = {dataTaxRegimes}/>       
       </div>
     </>
   );

@@ -148,113 +148,114 @@ function ModalAddAssumptions({modalAddRecord, setModalAddRecord, updateAddData, 
  
     return (
         <Modal isOpen={modalAddRecord} toggle={handleModalClick} size="lg">
-        <div className="modal-header justify-content-center">
-        <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
-            <span aria-hidden="true">×</span>
-        </button>
-        <h5 className="modal-title">Agregar Registro</h5>
-        </div>
-        <ModalBody>
-        <Form id="RegisterValidation">
-            <FormGroup className={`has-label ${idState}`}>
-                <label>Id *</label>
-                <Input
-                    name="id"
-                    type="text"
-                    autoComplete="off"
-                    onChange={(e) => {
-                        if (!verifyLength(e.target.value, 1)) {
-                            setIdState("has-danger");
-                        } else {
-                            setIdState("has-success");
-                        }
-                        setId(e.target.value);
-                    }}
-                />
-                {idState === "has-danger" ? (
-                    <label className="error">Este campo es requerido.</label>
-                ) : null}
-            </FormGroup>
-            <FormGroup className={`has-label ${shortDescriptionState}`}>
-                <label>Descripción corta *</label>
-                <Input
-                    name="shortdescription"
-                    type="text"
-                    autoComplete="off"
-                    onChange={(e) => {
-                        if (!verifyLength(e.target.value, 1)) {
-                            setShortDescriptionState("has-danger");
-                        } else {
-                            setShortDescriptionState("has-success");
-                        }
-                        setShortDescription(e.target.value);
-                    }}
-                />
-                {shortDescriptionState === "has-danger" ? (
-                    <label className="error">Este campo es requerido.</label>
-                ) : null}
-            </FormGroup>
-            <FormGroup className={`has-label ${longDescriptionState}`}>
-                <label>Descripción larga *</label>
-                <Input
-                    name="descripcionlarga"
-                    type="text"
-                    autoComplete="off"
-                    onChange={(e) => {
-                    if (!verifyLength(e.target.value, 1)) {
-                        setLongDescriptionState("has-danger");
-                    } else {
-                        setLongDescriptionState("has-success");
-                    }
-                    setLongDescription(e.target.value);
-                    }}
-                />
-                {longDescriptionState === "has-danger" ? (
-                    <label className="error">Este campo es requerido.</label>
-                ) : null}
-            </FormGroup>
-            <FormGroup className={`has-label ${longDescriptionState}`}>
-                <label>Primer renglón *</label>
-                <Input
-                    name="primerenglon"
-                    type="number"
-                    min="0"
-                    autoComplete="off"
-                    onChange={(e) => {
-                        setFirstRowState("has-success");
-                        setFirstRow(e.target.value);
-                    }}
-                />
-                {firstRowState === "has-danger" ? (
-                    <label className="error">Este campo es requerido.</label>
-                ) : null}
-            </FormGroup>
-            <FormGroup check>
-                    <Label check>
-                    <Input 
-                        type="checkbox" 
-                        checked = {status}
-                        onChange={(e) => {
-                            setStatus(e.target.checked)
-                        }}
-                    />{' '}
-                    Habilitado
-                    <span className="form-check-sign">
-                        <span className="check"></span>
-                    </span>
-                    </Label>
-            </FormGroup>
-            <div className="category form-category">
-                * Campos requeridos
+            <div className="modal-header justify-content-center">
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h5 className="modal-title">Agregar Registro</h5>
             </div>
-            <FormGroup className={`has-label ${errorState}`}>
-                {errorState === "has-danger" ? (
-                        <label className="error">{errorMessage}</label>
-                ) : null}
-            </FormGroup>
-          </Form>
-          {error}
-        </ModalBody>
+            <ModalBody>
+                <Form id="RegisterValidation">
+                    <FormGroup className={`has-label ${idState}`}>
+                        <label>Id *</label>
+                        <Input
+                            name="id"
+                            type="text"
+                            autoComplete="off"
+                            onChange={(e) => {
+                                if (!verifyLength(e.target.value, 1)) {
+                                    setIdState("has-danger");
+                                } else {
+                                    setIdState("has-success");
+                                }
+                                setId(e.target.value);
+                            }}
+                        />
+                        {idState === "has-danger" ? (
+                            <label className="error">Este campo es requerido.</label>
+                        ) : null}
+                    </FormGroup>
+                    <FormGroup className={`has-label ${shortDescriptionState}`}>
+                        <label>Descripción corta *</label>
+                        <Input
+                            name="shortdescription"
+                            type="text"
+                            autoComplete="off"
+                            onChange={(e) => {
+                                if (!verifyLength(e.target.value, 1)) {
+                                    setShortDescriptionState("has-danger");
+                                } else {
+                                    setShortDescriptionState("has-success");
+                                }
+                                setShortDescription(e.target.value);
+                            }}
+                        />
+                        {shortDescriptionState === "has-danger" ? (
+                            <label className="error">Este campo es requerido.</label>
+                        ) : null}
+                    </FormGroup>
+                    <FormGroup className={`has-label ${longDescriptionState}`}>
+                        <label>Descripción larga *</label>
+                        <Input
+                            name="descripcionlarga"
+                            type="text"
+                            autoComplete="off"
+                            onChange={(e) => {
+                            if (!verifyLength(e.target.value, 1)) {
+                                setLongDescriptionState("has-danger");
+                            } else {
+                                setLongDescriptionState("has-success");
+                            }
+                            setLongDescription(e.target.value);
+                            }}
+                        />
+                        {longDescriptionState === "has-danger" ? (
+                            <label className="error">Este campo es requerido.</label>
+                        ) : null}
+                    </FormGroup>
+                    <FormGroup className={`has-label ${longDescriptionState}`}>
+                        <label>Primer renglón *</label>
+                        <Input
+                            name="primerenglon"
+                            type="number"
+                            min="0"
+                            autoComplete="off"
+                            onChange={(e) => {
+                                setFirstRowState("has-success");
+                                setFirstRow(e.target.value);
+                            }}
+                        />
+                        {firstRowState === "has-danger" ? (
+                            <label className="error">Este campo es requerido.</label>
+                        ) : null}
+                    </FormGroup>
+                    <label>Estatus</label>
+                    <FormGroup check>
+                            <Label check>
+                            <Input 
+                                type="checkbox" 
+                                checked = {status}
+                                onChange={(e) => {
+                                    setStatus(e.target.checked)
+                                }}
+                            />{' '}
+                            Habilitado
+                            <span className="form-check-sign">
+                                <span className="check"></span>
+                            </span>
+                            </Label>
+                    </FormGroup>
+                    <div className="category form-category">
+                        * Campos requeridos
+                    </div>
+                    <FormGroup className={`has-label ${errorState}`}>
+                        {errorState === "has-danger" ? (
+                                <label className="error">{errorMessage}</label>
+                        ) : null}
+                    </FormGroup>
+                </Form>
+                {error}
+            </ModalBody>
         <ModalFooter>
           <div className="center-side">
             <Button color="secondary" onClick={handleModalClick}>

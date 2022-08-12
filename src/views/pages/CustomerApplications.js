@@ -23,7 +23,7 @@ import {
 } from "reactstrap";
 
 // core components
-import CustomerApplicationsTable from "../components/Clients/CustomerApplicationsTable.js";
+import CustomerApplicationsTable from "../components/Customers/CustomerApplicationsTable.js";
 import ModalAddCustomerApplication from "views/components/Modals/ModalAddCustomerApplication.js";
 
 function CustomerApplications() {

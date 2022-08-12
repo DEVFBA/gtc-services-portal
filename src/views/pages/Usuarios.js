@@ -24,7 +24,6 @@ import {
   Input,
   Label,
 } from "reactstrap";
-import { createTypePredicateNodeWithModifier } from "typescript";
 
 // core components
 import UsersTable from "../components/Users/UsersTable.js";
@@ -72,7 +71,7 @@ function Usuarios({changeImageP, setChangeImageP}) {
     const params = {
       pvOptionCRUD: "R"
     };
-
+    
     var url = new URL(`${process.env.REACT_APP_API_URI}security-users/`);
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
@@ -88,15 +87,16 @@ function Usuarios({changeImageP, setChangeImageP}) {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
-      setDataUsers(data)
-      setDataFind(false)
+      setDataUsers(data);
+      getDataRoles();
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los roles" + err);
     });
   }, []);
 
-  useEffect(() => {
+  function getDataRoles()
+  {  
     //Aqui vamos a descargar la lista de roles de la base de datos por primera vez
     const params = {
       pvOptionCRUD: "R"
@@ -124,17 +124,19 @@ function Usuarios({changeImageP, setChangeImageP}) {
         for(i=0; i<data.length; i++)
         {
           optionsAux.push({
-            value: data[i].Id_Role, label: data[i].Short_Desc 
+            value: data[i].Id_Role, label: data[i].Id_Role + " - " + data[i].Short_Desc 
           })
         }
         setDataRoles(optionsAux)
+        getDataCustomers();
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los roles" + err);
     });
-  }, []);
+  }
 
-  useEffect(() => {
+  function getDataCustomers()
+  {
     //Aqui vamos a descargar la lista de customers de la base de datos por primera vez
     const params = {
       pvOptionCRUD: "R"
@@ -162,17 +164,19 @@ function Usuarios({changeImageP, setChangeImageP}) {
         for(i=0; i<data.length; i++)
         {
           optionsAux.push({
-            value: data[i].Id_Customer, label: data[i].Name
+            value: data[i].Id_Customer, label: data[i].Id_Customer + " - " + data[i].Name
           })
         }
         setDataCustomers(optionsAux)
+        getDataGeneralParameters()
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los roles" + err);
     });
-  }, []);
+  }
 
-  useEffect(() => {
+  function getDataGeneralParameters()
+  {
     //Aqui vamos a descargar la lista de general parameters para revisar la vigencia del password
     const params = {
       pvOptionCRUD: "R"
@@ -193,44 +197,18 @@ function Usuarios({changeImageP, setChangeImageP}) {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
-        var aux = data.find( o => o.Id_Catalog === 3 )
-        var aux2 = data.find( o => o.Id_Catalog === 9 )
-        setValidDays(parseInt(aux.Value,10))
-        setProfilePath(aux2.Value)
+        var aux = data.find( o => o.Id_Catalog === 3 );
+        var aux2 = data.find( o => o.Id_Catalog === 9 );
+        var aux3 = data.find( o => o.Id_Catalog === 2 )
+        setValidDays(parseInt(aux.Value,10));
+        setProfilePath(aux2.Value);
+        setPathImage(aux3.Value);
+        setDataFind(false);
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los general parameters" + err);
     });
-  }, []);
-
-  useEffect(() => {
-    //Aqui vamos a descargar la lista de general parameters para revisar el path de los logos
-    const params = {
-      pvOptionCRUD: "R"
-    };
-
-    var url = new URL(`${process.env.REACT_APP_API_URI}general-parameters/`);
-
-    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-
-    fetch(url, {
-        method: "GET",
-        headers: {
-            "access-token": token,
-            "Content-Type": "application/json",
-        }
-    })
-    .then(function(response) {
-        return response.ok ? response.json() : Promise.reject();
-    })
-    .then(function(data) {
-        var aux = data.find( o => o.Id_Catalog === 2 )
-        setPathImage(aux.Value)
-    })
-    .catch(function(err) {
-        alert("No se pudo consultar la informacion de los general parameters" + err);
-    });
-  }, []);
+  }
 
   React.useEffect(() => {
     return function cleanup() {

@@ -1,29 +1,23 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
 import ReactBSAlert from "react-bootstrap-sweetalert";
+import Skeleton from '@yisheng90/react-loading';
 
 // reactstrap components
 import {
-  Button,
   Card,
   CardHeader,
   CardBody,
   CardTitle,
   Row,
   Col,
-  Modal, 
-  ModalBody, 
-  ModalFooter,
   FormGroup,
-  Label,
-  Input,
 } from "reactstrap";
 
 import Select from "react-select";
 
-
 import ApplicationSuites from "views/components/Catalogs/Portal/ApplicationSuites.js";
-
+import Groupers from "views/components/Catalogs/Portal/Groupers.js";
 
 function CatalogosPortal() {
   //Para guardar los datos de los catálogos
@@ -37,11 +31,15 @@ function CatalogosPortal() {
 
   //Para guardar los datos del catalogo seleccionado
   const [dataCatalog, setDataCatalog] = useState([]);
+
   const token = localStorage.getItem("Token");
 
   const [alert, setAlert] = React.useState(null);
 
   const [ip, setIP] = React.useState("");
+
+  const [dataFind, setDataFind] = useState(true);
+
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
     setIP(res.data.IPv4)
@@ -75,7 +73,7 @@ function CatalogosPortal() {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
-      //console.log(data)
+      console.log(data)
       
       //Creamos el arreglo de opciones para el select
       var optionsAux = [];
@@ -103,13 +101,50 @@ function CatalogosPortal() {
     const catalog = props.component;
     if(catalog === "ApplicationSuites")
     {
-      return <ApplicationSuites dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else if(dataCatalog.length === 0)
+      {
+          return  <div className ="no-data">
+                      <h3>No hay datos</h3>
+                  </div>
+      }
+      else {      
+        return <ApplicationSuites dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
+    }
+    else if(catalog === "Agrupadores")
+    {
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else if(dataCatalog.length === 0)
+      {
+          return  <div className ="no-data">
+                      <h3>No hay datos</h3>
+                  </div>
+      }
+      else {      
+        return <Groupers dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     return <></>
   }
 
   //Nos servirá para pasarle los datos a la tabla ya descargados
   function updateData(datos){
+    setDataFind(true);
     const params = {
       pvOptionCRUD: "R",
       pSpCatalog : datos.CRUD_References,
@@ -130,6 +165,7 @@ function CatalogosPortal() {
     })
     .then(function(data) {
       setDataCatalog(data)
+      setDataFind(false);
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los catálogos" + err);
@@ -138,6 +174,7 @@ function CatalogosPortal() {
 
   //Para actualizar la tabla al insertar registro
   function updateAddData(){
+    setDataFind(true);
     var datos = dataTable.find(o => o.Component === catalog)
    
     const params = {
@@ -160,6 +197,7 @@ function CatalogosPortal() {
     })
     .then(function(data) {
       setDataCatalog(data)
+      setDataFind(false);
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los catálogos" + err);

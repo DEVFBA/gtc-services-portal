@@ -26,6 +26,7 @@ import ModalUpdatePaymentMethods from "views/components/Modals/catalogs/sat/Moda
 import ModalAddPaymentMethods from "views/components/Modals/catalogs/sat/ModalAddPaymentMethods";
 
 function PaymentMethods({dataTable, updateAddData, ip, autoCloseAlert}) {
+  const role = localStorage.getItem("Id_Role");
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
       var status;
@@ -45,19 +46,21 @@ function PaymentMethods({dataTable, updateAddData, ip, autoCloseAlert}) {
           // ACCIONES A REALIZAR EN CADA REGISTRO
           <div className="actions-center">
               {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-              <abbr title="Editar">
-              <Button
-              onClick={() => {
-                  getRegistro(key);
-                  toggleModalUpdateRecord()
-              }}
-              color="warning"
-              size="sm"
-              className="btn-icon btn-link edit"
-              >
-              <i className="fa fa-edit" />
-              </Button>
-              </abbr>
+              {role === "GTCADMIN" || role === "GTCSUPPO" ? (
+                <abbr title="Editar">
+                <Button
+                  onClick={() => {
+                      getRegistro(key);
+                      toggleModalUpdateRecord()
+                  }}
+                  color="warning"
+                  size="sm"
+                  className="btn-icon btn-link edit"
+                  >
+                  <i className="fa fa-edit" />
+                </Button>
+                </abbr>
+              ):null}
           </div>
           ),
       };
@@ -97,20 +100,7 @@ function PaymentMethods({dataTable, updateAddData, ip, autoCloseAlert}) {
         }
     }
 
-    return dataTable.length === 0 ? (
-      <>
-        <div className="content">
-          <Row>
-            <Col md="12">
-              <h4>Métodos de Pago</h4>
-              <Skeleton height={25} />
-              <Skeleton height="25px" />
-              <Skeleton height="3rem" />
-            </Col>
-          </Row>
-        </div>
-      </>
-    ) : (
+    return (
     <>
       {/*console.log(props.example)*/}
       <div className="content">
@@ -118,12 +108,14 @@ function PaymentMethods({dataTable, updateAddData, ip, autoCloseAlert}) {
           <Col md="12">
             
                 <h4>Métodos de Pago</h4>
-                <Button color="primary" onClick={toggleModalAddRecord}>
+                {role === "GTCADMIN" || role === "GTCSUPPO" ? (
+                  <Button color="primary" onClick={toggleModalAddRecord}>
                     <span className="btn-label">
                     <i className="nc-icon nc-simple-add" />
                     </span>
                     Agregar Nuevo Registro
-                </Button>
+                  </Button>
+                ): null}
              
                 <ReactTable
                   data={dataState}

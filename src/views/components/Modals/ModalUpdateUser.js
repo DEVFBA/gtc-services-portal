@@ -63,8 +63,6 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
     };
 
     useEffect(() => {
-        console.log("ENTRE AL MODAL")
-        console.log(record.image)
         setupdateEmail(record.email);
         setupdateFullName(record.name)
         setupdateRol({
@@ -164,7 +162,7 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
         } else {
           return false;
         }
-      };
+    };
 
     const updateClick = () => {
         if(isValidated()===true)
@@ -359,18 +357,18 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                         <FormGroup className={`has-label ${updateFullNameState}`}>
                             <label>Nombre Usuario *</label>
                             <Input
-                            name="fullname"
-                            id="fullname"
-                            type="text"
-                            value = {updateFullName}
-                            onChange={(e) => {
-                                if (!verifyLength(e.target.value, 1)) {
-                                setupdateFullNameState("has-danger");
-                                } else {
-                                setupdateFullNameState("has-success");
-                                }
-                                setupdateFullName(e.target.value);
-                            }}
+                                name="fullname"
+                                id="fullname"
+                                type="text"
+                                value = {updateFullName}
+                                onChange={(e) => {
+                                    if (!verifyLength(e.target.value, 1)) {
+                                    setupdateFullNameState("has-danger");
+                                    } else {
+                                    setupdateFullNameState("has-success");
+                                    }
+                                    setupdateFullName(e.target.value);
+                                }}
                             />
                             {updateFullNameState === "has-danger" ? (
                             <label className="error">Este campo es requerido.</label>
@@ -452,48 +450,30 @@ function ModalUpdateUser({abierto, toggleModalUpdateRecord, record, dataRoles, d
                             </>
                             ) : null}
                         </FormGroup>
-                        <FormGroup className={`has-label ${updateRolState}`}>
-                            <Label for="exampleSelect">Rol * </Label>
-                            <Select
-                                name=""
-                                className="react-select"
-                                defaultValue = {updateRol}
-                                classNamePrefix="react-select"
-                                value={updateRol}
-                                onChange={(value) => {
-                                    console.log(value)
-                                    setupdateRol(value)
-                                    setupdateRolState("has-success");
-                                }}
-                                options={dataRoles}
+                        <FormGroup>
+                            <Label for="exampleSelect">Rol</Label>
+                            <Input
+                                name="rol"
+                                type="text"
+                                value = {updateRol.label}
+                                readOnly
                             />
-                            {updateRolState === "has-danger" ? (
-                                <label className="error">Selecciona un rol.</label>
-                            ) : null}
                         </FormGroup>
                     </Col>
                     <Col sm="4">
                         <UploadUserImage registerImage = {updateImage} setregisterImage={setupdateImage} image = {updateImage} path = {profilePath} setChangeImage = {setChangeImage}/>
                     </Col>
                     <Col sm="6">
-                        <FormGroup className={`has-label ${updateCustomerState}`}>
-                            <Label for="exampleSelect">Cliente * </Label>
-                            <Select
-                                name=""
-                                className="react-select"
-                                defaultValue = {updateCustomer}
-                                classNamePrefix="react-select"
-                                value={updateCustomer}
-                                onChange={(value) => {
-                                    setupdateCustomer(value)
-                                    setupdateCustomerState("has-success");
-                                }}
-                                options={dataCustomers}
+                        <FormGroup>
+                            <Label for="exampleSelect">Cliente</Label>
+                            <Input
+                                name="cliente"
+                                type="text"
+                                value = {updateCustomer.label}
+                                readOnly
                             />
-                            {updateCustomerState === "has-danger" ? (
-                                <label className="error">Selecciona un cliente.</label>
-                            ) : null}
                         </FormGroup>
+                        <label>Estatus</label>
                         <FormGroup check>
                             <Label check>
                             <Input 

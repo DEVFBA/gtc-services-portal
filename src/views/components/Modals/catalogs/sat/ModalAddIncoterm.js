@@ -204,6 +204,7 @@ function ModalAddIncoterm({modalAddRecord, setModalAddRecord, updateAddData, ip,
                     <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
+            <label>Estatus</label>
             <FormGroup check>
                     <Label check>
                     <Input 

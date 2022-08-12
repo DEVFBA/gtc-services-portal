@@ -12,15 +12,19 @@ import {
     Label,
 } from "reactstrap";
 
-function ModalUpdateTariffFractions({abierto, toggleModalUpdateRecord, record, updateAddData, ip, autoCloseAlert}) {
+import Select from "react-select";
+
+function ModalUpdateTariffFractions({abierto, toggleModalUpdateRecord, record, updateAddData, ip, autoCloseAlert, dataCustomUoMs}) {
         // update form
     const [id, setId] = React.useState();
     const [shortDescription, setShortDescription] = React.useState("");
     const [longDescription, setLongDescription] = React.useState("");
+    const [customUoMs, setCustomUoMs] = useState("");
     const [status, setStatus] = React.useState(true);
     
     const [shortDescriptionState, setShortDescriptionState] = React.useState("");
     const [longDescriptionState, setLongDescriptionState] = React.useState("");
+    const [customUoMsState, setCustomUoMsState] = useState("");
 
     const [error, setError] = React.useState();
     const [errorState, setErrorState] = React.useState("");
@@ -40,14 +44,19 @@ function ModalUpdateTariffFractions({abierto, toggleModalUpdateRecord, record, u
         else{
             setStatus(false);
         }
+        setCustomUoMs({
+            value: record.idCustomUoMs,
+            label: record.idCustomUoMs + " - " + record.customUoMs
+        })
     },[record]);
 
     const handleModalClick = () => {
-        setShortDescriptionState("")
-        setLongDescriptionState("")
-        setError("")
-        setErrorState("")
-        setErrorMessage("")
+        setShortDescriptionState("");
+        setLongDescriptionState("");
+        setCustomUoMsState("");
+        setError("");
+        setErrorState("");
+        setErrorMessage("");
         toggleModalUpdateRecord(!abierto);
     };
 
@@ -108,12 +117,15 @@ function ModalUpdateTariffFractions({abierto, toggleModalUpdateRecord, record, u
             pvIdCatalog: id,
             pvShortDesc: shortDescription,
             pvLongDesc: longDescription,
+            pvIdCustomUoMs : customUoMs.value,
             pbStatus: status,
             pvUser: user,
             pvIP: ip
         };
+
+        console.log(catRegister);
     
-        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/update-sat`, {
+        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/update-sat-tariff-fractions`, {
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {
@@ -173,7 +185,7 @@ function ModalUpdateTariffFractions({abierto, toggleModalUpdateRecord, record, u
               />
             </FormGroup>
             <FormGroup className={`has-label ${shortDescriptionState}`}>
-                <label>Descripción corta</label>
+                <label>Descripción corta *</label>
                 <Input
                   name="shortdescription"
                   type="text"
@@ -194,7 +206,7 @@ function ModalUpdateTariffFractions({abierto, toggleModalUpdateRecord, record, u
                 ) : null}
             </FormGroup>
             <FormGroup className={`has-label ${longDescriptionState}`}>
-                <label>Descripción larga</label>
+                <label>Descripción larga *</label>
                 <Input
                     name="descripcionlarga"
                     type="text"
@@ -214,6 +226,25 @@ function ModalUpdateTariffFractions({abierto, toggleModalUpdateRecord, record, u
                     <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
+            <FormGroup className={`has-label ${customUoMsState}`}>
+                    {/*Al seleccionar un catálogo se hará fetch para actualizar sus configuraciones*/}
+                    <label>Unidad Aduana *</label>
+                    <Select 
+                        className="react-select"
+                        classNamePrefix="react-select"
+                        placeholder = "Selecciona una unidad aduana"
+                        defaultValue = {customUoMs}
+                        options = {dataCustomUoMs}
+                        onChange={(e) => {
+                            setCustomUoMs(e);
+                            setCustomUoMsState("has-success");
+                        }}
+                    />
+                    {customUoMsState === "has-danger" ? (
+                        <label className="error">Este campo es requerido.</label>
+                ) : null}
+            </FormGroup>
+            <label>Estatus</label>
             <FormGroup check>
                     <Label check>
                     <Input 

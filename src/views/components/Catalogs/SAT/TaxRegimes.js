@@ -26,38 +26,55 @@ import ModalUpdateTaxRegimes from "views/components/Modals/catalogs/sat/ModalUpd
 import ModalAddTaxRegimes from "views/components/Modals/catalogs/sat/ModalAddTaxRegimes";
 
 function TaxRegimes({dataTable, updateAddData, ip, autoCloseAlert}) {
+  const role = localStorage.getItem("Id_Role");
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
-      var status;
+      var status, legEntity, legPerson;
       if(prop.Status === true){
-          status = "Habilitado"
+        status = "Habilitado"
       }
       else{
-          status = "No Habilitado"
+        status = "No Habilitado"
+      }
+      if(prop.Legal_Person === true){
+        legPerson = "Si"
+      }
+      else{
+        legPerson = "No"
+      }
+      if(prop.Legal_Entity === true){
+        legEntity = "Si"
+      }
+      else{
+        legEntity = "No"
       }
       return {
           id: key,
           idR: prop.Id_Catalog,
           shortDescription: prop.Short_Desc,
           longDescription: prop.Long_Desc,
+          legalPerson: legPerson,
+          legalEntity: legEntity,
           status: status,
           actions: (
           // ACCIONES A REALIZAR EN CADA REGISTRO
           <div className="actions-center">
               {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-              <abbr title="Editar">
-                <Button
-                onClick={() => {
-                    getRegistro(key);
-                    toggleModalUpdateRecord()
-                }}
-                color="warning"
-                size="sm"
-                className="btn-icon btn-link edit"
-                >
-                <i className="fa fa-edit" />
-                </Button>
-              </abbr>
+              {role === "GTCADMIN" || role === "GTCSUPPO" ? (
+                <abbr title="Editar">
+                  <Button
+                  onClick={() => {
+                      getRegistro(key);
+                      toggleModalUpdateRecord()
+                  }}
+                  color="warning"
+                  size="sm"
+                  className="btn-icon btn-link edit"
+                  >
+                  <i className="fa fa-edit" />
+                  </Button>
+                </abbr>
+              ):null}
           </div>
           ),
       };
@@ -97,20 +114,7 @@ function TaxRegimes({dataTable, updateAddData, ip, autoCloseAlert}) {
         }
     }
 
-    return dataTable.length === 0 ? (
-      <>
-        <div className="content">
-          <Row>
-            <Col md="12">
-              <h4>Regímenes Fiscales</h4>
-              <Skeleton height={25} />
-              <Skeleton height="25px" />
-              <Skeleton height="3rem" />
-            </Col>
-          </Row>
-        </div>
-      </>
-    ) : (
+    return (
     <>
       {/*console.log(props.example)*/}
       <div className="content">
@@ -118,12 +122,14 @@ function TaxRegimes({dataTable, updateAddData, ip, autoCloseAlert}) {
           <Col md="12">
             
                 <h4>Regímenes Fiscales</h4>
-                <Button color="primary" onClick={toggleModalAddRecord}>
+                {role === "GTCADMIN" || role === "GTCSUPPO" ? (
+                  <Button color="primary" onClick={toggleModalAddRecord}>
                     <span className="btn-label">
                     <i className="nc-icon nc-simple-add" />
                     </span>
                     Agregar Nuevo Registro
-                </Button>
+                  </Button>
+                ): null}
              
                 <ReactTable
                   data={dataState}
@@ -139,6 +145,14 @@ function TaxRegimes({dataTable, updateAddData, ip, autoCloseAlert}) {
                     {
                       Header: "Desc. Larga",
                       accessor: "longDescription",
+                    },
+                    {
+                      Header: "Persona Física",
+                      accessor: "legalPerson",
+                    },
+                    {
+                      Header: "Persona Moral",
+                      accessor: "legalEntity",
                     },
                     {
                       Header: "Estatus",

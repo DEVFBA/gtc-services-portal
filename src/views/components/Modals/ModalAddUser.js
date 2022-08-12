@@ -70,7 +70,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
         setModalAddRecord(!modalAddRecord);
     };
 
-        // function that returns true if value is email, false otherwise
+    // function that returns true if value is email, false otherwise
     const verifyEmail = (value) => {
         var emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (emailRex.test(value)) {
@@ -78,6 +78,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
         }
         return false;
     };
+
     // function that verifies if a string has a given length or not
     const verifyLength = (value, length) => {
         if (value.length >= length) {
@@ -97,7 +98,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
     const verifyPassword = (value) => {
         var passwordRex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{10,50}$/;
         if (passwordRex.test(value)) {
-        return true;
+            return true;
         }
         return false;
     };
@@ -111,29 +112,29 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
             registerCustomerState === "has-success" &&
             registerConfirmPasswordState === "has-success"
         ) {
-          return true;
+            return true;
         } else {
-          if (registerEmailState !== "has-success") {
-            setregisterEmailState("has-danger");
-          }
-          if (registerFullNameState !== "has-success") {
-            setregisterFullNameState("has-danger");
-          }
-          if (registerPasswordState !== "has-success") {
-            setregisterPasswordState("has-danger");
-          }
-          if (registerConfirmPasswordState !== "has-success") {
-            setregisterConfirmPasswordState("has-danger");
-          }
-          if (registerRolState !== "has-success") {
-            setregisterRolState("has-danger");
-          }
-          if (registerCustomerState !== "has-success") {
-            setregisterCustomerState("has-danger");
-          }
-          return false;
+            if (registerEmailState !== "has-success") {
+                setregisterEmailState("has-danger");
+            }
+            if (registerFullNameState !== "has-success") {
+                setregisterFullNameState("has-danger");
+            }
+            if (registerPasswordState !== "has-success") {
+                setregisterPasswordState("has-danger");
+            }
+            if (registerConfirmPasswordState !== "has-success") {
+                setregisterConfirmPasswordState("has-danger");
+            }
+            if (registerRolState !== "has-success") {
+                setregisterRolState("has-danger");
+            }
+            if (registerCustomerState !== "has-success") {
+                setregisterCustomerState("has-danger");
+            }
+            return false;
         }
-      };
+    };
 
     const registerClick = () => {
         
@@ -248,27 +249,95 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
             <Form id="RegisterValidation">
                 <Row className="justify-content-center">
                     <Col className="mt-3" lg="10">
-                        <FormGroup className={`has-label ${registerEmailState}`}>
-                        <label>Correo electrónico / Id Usuario *</label>
-                        <Input
-                            name="email"
-                            type="email"
-                            autoComplete="off"
-                            onChange={(e) => {
-                            if (!verifyEmail(e.target.value)) {
-                                setregisterEmailState("has-danger");
-                            } else {
-                                setregisterEmailState("has-success");
-                            }
-                            setregisterEmail(e.target.value);
-                            }}
-                        />
-                        {registerEmailState === "has-danger" ? (
-                            <label className="error">
-                            Por favor ingresa un correo electrónico válido.
-                            </label>
-                        ) : null}
+                        <FormGroup className={`has-label ${registerRolState}`}>
+                            <Label for="exampleSelect">Rol * </Label>
+                            <Select
+                                name=""
+                                className="react-select"
+                                placeholder="Selecciona un rol"
+                                classNamePrefix="react-select"
+                                value={registerRol}
+                                onChange={(value) => {
+                                    console.log(value)
+                                    setregisterRol(value)
+                                    setregisterRolState("has-success");
+                                }}
+                                options={dataRoles}
+                            />
+                            {registerRolState === "has-danger" ? (
+                                <label className="error">Selecciona un rol.</label>
+                            ) : null}
                         </FormGroup>
+                        {registerRol.value === "SERVICE" ? (
+                            <>
+                                <FormGroup className={`has-label ${registerEmailState}`}>
+                                    <label>Id Usuario *</label>
+                                    <Input
+                                        name="email"
+                                        type="text"
+                                        autoComplete="off"
+                                        onChange={(e) => {
+                                        if (!verifyLength(e.target.value, 1)) {
+                                            setregisterEmailState("has-danger");
+                                        } else {
+                                            setregisterEmailState("has-success");
+                                        }
+                                        setregisterEmail(e.target.value);
+                                        }}
+                                    />
+                                    {registerEmailState === "has-danger" ? (
+                                        <label className="error">
+                                        Este campo es requerido.
+                                        </label>
+                                    ) : null}
+                                </FormGroup>
+                            </> 
+                         ) : 
+                            <>
+                                {/*<FormGroup className={`has-label ${registerEmailState}`}>
+                                    <label>Correo electrónico *</label>
+                                    <Input
+                                        name="email"
+                                        type="email"
+                                        autoComplete="off"
+                                        onChange={(e) => {
+                                        if (!verifyEmail(e.target.value)) {
+                                            setregisterEmailState("has-danger");
+                                        } else {
+                                            setregisterEmailState("has-success");
+                                        }
+                                        setregisterEmail(e.target.value);
+                                        }}
+                                    />
+                                    {registerEmailState === "has-danger" ? (
+                                        <label className="error">
+                                        Por favor ingresa un correo electrónico válido.
+                                        </label>
+                                    ) : null}
+                                    </FormGroup>*/}
+                                <FormGroup className={`has-label ${registerEmailState}`}>
+                                    <label>Id Usuario *</label>
+                                    <Input
+                                        name="email"
+                                        type="text"
+                                        autoComplete="off"
+                                        onChange={(e) => {
+                                        if (!verifyLength(e.target.value, 1)) {
+                                            setregisterEmailState("has-danger");
+                                        } else {
+                                            setregisterEmailState("has-success");
+                                        }
+                                        setregisterEmail(e.target.value);
+                                        }}
+                                    />
+                                    {registerEmailState === "has-danger" ? (
+                                        <label className="error">
+                                        Este campo es requerido.
+                                        </label>
+                                    ) : null}
+                                </FormGroup>
+                            </> 
+                         }
                         <FormGroup className={`has-label ${registerFullNameState}`}>
                             <label>Nombre Usuario *</label>
                             <Input
@@ -285,7 +354,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
                                 }}
                             />
                             {registerFullNameState === "has-danger" ? (
-                            <label className="error">Este campo es requerido.</label>
+                                <label className="error">Este campo es requerido.</label>
                             ) : null}
                         </FormGroup>
                         <FormGroup className={`has-label ${registerPasswordState}`}>
@@ -331,24 +400,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
                             <label className="error">La contraseña no coincide.</label>
                         ) : null}
                         </FormGroup>
-                        <FormGroup className={`has-label ${registerRolState}`}>
-                            <Label for="exampleSelect">Rol * </Label>
-                            <Select
-                                name=""
-                                className="react-select"
-                                placeholder="Selecciona un rol"
-                                classNamePrefix="react-select"
-                                value={registerRol}
-                                onChange={(value) => {
-                                    setregisterRol(value)
-                                    setregisterRolState("has-success");
-                                }}
-                                options={dataRoles}
-                            />
-                            {registerRolState === "has-danger" ? (
-                                <label className="error">Selecciona un rol.</label>
-                            ) : null}
-                        </FormGroup>
+                        
                     </Col>
                     <Col sm="4">
                             <AddUserImage registerImage = {registerImage} setregisterImage={setregisterImage}/>
@@ -372,6 +424,7 @@ function ModalAddUser({modalAddRecord, setModalAddRecord, dataRoles, dataCustome
                                 <label className="error">Selecciona un cliente.</label>
                             ) : null}
                         </FormGroup>
+                        <label>Estatus</label>
                         <FormGroup check>
                             <Label check>
                             <Input 

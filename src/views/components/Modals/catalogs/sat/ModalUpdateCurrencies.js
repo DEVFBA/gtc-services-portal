@@ -17,10 +17,16 @@ function ModalUpdateCurrencies({abierto, toggleModalUpdateRecord, record, update
     const [id, setId] = React.useState("Hola");
     const [shortDescription, setShortDescription] = React.useState("");
     const [longDescription, setLongDescription] = React.useState("");
+    const [decimals, setDecimals] = React.useState("");
+    const [variationPercentage, setVariationPercentage] = React.useState("");
     const [status, setStatus] = React.useState(true);
+
+    const [noDecimals, setNoDecimals] = React.useState(new RegExp('[.]'));
     
     const [shortDescriptionState, setShortDescriptionState] = React.useState("");
     const [longDescriptionState, setLongDescriptionState] = React.useState("");
+    const [decimalsState, setDecimalsState] = React.useState("");
+    const [variationPercentageState, setVariationPercentageState] = React.useState("");
 
     const [error, setError] = React.useState();
     const [errorState, setErrorState] = React.useState("");
@@ -31,8 +37,10 @@ function ModalUpdateCurrencies({abierto, toggleModalUpdateRecord, record, update
 
     useEffect(() => {
         setId(record.idR);
-        setShortDescription(record.shortDescription)
-        setLongDescription(record.longDescription)
+        setShortDescription(record.shortDescription);
+        setLongDescription(record.longDescription);
+        setDecimals(record.decimals);
+        setVariationPercentage(record.variationPercentage);
         if(record.status === "Habilitado")
         {
             setStatus(true);
@@ -43,9 +51,10 @@ function ModalUpdateCurrencies({abierto, toggleModalUpdateRecord, record, update
     },[record]);
 
     const handleModalClick = () => {
-       
         setShortDescriptionState("")
         setLongDescriptionState("")
+        setDecimalsState();
+        setVariationPercentageState();
         setError("")
         setErrorState("")
         setErrorMessage("")
@@ -60,10 +69,25 @@ function ModalUpdateCurrencies({abierto, toggleModalUpdateRecord, record, update
         return false;
     };
 
+    function containsDot(number)
+    {
+        console.log(number.toString())
+        if(number.toString().includes(".") === true)
+        {
+            console.log("SI ENTRE")
+            return true
+        }
+        else {
+            return false
+        }
+    }
+
     //Funcion para validar que no se queden en blanco los inputs en caso de que haga cambios
     const verifyInputs = () =>{
         var shortDesc = document.getElementById("shortdescription").value
         var longDesc = document.getElementById("longdescription").value
+        var decimalsI = document.getElementById("decimals").value
+        var variationPI = document.getElementById("variationpercentage").value
 
         if (!verifyLength(shortDesc, 1)) {
             setShortDescriptionState("has-danger");
@@ -78,6 +102,24 @@ function ModalUpdateCurrencies({abierto, toggleModalUpdateRecord, record, update
             setLongDescriptionState("has-success");
         }
         setLongDescription(longDesc);
+
+        if(decimalsI === "" || decimalsI < 0)
+        {
+            setDecimalsState("has-danger");
+        }
+        else {
+            setDecimalsState("has-success");
+        }
+        setDecimals(decimalsI);
+
+        if(variationPI === "" || variationPI < 0)
+        {
+            setVariationPercentageState("has-danger");
+        }
+        else {
+            setVariationPercentageState("has-success");
+        }
+        setVariationPercentage(variationPI);
     }
 
     const isValidated = () => {
@@ -85,7 +127,9 @@ function ModalUpdateCurrencies({abierto, toggleModalUpdateRecord, record, update
         verifyInputs()
         if (
             shortDescriptionState !== "has-danger" &&
-            longDescriptionState !== "has-danger"
+            longDescriptionState !== "has-danger" &&
+            decimalsState !== "has-danger" &&
+            variationPercentageState !== "has-danger"
         ) {
           return true;
         } else {
@@ -109,12 +153,16 @@ function ModalUpdateCurrencies({abierto, toggleModalUpdateRecord, record, update
             pvIdCatalog: id,
             pvShortDesc: shortDescription,
             pvLongDesc: longDescription,
+            piDecimals: decimals,
+            pfVariationPercent: variationPercentage,
             pbStatus: status,
             pvUser: user,
             pvIP: ip
         };
+
+        console.log(catRegister)
     
-        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/update-sat`, {
+        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/update-sat-currencies`, {
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {
@@ -174,7 +222,7 @@ function ModalUpdateCurrencies({abierto, toggleModalUpdateRecord, record, update
               />
             </FormGroup>
             <FormGroup className={`has-label ${shortDescriptionState}`}>
-                <label>Descripción corta</label>
+                <label>Descripción corta *</label>
                 <Input
                   name="shortdescription"
                   type="text"
@@ -195,7 +243,7 @@ function ModalUpdateCurrencies({abierto, toggleModalUpdateRecord, record, update
                 ) : null}
             </FormGroup>
             <FormGroup className={`has-label ${longDescriptionState}`}>
-                <label>Descripción larga</label>
+                <label>Descripción larga *</label>
                 <Input
                     name="descripcionlarga"
                     type="text"
@@ -215,6 +263,58 @@ function ModalUpdateCurrencies({abierto, toggleModalUpdateRecord, record, update
                     <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
+            <FormGroup className={`has-label ${decimalsState}`}>
+                <label>Decimales *</label>
+                <Input
+                    name="decimals"
+                    type="number"
+                    id = "decimals"
+                    onkeydown = "return event.keyCode !== 190"
+                    value={decimals}
+                    autoComplete="off"
+                    onChange={(e) => {
+                        //console.log(noDecimals.test(e.target.value))
+                        console.log(containsDot(e.target.value))
+                        if(e.target.value!=="" && containsDot(e.target.value)!==true)
+                        {
+                            setDecimals(e.target.value)
+                            setDecimalsState("has-success")
+                        }
+                        else {
+                            setDecimals(e.target.value)
+                            setDecimalsState("has-danger")
+                        }
+                    }}
+                />
+                {decimalsState === "has-danger" ? (
+                    <label className="error">Este campo es requerido - No se permiten números decimales</label>
+                ) : null}
+            </FormGroup>
+            <FormGroup className={`has-label ${variationPercentageState}`}>
+                <label>Variación *</label>
+                <Input
+                    name="variationpercentage"
+                    type="number"
+                    id = "variationpercentage"
+                    value={variationPercentage}
+                    autoComplete="off"
+                    onChange={(e) => {
+                        if(e.target.value!=="")
+                        {
+                            setVariationPercentage(e.target.value)
+                            setVariationPercentageState("has-success")
+                        }
+                        else {
+                            setVariationPercentage(e.target.value)
+                            setVariationPercentageState("has-danger")
+                        }
+                    }}
+                />
+                {variationPercentageState === "has-danger" ? (
+                    <label className="error">Este campo es requerido.</label>
+                ) : null}
+            </FormGroup>
+            <label>Estatus</label>
             <FormGroup check>
                     <Label check>
                     <Input 

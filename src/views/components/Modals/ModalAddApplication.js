@@ -298,6 +298,7 @@ function ModalAddApplication({abierto, toggleModalAddRecord, dataSuites, updateA
                                     <label className="error">Selecciona un tipo de aplicación.</label>
                                 ) : null}
                             </FormGroup>
+                            <Label for="exampleSelect">Estatus</Label>
                             <FormGroup check>
                                 <Label check>
                                 <Input 

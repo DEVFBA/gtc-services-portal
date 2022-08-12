@@ -20,8 +20,13 @@ import {
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js"; 
+import ModalAddMunicipalities from "views/components/Modals/catalogs/sat/ModalAddMunicipalities";
+import ModalUpdateMunicipalities from "views/components/Modals/catalogs/sat/ModalUpdateMunicipalities.js";
 
 function Municipalities({dataTable, updateAddData, ip, autoCloseAlert}) {
+  const role = localStorage.getItem("Id_Role");
+  const token = localStorage.getItem("Token");
+
   const [dataState, setDataState] = React.useState(
     dataTable.map((prop, key) => {
       var status;
@@ -40,12 +45,165 @@ function Municipalities({dataTable, updateAddData, ip, autoCloseAlert}) {
         idMunicipality: prop.Id_Municipality,
         municipalityDesc: prop.Municipality_Desc,
         status: status,
+        actions: (
+          // ACCIONES A REALIZAR EN CADA REGISTRO
+          <div className="actions-center">
+              {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
+              {role === "GTCADMIN" || role === "GTCSUPPO" ? (
+                <abbr title="Editar">
+                  <Button
+                  onClick={() => {
+                      getRegistro(key);
+                      toggleModalUpdateRecord()
+                  }}
+                  color="warning"
+                  size="sm"
+                  className="btn-icon btn-link edit"
+                  >
+                  <i className="fa fa-edit" />
+                  </Button>
+                </abbr>
+              ):null}
+          </div>
+        ),
       };
     })
   );
 
+  const [dataFind, setDataFind] = useState(true)
+  const [dataCountries, setDataCountries] = useState([])
+  const [dataStates, setDataStates] = useState([])
 
-    return dataTable.length === 0 ? (
+  useEffect(() => {
+    const params = {
+      pvOptionCRUD: "R",
+      pSpCatalog : "spSAT_Cat_Countries_CRUD_Records",
+    };
+
+    var url = new URL(`${process.env.REACT_APP_API_URI}cat-catalogs/catalog`);
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+      //Creamos el arreglo de opciones para el select en orden alfabetico
+      data.sort(function (a, b) {
+        if (a.Short_Desc > b.Short_Desc) {
+          return 1;
+        }
+        if (a.Short_Desc < b.Short_Desc) {
+          return -1;
+        }
+        // a must be equal to b
+        return 0;
+      });
+      
+      var optionsAux = [];
+      var i;
+      for(i=0; i<data.length; i++)
+      {
+        optionsAux.push({
+          value: data[i].Id_Catalog, label: data[i].Id_Catalog + " - " + data[i].Short_Desc 
+        })
+      }
+      setDataCountries(optionsAux);
+      getDataStates();
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de los catálogos" + err);
+    });
+  }, []);
+
+  function getDataStates()
+  {
+    const params = {
+      pvOptionCRUD: "R",
+      pSpCatalog : "spSAT_Cat_States_CRUD_Records",
+    };
+
+    var url = new URL(`${process.env.REACT_APP_API_URI}cat-catalogs/catalog`);
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "access-token": token,
+            "Content-Type": "application/json",
+        }
+    })
+    .then(function(response) {
+        return response.ok ? response.json() : Promise.reject();
+    })
+    .then(function(data) {
+      //Creamos el arreglo de opciones para el select en orden alfabetico
+      data.sort(function (a, b) {
+        if (a.State_Desc > b.State_Desc) {
+          return 1;
+        }
+        if (a.State_Desc < b.State_Desc) {
+          return -1;
+        }
+        // a must be equal to b
+        return 0;
+      });
+      
+      var optionsAux = [];
+      var i;
+      for(i=0; i<data.length; i++)
+      {
+        optionsAux.push({
+          value: data[i].Id_State, label: data[i].Id_State + " - " + data[i].State_Desc
+        })
+      }
+      setDataStates(optionsAux);
+      setDataFind(false);
+    })
+    .catch(function(err) {
+        alert("No se pudo consultar la informacion de los catálogos" + err);
+    });
+  }
+
+
+    const [modalAddRecord, setModalAddRecord] = useState(false);
+    const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
+
+    //Para saber que registro se va a editar
+    const [record, setRecord] = useState({});
+
+    function getRegistro(key)
+    {
+        var registro = dataState.find((o) => o.id === key)
+        setRecord(registro) 
+    }
+
+    function toggleModalAddRecord(){
+        if(modalAddRecord == false){
+        setModalAddRecord(true);
+        }
+        else{
+        setModalAddRecord(false);
+        }
+    }
+
+    function toggleModalUpdateRecord(){
+        if(modalUpdateRecord == false){
+        setModalUpdateRecord(true);
+        }
+        else{
+        setModalUpdateRecord(false);
+        }
+    }
+
+
+    return dataFind === true ? (
       <>
         <div className="content">
           <Row>
@@ -66,6 +224,15 @@ function Municipalities({dataTable, updateAddData, ip, autoCloseAlert}) {
           <Col md="12">
             
                 <h4>Municipios</h4>
+
+                {role === "GTCADMIN" || role === "GTCSUPPO" ? (
+                  <Button color="primary" onClick={toggleModalAddRecord}>
+                    <span className="btn-label">
+                    <i className="nc-icon nc-simple-add" />
+                    </span>
+                    Agregar Nuevo Registro
+                  </Button>
+                ): null}
              
                 <ReactTable
                     data={dataState}
@@ -93,7 +260,13 @@ function Municipalities({dataTable, updateAddData, ip, autoCloseAlert}) {
                         {
                             Header: "Nombre Municipio",
                             accessor: "municipalityDesc",
-                        }
+                        },
+                        {
+                          Header: "Acciones",
+                          accessor: "actions",
+                          sortable: false,
+                          filterable: false,
+                        },
                     ]}
                 /*
                     You can choose between primary-pagination, info-pagination, success-pagination, warning-pagination, danger-pagination or none - which will make the pagination buttons gray
@@ -103,6 +276,12 @@ function Municipalities({dataTable, updateAddData, ip, autoCloseAlert}) {
           </Col>
         </Row>
       </div>
+
+      {/*MODAL PARA AÑADIR REGISTROS*/}
+      <ModalAddMunicipalities modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData} ip = {ip} autoCloseAlert={autoCloseAlert} dataCountries = {dataCountries} dataStates = {dataStates}/>       
+
+      {/*MODAL PARA MODIFICAR REGISTRO*/}
+      <ModalUpdateMunicipalities abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData} ip = {ip} autoCloseAlert={autoCloseAlert} dataCountries = {dataCountries} dataStates = {dataStates}/>
     </>
   );
 }

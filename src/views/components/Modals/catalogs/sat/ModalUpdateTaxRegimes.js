@@ -17,6 +17,8 @@ function ModalUpdateTaxRegimes({abierto, toggleModalUpdateRecord, record, update
     const [id, setId] = React.useState("Hola");
     const [shortDescription, setShortDescription] = React.useState("");
     const [longDescription, setLongDescription] = React.useState("");
+    const [legalPerson, setLegalPerson] = React.useState(false);
+    const [legalEntity, setLegalEntity] = React.useState(false);
     const [status, setStatus] = React.useState(true);
     
     const [shortDescriptionState, setShortDescriptionState] = React.useState("");
@@ -39,6 +41,20 @@ function ModalUpdateTaxRegimes({abierto, toggleModalUpdateRecord, record, update
         }
         else{
             setStatus(false);
+        }
+        if(record.legalPerson === "Si")
+        {
+            setLegalPerson(true);
+        }
+        else{
+            setLegalPerson(false);
+        }
+        if(record.legalEntity === "Si")
+        {
+            setLegalEntity(true);
+        }
+        else{
+            setLegalEntity(false);
         }
     },[record]);
 
@@ -108,12 +124,14 @@ function ModalUpdateTaxRegimes({abierto, toggleModalUpdateRecord, record, update
             pvIdCatalog: id,
             pvShortDesc: shortDescription,
             pvLongDesc: longDescription,
+            pbLegalPerson: legalPerson,
+            pbLegalEntity: legalEntity,
             pbStatus: status,
             pvUser: user,
             pvIP: ip
         };
     
-        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/update-sat`, {
+        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/update-sat-tax-regimes`, {
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {
@@ -214,6 +232,37 @@ function ModalUpdateTaxRegimes({abierto, toggleModalUpdateRecord, record, update
                     <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
+            <FormGroup check>
+                <Label check>
+                    <Input 
+                        type="checkbox" 
+                        checked = {legalPerson}
+                        onChange={(e) => {
+                            setLegalPerson(e.target.checked)
+                        }}
+                    />{' '}
+                    Persona Física
+                    <span className="form-check-sign">
+                        <span className="check"></span>
+                    </span>
+                </Label>
+            </FormGroup>
+            <FormGroup check>
+                <Label check>
+                    <Input 
+                        type="checkbox" 
+                        checked = {legalEntity}
+                        onChange={(e) => {
+                            setLegalEntity(e.target.checked)
+                        }}
+                    />{' '}
+                    Persona Moral
+                    <span className="form-check-sign">
+                        <span className="check"></span>
+                    </span>
+                </Label>
+            </FormGroup>
+            <label>Estatus</label>
             <FormGroup check>
                     <Label check>
                     <Input 

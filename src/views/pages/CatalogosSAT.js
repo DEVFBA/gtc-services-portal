@@ -1,26 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
 import ReactBSAlert from "react-bootstrap-sweetalert";
+import Skeleton from '@yisheng90/react-loading';
 
 // reactstrap components
 import {
-  Button,
   Card,
   CardHeader,
   CardBody,
   CardTitle,
   Row,
   Col,
-  Modal, 
-  ModalBody, 
-  ModalFooter,
   FormGroup,
-  Label,
-  Input,
 } from "reactstrap";
 
 import Select from "react-select";
-
 
 import CFDIUses from "views/components/Catalogs/SAT/CFDIUses";
 import Countries from "views/components/Catalogs/SAT/Countries";
@@ -46,6 +40,13 @@ import Localities from "views/components/Catalogs/SAT/Localities";
 import Municipalities from "views/components/Catalogs/SAT/Municipalities";
 import States from "views/components/Catalogs/SAT/States";
 import ZipCodes from "views/components/Catalogs/SAT/ZipCodes";
+import Export from "views/components/Catalogs/SAT/Export";
+import Frequency from "views/components/Catalogs/SAT/Frequency";
+import Months from "views/components/Catalogs/SAT/Months";
+import TaxObject from "views/components/Catalogs/SAT/TaxObject";
+import FactorTypes from "views/components/Catalogs/SAT/FactorTypes";
+import TaxFee from "views/components/Catalogs/SAT/TaxFee";
+import CFDIUsesTaxRegimes from "views/components/Catalogs/SAT/CFDIUsesTaxRegimes";
 
 function CatalogosSAT() {
   //Para guardar los datos de los catálogos
@@ -66,6 +67,8 @@ function CatalogosSAT() {
 
   const [alert, setAlert] = React.useState(null);
 
+  const [dataFind, setDataFind] = useState(true);
+
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
     setIP(res.data.IPv4)
@@ -77,7 +80,6 @@ function CatalogosSAT() {
   }, []);
 
   useEffect(() => {
-    console.log("HOLA ENTRE")
     //Aqui vamos a descargar la lista de catalogos de la base de datos por primera vez
     const params = {
       pvOptionCRUD: "R",
@@ -134,83 +136,445 @@ function CatalogosSAT() {
   function Catalog(props) {
     const catalog = props.component;
     if (catalog === "CFDIUses") {
-      return <CFDIUses dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <CFDIUses dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "Countries") {
-      return <Countries dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <Countries dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "Currencies") {
-      return <Currencies dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <Currencies dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "Customs") {
-      return <Customs dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <Customs dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "CustomsUnits") {
-      return <CustomsUnits dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <CustomsUnits dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "Incoterm") {
-      return <Incoterm dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <Incoterm dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "KeyProduct") {
-      return <KeyProduct dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <KeyProduct dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "KeyUnit") {
-      return <KeyUnit dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <KeyUnit dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "PaymentMethods") {
-      return <PaymentMethods dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <PaymentMethods dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "PaymentWays") {
-      return <PaymentWays dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <PaymentWays dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "PetitionTypes") {
-      return <PetitionTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <PetitionTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "ReasonsTransfer") {
-      return <ReasonsTransfer dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <ReasonsTransfer dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "TariffFractions") {
-      return <TariffFractions dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <TariffFractions dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "Taxes") {
-      return <Taxes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <Taxes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "TaxRegimes") {
-      return <TaxRegimes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <TaxRegimes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "TypesOperation") {
-      return <TypesOperation dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <TypesOperation dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "VoucherTypes") {
-      return <VoucherTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <VoucherTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "RelationshipTypes") {
-      return <RelationshipTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <RelationshipTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "Assumptions") {
-      return <Assumptions dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <Assumptions dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "EntityTypes") {
-      return <EntityTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <EntityTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "Locations") {
-      return <Localities dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <Localities dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "Municipalities") {
-      return <Municipalities dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <Municipalities dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "States") {
-      return <States dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <States dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     if (catalog === "ZipCodes") {
-      return <ZipCodes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <ZipCodes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
+    }
+    if (catalog === "Export") {
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <Export dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
+    }
+    if (catalog === "Frequency") {
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <Frequency dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
+    }
+    if (catalog === "Months") {
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <Months dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
+    }
+    if (catalog === "TaxObject") {
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <TaxObject dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
+    }
+    if (catalog === "FactorType") {
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <FactorTypes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
+    }
+    if (catalog === "RateFee") {
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <TaxFee dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
+    }
+    if (catalog === "CFDIUsesTaxRegimens") {
+      if(dataFind === true)
+      {
+          return  <div>
+                      <Skeleton height={25} />
+                      <Skeleton height="25px" />
+                      <Skeleton height="3rem" />
+                  </div>
+      }
+      else 
+      {
+        return <CFDIUsesTaxRegimes dataTable = {dataCatalog} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>;
+      }
     }
     return <p></p>
   }
 
   //Nos servirá para pasarle los datos a la tabla ya descargados
   function updateData(datos){
-    console.log(datos)
+    setDataFind(true);
     const params = {
       pvOptionCRUD: "R",
       pSpCatalog : datos.CRUD_References,
@@ -231,7 +595,8 @@ function CatalogosSAT() {
     })
     .then(function(data) {
       console.log(data)
-      setDataCatalog(data)
+      setDataCatalog(data);
+      setDataFind(false);
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los catálogos" + err);
@@ -240,7 +605,7 @@ function CatalogosSAT() {
 
   //Para actualizar la tabla al insertar registro
   function updateAddData(){
-    
+    setDataFind(true);
     var datos = dataTable.find(o => o.Component === catalog)
     console.log(datos)
     console.log("entre")
@@ -264,7 +629,8 @@ function CatalogosSAT() {
         return response.ok ? response.json() : Promise.reject();
     })
     .then(function(data) {
-      setDataCatalog(data)
+      setDataCatalog(data);
+      setDataFind(false);
     })
     .catch(function(err) {
         alert("No se pudo consultar la informacion de los catálogos" + err);

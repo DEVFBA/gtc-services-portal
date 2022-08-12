@@ -73,6 +73,8 @@ function Dashboard() {
   const logged = localStorage.getItem("logged");
   const history = useHistory();
 
+  const ambiente = process.env.REACT_APP_ENVIRONMENT
+
   React.useEffect(() => {
     /*fetch(`http://localhost:8091/api/cat-countries`, {
       method: "GET",

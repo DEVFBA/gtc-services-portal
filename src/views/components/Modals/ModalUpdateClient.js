@@ -20,7 +20,7 @@ import {
     Col,
 } from "reactstrap";
 
-function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dataCountries, updateAddData, pathLogo, ip, profilePath, autoCloseAlert}) {
+function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dataCountries, updateAddData, pathLogo, ip, profilePath, autoCloseAlert, dataTaxRegimes}) {
 
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");
@@ -29,6 +29,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
     const [updateIdCustomer, setupdateIdCustomer] = React.useState("");
     const [updateFullName, setupdateFullName] = React.useState("");
     const [updateRfc, setupdateRfc] = React.useState("");
+    const [updateTaxRegimen, setupdateTaxRegimen] = React.useState("");
     const [updateStreet, setupdateStreet] = React.useState("");
     const [updateNoExterior, setupdateNoExterior] = React.useState("");
     const [updateNoInterior, setupdateNoInterior] = React.useState("");
@@ -48,6 +49,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
 
     const [updateFullNameState, setupdateFullNameState] = React.useState("");
     const [updateRfcState, setupdateRfcState] = React.useState("");
+    const [updateTaxRegimenState, setupdateTaxRegimenState] = React.useState("");
     const [updateStreetState, setupdateStreetState] = React.useState("");
     const [updateNoExteriorState, setupdateNoExteriorState] = React.useState("");
     const [updateNoInteriorState, setupdateNoInteriorState] = React.useState("");
@@ -66,22 +68,26 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
     const [errorMessage, setErrorMessage] = React.useState("");
 
     useEffect(() => {
-        setupdateIdCustomer(record.idCus)
-        setupdateFullName(record.nombre)
-        setupdateRfc(record.taxId)
-        setupdateStreet(record.street)
-        setupdateNoExterior(record.exteriorNumber)
-        setupdateNoInterior(record.interiorNumber)
+        setupdateIdCustomer(record.idCus);
+        setupdateFullName(record.nombre);
+        setupdateRfc(record.taxId);
+        setupdateTaxRegimen({
+            value: record.idTaxRegimen,
+            label: record.idTaxRegimen + " - " + record.taxRegimen
+        })
+        setupdateStreet(record.street);
+        setupdateNoExterior(record.exteriorNumber);
+        setupdateNoInterior(record.interiorNumber);
         setupdateCountry({
             value: record.idCountry,
-            label: record.country
+            label: record.idCountry + " - " + record.country
         })
-        setupdateCity(record.city)
-        setupdateZipCode(record.zipCode)
-        setupdateContact(record.contact)
-        setupdateTelephone1(record.phone1)
-        setupdateTelephone2(record.phone2)
-        setupdateWebPage(record.webPage)
+        setupdateCity(record.city);
+        setupdateZipCode(record.zipCode);
+        setupdateContact(record.contact);
+        setupdateTelephone1(record.phone1);
+        setupdateTelephone2(record.phone2);
+        setupdateWebPage(record.webPage);
         if(record.status === "Habilitado")
         {
             setupdateStatus(true);
@@ -95,6 +101,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
     const handleModalClick = () => {
         setupdateFullNameState("")
         setupdateRfcState("")
+        setupdateTaxRegimenState("")
         setModalUpdateRecord(!modalUpdateRecord);
     };
 
@@ -111,6 +118,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
         if (
             updateFullNameState !== "has-danger" &&
             updateRfcState !== "has-danger" &&
+            updateTaxRegimenState !== "has-danger" &&
             updateCountryState !== "has-danger"
         ) {
           return true;
@@ -154,6 +162,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
             pvOptionCRUD: "U",
             piIdCustomer: updateIdCustomer,
             pvIdCountry: updateCountry.value,
+            pvIdTaxRegimen: updateTaxRegimen.value,
             pvName: updateFullName,
             pvTaxId: updateRfc,
             pvStreet: updateStreet,
@@ -173,7 +182,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
             pvChangeImage : changeImage
         };
     
-        fetch(`${process.env.REACT_APP_API_URI}customers/update-customer/`, {
+        fetch(`http://localhost:8091/api/customers/update-customer/`, {
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {
@@ -216,58 +225,71 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
     return (
         <Modal isOpen={modalUpdateRecord} toggle={handleModalClick} size="lg">
             <div className="modal-header justify-content-center">
-            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
-                <span aria-hidden="true">×</span>
-            </button>
-            <h5 className="modal-title">Actualizar registro</h5>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h5 className="modal-title">Actualizar registro</h5>
             </div>
             <ModalBody>
             <Form id="RegisterValidation">
                 <Row className="justify-content-center">
                     <Col className="mt-3" lg="10">
                         <FormGroup className={`has-label ${updateFullNameState}`}>
-                        <label>Nombre completo *</label>
-                        <Input
-                            name="name"
-                            type="text"
-                            value = {updateFullName}
-                            id="fullname"
-                            onChange={(e) => {
-                                if (!verifyLength(e.target.value, 1)) {
-                                    setupdateFullNameState("has-danger");
-                                } else {
-                                    setupdateFullNameState("has-success");
-                                }
-                                setupdateFullName(e.target.value);
-                            }}
-                        />
-                        {updateFullNameState === "has-danger" ? (
-                            <label className="error">
-                            Este campo es requerido.
-                            </label>
-                        ) : null}
+                            <label>Nombre completo *</label>
+                            <Input
+                                name="name"
+                                type="text"
+                                value = {updateFullName}
+                                id="fullname"
+                                onChange={(e) => {
+                                    if (!verifyLength(e.target.value, 1)) {
+                                        setupdateFullNameState("has-danger");
+                                    } else {
+                                        setupdateFullNameState("has-success");
+                                    }
+                                    setupdateFullName(e.target.value);
+                                }}
+                            />
+                            {updateFullNameState === "has-danger" ? (
+                                <label className="error">
+                                Este campo es requerido.
+                                </label>
+                            ) : null}
                         </FormGroup>
                         <FormGroup className={`has-label ${updateRfcState}`}>
-                        <label>Rfc / Tax Id *</label>
-                        <Input
-                            name="rfc"
-                            type="text"
-                            id="rfc"
-                            value = {updateRfc}
-                            onChange={(e) => {
-                                if (!verifyLength(e.target.value, 1)) {
-                                    setupdateRfcState("has-danger");
-                                } else {
-                                    setupdateRfcState("has-success");
-                                }
-                                setupdateRfc(e.target.value);
-                            }}
-                        />
-                        {updateRfcState === "has-danger" ? (
-                            <label className="error">
-                            Este campo es requerido.
-                            </label>
-                        ) : null}
+                            <label>Rfc / Tax Id *</label>
+                            <Input
+                                name="rfc"
+                                type="text"
+                                id="rfc"
+                                value = {updateRfc}
+                                onChange={(e) => {
+                                    if (!verifyLength(e.target.value, 1)) {
+                                        setupdateRfcState("has-danger");
+                                    } else {
+                                        setupdateRfcState("has-success");
+                                    }
+                                    setupdateRfc(e.target.value);
+                                }}
+                            />
+                            {updateRfcState === "has-danger" ? (
+                                <label className="error">
+                                Este campo es requerido.
+                                </label>
+                            ) : null}
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="exampleSelect">Régimen Fiscal*</Label>
+                            <Select
+                                name="country"
+                                className="react-select"
+                                classNamePrefix="react-select"
+                                defaultValue = {updateTaxRegimen}
+                                onChange={(value) => {
+                                    setupdateTaxRegimen(value)
+                                }}
+                                options={dataTaxRegimes}
+                            />
                         </FormGroup>
                         <FormGroup>
                             <label>Calle</label>
@@ -303,7 +325,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
                             />
                         </FormGroup>
                         <FormGroup>
-                            <Label for="exampleSelect">País</Label>
+                            <Label for="exampleSelect">País *</Label>
                             <Select
                                 name="country"
                                 className="react-select"
@@ -388,6 +410,7 @@ function ModalUpdateClient({modalUpdateRecord, setModalUpdateRecord, record, dat
                                 }}
                             />
                         </FormGroup>
+                        <label>Estatus</label>
                         <FormGroup check>
                             <Label check>
                             <Input 

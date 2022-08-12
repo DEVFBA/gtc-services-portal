@@ -356,6 +356,7 @@ function ModalUpdateApplication({abierto, toggleModalUpdateRecord, dataSuites, u
                                     <label className="error">Selecciona un tipo de aplicación.</label>
                                 ) : null}
                             </FormGroup>
+                            <Label>Estatus</Label>
                             <FormGroup check>
                                 <Label check>
                                 <Input 

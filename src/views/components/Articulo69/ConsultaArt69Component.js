@@ -95,7 +95,7 @@ function ConsultaArt69Component({dataOptions}) {
             <Select 
               name=""
               className="react-select"
-              placeholder = "Selecciona un assumption para ver su información"
+              placeholder = "Selecciona un Supuesto para ver su información"
               classNamePrefix="react-select"
               value={catalog}
               onChange={(value) => {

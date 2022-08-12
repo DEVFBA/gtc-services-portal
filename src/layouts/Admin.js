@@ -6,7 +6,6 @@ import { Route, Switch, useLocation } from "react-router-dom";
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
-import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 import IdleTimer from 'react-idle-timer';
 
 import { Link, useHistory } from "react-router-dom";
@@ -30,12 +29,22 @@ import CustomerApplications from "../views/pages/CustomerApplications.js";
 import Articulo69 from "../views/pages/Articulo69.js";
 import ConsultaArt69 from "../views/pages/ConsultaArt69";
 import CFDIPDFRequest from "../views/pages/CFDIPDFRequest.js";
-import CustomerApplicationsUsers from "../views/components/Clients/CustomerApplicationsUsers";
+import CustomerApplicationsUsers from "../views/components/Customers/CustomerApplicationsUsers";
 import CFDIPDFRequestDetail from "../views/components/CFDIPDFRequest/CFDIPDFRequestDetail";
 import SupportApplicationsSettings from "../views/components/SupportClients/SupportApplicationsSettings";
 import Encriptado from "../views/pages/Encriptado";
-import { string } from "prop-types";
-import routes from "routes.js";
+import ControlTimbres from "../views/pages/ControlTimbres";
+import RequestCustomerStampings from "../views/pages/RequestCustomerStampings";
+import CrearFactura2 from "../views/pages/CrearFactura2";
+import Facturacion from "../views/pages/Facturacion";
+import AsignacionTimbres from "../views/pages/AsignacionTimbres";
+import CustomerKeyProduct from "../views/pages/CustomerKeyProduct";
+import GeneralParameters from "../views/pages/GeneralParameters";
+import CustomerUoMs from "../views/pages/CustomerUoMs";
+import CustomerBillTos from "../views/pages/CustomerBillTos";
+import CustomerItems from "../views/pages/CustomerItems";
+import CustomerItemsTaxes from "../views/pages/CustomerItemsTaxes";
+import CustomerReceiptTypesSerie from "../views/pages/CustomerReceiptTypesSerie";
 
 var ps;
 
@@ -58,7 +67,6 @@ function Admin(props) {
   const token = localStorage.getItem("Token");
 
   const ambiente = process.env.REACT_APP_ENVIRONMENT
-  const ambiente2 = process.env.REACT_APP_ENVIRONMENT
 
   //Para el cierre de sesión cuando no hay actividad
   const [timeout, setTimeout] = useState(1800000); //despues de media hora se cierra la sesión
@@ -78,7 +86,6 @@ function Admin(props) {
   }
   
   function _onIdle(e) {
-    console.log("ENTRE AL ON IDLE")
     localStorage.setItem("Logged", false);
     localStorage.removeItem("User");
     localStorage.removeItem("Id_Role");
@@ -91,7 +98,6 @@ function Admin(props) {
     //Si el usuario no ha iniciado sesión que se le redirija al login
     if(logged !== "true")
     {
-      console.log("EL LOGGED ES DIFERENTE DE TRUE")
       history.push(ambiente + "/auth/login");
     }
   }, []);
@@ -126,7 +132,6 @@ function Admin(props) {
 
         if(data.mensaje === 'Token inválida')
         {
-          console.log("ENTRE Al TOKEN INVALIDA")
           localStorage.setItem("Logged", false);
           localStorage.removeItem("User");
           localStorage.removeItem("Id_Role");
@@ -135,307 +140,497 @@ function Admin(props) {
           history.push(ambiente + "/auth/login")
         }
         else{
+          console.log(data)
+          var dataAux = [];
+          var dataAuxCount = 0;
           for(var i=0; i<data.length; i++)
           {
             if(data[i].Status === true)
             {
-              //console.log(data[i])
-              if(data[i].Component_Module!=="")
+              dataAux[dataAuxCount] = data[i]
+              dataAuxCount++
+            }
+          }
+          console.log(dataAux)
+
+          for(var i=0; i<dataAux.length; i++)
+          {
+            //console.log(data[i])
+            if(dataAux[i].Component_Module!=="")
+            {
+              if(dataAux[i].Component_Module === "DashboardAdmin")
               {
-                if(data[i].Component_Module === "DashboardAdmin")
-                {
-                  routesAux.push(
-                    {
-                      collapse: false,
-                      path: data[i].Url,
-                      name: data[i].Module_Desc,
-                      icon: String(data[i].Icon),
-                      component: DashboardAdmin,
-                      layout: ambiente + data[i].Layout_Module
-                    }
-                  )
-                }
-                else if(data[i].Component_Module === "DashboardSoporte")
-                {
-                  routesAux.push(
-                    {
-                      collapse: false,
-                      path: data[i].Url,
-                      name: data[i].Module_Desc,
-                      icon: String(data[i].Icon),
-                      component: DashboardSoporte,
-                      layout: ambiente + data[i].Layout_Module
-                    }
-                  )
-                }
-                else{
-                  routesAux.push(
-                    {
-                      collapse: false,
-                      path: data[i].Url,
-                      name: data[i].Module_Desc,
-                      icon: String(data[i].Icon),
-                      component: DashboardCliente,
-                      layout: ambiente + data[i].Layout_Module
-                    }
-                  )
-                }
+                routesAux.push(
+                  {
+                    collapse: false,
+                    path: dataAux[i].Url,
+                    name: dataAux[i].Module_Desc,
+                    icon: String(dataAux[i].Icon),
+                    component: DashboardAdmin,
+                    layout: ambiente + dataAux[i].Layout_Module
+                  }
+                )
+              }
+              else if(dataAux[i].Component_Module === "DashboardSoporte")
+              {
+                routesAux.push(
+                  {
+                    collapse: false,
+                    path: dataAux[i].Url,
+                    name: dataAux[i].Module_Desc,
+                    icon: String(dataAux[i].Icon),
+                    component: DashboardSoporte,
+                    layout: ambiente + dataAux[i].Layout_Module
+                  }
+                )
               }
               else{
-                //El componente es padre pero collapse
-                if(data[i-1].Module_Desc !== data[i].Module_Desc)
-                {
-                  var views = []
-                  if(data[i].Component_Submodule === "Usuarios")
+                routesAux.push(
                   {
+                    collapse: false,
+                    path: dataAux[i].Url,
+                    name: dataAux[i].Module_Desc,
+                    icon: String(dataAux[i].Icon),
+                    component: DashboardCliente,
+                    layout: ambiente + dataAux[i].Layout_Module
+                  }
+                )
+              }
+            }
+            else{
+              //El componente es padre pero collapse
+              if(dataAux[i-1].Module_Desc !== dataAux[i].Module_Desc)
+              {
+                //console.log(data[i-1])
+                //console.log(data[i])
+                var views = []
+                if(dataAux[i].Component_Submodule === "Usuarios")
+                {
+                  views.push(
+                    {
+                      path: dataAux[i].Url,
+                      name: dataAux[i].SubModule_Desc,
+                      component: "Usuarios",
+                      layout: ambiente + dataAux[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(dataAux[i].Component_Submodule === "Encriptado")
+                {
                     views.push(
                       {
-                        path: data[i].Url,
-                        name: data[i].SubModule_Desc,
-                        component: "Usuarios",
-                        layout: ambiente + data[i].Layout_SubModule
+                        path: dataAux[i].Url,
+                        name: dataAux[i].SubModule_Desc,
+                        component: Encriptado,
+                        layout: ambiente + dataAux[i].Layout_SubModule
                       }
                     )
-                  }
-                  else if(data[i].Component_Submodule === "Encriptado")
+                }
+                else if(dataAux[i].Component_Submodule === "CatalogosPortal")
+                {
+                  views.push(
+                    {
+                      path: dataAux[i].Url,
+                      name: dataAux[i].SubModule_Desc,
+                      component: CatalogosPortal,
+                      layout: ambiente + dataAux[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(dataAux[i].Component_Submodule === "CatalogosSAT")
+                {
+                  views.push(
+                    {
+                      path: dataAux[i].Url,
+                      name: dataAux[i].SubModule_Desc,
+                      component: CatalogosSAT,
+                      layout: ambiente + dataAux[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(dataAux[i].Component_Submodule === "Clientes")
+                {
+                  views.push(
+                    {
+                      path: dataAux[i].Url,
+                      name: dataAux[i].SubModule_Desc,
+                      component: Clientes,
+                      layout: ambiente + dataAux[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(dataAux[i].Component_Submodule === "SupportClients")
+                {
+                  views.push(
+                    {
+                      path: dataAux[i].Url,
+                      name: dataAux[i].SubModule_Desc,
+                      component: SupportClients,
+                      layout: ambiente + dataAux[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(dataAux[i].Component_Submodule === "ModuleSettings")
+                {
+                  views.push(
+                    {
+                      path: dataAux[i].Url,
+                      name: dataAux[i].SubModule_Desc,
+                      component: ModuleSettings,
+                      layout: ambiente + dataAux[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(dataAux[i].Component_Submodule === "ClienteConfiguraciones")
+                {
+                  views.push(
+                    {
+                      path: dataAux[i].Url,
+                      name: dataAux[i].SubModule_Desc,
+                      component: ClienteConfiguraciones,
+                      layout: ambiente + dataAux[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(dataAux[i].Component_Submodule === "Articulo69")
+                {
+                  views.push(
+                    {
+                      path: dataAux[i].Url,
+                      name: dataAux[i].SubModule_Desc,
+                      component: Articulo69,
+                      layout: ambiente + dataAux[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(dataAux[i].Component_Submodule === "ControlTimbres")
+                {
+                  views.push(
+                    {
+                      path: dataAux[i].Url,
+                      name: dataAux[i].SubModule_Desc,
+                      component: ControlTimbres,
+                      layout: ambiente + dataAux[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(dataAux[i].Component_Submodule === "SATProductCustomer")
+                {
+                  views.push(
+                    {
+                      path: dataAux[i].Url,
+                      name: dataAux[i].SubModule_Desc,
+                      component: CustomerKeyProduct,
+                      layout: ambiente + dataAux[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(dataAux[i].Component_Submodule === "CustomerUoMs")
+                {
+                  views.push(
+                    {
+                      path: dataAux[i].Url,
+                      name: dataAux[i].SubModule_Desc,
+                      component: CustomerUoMs,
+                      layout: ambiente + dataAux[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(dataAux[i].Component_Submodule === "CustomerItems")
+                {
+                  views.push(
+                    {
+                      path: dataAux[i].Url,
+                      name: dataAux[i].SubModule_Desc,
+                      component: CustomerItems,
+                      layout: ambiente + dataAux[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(dataAux[i].Component_Submodule === "ItemTaxes")
+                {
+                  views.push(
+                    {
+                      path: dataAux[i].Url,
+                      name: dataAux[i].SubModule_Desc,
+                      component: CustomerItemsTaxes,
+                      layout: ambiente + dataAux[i].Layout_SubModule
+                    }
+                  )
+                }
+                else if(dataAux[i].Component_Submodule === "CustomerSeries")
+                {
+                  views.push(
+                    {
+                      path: dataAux[i].Url,
+                      name: dataAux[i].SubModule_Desc,
+                      component: CustomerReceiptTypesSerie,
+                      layout: ambiente + dataAux[i].Layout_SubModule
+                    }
+                  )
+
+                }
+                var j= i+1;
+                while(j<dataAux.length)
+                {
+                  //Este ciclo se utiliza para meter a los demás hijos (cuando un padre tiene más de 1 hijo)
+                  if(dataAux[i].Id_Module === dataAux[j].Id_Module && dataAux[j].Status === true)
                   {
+                    if(dataAux[j].Component_Submodule === "Usuarios")
+                    {
                       views.push(
                         {
-                          path: data[i].Url,
-                          name: data[i].SubModule_Desc,
-                          component: Encriptado,
-                          layout: ambiente + data[i].Layout_SubModule
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: "Usuarios",
+                          layout: ambiente + dataAux[j].Layout_SubModule
                         }
                       )
-                  }
-                  else if(data[i].Component_Submodule === "CatalogosPortal")
-                  {
-                    views.push(
-                      {
-                        path: data[i].Url,
-                        name: data[i].SubModule_Desc,
-                        component: CatalogosPortal,
-                        layout: ambiente + data[i].Layout_SubModule
-                      }
-                    )
-                  }
-                  else if(data[i].Component_Submodule === "CatalogosSAT")
-                  {
-                    views.push(
-                      {
-                        path: data[i].Url,
-                        name: data[i].SubModule_Desc,
-                        component: CatalogosSAT,
-                        layout: ambiente + data[i].Layout_SubModule
-                      }
-                    )
-                  }
-                  else if(data[i].Component_Submodule === "Clientes")
-                  {
-                    views.push(
-                      {
-                        path: data[i].Url,
-                        name: data[i].SubModule_Desc,
-                        component: Clientes,
-                        layout: ambiente + data[i].Layout_SubModule
-                      }
-                    )
-                  }
-                  else if(data[i].Component_Submodule === "SupportClients")
-                  {
-                    views.push(
-                      {
-                        path: data[i].Url,
-                        name: data[i].SubModule_Desc,
-                        component: SupportClients,
-                        layout: ambiente + data[i].Layout_SubModule
-                      }
-                    )
-                  }
-                  else if(data[i].Component_Submodule === "ModuleSettings")
-                  {
-                    views.push(
-                      {
-                        path: data[i].Url,
-                        name: data[i].SubModule_Desc,
-                        component: ModuleSettings,
-                        layout: ambiente + data[i].Layout_SubModule
-                      }
-                    )
-                  }
-                  else if(data[i].Component_Submodule === "ClienteConfiguraciones")
-                  {
-                    views.push(
-                      {
-                        path: data[i].Url,
-                        name: data[i].SubModule_Desc,
-                        component: ClienteConfiguraciones,
-                        layout: ambiente + data[i].Layout_SubModule
-                      }
-                    )
-                  }
-                  else if(data[i].Component_Submodule === "Articulo69")
-                  {
-                    views.push(
-                      {
-                        path: data[i].Url,
-                        name: data[i].SubModule_Desc,
-                        component: Articulo69,
-                        layout: ambiente + data[i].Layout_SubModule
-                      }
-                    )
-                  }
-                  var j= i+1;
-                  while(j<data.length)
-                  {
-                    //Este ciclo se utiliza para meter a los demás hijos (cuando un padre tiene más de 1 hijo)
-                    if(data[i].Id_Module === data[j].Id_Module && data[j].Status === true)
-                    {
-                      if(data[j].Component_Submodule === "Usuarios")
-                      {
-                        views.push(
-                          {
-                            path: data[j].Url,
-                            name: data[j].SubModule_Desc,
-                            component: "Usuarios",
-                            layout: ambiente + data[j].Layout_SubModule
-                          }
-                        )
-                      }
-                      else if(data[j].Component_Submodule === "Encriptado")
-                      {
-                        views.push(
-                          {
-                            path: data[j].Url,
-                            name: data[j].SubModule_Desc,
-                            component: Encriptado,
-                            layout: ambiente + data[j].Layout_SubModule
-                          }
-                        )
-                      }
-                      else if(data[j].Component_Submodule === "CatalogosPortal")
-                      {
-                        views.push(
-                          {
-                            path: data[j].Url,
-                            name: data[j].SubModule_Desc,
-                            component: CatalogosPortal,
-                            layout: ambiente + data[j].Layout_SubModule
-                          }
-                        )
-                      }
-                      else if(data[j].Component_Submodule === "CatalogosSAT")
-                      {
-                        views.push(
-                          {
-                            path: data[j].Url,
-                            name: data[j].SubModule_Desc,
-                            component: CatalogosSAT,
-                            layout: ambiente + data[j].Layout_SubModule
-                          }
-                        )
-                      }
-                      else if(data[j].Component_Submodule === "Clientes")
-                      {
-                        views.push(
-                          {
-                            path: data[j].Url,
-                            name: data[j].SubModule_Desc,
-                            component: Clientes,
-                            layout: ambiente + data[j].Layout_SubModule
-                          }
-                        )
-                      }
-                      else if(data[j].Component_Submodule === "SupportClients")
-                      {
-                        views.push(
-                          {
-                            path: data[j].Url,
-                            name: data[j].SubModule_Desc,
-                            component: SupportClients,
-                            layout: ambiente + data[j].Layout_SubModule
-                          }
-                        )
-                      }
-                      else if(data[j].Component_Submodule === "ModuleSettings")
-                      {
-                        views.push(
-                          {
-                            path: data[j].Url,
-                            name: data[j].SubModule_Desc,
-                            component: ModuleSettings,
-                            layout: ambiente + data[j].Layout_SubModule
-                          }
-                        )
-                      }
-                      else if(data[j].Component_Submodule === "ClienteConfiguraciones")
-                      {
-                        views.push(
-                          {
-                            path: data[j].Url,
-                            name: data[j].SubModule_Desc,
-                            component: ClienteConfiguraciones,
-                            layout: ambiente + data[j].Layout_SubModule
-                          }
-                        )
-                      }
-                      else if(data[j].Component_Submodule === "CustomerApplications")
-                      {
-                        views.push(
-                          {
-                            path: data[j].Url,
-                            name: data[j].SubModule_Desc,
-                            component: CustomerApplications,
-                            layout: ambiente + data[j].Layout_SubModule
-                          }
-                        )
-                      }
-                      else if(data[j].Component_Submodule === "CFDIPDFRequest")
-                      {
-                        views.push(
-                          {
-                            path: data[j].Url,
-                            name: data[j].SubModule_Desc,
-                            component: CFDIPDFRequest,
-                            layout: ambiente + data[j].Layout_SubModule
-                          }
-                        )
-                      }
-                      else if(data[j].Component_Submodule === "ConsultaArt69")
-                      {
-                        views.push(
-                          {
-                            path: data[j].Url,
-                            name: data[j].SubModule_Desc,
-                            component: ConsultaArt69,
-                            layout: ambiente + data[j].Layout_SubModule
-                          }
-                        )
-                      }
                     }
-                    j++
+                    else if(dataAux[j].Component_Submodule === "Encriptado")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: Encriptado,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "CatalogosPortal")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: CatalogosPortal,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "CatalogosSAT")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: CatalogosSAT,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "Clientes")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: Clientes,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "SupportClients")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: SupportClients,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "ModuleSettings")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: ModuleSettings,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "ClienteConfiguraciones")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: ClienteConfiguraciones,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "CustomerApplications")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: CustomerApplications,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "CFDIPDFRequest")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: CFDIPDFRequest,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "ConsultaArt69")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: ConsultaArt69,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "ControlTimbres")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: ControlTimbres,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "Facturacion")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: Facturacion,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "AsignacionTimbres")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: AsignacionTimbres,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "SATProductCustomer")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: CustomerKeyProduct,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "GeneralParameters")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: GeneralParameters,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "CustomerUoMs")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: CustomerUoMs,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "CustomerBillTos")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: CustomerBillTos,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "CustomerItems")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: CustomerItems,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "ItemTaxes")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: CustomerItemsTaxes,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
+                    else if(dataAux[j].Component_Submodule === "CustomerSeries")
+                    {
+                      views.push(
+                        {
+                          path: dataAux[j].Url,
+                          name: dataAux[j].SubModule_Desc,
+                          component: CustomerReceiptTypesSerie,
+                          layout: ambiente + dataAux[j].Layout_SubModule
+                        }
+                      )
+                    }
                   }
-
-                  //Ya cuando se terminan de meter a los hijos agregamos la ruta
-                  var iconn = String(data[i].Icon.toString())
-                  var ultimo = routesAux.length
-                  if(routesAux[ultimo-1].name !== data[i].Module_Desc)
-                  {
-                    routesAux.push(
-                      {
-                        collapse: true,
-                        name: data[i].Module_Desc,
-                        icon: iconn,
-                        state: data[i].Module_Desc,
-                        views: views,
-                      }
-                    )
-                  }
-                  //console.log(routesAux[x])
+                  j++
                 }
+
+                //Ya cuando se terminan de meter a los hijos agregamos la ruta
+                var iconn = String(data[i].Icon.toString())
+                var ultimo = routesAux.length
+                if(routesAux[ultimo-1].name !== dataAux[i].Module_Desc)
+                {
+                  routesAux.push(
+                    {
+                      collapse: true,
+                      name: dataAux[i].Module_Desc,
+                      icon: iconn,
+                      state: dataAux[i].Module_Desc,
+                      views: views,
+                    }
+                  )
+                }
+                //console.log(routesAux[x])
               }
             }
           }
+
           //Agregar rutas solo para roles en específico
           if(params.pvIdRole == "GTCADMIN")
           {
@@ -470,6 +665,17 @@ function Admin(props) {
                 layout:  ambiente + "/admin",
               }
             )
+
+            routesAux.push(
+              {
+                invisible: true,
+                path: "/crear-factura/",
+                name: "Crear Factura",
+                icon: "nc-icon nc-bank",
+                component: CrearFactura2,
+                layout: ambiente + "/admin",
+              },
+            )
           }
           else if(params.pvIdRole == "CUSAPPLI")
           {
@@ -493,6 +699,28 @@ function Admin(props) {
                 component: SupportApplicationsSettings,
                 layout:  ambiente + "/admin",
               }
+            )
+
+            routesAux.push(
+              {
+                invisible: true,
+                path: "/request-customer-stampings/:idCus/",
+                name: "Request Customer Stampings",
+                icon: "nc-icon nc-bank",
+                component: RequestCustomerStampings,
+                layout: ambiente + "/admin",
+              },
+            )
+
+            routesAux.push(
+              {
+                invisible: true,
+                path: "/crear-factura/",
+                name: "Crear Factura",
+                icon: "nc-icon nc-bank",
+                component: CrearFactura2,
+                layout: ambiente + "/admin",
+              },
             )
           }
           else if(params.pvIdRole == "GTCSUPPO")
@@ -518,8 +746,6 @@ function Admin(props) {
               }
             )
           }
-          //Ruta para cambiar contraseña
-          //console.log(routesAux)
           setDbRoutes(routesAux)
         }
     })
@@ -527,45 +753,6 @@ function Admin(props) {
         console.log(err)
     });
   }, []);
-
-  /*useEffect(() => {
-    const temporal = setTimeout(() => {
-      if(logged === "true")
-      {
-        var url = new URL(`${process.env.REACT_APP_API_URI}security-users/${user}`);
-        fetch(url, {
-          method: "GET",
-          headers: {
-              "access-token": token,
-              "Content-Type": "application/json",
-          }
-        })
-        .then(function(response) {
-            return response.ok ? response.json() : Promise.reject();
-        })
-        .then(function(data) {
-            if(data[0].Temporal_Password===true)
-            {
-              console.log("ENTRE AL TEMPORAL PASSWORD")
-              localStorage.setItem("Logged", false);
-              localStorage.removeItem("User");
-              localStorage.removeItem("Id_Role");
-              localStorage.removeItem("Id_Customer");
-              localStorage.removeItem("Token");
-              localStorage.removeItem("Name");
-              localStorage.removeItem("P_Picture");
-              history.push(ambiente + "/auth/login");
-            }
-            console.log("LA DATA AL VALIDAR EL TEMPORAL PASSWORD")
-            console.log(data)
-        })
-        .catch(function(err) {
-            console.log(err)
-        });
-      }
-    }, 2000);
-    return () => clearTimeout(temporal);
-  },[]);*/
 
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {

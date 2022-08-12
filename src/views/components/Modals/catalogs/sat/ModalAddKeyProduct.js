@@ -10,6 +10,8 @@ import {
     Form,
     Input,
     Label,
+    Row,
+    Col
 } from "reactstrap";
 
 function ModalAddKeyProduct({modalAddRecord, setModalAddRecord, updateAddData, ip, autoCloseAlert}) {
@@ -17,11 +19,17 @@ function ModalAddKeyProduct({modalAddRecord, setModalAddRecord, updateAddData, i
     const [id, setId] = React.useState("Hola");
     const [shortDescription, setShortDescription] = React.useState("");
     const [longDescription, setLongDescription] = React.useState("");
+    const [vatTransfer, setVatTransfer] = React.useState("0");
+    const [vatTransferMessage, setVatTransferMessage] = React.useState("No Incluir");
+    const [iepsTransfer, setIEPSTransfer] = React.useState("0");
+    const [iepsTransferMessage, setIEPSTransferMessage] = React.useState("No Incluir");
     const [status, setStatus] = React.useState(true);
     
     const [idState, setIdState] = React.useState("");
     const [shortDescriptionState, setShortDescriptionState] = React.useState("");
     const [longDescriptionState, setLongDescriptionState] = React.useState("");
+    const [vatTransferState, setVatTransferState] = React.useState("has-success");
+    const [iepsTransferState, setIEPSTransferState] = React.useState("has-success");
 
     const [error, setError] = React.useState();
     const [errorState, setErrorState] = React.useState("");
@@ -34,10 +42,14 @@ function ModalAddKeyProduct({modalAddRecord, setModalAddRecord, updateAddData, i
         setId("")
         setShortDescription("")
         setLongDescription("")
+        setVatTransfer("0")
+        setIEPSTransfer("0")
         setStatus(true)
         setIdState("")
         setShortDescriptionState("")
         setLongDescriptionState("")
+        setVatTransferState("has-success")
+        setIEPSTransferState("has-success")
         setError("")
         setErrorState("")
         setErrorMessage("")
@@ -56,7 +68,9 @@ function ModalAddKeyProduct({modalAddRecord, setModalAddRecord, updateAddData, i
         if (
             idState === "has-success" &&
             shortDescriptionState === "has-success" &&
-            longDescriptionState === "has-success"
+            longDescriptionState === "has-success" &&
+            vatTransferState === "has-success" &&
+            iepsTransferState === "has-success"
         ) {
           return true;
         } else {
@@ -68,6 +82,12 @@ function ModalAddKeyProduct({modalAddRecord, setModalAddRecord, updateAddData, i
             }
             if (longDescriptionState !== "has-success") {
                 setLongDescriptionState("has-danger");
+            }
+            if (vatTransferState !== "has-success") {
+                setVatTransferState("has-danger");
+            }
+            if (iepsTransferState !== "has-success") {
+                setIEPSTransferState("has-danger");
             }
             return false;
         }
@@ -92,12 +112,16 @@ function ModalAddKeyProduct({modalAddRecord, setModalAddRecord, updateAddData, i
             pvIdCatalog: id,
             pvShortDesc: shortDescription,
             pvLongDesc: longDescription,
+            piVATTransfer: vatTransfer,    
+            piIEPSTransfer: iepsTransfer,
             pbStatus: status,
             pvUser: user,
             pvIP: ip
         };
+
+        console.log(catRegister)
     
-        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/create-sat`, {
+        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/create-sat-key-product`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {
@@ -204,6 +228,119 @@ function ModalAddKeyProduct({modalAddRecord, setModalAddRecord, updateAddData, i
                     <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
+            <Row>
+                <Col>
+                    <FormGroup className={`has-label ${vatTransferState}`}>
+                        <label>Incluir IVA Traslado *</label>
+                        <Input
+                            name="decimals"
+                            type="number"
+                            autoComplete="off"
+                            min={0}
+                            max={2}
+                            value={vatTransfer}
+                            step={1}
+                            onChange={(e) => {
+                                if(e.target.value === "0")
+                                {
+                                    setVatTransfer(e.target.value);
+                                    setVatTransferState("has-success");
+                                    setVatTransferMessage("No Incluir");
+                                }
+                                else if(e.target.value === "1")
+                                {
+                                    setVatTransfer(e.target.value);
+                                    setVatTransferState("has-success");
+                                    setVatTransferMessage("Incluir");
+                                }
+                                else if(e.target.value === "2")
+                                {
+                                    setVatTransfer(e.target.value);
+                                    setVatTransferState("has-success");
+                                    setVatTransferMessage("Opcional");
+                                }
+                                else {
+                                    setVatTransfer(e.target.value);
+                                    setVatTransferState("has-danger");
+                                    setVatTransferMessage("");
+                                }
+                            }}
+                        />
+                        {vatTransferState === "has-danger" ? (
+                            <label className="error">Este campo es requerido - Valor no permitido.</label>
+                        ) : null}
+                    </FormGroup>
+                </Col>
+                <Col>
+                    <FormGroup>
+                        <label>Descripción</label>
+                        <Input
+                            name="id"
+                            type="text"
+                            autoComplete="off"
+                            value={vatTransferMessage}
+                            readOnly
+                        />
+                    </FormGroup>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <FormGroup className={`has-label ${iepsTransferState}`}>
+                        <label>Incluir IEPS Traslado *</label>
+                        <Input
+                            name="decimals"
+                            type="number"
+                            autoComplete="off"
+                            min={0}
+                            max={2}
+                            value={iepsTransfer}
+                            step={1}
+                            onChange={(e) => {
+                                if(e.target.value === "0")
+                                {
+                                    setIEPSTransfer(e.target.value);
+                                    setIEPSTransferState("has-success");
+                                    setIEPSTransferMessage("No Incluir");
+                                }
+                                else if(e.target.value === "1")
+                                {
+                                    setIEPSTransfer(e.target.value);
+                                    setIEPSTransferState("has-success");
+                                    setIEPSTransferMessage("Incluir");
+                                }
+                                else if(e.target.value === "2")
+                                {
+                                    setIEPSTransfer(e.target.value);
+                                    setIEPSTransferState("has-success");
+                                    setIEPSTransferMessage("Opcional");
+                                }
+                                else {
+                                    setIEPSTransfer(e.target.value);
+                                    setIEPSTransferState("has-danger");
+                                    setIEPSTransferMessage("");
+                                }
+                            }}
+                        />
+                        {iepsTransferState === "has-danger" ? (
+                            <label className="error">Este campo es requerido - Valor no permitido.</label>
+                        ) : null}
+                    </FormGroup>
+                </Col>
+                <Col>
+                    <FormGroup>
+                        <label>Descripción</label>
+                        <Input
+                            name="id"
+                            type="text"
+                            autoComplete="off"
+                            value={iepsTransferMessage}
+                            readOnly
+                        />
+                    </FormGroup>
+                </Col>
+            </Row>
+            <label>Estatus</label>
             <FormGroup check>
                     <Label check>
                     <Input 

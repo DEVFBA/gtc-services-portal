@@ -20,9 +20,6 @@ import {
   ModalFooter
 } from "reactstrap";
 
-
-
-
 function ClienteConfiguraciones() {
   const token = localStorage.getItem("Token"); 
   const customer = localStorage.getItem("Id_Customer")

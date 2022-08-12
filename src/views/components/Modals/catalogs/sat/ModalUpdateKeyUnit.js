@@ -113,7 +113,7 @@ function ModalUpdateKeyUnit({abierto, toggleModalUpdateRecord, record, updateAdd
             pvIP: ip
         };
     
-        fetch(`${process.env.REACT_APP_API_URI}scat-catalogs/update-sat`, {
+        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/update-sat`, {
             method: "PUT",
             body: JSON.stringify(catRegister),
             headers: {
@@ -214,6 +214,7 @@ function ModalUpdateKeyUnit({abierto, toggleModalUpdateRecord, record, updateAdd
                     <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
+            <label>Estatus</label>
             <FormGroup check>
                     <Label check>
                     <Input 

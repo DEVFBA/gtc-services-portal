@@ -363,6 +363,7 @@ function Articulo69() {
                   <Row> 
                     <Col>
                     <FormGroup className={`has-label ${supuestoState}`}>
+                      <Label>Supuesto *</Label>
                       {/*Al seleccionar un catálogo se hará fetch para actualizar sus configuraciones*/}
                       <Select 
                         name=""
@@ -382,6 +383,7 @@ function Articulo69() {
                           </label>
                       ) : null}
                     </FormGroup>
+                      <Label>Archivo *</Label>
                       <FormGroup className={`has-label ${excelState69}`}>
                         <Input 
                           className="form-control" 
@@ -400,7 +402,7 @@ function Articulo69() {
                       </FormGroup>
                     </Col>
                     <Col>
-                      <Button color="primary" onClick={uploadFile69}>
+                      <Button className = "btn-article69" color="primary" onClick={uploadFile69}>
                         Subir datos
                       </Button> 
                     </Col>
@@ -419,6 +421,7 @@ function Articulo69() {
                   <Row> 
                     <Col>
                       <FormGroup className={`has-label ${excelState69B}`}>
+                        <Label>Archivo *</Label>
                         <Input 
                           className="form-control" 
                           type="file" id="fileUpload" 
@@ -436,7 +439,7 @@ function Articulo69() {
                       </FormGroup>
                     </Col>
                     <Col>
-                      <Button color="primary" onClick={uploadFile69B}>
+                      <Button className = "btn-article69" color="primary" onClick={uploadFile69B}>
                         Subir datos
                       </Button> 
                     </Col>

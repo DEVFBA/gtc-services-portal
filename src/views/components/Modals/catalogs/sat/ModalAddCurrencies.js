@@ -17,11 +17,15 @@ function ModalAddCurrencies({modalAddRecord, setModalAddRecord, updateAddData, i
     const [id, setId] = React.useState("Hola");
     const [shortDescription, setShortDescription] = React.useState("");
     const [longDescription, setLongDescription] = React.useState("");
+    const [decimals, setDecimals] = React.useState();
+    const [variationPercentage, setVariationPercentage] = React.useState();
     const [status, setStatus] = React.useState(true);
 
     const [idState, setIdState] = React.useState("");
     const [shortDescriptionState, setShortDescriptionState] = React.useState("");
     const [longDescriptionState, setLongDescriptionState] = React.useState("");
+    const [decimalsState, setDecimalsState] = React.useState("");
+    const [variationPercentageState, setVariationPercentageState] = React.useState("");
 
     const [error, setError] = React.useState();
     const [errorState, setErrorState] = React.useState("");
@@ -34,10 +38,14 @@ function ModalAddCurrencies({modalAddRecord, setModalAddRecord, updateAddData, i
         setId("")
         setShortDescription("")
         setLongDescription("")
+        setDecimals()
+        setVariationPercentage()
         setStatus(true)
         setIdState("")
         setShortDescriptionState("")
-        setLongDescriptionState("")
+        setLongDescriptionState("");
+        setDecimalsState("");
+        setVariationPercentageState("");
         setError("")
         setErrorState("")
         setErrorMessage("")
@@ -56,7 +64,9 @@ function ModalAddCurrencies({modalAddRecord, setModalAddRecord, updateAddData, i
         if (
             idState === "has-success" &&
             shortDescriptionState === "has-success" &&
-            longDescriptionState === "has-success"
+            longDescriptionState === "has-success" &&
+            decimalsState === "has-success" &&
+            variationPercentageState === "has-success"
         ) {
           return true;
         } else {
@@ -68,6 +78,12 @@ function ModalAddCurrencies({modalAddRecord, setModalAddRecord, updateAddData, i
             }
             if (longDescriptionState !== "has-success") {
                 setLongDescriptionState("has-danger");
+            }
+            if (decimalsState !== "has-success") {
+                setDecimalsState("has-danger");
+            }
+            if (variationPercentageState !== "has-success") {
+                setVariationPercentageState("has-danger");
             }
             return false;
         }
@@ -92,12 +108,16 @@ function ModalAddCurrencies({modalAddRecord, setModalAddRecord, updateAddData, i
             pvIdCatalog: id,
             pvShortDesc: shortDescription,
             pvLongDesc: longDescription,
+            piDecimals: decimals,
+            pfVariationPercent: variationPercentage,
             pbStatus: status,
             pvUser: user,
             pvIP: ip
         };
+
+        console.log(catRegister)
     
-        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/create-sat`, {
+        fetch(`${process.env.REACT_APP_API_URI}cat-catalogs/create-sat-currencies`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {
@@ -204,6 +224,55 @@ function ModalAddCurrencies({modalAddRecord, setModalAddRecord, updateAddData, i
                     <label className="error">Este campo es requerido.</label>
                 ) : null}
             </FormGroup>
+            <FormGroup className={`has-label ${decimalsState}`}>
+                <label>Decimales *</label>
+                <Input
+                    name="decimals"
+                    type="number"
+                    autoComplete="off"
+                    min={0}
+                    step={1}
+                    onChange={(e) => {
+                        if(e.target.value!=="")
+                        {
+                            setDecimals(e.target.value)
+                            setDecimalsState("has-success")
+                        }
+                        else {
+                            setDecimals(e.target.value)
+                            setDecimalsState("has-danger")
+                        }
+                    }}
+                />
+                {decimalsState === "has-danger" ? (
+                    <label className="error">Este campo es requerido.</label>
+                ) : null}
+            </FormGroup>
+            <FormGroup className={`has-label ${variationPercentageState}`}>
+                <label>Variación *</label>
+                <Input
+                    name="variationpercentage"
+                    type="number"
+                    autoComplete="off"
+                    min={0}
+                    step={0.1}
+                    onChange={(e) => {
+                        if(e.target.value!=="")
+                        {
+                            setVariationPercentage(e.target.value)
+                            setVariationPercentageState("has-success")
+                        }
+                        else {
+                            setVariationPercentage(e.target.value)
+                            setVariationPercentageState("has-danger")
+                        }
+                    }}
+                />
+                {variationPercentageState === "has-danger" ? (
+                    <label className="error">Este campo es requerido.</label>
+                ) : null}
+            </FormGroup>
+            <label>Estatus</label>
             <FormGroup check>
                     <Label check>
                     <Input 

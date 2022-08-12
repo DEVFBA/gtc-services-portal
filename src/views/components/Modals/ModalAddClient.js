@@ -21,13 +21,14 @@ import {
 } from "reactstrap";
 import { data } from "jquery";
 
-function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updateAddData, pathLogo, ip, autoCloseAlert}) {
+function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updateAddData, pathLogo, ip, autoCloseAlert, dataTaxRegimes}) {
 
     const user = localStorage.getItem("User");
     const token = localStorage.getItem("Token");
     // register form
     const [registerFullName, setregisterFullName] = React.useState("");
     const [registerRfc, setregisterRfc] = React.useState("");
+    const [registerTaxRegimen, setregisterTaxRegimen] = React.useState("");
     const [registerStreet, setregisterStreet] = React.useState("");
     const [registerNoExterior, setregisterNoExterior] = React.useState("");
     const [registerNoInterior, setregisterNoInterior] = React.useState("");
@@ -41,23 +42,10 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
     const [registerLogo, setregisterLogo] = React.useState("");
     const [registerStatus, setregisterStatus] = useState(true);
 
-    //Mandar error en caso de que ya exista el Country/TaxId
-    const [registerError, setregisterError] = useState("");
-
     const [registerFullNameState, setregisterFullNameState] = React.useState("");
     const [registerRfcState, setregisterRfcState] = React.useState("");
-    const [registerStreetState, setregisterStreetState] = React.useState("");
-    const [registerNoExteriorState, setregisterNoExteriorState] = React.useState("");
-    const [registerNoInteriorState, setregisterNoInteriorState] = React.useState("");
+    const [registerTaxRegimenState, setregisterTaxRegimenState] = React.useState("");
     const [registerCountryState, setregisterCountryState] = React.useState("");
-    const [registerCityState, setregisterCityState] = React.useState("");
-    const [registerZipCodeState, setregisterZipCodeState] = React.useState("");
-    const [registerContactState, setregisterContactState] = React.useState("");
-    const [registerTelephone1State, setregisterTelephone1State] = React.useState("");
-    const [registerTelephone2State, setregisterTelephone2State] = React.useState("");
-    const [registerWebPageState, setregisterWebPageState] = React.useState("");
-    const [registerLogoState, setregisterLogoState] = React.useState("");
-    const [registerStatusState, setregisterStatusState] = useState(false);
 
     const [error, setError] = React.useState();
     const [errorState, setErrorState] = React.useState("");
@@ -65,23 +53,28 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
     
 
     const handleModalClick = () => {
-        setregisterFullName("")
-        setregisterRfc("")
-        setregisterStreet("")
-        setregisterNoExterior("")
-        setregisterNoInterior("")
-        setregisterCountry("")
-        setregisterCity("")
-        setregisterZipCode("")
-        setregisterContact("")
-        setregisterTelephone1("")
-        setregisterTelephone2("")
-        setregisterWebPage("")
-        setregisterLogo("")
-        setregisterStatus(false)
-        setError("")
-        setErrorState("")
-        setErrorMessage("")
+        setregisterFullName("");
+        setregisterRfc("");
+        setregisterTaxRegimen();
+        setregisterStreet("");
+        setregisterNoExterior("");
+        setregisterNoInterior("");
+        setregisterCountry("");
+        setregisterCity("");
+        setregisterZipCode("");
+        setregisterContact("");
+        setregisterTelephone1("");
+        setregisterTelephone2("");
+        setregisterWebPage("");
+        setregisterLogo("");
+        setregisterStatus(false);
+        setregisterFullNameState("");
+        setregisterRfcState("");
+        setregisterTaxRegimenState("");
+        setregisterCountryState("");
+        setError("");
+        setErrorState("");
+        setErrorMessage("");
         setModalAddRecord(!modalAddRecord);
     };
 
@@ -92,33 +85,29 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
         }
         return false;
     };
-
-    // function that verifies if two strings are equal
-    const compare = (string1, string2) => {
-        if (string1 === string2) {
-        return true;
-        }
-        return false;
-    };
     
     const isValidated = () => {
         if (
             registerFullNameState === "has-success" &&
             registerRfcState === "has-success" &&
-            registerRfcState === "has-success"
+            registerTaxRegimenState === "has-success" &&
+            registerCountryState === "has-success"
         ) {
-          return true;
+            return true;
         } else {
-          if (registerFullNameState !== "has-success") {
-            setregisterFullNameState("has-danger");
-          }
-          if (registerRfcState !== "has-success") {
-            setregisterRfcState("has-danger");
-          }
-          if (registerCountryState !== "has-success") {
-            setregisterCountryState("has-danger");
-          }
-          return false;
+            if (registerFullNameState !== "has-success") {
+                setregisterFullNameState("has-danger");
+            }
+            if (registerRfcState !== "has-success") {
+                setregisterRfcState("has-danger");
+            }
+            if (registerTaxRegimenState !== "has-success") {
+                setregisterTaxRegimenState("has-danger");
+            }
+            if (registerCountryState !== "has-success") {
+             setregisterCountryState("has-danger");
+            }
+            return false;
         }
     };
 
@@ -126,7 +115,6 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
         if(isValidated()===true)
         {
             addRegister()
-            //haremos el fetch a la base de datos para agregar el registro
         }
         else{
             console.log("no entre")
@@ -137,6 +125,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
         const catRegister = {
             pvOptionCRUD: "C",
             pvIdCountry: registerCountry.value,
+            pvIdTaxRegimen: registerTaxRegimen.value,
             pvName: registerFullName,
             pvTaxId: registerRfc,
             pvStreet: registerStreet,
@@ -155,7 +144,7 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
             pvIP : ip
         };
     
-        fetch(`${process.env.REACT_APP_API_URI}customers/create-customer/`, {
+        fetch(`http://localhost:8091/api/customers/create-customer/`, {
             method: "POST",
             body: JSON.stringify(catRegister),
             headers: {
@@ -199,224 +188,244 @@ function ModalAddClient({modalAddRecord, setModalAddRecord, dataCountries, updat
     return (
         <Modal isOpen={modalAddRecord} toggle={handleModalClick} size="lg">
             <div className="modal-header justify-content-center">
-            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
-                <span aria-hidden="true">×</span>
-            </button>
-            <h5 className="modal-title">Agregar Registro</h5>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleModalClick}>
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h5 className="modal-title">Agregar Registro</h5>
             </div>
             <ModalBody>
-            <Form id="RegisterValidation">
-                <Row className="justify-content-center">
-                    <Col className="mt-3" lg="10">
-                        <FormGroup className={`has-label ${registerFullNameState}`}>
-                            <label>Nombre Completo *</label>
-                            <Input
-                                name="name"
-                                type="text"
-                                autoComplete="off"
-                                onChange={(e) => {
-                                    if (!verifyLength(e.target.value, 1)) {
-                                        setregisterFullNameState("has-danger");
-                                    } else {
-                                        setregisterFullNameState("has-success");
-                                    }
-                                    setregisterFullName(e.target.value);
-                                }}
-                            />
-                            {registerFullNameState === "has-danger" ? (
-                                <label className="error">
-                                Este campo es requerido.
-                                </label>
-                            ) : null}
-                        </FormGroup>
-                        <FormGroup className={`has-label ${registerRfcState}`}>
-                            <label>Rfc / Tax Id *</label>
-                            <Input
-                                name="rfc"
-                                type="text"
-                                autoComplete="off"
-                                onChange={(e) => {
-                                    if (!verifyLength(e.target.value, 1)) {
-                                        setregisterRfcState("has-danger");
-                                    } else {
-                                        setregisterRfcState("has-success");
-                                    }
-                                    setregisterRfc(e.target.value);
-                                }}
-                            />
-                            {registerRfcState === "has-danger" ? (
-                                <label className="error">
-                                Este campo es requerido.
-                                </label>
-                            ) : null}
-                        </FormGroup>
-                        <FormGroup>
-                            <label>Calle</label>
-                            <Input
-                                name="street"
-                                type="text"
-                                autoComplete="off"
-                                onChange={(e) => {
-                                    setregisterStreet(e.target.value);
-                                }}
-                            />
-                        </FormGroup>
-                        <FormGroup >
-                            <label>No. Exterior</label>
-                            <Input
-                                name="noExterior"
-                                type="text"
-                                autoComplete="off"
-                                onChange={(e) => {
-                                    setregisterNoExterior(e.target.value);
-                                }}
-                            />
-                        </FormGroup>
-                        <FormGroup>
-                            <label>No. Interior</label>
-                            <Input
-                                name="noInterior"
-                                type="text"
-                                autoComplete="off"
-                                onChange={(e) => {
-                                    setregisterNoInterior(e.target.value);
-                                }}
-                            />
-                        </FormGroup>
-                        <FormGroup  className={`has-label ${registerCountryState}`}>
-                            <Label for="exampleSelect">País</Label>
-                            <Select
-                                name="country"
-                                className="react-select"
-                                placeholder = "Selecciona un país"
-                                classNamePrefix="react-select"
-                                value={registerCountry}
-                                onChange={(value) => {
-                                    setregisterCountry(value)
-                                    setregisterCountryState("has-success")
-                                    //console.log(registerCountry)
-                                }}
-                                options={dataCountries}
-                            />
-                            {registerCountryState === "has-danger" ? (
-                                <label className="error">
+                <Form id="RegisterValidation">
+                    <Row className="justify-content-center">
+                        <Col className="mt-3" lg="10">
+                            <FormGroup className={`has-label ${registerFullNameState}`}>
+                                <label>Nombre Completo *</label>
+                                <Input
+                                    name="name"
+                                    type="text"
+                                    autoComplete="off"
+                                    onChange={(e) => {
+                                        if (!verifyLength(e.target.value, 1)) {
+                                            setregisterFullNameState("has-danger");
+                                        } else {
+                                            setregisterFullNameState("has-success");
+                                        }
+                                        setregisterFullName(e.target.value);
+                                    }}
+                                />
+                                {registerFullNameState === "has-danger" ? (
+                                    <label className="error">
                                     Este campo es requerido.
-                                </label>
-                            ) : null}
-                        </FormGroup>
-                        <FormGroup>
-                            <label>Ciudad</label>
-                            <Input
-                                name="city"
-                                type="text"
-                                autoComplete="off"
-                                onChange={(e) => {
-                                    setregisterCity(e.target.value);
-                                }}
-                            />
-                        </FormGroup>
-                        <FormGroup>
-                            <label>Código Postal</label>
-                            <Input
-                                name="zipCode"
-                                type="text"
-                                autoComplete="off"
-                                onChange={(e) => {
-                                    setregisterZipCode(e.target.value);
-                                }}
-                            />
-                        </FormGroup>
-                        <FormGroup>
-                            <label>Contacto</label>
-                            <Input
-                                name="contact"
-                                type="text"
-                                autoComplete="off"
-                                onChange={(e) => {
-                                    setregisterContact(e.target.value);
-                                }}
-                            />
-                        </FormGroup>
-                        <FormGroup>
-                            <label>Teléfono 1</label>
-                            <Input
-                                name="telephone1"
-                                type="text"
-                                autoComplete="off"
-                                onChange={(e) => {
-                                    setregisterTelephone1(e.target.value);
-                                }}
-                            />
-                        </FormGroup>
-                        <FormGroup>
-                            <label>Telefono 2</label>
-                            <Input
-                                name="telephone2"
-                                type="text"
-                                autoComplete="off"
-                                onChange={(e) => {
-                                    setregisterTelephone2(e.target.value);
-                                }}
-                            />
-                        </FormGroup>
-                    </Col>
-                    <Col sm="4">
-                        <AddLogo registerLogo = {registerLogo} setregisterLogo={setregisterLogo} registerCountry = {registerCountry.value} registerRfc = {registerRfc}/>
-                    </Col>
-                    <Col sm="6">
-                        <FormGroup>
-                            <label>Página Web</label>
-                            <Input
-                                name="webpage"
-                                type="text"
-                                autoComplete="off"
-                                onChange={(e) => {
-                                    setregisterWebPage(e.target.value);
-                                }}
-                            />
-                        </FormGroup>
-                        <FormGroup check>
-                            <Label check>
-                            <Input 
-                                type="checkbox" 
-                                checked = {registerStatus}
-                                onChange={(e) => {
-                                    setregisterStatus(e.target.checked)
-                                }}
-                            />{' '}
-                            Habilitado
-                            <span className="form-check-sign">
-                                <span className="check"></span>
-                            </span>
-                            </Label>
-                        </FormGroup>
-                    </Col> 
-                    <Col className="mt-3" lg="10">
-                        <div className="category form-category">
-                        * Campos requeridos
-                        </div>
-                    </Col>  
-                    <Col className="mt-3" lg="10">
-                        <FormGroup className={`has-label ${errorState}`}>
-                            {errorState === "has-danger" ? (
-                                <label className="error">
-                                    {errorMessage}
-                                </label>
-                            ) : null}
-                        </FormGroup>
-                    </Col>    
-                    {error}
-                </Row>
-            </Form>
+                                    </label>
+                                ) : null}
+                            </FormGroup>
+                            <FormGroup className={`has-label ${registerRfcState}`}>
+                                <label>Rfc / Tax Id *</label>
+                                <Input
+                                    name="rfc"
+                                    type="text"
+                                    autoComplete="off"
+                                    onChange={(e) => {
+                                        if (!verifyLength(e.target.value, 1)) {
+                                            setregisterRfcState("has-danger");
+                                        } else {
+                                            setregisterRfcState("has-success");
+                                        }
+                                        setregisterRfc(e.target.value);
+                                    }}
+                                />
+                                {registerRfcState === "has-danger" ? (
+                                    <label className="error">
+                                    Este campo es requerido.
+                                    </label>
+                                ) : null}
+                            </FormGroup>
+                            <FormGroup className={`has-label ${registerTaxRegimenState}`}>
+                                <Label for="exampleSelect">Régimen Fiscal *</Label>
+                                <Select
+                                    name="taxregimen"
+                                    className="react-select"
+                                    placeholder = "Selecciona un Régimen Fiscal"
+                                    classNamePrefix="react-select"
+                                    onChange={(value) => {
+                                        setregisterTaxRegimen(value)
+                                        setregisterTaxRegimenState("has-success")
+                                    }}
+                                    options={dataTaxRegimes}
+                                />
+                                {registerTaxRegimenState === "has-danger" ? (
+                                    <label className="error">
+                                    Este campo es requerido.
+                                    </label>
+                                ) : null}
+                            </FormGroup>
+                            <FormGroup>
+                                <label>Calle</label>
+                                <Input
+                                    name="street"
+                                    type="text"
+                                    autoComplete="off"
+                                    onChange={(e) => {
+                                        setregisterStreet(e.target.value);
+                                    }}
+                                />
+                            </FormGroup>
+                            <FormGroup >
+                                <label>No. Exterior</label>
+                                <Input
+                                    name="noExterior"
+                                    type="text"
+                                    autoComplete="off"
+                                    onChange={(e) => {
+                                        setregisterNoExterior(e.target.value);
+                                    }}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <label>No. Interior</label>
+                                <Input
+                                    name="noInterior"
+                                    type="text"
+                                    autoComplete="off"
+                                    onChange={(e) => {
+                                        setregisterNoInterior(e.target.value);
+                                    }}
+                                />
+                            </FormGroup>
+                            <FormGroup  className={`has-label ${registerCountryState}`}>
+                                <Label for="exampleSelect">País *</Label>
+                                <Select
+                                    name="country"
+                                    className="react-select"
+                                    placeholder = "Selecciona un País"
+                                    classNamePrefix="react-select"
+                                    value={registerCountry}
+                                    onChange={(value) => {
+                                        setregisterCountry(value)
+                                        setregisterCountryState("has-success")
+                                        //console.log(registerCountry)
+                                    }}
+                                    options={dataCountries}
+                                />
+                                {registerCountryState === "has-danger" ? (
+                                    <label className="error">
+                                        Este campo es requerido.
+                                    </label>
+                                ) : null}
+                            </FormGroup>
+                            <FormGroup>
+                                <label>Ciudad</label>
+                                <Input
+                                    name="city"
+                                    type="text"
+                                    autoComplete="off"
+                                    onChange={(e) => {
+                                        setregisterCity(e.target.value);
+                                    }}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <label>Código Postal</label>
+                                <Input
+                                    name="zipCode"
+                                    type="text"
+                                    autoComplete="off"
+                                    onChange={(e) => {
+                                        setregisterZipCode(e.target.value);
+                                    }}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <label>Contacto</label>
+                                <Input
+                                    name="contact"
+                                    type="text"
+                                    autoComplete="off"
+                                    onChange={(e) => {
+                                        setregisterContact(e.target.value);
+                                    }}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <label>Teléfono 1</label>
+                                <Input
+                                    name="telephone1"
+                                    type="text"
+                                    autoComplete="off"
+                                    onChange={(e) => {
+                                        setregisterTelephone1(e.target.value);
+                                    }}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <label>Telefono 2</label>
+                                <Input
+                                    name="telephone2"
+                                    type="text"
+                                    autoComplete="off"
+                                    onChange={(e) => {
+                                        setregisterTelephone2(e.target.value);
+                                    }}
+                                />
+                            </FormGroup>
+                        </Col>
+                        <Col sm="4">
+                            <AddLogo registerLogo = {registerLogo} setregisterLogo={setregisterLogo} registerCountry = {registerCountry.value} registerRfc = {registerRfc}/>
+                        </Col>
+                        <Col sm="6">
+                            <FormGroup>
+                                <label>Página Web</label>
+                                <Input
+                                    name="webpage"
+                                    type="text"
+                                    autoComplete="off"
+                                    onChange={(e) => {
+                                        setregisterWebPage(e.target.value);
+                                    }}
+                                />
+                            </FormGroup>
+                            <label>Estatus</label>
+                            <FormGroup check>
+                                <Label check>
+                                <Input 
+                                    type="checkbox" 
+                                    checked = {registerStatus}
+                                    onChange={(e) => {
+                                        setregisterStatus(e.target.checked)
+                                    }}
+                                />{' '}
+                                Habilitado
+                                <span className="form-check-sign">
+                                    <span className="check"></span>
+                                </span>
+                                </Label>
+                            </FormGroup>
+                        </Col> 
+                        <Col className="mt-3" lg="10">
+                            <div className="category form-category">
+                            * Campos requeridos
+                            </div>
+                        </Col>  
+                        <Col className="mt-3" lg="10">
+                            <FormGroup className={`has-label ${errorState}`}>
+                                {errorState === "has-danger" ? (
+                                    <label className="error">
+                                        {errorMessage}
+                                    </label>
+                                ) : null}
+                            </FormGroup>
+                        </Col>    
+                        {error}
+                    </Row>
+                </Form>
             </ModalBody>
             <ModalFooter>
                 <div className="center-side">
-                <Button className="buttons" color="secondary" onClick={handleModalClick}>
-                    Cerrar 
-                </Button>
-                <Button className="buttons" color="primary" onClick={registerClick}>
-                    Guardar cambios
-                </Button>
+                    <Button className="buttons" color="secondary" onClick={handleModalClick}>
+                        Cerrar 
+                    </Button>
+                    <Button className="buttons" color="primary" onClick={registerClick}>
+                        Guardar cambios
+                    </Button>
                 </div>
             </ModalFooter>
         </Modal>
