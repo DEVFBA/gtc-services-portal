@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Skeleton from '@yisheng90/react-loading';
 
 // reactstrap components
@@ -12,7 +12,6 @@ import {
 import ReactTable from "components/ReactTable/ReactTable.js"; 
 import ModalUpdateGrouper from "views/components/Modals/catalogs/portal/ModalUpdateGrouper.js";
 import ModalAddGrouper from "views/components/Modals/catalogs/portal/ModalAddGrouper.js";
-
 
 function Groupers({dataTable, updateAddData, ip, autoCloseAlert}) {
 
@@ -86,18 +85,16 @@ function Groupers({dataTable, updateAddData, ip, autoCloseAlert}) {
     }
 
     return dataTable.length === 0 ? (
-      <>
-        <div className="content">
-          <Row>
-            <Col md="12">
-              <h4>Agrupadores de Parámetros Generales</h4>
-              <Skeleton height={25} />
-              <Skeleton height="25px" />
-              <Skeleton height="3rem" />
-            </Col>
-          </Row>
-        </div>
-      </>
+      <div className="content">
+        <Row>
+          <Col md="12">
+            <h4>Agrupadores de Parámetros Generales</h4>
+            <Skeleton height={25} />
+            <Skeleton height="25px" />
+            <Skeleton height="3rem" />
+          </Col>
+        </Row>
+      </div>
     ) : (
     <>
       <div className="content">
@@ -145,13 +142,13 @@ function Groupers({dataTable, updateAddData, ip, autoCloseAlert}) {
                 />
           </Col>
         </Row>
-    </div>
+      </div>
 
-    {/*MODAL PARA AÑADIR REGISTROS*/}
-    <ModalAddGrouper modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>       
+      {/*MODAL PARA AÑADIR REGISTROS*/}
+      <ModalAddGrouper modalAddRecord = {modalAddRecord} setModalAddRecord = {setModalAddRecord} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>       
 
-    {/*MODAL PARA MODIFICAR REGISTRO*/}
-    <ModalUpdateGrouper abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>
+      {/*MODAL PARA MODIFICAR REGISTRO*/}
+      <ModalUpdateGrouper abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} updateAddData = {updateAddData} ip = {ip} autoCloseAlert = {autoCloseAlert}/>
 
     </>
   );

@@ -10,7 +10,6 @@ import IdleTimer from 'react-idle-timer';
 
 import { Link, useHistory } from "react-router-dom";
 
-
 //Importando todos los componentes que se van a utilizar
 import DashboardAdmin from "../views/Dashboard.js";
 import Usuarios from "../views/pages/Usuarios.js";
@@ -70,18 +69,16 @@ function Admin(props) {
 
   //Para el cierre de sesión cuando no hay actividad
   const [timeout, setTimeout] = useState(1800000); //despues de media hora se cierra la sesión
-  const [showModal, setShowModal] = useState(false);
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [isTimedOut, setIsTimedOut] = useState(false);
   const [idleTimer, setIdleTimer] = useState(false);
-  
+
+
+  //Funciones para cerrar la sesión en caso de inactividad
   function _onAction(e) {
-    //console.log('user did something', e)
     setIsTimedOut(false)
   }
   
   function _onActive(e) {
-    //console.log('user is active', e)
     setIsTimedOut(false)
   }
   
@@ -94,7 +91,7 @@ function Admin(props) {
     history.push(ambiente + "/auth/login")
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     //Si el usuario no ha iniciado sesión que se le redirija al login
     if(logged !== "true")
     {
@@ -114,7 +111,6 @@ function Admin(props) {
  
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-    //console.log(url)
 
     fetch(url, {
         method: "GET",
@@ -128,7 +124,6 @@ function Admin(props) {
     })
     .then(function(data) {
         var routesAux = [];
-        //const ambiente = "/QSDEV"
 
         if(data.mensaje === 'Token inválida')
         {
@@ -201,8 +196,6 @@ function Admin(props) {
               //El componente es padre pero collapse
               if(dataAux[i-1].Module_Desc !== dataAux[i].Module_Desc)
               {
-                //console.log(data[i-1])
-                //console.log(data[i])
                 var views = []
                 if(dataAux[i].Component_Submodule === "Usuarios")
                 {
@@ -626,7 +619,6 @@ function Admin(props) {
                     }
                   )
                 }
-                //console.log(routesAux[x])
               }
             }
           }
@@ -754,7 +746,8 @@ function Admin(props) {
     });
   }, []);
 
-  React.useEffect(() => {
+  //Para agregar las clases a la hora de hacer scroll
+  useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
       document.documentElement.className += " perfect-scrollbar-on";
       document.documentElement.classList.remove("perfect-scrollbar-off");
@@ -769,12 +762,13 @@ function Admin(props) {
     };
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     mainPanel.current.scrollTop = 0;
   }, [location]);
 
+  //Crear las rutas en cada uno de los componentes
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
       if (prop.collapse) {
@@ -803,14 +797,6 @@ function Admin(props) {
         return null;
       }
     });
-  };
-
-  const handleActiveClick = (color) => {
-    setActiveColor(color);
-  };
-
-  const handleBgClick = (color) => {
-    setBackgroundColor(color);
   };
 
   const handleMiniClick = () => {
@@ -856,15 +842,6 @@ function Admin(props) {
             )
           }
         </div>
-      
-      {/*<FixedPlugin
-        bgColor={backgroundColor}
-        activeColor={activeColor}
-        sidebarMini={sidebarMini}
-        handleActiveClick={handleActiveClick}
-        handleBgClick={handleBgClick}
-        handleMiniClick={handleMiniClick}
-      /> */}
       </div>
   );
 }

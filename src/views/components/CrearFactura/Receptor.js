@@ -1,19 +1,3 @@
-/*!
-
-=========================================================
-* Paper Dashboard PRO React - v1.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-pro-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React, { useState, useEffect } from "react";
 import Skeleton from '@yisheng90/react-loading';
 
@@ -252,93 +236,93 @@ const Receptor = React.forwardRef((props, ref) => {
         </>
     ):(
         <>
-        <h5 className="info-text">Datos del receptor</h5>
-        <Row className="justify-content-center">
-            <Col sm="8">
-                <FormGroup className={`has-label ${rfcState}`}>
-                    <Label for="exampleSelect">RFC * </Label>
-                    <Select
-                        name=""
-                        className="react-select"
-                        placeholder="Selecciona un RFC"
-                        classNamePrefix="react-select"
-                        onChange={(value) => {
-                            var cliente = dataCustomerBillTos.find( o => o.Tax_Id === value.value);
-                            console.log(cliente)
-                            setNombreRazon(cliente.Name);
-                            setCfdiUse({value: cliente.Id_CFDI_Use, label: cliente.Id_CFDI_Use + " - " + cliente.CFDI_Use});
-                            setCfdiUseState("has-success");
-                            setTaxRegime({value: cliente.Id_Tax_Regimen, label: cliente.Id_Tax_Regimen + " - " + cliente.Tax_Regimen});
-                            setTaxRegimeState("has-success");
-                            setRfc(value);
-                            setRfcState("has-success");
-                            setDomicilioFiscal(cliente.Zip_Codes);
-                        }}
-                        options={dataCustomerBillTosSelect}
-                    />
-                    {rfcState === "has-danger" ? (
-                        <label className="error">Este campo es requerido.</label>
-                    ) : null}
-                </FormGroup>
-                <FormGroup>
-                    <Label for="exampleSelect">Nombre / Razón Social</Label>
-                    <Input
-                        name="nombre"
-                        type="text"
-                        autoComplete="off"
-                        value={nombreRazon}
-                        readOnly
-                    />
-                </FormGroup>
-                <FormGroup className={`has-label ${cfdiUseState}`}>
-                    <Label>Uso de CFDI * </Label>
-                    <Select
-                        name=""
-                        className="react-select"
-                        placeholder="Selecciona Uso de CFDI"
-                        classNamePrefix="react-select"
-                        value={cfdiUse}
-                        onChange={(value) => {
-                            setCfdiUse(value)
-                            setCfdiUseState("has-success");
-                        }}
-                        options={dataCfdiUses}
-                    />
-                    {cfdiUseState === "has-danger" ? (
-                        <label className="error">Selecciona un Uso de CFDI.</label>
-                    ) : null}
-                </FormGroup>
-                <FormGroup>
-                    <Label for="exampleSelect">Domicilio Fiscal</Label>
-                    <Input
-                        name="nombre"
-                        type="text"
-                        autoComplete="off"
-                        value={domicilioFiscal}
-                        readOnly
-                    />
-                </FormGroup>
-                <FormGroup className={`has-label ${taxRegimeState}`}>
-                    <Label>Regimen Fiscal * </Label>
-                    <Select
-                        name=""
-                        className="react-select"
-                        placeholder="Selecciona un Régimen Fiscal"
-                        classNamePrefix="react-select"
-                        value={taxRegime}
-                        onChange={(value) => {
-                            console.log(value)
-                            setTaxRegime(value)
-                            setTaxRegimeState("has-success");
-                        }}
-                        options={dataTaxRegimes}
-                    />
-                    {taxRegimeState === "has-danger" ? (
-                        <label className="error">Selecciona un Régimen Fiscal.</label>
-                    ) : null}
-                </FormGroup>
-            </Col>
-        </Row>
+            <h5 className="info-text">Datos del receptor</h5>
+            <Row className="justify-content-center">
+                <Col sm="8">
+                    <FormGroup className={`has-label ${rfcState}`}>
+                        <Label for="exampleSelect">RFC * </Label>
+                        <Select
+                            name=""
+                            className="react-select"
+                            placeholder="Selecciona un RFC"
+                            classNamePrefix="react-select"
+                            onChange={(value) => {
+                                var cliente = dataCustomerBillTos.find( o => o.Tax_Id === value.value);
+                                console.log(cliente)
+                                setNombreRazon(cliente.Name);
+                                setCfdiUse({value: cliente.Id_CFDI_Use, label: cliente.Id_CFDI_Use + " - " + cliente.CFDI_Use});
+                                setCfdiUseState("has-success");
+                                setTaxRegime({value: cliente.Id_Tax_Regimen, label: cliente.Id_Tax_Regimen + " - " + cliente.Tax_Regimen});
+                                setTaxRegimeState("has-success");
+                                setRfc(value);
+                                setRfcState("has-success");
+                                setDomicilioFiscal(cliente.Zip_Codes);
+                            }}
+                            options={dataCustomerBillTosSelect}
+                        />
+                        {rfcState === "has-danger" ? (
+                            <label className="error">Este campo es requerido.</label>
+                        ) : null}
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="exampleSelect">Nombre / Razón Social</Label>
+                        <Input
+                            name="nombre"
+                            type="text"
+                            autoComplete="off"
+                            value={nombreRazon}
+                            readOnly
+                        />
+                    </FormGroup>
+                    <FormGroup className={`has-label ${cfdiUseState}`}>
+                        <Label>Uso de CFDI * </Label>
+                        <Select
+                            name=""
+                            className="react-select"
+                            placeholder="Selecciona Uso de CFDI"
+                            classNamePrefix="react-select"
+                            value={cfdiUse}
+                            onChange={(value) => {
+                                setCfdiUse(value)
+                                setCfdiUseState("has-success");
+                            }}
+                            options={dataCfdiUses}
+                        />
+                        {cfdiUseState === "has-danger" ? (
+                            <label className="error">Selecciona un Uso de CFDI.</label>
+                        ) : null}
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="exampleSelect">Domicilio Fiscal</Label>
+                        <Input
+                            name="nombre"
+                            type="text"
+                            autoComplete="off"
+                            value={domicilioFiscal}
+                            readOnly
+                        />
+                    </FormGroup>
+                    <FormGroup className={`has-label ${taxRegimeState}`}>
+                        <Label>Regimen Fiscal * </Label>
+                        <Select
+                            name=""
+                            className="react-select"
+                            placeholder="Selecciona un Régimen Fiscal"
+                            classNamePrefix="react-select"
+                            value={taxRegime}
+                            onChange={(value) => {
+                                console.log(value)
+                                setTaxRegime(value)
+                                setTaxRegimeState("has-success");
+                            }}
+                            options={dataTaxRegimes}
+                        />
+                        {taxRegimeState === "has-danger" ? (
+                            <label className="error">Selecciona un Régimen Fiscal.</label>
+                        ) : null}
+                    </FormGroup>
+                </Col>
+            </Row>
         </>
     );
 });

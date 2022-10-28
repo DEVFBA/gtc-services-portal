@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
@@ -15,63 +15,63 @@ import {
 function ClienteConfiguracionesTable({dataTable, dataApplications, dataCustomers, updateAddData, ip, autoCloseAlert}){
     const history = useHistory();
     const [dataState, setDataState] = useState(
-        dataTable.map((prop, key) => {
-          var licDate;
-          if(prop.Final_Effective_Date === null){
-              licDate = "Vitalicia"
-          }
-          else{
-              var fecha = new Date(prop.Final_Effective_Date)
-              var date, month, year;
-              if(fecha.getDate() < 10)
-              {
-                  date = "0" + (fecha.getDate()+1)
-              }
-              else{
-                  date = (fecha.getDate()+1)
-              }
-              if((fecha.getMonth() + 1) < 10)
-              {
-                  month = "0" + (fecha.getMonth() + 1)
-              }
-              else 
-              {
-                  month = fecha.getMonth() + 1
-              }
-              year = fecha.getFullYear()
-              licDate = year + "/" + month + "/" + date
-          }
-          return {
-            id: key,
-            idCus: prop.Id_Customer,
-            client: prop.Customer,
-            application: prop.Application_Desc,
-            suite: prop.Suite_Desc,
-            licenseDate: licDate,
-            idApp: prop.Id_Application,
-            dateValid: fecha,
-            actions: (
-              // ACCIONES A REALIZAR EN CADA REGISTRO
-              <div className="actions-center">
-                {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-                <Button
-                  onClick={() => {
-                    /*getRegistro(key);
-                    toggleModalUpdateRecord()*/
-                    let obj = dataState.find((o) => o.id === key);
-                    history.push(ambiente + `/admin/application-settings/${obj.idCus}/${obj.idApp}/`);
-                  }}
-                  color="warning"
-                  size="sm"
-                  className="btn-icon btn-link edit"
-                >
-                  <i className="fa fa-edit" />
-                </Button>
-              </div>
-            ),
-          };
-        })
-      );
+      dataTable.map((prop, key) => {
+        var licDate;
+        if(prop.Final_Effective_Date === null){
+            licDate = "Vitalicia"
+        }
+        else{
+            var fecha = new Date(prop.Final_Effective_Date)
+            var date, month, year;
+            if(fecha.getDate() < 10)
+            {
+                date = "0" + (fecha.getDate()+1)
+            }
+            else{
+                date = (fecha.getDate()+1)
+            }
+            if((fecha.getMonth() + 1) < 10)
+            {
+                month = "0" + (fecha.getMonth() + 1)
+            }
+            else 
+            {
+                month = fecha.getMonth() + 1
+            }
+            year = fecha.getFullYear()
+            licDate = year + "/" + month + "/" + date
+        }
+        return {
+          id: key,
+          idCus: prop.Id_Customer,
+          client: prop.Customer,
+          application: prop.Application_Desc,
+          suite: prop.Suite_Desc,
+          licenseDate: licDate,
+          idApp: prop.Id_Application,
+          dateValid: fecha,
+          actions: (
+            // ACCIONES A REALIZAR EN CADA REGISTRO
+            <div className="actions-center">
+              {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
+              <Button
+                onClick={() => {
+                  /*getRegistro(key);
+                  toggleModalUpdateRecord()*/
+                  let obj = dataState.find((o) => o.id === key);
+                  history.push(ambiente + `/admin/application-settings/${obj.idCus}/${obj.idApp}/`);
+                }}
+                color="warning"
+                size="sm"
+                className="btn-icon btn-link edit"
+              >
+                <i className="fa fa-edit" />
+              </Button>
+            </div>
+          ),
+        };
+      })
+    );
 
     const ambiente = process.env.REACT_APP_ENVIRONMENT
 

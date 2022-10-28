@@ -4,27 +4,18 @@ import Skeleton from '@yisheng90/react-loading';
 
 // reactstrap components
 import {
-  Button,
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   CardTitle,
   Row,
   Col,
-  Modal, 
-  ModalBody, 
-  ModalFooter,
-  FormGroup,
-  Form,
-  Input,
-  Label,
 } from "reactstrap";
 
 // core components
 import CFDIPDFRequestDetailTable from "./CFDIPDFRequestDetailTable.js";
 
-function CFDIPDFRequestDetail() {
+  function CFDIPDFRequestDetail() {
   const { idCus, idReq } = useParams();
 
   //Para guardar los datos de los usuarios

@@ -10,8 +10,6 @@ import {
     Form,
     Input,
     Label,
-    Row,
-    Col
 } from "reactstrap";
 
 function ModalUpdateCustomerKeyProduct({abierto, toggleModalUpdateRecord, record, updateAddData, ip, autoCloseAlert}) {

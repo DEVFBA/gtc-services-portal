@@ -9,13 +9,8 @@ import {
     FormGroup,
     Form,
     Input,
-    Label,
-    Row,
-    Col,
+    Label
 } from "reactstrap";
-
-//React plugin used to create DropdownMenu for selecting items
-import Select from "react-select";
 
 function ModalReadBillTos({modalReadRecord, setModalReadRecord, record}) {
         // register form

@@ -62,8 +62,6 @@ function CustomerItemsTaxesTable({dataTable, ip, autoCloseAlert, updateAddData, 
     //Para saber que usuario se va a editar
     const [record, setRecord] = useState([]);
 
-    const token = localStorage.getItem("Token");
-
     function getRegistro(key)
     {
         var registro = dataState.find((o) => o.id === key)
@@ -72,10 +70,10 @@ function CustomerItemsTaxesTable({dataTable, ip, autoCloseAlert, updateAddData, 
 
     function toggleModalUpdateRecord(){
         if(modalUpdateRecord == false){
-        setModalUpdateRecord(true);
+            setModalUpdateRecord(true);
         }
         else{
-        setModalUpdateRecord(false);
+            setModalUpdateRecord(false);
         }
     }
 

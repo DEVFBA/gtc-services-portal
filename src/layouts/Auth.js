@@ -22,8 +22,6 @@ import { Route, Switch } from "react-router-dom";
 import AuthNavbar from "components/Navbars/AuthNavbar.js";
 import Footer from "components/Footer/Footer.js";
 
-import routes from "routes.js";
-
 import Login from "views/pages/Login.js";
 import EditPassword from "views/pages/ChangePassword";
 import Register from "views/pages/Register.js";
@@ -36,10 +34,9 @@ function Pages() {
   //GUARDAR EL ESTADO PARA LAS RUTAS
   const [dbRoutes, setDbRoutes] = useState([]);
   const ambiente = process.env.REACT_APP_ENVIRONMENT
+
   useEffect(() => {
     var routesAux = [];
-    //Agregando las rutas del auth
-    //const ambiente = "/QSDEV"
     
     routesAux.push(
       {
@@ -93,8 +90,10 @@ function Pages() {
     )
     setDbRoutes(routesAux)
   }, []);
+
   const fullPages = React.useRef();
-  React.useEffect(() => {
+
+  useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
       ps = new PerfectScrollbar(fullPages.current);
     }
@@ -104,6 +103,7 @@ function Pages() {
       }
     };
   });
+
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
       if (prop.collapse) {
@@ -122,6 +122,7 @@ function Pages() {
       }
     });
   };
+  
   return (
     <>
       <AuthNavbar />

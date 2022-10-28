@@ -4,18 +4,8 @@ import Skeleton from '@yisheng90/react-loading';
 // reactstrap components
 import {
   Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Row,
   Col,
-  Modal, 
-  ModalBody, 
-  ModalFooter,
-  FormGroup,
-  Label,
-  Input,
 } from "reactstrap";
 
 // core components
@@ -172,51 +162,51 @@ function Municipalities({dataTable, updateAddData, ip, autoCloseAlert}) {
   }
 
 
-    const [modalAddRecord, setModalAddRecord] = useState(false);
-    const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
+  const [modalAddRecord, setModalAddRecord] = useState(false);
+  const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
 
-    //Para saber que registro se va a editar
-    const [record, setRecord] = useState({});
+  //Para saber que registro se va a editar
+  const [record, setRecord] = useState({});
 
-    function getRegistro(key)
-    {
-        var registro = dataState.find((o) => o.id === key)
-        setRecord(registro) 
-    }
+  function getRegistro(key)
+  {
+      var registro = dataState.find((o) => o.id === key)
+      setRecord(registro) 
+  }
 
-    function toggleModalAddRecord(){
-        if(modalAddRecord == false){
-        setModalAddRecord(true);
-        }
-        else{
-        setModalAddRecord(false);
-        }
-    }
+  function toggleModalAddRecord(){
+      if(modalAddRecord == false){
+      setModalAddRecord(true);
+      }
+      else{
+      setModalAddRecord(false);
+      }
+  }
 
-    function toggleModalUpdateRecord(){
-        if(modalUpdateRecord == false){
-        setModalUpdateRecord(true);
-        }
-        else{
-        setModalUpdateRecord(false);
-        }
-    }
+  function toggleModalUpdateRecord(){
+      if(modalUpdateRecord == false){
+      setModalUpdateRecord(true);
+      }
+      else{
+      setModalUpdateRecord(false);
+      }
+  }
 
 
-    return dataFind === true ? (
-      <>
-        <div className="content">
-          <Row>
-            <Col md="12">
-              <h4>Municipios</h4>
-              <Skeleton height={25} />
-              <Skeleton height="25px" />
-              <Skeleton height="3rem" />
-            </Col>
-          </Row>
-        </div>
-      </>
-    ) : (
+  return dataFind === true ? (
+    <>
+      <div className="content">
+        <Row>
+          <Col md="12">
+            <h4>Municipios</h4>
+            <Skeleton height={25} />
+            <Skeleton height="25px" />
+            <Skeleton height="3rem" />
+          </Col>
+        </Row>
+      </div>
+    </>
+  ) : (
     <>
       {/*console.log(props.example)*/}
       <div className="content">

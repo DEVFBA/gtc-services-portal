@@ -22,60 +22,60 @@ function CustomerItemsTable({dataTable, ip, autoCloseAlert, updateAddData, toggl
                 status = "No Habilitado"
             }
             return {
-              id: key,
-              branch: prop.Branch,
-              idCustomer: prop.Id_Customer,
-              customer: prop.Customer,
-              customUoMs: prop.Custom_UoMs,
-              harmonizedTariffCode: prop.Harmonized_Tariff_Code,
-              idCustomUoMs: prop.Id_Custom_UoMs,
-              idCustomerUoM: prop.Id_Customer_UoM,
-              idHarmonizedTariffCode: prop.Id_Harmonized_Tariff_Code,
-              idItem: prop.Id_Item,
-              idProductServiceCode: prop.Id_Product_Service_Code,
-              idTaxObject: prop.Id_Tax_Object,
-              idUoMCode: prop.Id_UoM_Code,
-              longDesc: prop.Long_Desc,
-              model: prop.Model,
-              productServiceCode: prop.Product_Service_Code,
-              serialNumber: prop.Serial_Number,
-              shortDesc: prop.Short_Desc,
-              subModel: prop.SubModel,
-              taxObject: prop.Tax_Object,
-              UoMCode: prop.UoM_Code,
-              status: status,
-              actions: (
-                // ACCIONES A REALIZAR EN CADA REGISTRO
-                <div className="actions-center">
-                  {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-                    <abbr title="Editar">
-                        <Button
-                            onClick={() => {
-                                getRegistro(key);
-                                toggleModalUpdateRecord()
-                            }}
-                            color="warning"
-                            size="sm"
-                            className="btn-icon btn-link edit"
-                        >
-                            <i className="fa fa-edit" />
-                        </Button>
-                    </abbr>
-                    <abbr title="Ver Detalle">
-                        <Button
-                            onClick={() => {
-                                getRegistro(key);
-                                toggleModalReadRecord()
-                            }}
-                            color="warning"
-                            size="sm"
-                            className="btn-icon btn-link edit"
-                        >
-                            <i className="fa fa-eye" />
-                        </Button>
-                    </abbr>
-                </div>
-              ),
+                id: key,
+                branch: prop.Branch,
+                idCustomer: prop.Id_Customer,
+                customer: prop.Customer,
+                customUoMs: prop.Custom_UoMs,
+                harmonizedTariffCode: prop.Harmonized_Tariff_Code,
+                idCustomUoMs: prop.Id_Custom_UoMs,
+                idCustomerUoM: prop.Id_Customer_UoM,
+                idHarmonizedTariffCode: prop.Id_Harmonized_Tariff_Code,
+                idItem: prop.Id_Item,
+                idProductServiceCode: prop.Id_Product_Service_Code,
+                idTaxObject: prop.Id_Tax_Object,
+                idUoMCode: prop.Id_UoM_Code,
+                longDesc: prop.Long_Desc,
+                model: prop.Model,
+                productServiceCode: prop.Product_Service_Code,
+                serialNumber: prop.Serial_Number,
+                shortDesc: prop.Short_Desc,
+                subModel: prop.SubModel,
+                taxObject: prop.Tax_Object,
+                UoMCode: prop.UoM_Code,
+                status: status,
+                actions: (
+                    // ACCIONES A REALIZAR EN CADA REGISTRO
+                    <div className="actions-center">
+                    {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
+                        <abbr title="Editar">
+                            <Button
+                                onClick={() => {
+                                    getRegistro(key);
+                                    toggleModalUpdateRecord()
+                                }}
+                                color="warning"
+                                size="sm"
+                                className="btn-icon btn-link edit"
+                            >
+                                <i className="fa fa-edit" />
+                            </Button>
+                        </abbr>
+                        <abbr title="Ver Detalle">
+                            <Button
+                                onClick={() => {
+                                    getRegistro(key);
+                                    toggleModalReadRecord()
+                                }}
+                                color="warning"
+                                size="sm"
+                                className="btn-icon btn-link edit"
+                            >
+                                <i className="fa fa-eye" />
+                            </Button>
+                        </abbr>
+                    </div>
+                ),
             };
         })
     );
@@ -85,8 +85,6 @@ function CustomerItemsTable({dataTable, ip, autoCloseAlert, updateAddData, toggl
 
     //Para saber que usuario se va a editar
     const [record, setRecord] = useState([]);
-
-    const token = localStorage.getItem("Token");
 
     function getRegistro(key)
     {

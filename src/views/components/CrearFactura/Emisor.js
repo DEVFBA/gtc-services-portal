@@ -1,19 +1,3 @@
-/*!
-
-=========================================================
-* Paper Dashboard PRO React - v1.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-pro-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React, { useState, useEffect } from "react";
 import Skeleton from '@yisheng90/react-loading';
 
@@ -25,9 +9,6 @@ import {
     FormGroup,
     Label,
 } from "reactstrap";
-
-//React plugin used to create DropdownMenu for selecting items
-import Select from "react-select";
 
 const Emisor = React.forwardRef((props, ref) => {
     //Para cargar el componente hasta que toda la información sea descargada
@@ -108,7 +89,7 @@ const Emisor = React.forwardRef((props, ref) => {
                 </Col>
             </Row>
         </>
-        ):(
+    ):(
         <>
             <h5 className="info-text">Datos del Emisor</h5>
             <Row className="justify-content-center">

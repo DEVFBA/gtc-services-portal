@@ -1,24 +1,11 @@
-import React, { useState, useEffect } from "react";
-import Skeleton from '@yisheng90/react-loading';
+import React, { useState } from "react";
 
 // reactstrap components
 import {
   Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Row,
   Col,
-  Modal, 
-  ModalBody, 
-  ModalFooter,
-  FormGroup,
-  Label,
-  Input,
 } from "reactstrap";
-
-import Select from "react-select";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js"; 
@@ -67,69 +54,58 @@ function ZipCodes({dataTable, updateAddData, ip, autoCloseAlert}) {
                   <i className="fa fa-eye" />
                   </Button>
                 </abbr>
-                {/*role === "GTCADMIN" || role === "GTCSUPPO" ? (
-                <abbr title="Editar">
-                  <Button
-                  onClick={() => {
-                      getRegistro(key);
-                      toggleModalUpdateRecord()
-                  }}
-                  color="warning"
-                  size="sm"
-                  className="btn-icon btn-link edit"
-                  >
-                  <i className="fa fa-edit" />
-                  </Button>
-                </abbr>
-                ):null*/}
             </div>
           </>
-          ),
+        ),
       };
     })
   );
 
-    const [modalReadRecord, setModalReadRecord] = useState(false);
-    const [modalAddRecord, setModalAddRecord] = useState(false);
-    const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
-    
-    //Para saber que registro se va a editar
-    const [record, setRecord] = useState({});
+  const [modalReadRecord, setModalReadRecord] = useState(false);
+  const [modalAddRecord, setModalAddRecord] = useState(false);
+  const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
+  
+  //Para saber que registro se va a editar
+  const [record, setRecord] = useState({});
 
-    function getRegistro(key)
-    {
-        var registro = dataState.find((o) => o.id === key)
-        setRecord(registro) 
-    }
+  function getRegistro(key)
+  {
+    var registro = dataState.find((o) => o.id === key);
+    setRecord(registro);
+  }
 
-    function toggleModalReadRecord(){
-        if(modalReadRecord == false){
-            setModalReadRecord(true);
-        }
-        else{
-            setModalReadRecord(false);
-        }
-    }
-
-    function toggleModalAddRecord(){
-      if(modalAddRecord == false){
-      setModalAddRecord(true);
+  function toggleModalReadRecord()
+  {
+      if(modalReadRecord == false)
+      {
+        setModalReadRecord(true);
       }
       else{
-      setModalAddRecord(false);
+        setModalReadRecord(false);
       }
-    }
+  }
 
-    function toggleModalUpdateRecord(){
-        if(modalUpdateRecord == false){
-        setModalUpdateRecord(true);
-        }
-        else{
-        setModalUpdateRecord(false);
-        }
+  function toggleModalAddRecord()
+  {
+    if(modalAddRecord == false){
+      setModalAddRecord(true);
     }
+    else{
+      setModalAddRecord(false);
+    }
+  }
 
-    return (
+  function toggleModalUpdateRecord()
+  {
+    if(modalUpdateRecord == false){
+      setModalUpdateRecord(true);
+    }
+    else{
+      setModalUpdateRecord(false);
+    }
+  }
+
+  return (
     <>
       {/*console.log(props.example)*/}
       <div className="content">

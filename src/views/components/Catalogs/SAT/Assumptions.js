@@ -1,30 +1,16 @@
-import React, { useState, useEffect } from "react";
-import Skeleton from '@yisheng90/react-loading';
+import React, { useState } from "react";
 
 // reactstrap components
 import {
   Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Row,
   Col,
-  Modal, 
-  ModalBody, 
-  ModalFooter,
-  FormGroup,
-  Label,
-  Input,
 } from "reactstrap";
-
-import Select from "react-select";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js"; 
 import ModalUpdateAssumptions from "views/components/Modals/catalogs/sat/ModalUpdateAssumptions";
 import ModalAddAssumptions from "views/components/Modals/catalogs/sat/ModalAddAssumptions";
-import { data } from "jquery";
 
 function Assumptions({dataTable, updateAddData, ip, autoCloseAlert}) {
   const role = localStorage.getItem("Id_Role");

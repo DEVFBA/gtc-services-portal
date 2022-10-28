@@ -1,31 +1,16 @@
-import React, { useState, useEffect } from "react";
-import Skeleton from '@yisheng90/react-loading';
+import React, { useState } from "react";
 
 // reactstrap components
 import {
   Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Row,
   Col,
-  Modal, 
-  ModalBody, 
-  ModalFooter,
-  FormGroup,
-  Label,
-  Input,
 } from "reactstrap";
-
-import Select from "react-select";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js"; 
 import ModalUpdateCFDIUsers from "views/components/Modals/catalogs/sat/ModalUpdateCFDIUses";
 import ModalAddCFDIUses from "views/components/Modals/catalogs/sat/ModalAddCFDIUses.js";
-
-import { data } from "jquery";
 
 function CFDIUses({dataTable, updateAddData, ip, autoCloseAlert}) {
   const role = localStorage.getItem("Id_Role");
@@ -47,22 +32,22 @@ function CFDIUses({dataTable, updateAddData, ip, autoCloseAlert}) {
           actions: (
           // ACCIONES A REALIZAR EN CADA REGISTRO
           <div className="actions-center">
-              {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-              {role === "GTCADMIN" || role === "GTCSUPPO" ? (
-                <abbr title="Editar">
-                  <Button
-                  onClick={() => {
-                      getRegistro(key);
-                      toggleModalUpdateRecord()
-                  }}
-                  color="warning"
-                  size="sm"
-                  className="btn-icon btn-link edit"
-                  >
-                  <i className="fa fa-edit" />
-                  </Button>
-                </abbr>
-              ):null}
+            {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
+            {role === "GTCADMIN" || role === "GTCSUPPO" ? (
+              <abbr title="Editar">
+                <Button
+                onClick={() => {
+                    getRegistro(key);
+                    toggleModalUpdateRecord()
+                }}
+                color="warning"
+                size="sm"
+                className="btn-icon btn-link edit"
+                >
+                <i className="fa fa-edit" />
+                </Button>
+              </abbr>
+            ):null}
           </div>
           ),
       };

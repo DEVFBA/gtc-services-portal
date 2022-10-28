@@ -1,24 +1,11 @@
 import React, { useState, useEffect } from "react";
-import Skeleton from '@yisheng90/react-loading';
 
 // reactstrap components
 import {
   Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Row,
   Col,
-  Modal, 
-  ModalBody, 
-  ModalFooter,
-  FormGroup,
-  Label,
-  Input,
 } from "reactstrap";
-
-import Select from "react-select";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js"; 
@@ -83,9 +70,6 @@ function Taxes({dataTable, updateAddData, ip, autoCloseAlert}) {
 
     const [modalAddRecord, setModalAddRecord] = useState(false);
     const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
-    
-    //Para actualizar cada que agreguen un campo a la tabla
-    const [updateTable, setUpdateTable] = useState(0);
 
     //Para saber que registro se va a editar
     const [record, setRecord] = useState({});

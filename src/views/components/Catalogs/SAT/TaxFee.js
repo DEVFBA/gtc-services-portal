@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Skeleton from '@yisheng90/react-loading';
 
 // reactstrap components
 import {
@@ -14,72 +13,72 @@ import ModalUpdateTaxFee from "views/components/Modals/catalogs/sat/ModalUpdateT
 import ModalAddTaxFee from "views/components/Modals/catalogs/sat/ModalAddTaxFee.js";
 
 function TaxFee({dataTable, updateAddData, ip, autoCloseAlert}) {
-  const role = localStorage.getItem("Id_Role");
-  const token = localStorage.getItem("Token");
-  const [dataState, setDataState] = React.useState(
-    dataTable.map((prop, key) => {
-        var status, fixed, withholding, transfer;
-        if(prop.Status === true){
-            status = "Habilitado"
-        }
-        else{
-            status = "No Habilitado"
-        }
-        if(prop.Fixed === true){
-            fixed = "Fijo"
-        }
-        else{
-            fixed = "Rango"
-        }
-        if(prop.Withholding === true){
-            withholding = "Si"
-        }
-        else{
-            withholding = "No"
-        }
-        if(prop.Transfer === true){
-            transfer = "Si"
-        }
-        else{
-            transfer = "No"
-        }
-        return {
-            id: key,
-            fixed: fixed,
-            tax: prop.Tax,
-            minimumValue: prop.Minimum_Value,
-            maximumValue: prop.Maximum_Value,
-            idTax: prop.Id_Tax,
-            taxDesc: prop.Tax_Desc,
-            idFactorType: prop.Id_Factor_Type,
-            factorType: prop.Factor_Type,
-            withholding: withholding,
-            transfer: transfer,
-            status: status,
-            actions: (
-            // ACCIONES A REALIZAR EN CADA REGISTRO
-            <div className="actions-center">
-                {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
-                {role === "GTCADMIN" || role === "GTCSUPPO" ? (
-                    <abbr title="Editar">
-                    <Button
-                    onClick={() => {
-                        getRegistro(key);
-                        toggleModalUpdateRecord()
-                    }}
-                    color="warning"
-                    size="sm"
-                    className="btn-icon btn-link edit"
-                    >
-                    <i className="fa fa-edit" />
-                    </Button>
-                    </abbr>
-                ):null}
-            </div>
-          ),
-      };
-    })
-  );
+    const role = localStorage.getItem("Id_Role");
+    const token = localStorage.getItem("Token");
+    const [dataState, setDataState] = React.useState(
+        dataTable.map((prop, key) => {
+            var status, fixed, withholding, transfer;
+            if(prop.Status === true){
+                status = "Habilitado"
+            }
+            else{
+                status = "No Habilitado"
+            }
+            if(prop.Fixed === true){
+                fixed = "Fijo"
+            }
+            else{
+                fixed = "Rango"
+            }
+            if(prop.Withholding === true){
+                withholding = "Si"
+            }
+            else{
+                withholding = "No"
+            }
+            if(prop.Transfer === true){
+                transfer = "Si"
+            }
+            else{
+                transfer = "No"
+            }
+            return {
+                id: key,
+                fixed: fixed,
+                tax: prop.Tax,
+                minimumValue: prop.Minimum_Value,
+                maximumValue: prop.Maximum_Value,
+                idTax: prop.Id_Tax,
+                taxDesc: prop.Tax_Desc,
+                idFactorType: prop.Id_Factor_Type,
+                factorType: prop.Factor_Type,
+                withholding: withholding,
+                transfer: transfer,
+                status: status,
+                actions: (
+                    // ACCIONES A REALIZAR EN CADA REGISTRO
+                    <div className="actions-center">
+                        {/*IMPLEMENTAR EDICION PARA CADA REGISTRO */}
+                        {role === "GTCADMIN" || role === "GTCSUPPO" ? (
+                            <abbr title="Editar">
+                            <Button
+                            onClick={() => {
+                                getRegistro(key);
+                                toggleModalUpdateRecord()
+                            }}
+                            color="warning"
+                            size="sm"
+                            className="btn-icon btn-link edit"
+                            >
+                            <i className="fa fa-edit" />
+                            </Button>
+                            </abbr>
+                        ):null}
+                    </div>
+                ),
+            };
+        })
+    );
 
     const [modalAddRecord, setModalAddRecord] = useState(false);
     const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
@@ -95,19 +94,19 @@ function TaxFee({dataTable, updateAddData, ip, autoCloseAlert}) {
 
     function toggleModalAddRecord(){
         if(modalAddRecord == false){
-        setModalAddRecord(true);
+            setModalAddRecord(true);
         }
         else{
-        setModalAddRecord(false);
+            setModalAddRecord(false);
         }
     }
 
     function toggleModalUpdateRecord(){
         if(modalUpdateRecord == false){
-        setModalUpdateRecord(true);
+            setModalUpdateRecord(true);
         }
         else{
-        setModalUpdateRecord(false);
+            setModalUpdateRecord(false);
         }
     }
 
@@ -213,7 +212,7 @@ function TaxFee({dataTable, updateAddData, ip, autoCloseAlert}) {
 
     return (
     <>
-      {/*console.log(props.example)*/}
+        {/*console.log(props.example)*/}
         <div className="content">
             <Row>
                 <Col md="12">

@@ -11,8 +11,6 @@ import {
   Row,
   Col,
 } from "reactstrap";
-import { prototype } from "react-datetime";
-import { PropagateLoader } from "react-spinners";
 
 function Articulo69BTable({dataTable}){
     const [dataState, setDataState] = React.useState(
@@ -81,55 +79,51 @@ function Articulo69BTable({dataTable}){
   }
 
     return dataTable.length === 0 ? (
-      <>
+      <div className="content">
+        <Row>
+          <Col md="12">
+            <Skeleton height={25} />
+            <Skeleton height="25px" />
+            <Skeleton height="3rem" />
+          </Col>
+        </Row>
+      </div>
+    ) : (
         <div className="content">
           <Row>
             <Col md="12">
-              <Skeleton height={25} />
-              <Skeleton height="25px" />
-              <Skeleton height="3rem" />
+                <ReactTable
+                  data={dataState}
+                  columns={[
+                      {
+                          Header: "RFC",
+                          accessor: "rfc",
+                      },
+                      {
+                          Header: "Contribuyente",
+                          accessor: "contribuyente",
+                      },
+                      {
+                          Header: "Situación Contribuyente",
+                          accessor: "situacionContribuyente",
+                      },
+                      {
+                        Header: "Acciones",
+                        accessor: "actions",
+                        sortable: false,
+                        filterable: false,
+                        },
+                  ]}
+                  /*
+                      You can choose between primary-pagination, info-pagination, success-pagination, warning-pagination, danger-pagination or none - which will make the pagination buttons gray
+                      */
+                  className="-striped -highlight primary-pagination"
+                />
             </Col>
           </Row>
-        </div>
-      </>
-    ) : (
-        <>
-          <div className="content">
-            <Row>
-              <Col md="12">
-                    <ReactTable
-                        data={dataState}
-                        columns={[
-                            {
-                                Header: "RFC",
-                                accessor: "rfc",
-                            },
-                            {
-                                Header: "Contribuyente",
-                                accessor: "contribuyente",
-                            },
-                            {
-                                Header: "Situación Contribuyente",
-                                accessor: "situacionContribuyente",
-                            },
-                            {
-                              Header: "Acciones",
-                              accessor: "actions",
-                              sortable: false,
-                              filterable: false,
-                             },
-                        ]}
-                        /*
-                            You can choose between primary-pagination, info-pagination, success-pagination, warning-pagination, danger-pagination or none - which will make the pagination buttons gray
-                            */
-                        className="-striped -highlight primary-pagination"
-                    />
-                </Col>
-            </Row>
-            {/*MODAL PARA MODIFICAR REGISTRO*/}
-            <ModalReadArticle69B abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} />
-        </div>
-        </>
+          {/*MODAL PARA MODIFICAR REGISTRO*/}
+          <ModalReadArticle69B abierto = {modalUpdateRecord} toggleModalUpdateRecord = {toggleModalUpdateRecord} record = {record} />
+      </div>
     );
 }
 

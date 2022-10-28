@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import Skeleton from '@yisheng90/react-loading';
+import React, { useState } from "react";
 
 // reactstrap components
 import {
@@ -80,9 +79,6 @@ function KeyProduct({dataTable, updateAddData, ip, autoCloseAlert}) {
 
     const [modalAddRecord, setModalAddRecord] = useState(false);
     const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
-    
-    //Para actualizar cada que agreguen un campo a la tabla
-    const [updateTable, setUpdateTable] = useState(0);
 
     //Para saber que registro se va a editar
     const [record, setRecord] = useState({});

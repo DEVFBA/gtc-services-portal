@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 //React plugin used to create DropdownMenu for selecting items
 import Select from "react-select";
@@ -45,18 +45,7 @@ function ModalAddCustomer({modalAddRecord, setModalAddRecord, dataCountries, upd
 
     const [registerFullNameState, setregisterFullNameState] = React.useState("");
     const [registerRfcState, setregisterRfcState] = React.useState("");
-    const [registerStreetState, setregisterStreetState] = React.useState("");
-    const [registerNoExteriorState, setregisterNoExteriorState] = React.useState("");
-    const [registerNoInteriorState, setregisterNoInteriorState] = React.useState("");
     const [registerCountryState, setregisterCountryState] = React.useState("");
-    const [registerCityState, setregisterCityState] = React.useState("");
-    const [registerZipCodeState, setregisterZipCodeState] = React.useState("");
-    const [registerContactState, setregisterContactState] = React.useState("");
-    const [registerTelephone1State, setregisterTelephone1State] = React.useState("");
-    const [registerTelephone2State, setregisterTelephone2State] = React.useState("");
-    const [registerWebPageState, setregisterWebPageState] = React.useState("");
-    const [registerLogoState, setregisterLogoState] = React.useState("");
-    const [registerStatusState, setregisterStatusState] = useState(false);
 
     const [error, setError] = React.useState();
     const [errorState, setErrorState] = React.useState("");
@@ -87,7 +76,7 @@ function ModalAddCustomer({modalAddRecord, setModalAddRecord, dataCountries, upd
     // function that verifies if a string has a given length or not
     const verifyLength = (value, length) => {
         if (value.length >= length) {
-        return true;
+            return true;
         }
         return false;
     };

@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState } from "react";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
 
 import {
-  Button,
   Row,
   Col,
 } from "reactstrap";
 
 function ControlTimbresTable({dataTable}){
-    
     const [dataState, setDataState] = useState(
         dataTable.map((prop, key) => {
             var fechaRegistro;
@@ -84,7 +81,7 @@ function ControlTimbresTable({dataTable}){
                 estate: estatus
             };
         })
-      );
+    );
 
     return (
         <>

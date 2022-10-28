@@ -1,24 +1,11 @@
-import React, { useState, useEffect } from "react";
-import Skeleton from '@yisheng90/react-loading';
+import React, { useState } from "react";
 
 // reactstrap components
 import {
   Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Row,
   Col,
-  Modal, 
-  ModalBody, 
-  ModalFooter,
-  FormGroup,
-  Label,
-  Input,
 } from "reactstrap";
-
-import Select from "react-select";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js"; 

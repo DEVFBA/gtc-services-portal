@@ -238,7 +238,7 @@ function Usuarios({changeImageP, setChangeImageP}) {
     setAlert(null);
   };
 
-   //Renderizado condicional
+  //Renderizado condicional
   function Users() {
       return <UsersTable dataTable = {dataUsers} dataRoles = {dataRoles} dataCustomers = {dataCustomers} updateAddData = {updateAddData} validDays = {validDays} pathImage = {pathImage} ip = {ip} profilePath = {profilePath} autoCloseAlert = {autoCloseAlert} changeImageP = {changeImageP} setChangeImageP = {setChangeImageP}/>;
   }

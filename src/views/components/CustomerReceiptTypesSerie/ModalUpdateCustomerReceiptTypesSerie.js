@@ -65,7 +65,6 @@ function ModalUpdateCustomerReceiptTypesSerie({modalUpdateRecord, setModalUpdate
     //Funcion para validar que no se queden en blanco los inputs en caso de que haga cambios
     const verifyInputs = () =>{
         var serie = document.getElementById("serie").value
-        console.log(serie)
         if (!verifyLength(serie, 1)) {
             setSerieState("has-danger");
         } else {
@@ -76,7 +75,6 @@ function ModalUpdateCustomerReceiptTypesSerie({modalUpdateRecord, setModalUpdate
     
     const isValidated = () => {
         verifyInputs()
-        console.log(serieState)
         if (
             serieState === "has-success"
         ) 

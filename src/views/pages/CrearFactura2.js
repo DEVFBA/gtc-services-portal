@@ -57,7 +57,7 @@ function CrearFactura() {
 
     const finishButtonClick = (allStates) => {
         console.log(allStates)
-        //generarFactura(allStates);
+        generarFactura(allStates);
     };
 
     function generarFactura(data)
@@ -69,7 +69,7 @@ function CrearFactura() {
         conceptos: data.Conceptos,
       };
 
-      fetch(`http://localhost:8091/api/invoices/create/`, {
+      fetch(`${process.env.REACT_APP_API_URI}invoices/create/`, {
         method: "POST",
         body: JSON.stringify(catRegister),
         headers: {

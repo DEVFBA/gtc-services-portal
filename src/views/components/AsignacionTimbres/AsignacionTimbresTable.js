@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState } from "react";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
 
 import {
-  Button,
   Row,
   Col,
 } from "reactstrap";
-import AsignacionTimbres from "views/pages/AsignacionTimbres";
 
 function AsignacionTimbresTable({dataTable}){
     

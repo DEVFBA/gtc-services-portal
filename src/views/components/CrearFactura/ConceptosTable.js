@@ -194,39 +194,30 @@ function ConceptosTable({dataTable, dataFind, setDataFind, dataCustomerItems, da
         }
     }   
 
-    //Para saber que usuario se va a editar
-    //const [record, setRecord] = useState({});
-
-    function getRegistro(key)
-    {
-        var registro = dataState.find((o) => o.id === key)
-        setRecord(registro) 
-    }
-
     return (
         <>
             <div className="content">
                 <Row>
                     <Col>
                         <FormGroup className={`has-label ${cantidadState}`}>
-                                <Label for="exampleSelect">Cantidad * </Label>
-                                <Input
-                                    name="rfc"
-                                    type="number"
-                                    min={0}
-                                    autoComplete="off"
-                                    onChange={(e) => {
-                                        if (!verifyLength(e.target.value, 1)) {
-                                            setCantidadState("has-danger");
-                                        } else {
-                                            setCantidadState("has-success");
-                                        }
-                                        setCantidad(e.target.value);
-                                    }}
-                                />
-                                {cantidadState === "has-danger" ? (
-                                    <label className="error">Este campo es requerido.</label>
-                                ) : null}
+                            <Label for="exampleSelect">Cantidad * </Label>
+                            <Input
+                                name="rfc"
+                                type="number"
+                                min={0}
+                                autoComplete="off"
+                                onChange={(e) => {
+                                    if (!verifyLength(e.target.value, 1)) {
+                                        setCantidadState("has-danger");
+                                    } else {
+                                        setCantidadState("has-success");
+                                    }
+                                    setCantidad(e.target.value);
+                                }}
+                            />
+                            {cantidadState === "has-danger" ? (
+                                <label className="error">Este campo es requerido.</label>
+                            ) : null}
                         </FormGroup>
                     </Col>
                     <Col>
@@ -518,7 +509,7 @@ function ConceptosTable({dataTable, dataFind, setDataFind, dataCustomerItems, da
                                     accessor: "idItem",
                                 },
                                 {
-                                    Header: "Cve. Producto Servicio",
+                                    Header: "Cve. Prod. Servicio",
                                     accessor: "claveProductoDesc",
                                 },
                                 {

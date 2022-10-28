@@ -3,20 +3,9 @@ import Skeleton from '@yisheng90/react-loading';
 
 // reactstrap components
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Row,
   Col,
   FormGroup,
-  Form,
-  Label,
-  Input,
-  Modal, 
-  ModalBody, 
-  ModalFooter
 } from "reactstrap";
 
 import Select from "react-select";
@@ -28,11 +17,8 @@ function ConsultaArt69Component({dataOptions}) {
 
   //Guardar catalogo seleccionado para descargar su lista de opciones
   const [catalog, setCatalog] = React.useState("");
-
   const [dataTable, setDataTable] = useState([]);
-
   const token = localStorage.getItem("Token");
-
   const [mensaje, setMensaje] = useState("");
 
   //Renderizado condicional
@@ -40,9 +26,9 @@ function ConsultaArt69Component({dataOptions}) {
     if(dataTable.length === 0)
     {
         return  <div>
-                    <Skeleton height={25} />
-                    <Skeleton height="25px" />
-                    <Skeleton height="3rem" />
+                  <Skeleton height={25} />
+                  <Skeleton height="25px" />
+                  <Skeleton height="3rem" />
                 </div>
     }
     else {
@@ -88,44 +74,42 @@ function ConsultaArt69Component({dataOptions}) {
   }
 
   return dataTable.length === 0 ? (
-      <>
-        <div className="content">
-          <FormGroup>
-            {/*Al seleccionar un catálogo se hará fetch para actualizar sus configuraciones*/}
-            <Select 
-              name=""
-              className="react-select"
-              placeholder = "Selecciona un Supuesto para ver su información"
-              classNamePrefix="react-select"
-              value={catalog}
-              onChange={(value) => {
-                setMensaje("")
-                setDataTable([])
-                setCatalog(value);
-                updateData(value)
-              }}
-              options = {dataOptions}
-            />
-          </FormGroup>
-          <Row>
-            <Col md="12">
-              <h4 tag="h4">Artículo 69</h4>
-              {mensaje !== "" ? (
-                  <>
-                    <h5 tag ="h5"> {mensaje} </h5>
-                  </>
-                ) : (
-                  <>
-                    <Skeleton height={25} />
-                    <Skeleton height="25px" />
-                    <Skeleton height="3rem" />
-                  </>
-                )
-              }
-            </Col>
-          </Row>
-        </div>
-      </>
+    <div className="content">
+      <FormGroup>
+        {/*Al seleccionar un catálogo se hará fetch para actualizar sus configuraciones*/}
+        <Select 
+          name=""
+          className="react-select"
+          placeholder = "Selecciona un Supuesto para ver su información"
+          classNamePrefix="react-select"
+          value={catalog}
+          onChange={(value) => {
+            setMensaje("")
+            setDataTable([])
+            setCatalog(value);
+            updateData(value)
+          }}
+          options = {dataOptions}
+        />
+      </FormGroup>
+      <Row>
+        <Col md="12">
+          <h4 tag="h4">Artículo 69</h4>
+          {mensaje !== "" ? (
+              <>
+                <h5 tag ="h5"> {mensaje} </h5>
+              </>
+            ) : (
+              <>
+                <Skeleton height={25} />
+                <Skeleton height="25px" />
+                <Skeleton height="3rem" />
+              </>
+            )
+          }
+        </Col>
+      </Row>
+    </div>
     ) : (
     <>
       <div className="content">

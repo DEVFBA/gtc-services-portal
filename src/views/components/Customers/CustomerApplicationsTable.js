@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 // core components
 import ReactTable from "components/ReactTable/ReactTable.js";
@@ -10,7 +10,6 @@ import {
   Row,
   Col,
 } from "reactstrap";
-import { prototype } from "react-datetime";
 
 function CustomerApplicationsTable({dataTable, dataApplications, dataCustomers, updateAddData, ip, autoCloseAlert}){
     const ambiente = process.env.REACT_APP_ENVIRONMENT
@@ -108,10 +107,10 @@ function CustomerApplicationsTable({dataTable, dataApplications, dataCustomers, 
 
     function toggleModalUpdateRecord(){
         if(modalUpdateRecord == false){
-        setModalUpdateRecord(true);
+          setModalUpdateRecord(true);
         }
         else{
-        setModalUpdateRecord(false);
+          setModalUpdateRecord(false);
         }
     }
 

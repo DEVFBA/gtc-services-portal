@@ -1,21 +1,10 @@
-import React, { useState, useEffect } from "react";
-import Skeleton from '@yisheng90/react-loading';
+import React, { useState } from "react";
 
 // reactstrap components
 import {
   Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Row,
   Col,
-  Modal, 
-  ModalBody, 
-  ModalFooter,
-  FormGroup,
-  Label,
-  Input,
 } from "reactstrap";
 
 // core components
@@ -65,37 +54,37 @@ function Months({dataTable, updateAddData, ip, autoCloseAlert}) {
     })
   );
 
-    const [modalAddRecord, setModalAddRecord] = useState(false);
-    const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
+  const [modalAddRecord, setModalAddRecord] = useState(false);
+  const [modalUpdateRecord, setModalUpdateRecord] = useState(false);
 
-    //Para saber que registro se va a editar
-    const [record, setRecord] = useState({});
+  //Para saber que registro se va a editar
+  const [record, setRecord] = useState({});
 
-    function getRegistro(key)
-    {
-        var registro = dataState.find((o) => o.id === key)
-        setRecord(registro) 
-    }
+  function getRegistro(key)
+  {
+      var registro = dataState.find((o) => o.id === key)
+      setRecord(registro) 
+  }
 
-    function toggleModalAddRecord(){
-        if(modalAddRecord == false){
-        setModalAddRecord(true);
-        }
-        else{
-        setModalAddRecord(false);
-        }
-    }
+  function toggleModalAddRecord(){
+      if(modalAddRecord == false){
+      setModalAddRecord(true);
+      }
+      else{
+      setModalAddRecord(false);
+      }
+  }
 
-    function toggleModalUpdateRecord(){
-        if(modalUpdateRecord == false){
-        setModalUpdateRecord(true);
-        }
-        else{
-        setModalUpdateRecord(false);
-        }
-    }
+  function toggleModalUpdateRecord(){
+      if(modalUpdateRecord == false){
+      setModalUpdateRecord(true);
+      }
+      else{
+      setModalUpdateRecord(false);
+      }
+  }
 
-    return (
+  return (
     <>
       {/*console.log(props.example)*/}
       <div className="content">

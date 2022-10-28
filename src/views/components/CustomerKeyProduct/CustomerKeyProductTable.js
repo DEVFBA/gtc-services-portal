@@ -6,14 +6,7 @@ import ReactTable from "components/ReactTable/ReactTable.js";
 import ModalUpdateCustomerKeyProduct from "./ModalUpdateCustomerKeyProduct.js";
 
 import {
-    Card,
-    CardHeader,
-    CardBody,
-    CardTitle,
     Button,
-    Row,
-    Col,
-    FormGroup,
 } from "reactstrap";
 
 function CustomerKeyProductTable({dataTable, ip, autoCloseAlert, updateAddData, toggleModalAddRecord}) {
@@ -61,8 +54,6 @@ function CustomerKeyProductTable({dataTable, ip, autoCloseAlert, updateAddData, 
     //Para saber que usuario se va a editar
     const [record, setRecord] = useState([]);
 
-    const token = localStorage.getItem("Token");
-
     function getRegistro(key)
     {
         var registro = dataState.find((o) => o.id === key)
@@ -71,10 +62,10 @@ function CustomerKeyProductTable({dataTable, ip, autoCloseAlert, updateAddData, 
 
     function toggleModalUpdateRecord(){
         if(modalUpdateRecord == false){
-        setModalUpdateRecord(true);
+            setModalUpdateRecord(true);
         }
         else{
-        setModalUpdateRecord(false);
+            setModalUpdateRecord(false);
         }
     }
 
@@ -117,8 +108,7 @@ function CustomerKeyProductTable({dataTable, ip, autoCloseAlert, updateAddData, 
                 <h3>No hay datos</h3>
             </div>
         </div>
-    ) : 
-    (
+    ) : (
         <div>
             <Button color="primary" className='btn-add-customer' onClick={toggleModalAddRecord}>
                 <span className="btn-label">

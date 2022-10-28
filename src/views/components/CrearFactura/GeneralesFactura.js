@@ -1,19 +1,3 @@
-/*!
-
-=========================================================
-* Paper Dashboard PRO React - v1.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-pro-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 import Skeleton from '@yisheng90/react-loading';
 
@@ -22,8 +6,7 @@ import {
     Row,
     Col,
     FormGroup,
-    Label,
-    Input
+    Label
 } from "reactstrap";
 
 //React plugin used to create DropdownMenu for selecting items
@@ -44,14 +27,16 @@ const GeneralesFactura = React.forwardRef((props, ref) => {
     const [currency, setCurrency] = React.useState({})
     const [receiptType, setReceiptType] = React.useState({})
     const [serie, setSerie] = React.useState("")
+    const [dataSeries, setDataSeries] = React.useState([]);
     const [paymentMethod, setPaymentMethod] = React.useState({})
     const [paymentInstrument, setPaymentInstrument] = React.useState({})
 
     //Variables para validar los select
-    const [currencyState, setCurrencyState] = React.useState({})
-    const [receiptTypeState, setReceiptTypeState] = React.useState({})
-    const [paymentMethodState, setPaymentMethodState] = React.useState({})
-    const [paymentInstrumentState, setPaymentInstrumentState] = React.useState({})
+    const [currencyState, setCurrencyState] = React.useState("");
+    const [receiptTypeState, setReceiptTypeState] = React.useState("");
+    const [serieState, setSerieState] = React.useState("");
+    const [paymentMethodState, setPaymentMethodState] = React.useState("");
+    const [paymentInstrumentState, setPaymentInstrumentState] = React.useState("");
 
     const token = localStorage.getItem("Token");
 
@@ -74,7 +59,7 @@ const GeneralesFactura = React.forwardRef((props, ref) => {
     React.useEffect(() => {
 
         //Información del cliente para colocarla en los inputs
-        var url = new URL(`http://localhost:8091/api/customer-receipt-types-series/${customerLogged}`);
+        var url = new URL(`${process.env.REACT_APP_API_URI}customer-receipt-types-series/${customerLogged}`);
         
         fetch(url, {
             method: "GET",
@@ -291,6 +276,7 @@ const GeneralesFactura = React.forwardRef((props, ref) => {
         if (
             currencyState === "has-success" &&
             receiptTypeState === "has-success" &&
+            serieState === "has-success" &&
             paymentMethodState === "has-success" &&
             paymentInstrumentState === "has-success"
         ) {
@@ -301,6 +287,9 @@ const GeneralesFactura = React.forwardRef((props, ref) => {
           }
           if (receiptTypeState !== "has-success") {
             setReceiptTypeState("has-danger");
+          }
+          if (serieState !== "has-success") {
+            setSerieState("has-danger");
           }
           if (paymentMethodState !== "has-success") {
             setPaymentMethodState("has-danger");
@@ -316,7 +305,7 @@ const GeneralesFactura = React.forwardRef((props, ref) => {
         <>
             <h5 className="info-text">
                 Datos Generales de la Factura
-            </h5>
+            </h5> 
             <Row className="justify-content-center">
                 <Col sm="8">
                     <Skeleton height={25} />
@@ -358,24 +347,41 @@ const GeneralesFactura = React.forwardRef((props, ref) => {
                             classNamePrefix="react-select"
                             onChange={(value) => {
                                 setReceiptType(value.value);
-                                setSerie(dataReceiptTypesSeries.find( o => o.Id_Receipt_Type === value.value).Serie)
+                                setSerie(dataReceiptTypesSeries.find( o => o.Id_Receipt_Type === value.value).Serie);
+                                var seriesAux = dataReceiptTypesSeries.filter(o => o.Id_Receipt_Type === value.value);
+                                var seriesAux2 =[];
+                                for(var i=0; i<seriesAux.length; i++)
+                                {
+                                    seriesAux2.push({
+                                        value: seriesAux[i].Serie, label: seriesAux[i].Serie
+                                    });
+                                }
+                                console.log(seriesAux2)
+                                setDataSeries(seriesAux2);
                                 setReceiptTypeState("has-success");
                             }}
                             options={dataReceiptTypes}
                         />
                         {receiptTypeState === "has-danger" ? (
-                            <label className="error">Selecciona un tipo de comprobante</label>
+                            <label className="error">Selecciona un Tipo de Comprobante</label>
                         ) : null}
                     </FormGroup>
-                    <FormGroup>
+                    <FormGroup className={`has-label ${serieState}`}>
                         <Label for="exampleSelect">Serie</Label>
-                        <Input
-                            name="nombre"
-                            type="text"
-                            autoComplete="off"
-                            value={serie}
-                            readOnly
+                        <Select
+                            name=""
+                            className="react-select"
+                            placeholder="Selecciona una Serie"
+                            classNamePrefix="react-select"
+                            onChange={(value) => {
+                                setSerie(value.value);
+                                setSerieState("has-success");
+                            }}
+                            options={dataSeries}
                         />
+                        { serieState === "has-danger" ? (
+                            <label className="error">Selecciona una Serie</label>
+                        ) : null}
                     </FormGroup>
                     <FormGroup className={`has-label ${paymentMethodState}`}>
                         <Label>Método de Pago * </Label>
